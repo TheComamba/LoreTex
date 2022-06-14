@@ -1,0 +1,56 @@
+
+\begin{luacode*}
+dofile("../shared/luatex-for-dnd/characters-and-geography.lua")
+\end{luacode*}
+
+\newcommand{\setContinent}[1]{\directlua{currentContinent = "#1"}}
+\newcommand{\setRegion}[1]{\directlua{currentRegion = "#1"}}
+\newcommand{\setCity}[1]{\directlua{currentCity = "#1"}}
+
+\newcommand{\newEntity}[4]{
+	\directlua{currentLabel = "#1"}
+	\directlua{addDescriptor(currentLabel,"type","#2")}
+	\directlua{addDescriptor(currentLabel,"shortname", "#3")}
+	\directlua{addDescriptor(currentLabel,"name", "#4")}
+}
+
+\newcommand{\newNPC}[3]{
+	\newEntity{#1}{npc}{#2}{#3}
+	\directlua{setLocation(currentLabel)}
+}
+
+\newcommand{\newContinent}[3]{
+	\newEntity{#1}{continent}{#2}{#3}
+	\setContinent{#1}
+}
+
+\newcommand{\newRegion}[3]{
+	\newEntity{#1}{region}{#2}{#3}
+	\directlua{addDescriptor(currentLabel,"parent", currentContinent)}
+	\setRegion{#1}
+}
+
+\newcommand{\newCity}[3]{
+	\newEntity{#1}{city}{#2}{#3}
+	\directlua{addDescriptor(currentLabel,"parent", currentRegion)}
+	\setCity{#1}
+}
+
+\newcommand{\addDescriptor}[2]{
+	\directlua{
+		addDescriptor(currentLabel,[[#1]],[[\detokenize{#2}]])
+	}
+}
+
+\newcommand{\automatedChapters}{
+	\input{../shared/npcs/all.tex}
+	\input{../shared/geography/all.tex}
+	\directlua{automatedChapters()}
+}
+
+\newcommand{\automatedChaptersFUCKINGEVERYTHING}{
+	\input{../shared/npcs/all.tex}
+	\input{../shared/geography/all.tex}
+	\directlua{addAllRefsToPrimary()}
+	\directlua{automatedChapters()}
+}

@@ -1,32 +1,32 @@
 \begin{luacode}
 	ftInM = 0.3048
 	
-	function roundedNum(num, decimals)
+	function RoundedNum(num, decimals)
 		local decimalFactor = math.pow(10,decimals)
 		return tostring(math.round(num*decimalFactor)/decimalFactor)
 	end
 	
-	function printFtToM(valInFt)
-		local str = roundedNum(valInFt*ftInM,1)
+	function PrintFtToM(valInFt)
+		local str = RoundedNum(valInFt*ftInM,1)
 		str = str.." m ("
-		str = str..roundedNum(valInFt,1)
+		str = str..RoundedNum(valInFt,1)
 		str = str.." Fuß)"
 		tex.print(str)
 	end
 	
-	function printMToFt(valInM)
-		local str = roundedNum(valInM,1)
+	function PrintMToFt(valInM)
+		local str = RoundedNum(valInM,1)
 		str = str.." m ("
-		str = str..roundedNum(valInM/ftInM,1)
+		str = str..RoundedNum(valInM/ftInM,1)
 		str = str.." Fuß)"
 		tex.print(str)
 	end
 \end{luacode}
 
 \newcommand{\ft}[1]{
-	\directlua{printFtToM(#1)}
+	\directlua{PrintFtToM(#1)}
 }
 
 \newcommand{\metre}[1]{
-	\directlua{printMToFt(#1)}
+	\directlua{PrintMToFt(#1)}
 }

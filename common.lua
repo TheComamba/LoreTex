@@ -1,4 +1,4 @@
-function texCmd(cmd,args,options)
+function TexCmd(cmd,args,options)
 	if type(args) ~= "table" then
 		args = {args}
 	end
@@ -23,7 +23,7 @@ function texCmd(cmd,args,options)
 	return out
 end
 
-function isIn(elem, list)
+function IsIn(elem, list)
 	for key,val in pairs(list) do
 		if val == elem then
 			return true
@@ -32,37 +32,37 @@ function isIn(elem, list)
 	return false
 end
 
-primaryRefs = {}
-secondaryRefs = {}
-unfoundRefs = {}
-function addRef(label, refs)
-	if label ~= nil and not isIn(label, refs) then
+PrimaryRefs = {}
+SecondaryRefs = {}
+UnfoundRefs = {}
+function AddRef(label, refs)
+	if label ~= nil and not IsIn(label, refs) then
 		refs[#refs+1] = label
 	end
 end
 
-isAppendix = false
-function addRefPrimaryOrSecondary(label)
-	if not isAppendix then
-		addRef(label, primaryRefs)
+IsAppendix = false
+function AddRefPrimaryOrSecondary(label)
+	if not IsAppendix then
+		AddRef(label, PrimaryRefs)
 	else
-		addRef(label, secondaryRefs)
+		AddRef(label, SecondaryRefs)
 	end
 end
 
-function namerefString(label)
-	local str = texCmd("nameref", label)
+function NamerefString(label)
+	local str = TexCmd("nameref", label)
 	str = str.." (Ref. "
-	str = str..texCmd("speech", label)
+	str = str..TexCmd("speech", label)
 	str = str..")"
 	return str
 end
 
-function unknownProcessor(content)
+function UnknownProcessor(content)
 	return "UNKNOWN PROCESSOR"
 end
 
-function listAll(list, processor, additionalProcessorArg)
+function ListAll(list, processor, additionalProcessorArg)
 	local str = ""
 	
 	if type(list[1]) ~= "table" then
@@ -70,22 +70,22 @@ function listAll(list, processor, additionalProcessorArg)
 	end
 	
 	if processor == nil then
-		processor = unknownProcessor
+		processor = UnknownProcessor
 	end
 	
 	local isContainsAtLeastOneItem = false
 	
-	str = str..texCmd("begin","itemize")
+	str = str..TexCmd("begin","itemize")
 	for key,label in pairs(list) do
 		local content = processor(label, additionalProcessorArg)
 		if content ~= nil and content ~= "" then
-			str = str..texCmd("item").." "
+			str = str..TexCmd("item").." "
 			str = str..content
 			
 			isContainsAtLeastOneItem = true
 		end
 	end
-	str = str..texCmd("end","itemize")
+	str = str..TexCmd("end","itemize")
 	
 	if isContainsAtLeastOneItem then
 		return str
@@ -94,14 +94,14 @@ function listAll(list, processor, additionalProcessorArg)
 	end
 end
 
-function listAllRefs()
-	tex.print(texCmd("paragraph", "primaryRefs"))
-	tex.print(listAll(primaryRefs, namerefString))
-	tex.print(texCmd("paragraph", "secondaryRefs"))
-	tex.print(listAll(secondaryRefs, namerefString))
+function ListAllRefs()
+	tex.print(TexCmd("paragraph", "primaryRefs"))
+	tex.print(ListAll(PrimaryRefs, NamerefString))
+	tex.print(TexCmd("paragraph", "secondaryRefs"))
+	tex.print(ListAll(SecondaryRefs, NamerefString))
 end
 
-function scanForRefs(str)
+function ScanForRefs(str)
 	if str == nil then
 		return
 	end
@@ -112,7 +112,7 @@ function scanForRefs(str)
 	while pos1 ~= nil do
 		local pos2 = string.find(str, keyword2, pos1)
 		local ref = string.sub(str, pos1+string.len(keyword1), pos2-1)
-		if not isIn(ref, refs) then
+		if not IsIn(ref, refs) then
 			refs[#refs+1] = ref
 		end
 		pos1 = string.find(str, keyword1, pos2)
@@ -120,19 +120,19 @@ function scanForRefs(str)
 	return refs
 end
 
-function scanForSecondaryRefs(str)
-	for key, ref in pairs(scanForRefs(str)) do
-		if not isIn(ref, primaryRefs) then
-			addRef(ref, secondaryRefs)
+function ScanForSecondaryRefs(str)
+	for key, ref in pairs(ScanForRefs(str)) do
+		if not IsIn(ref, PrimaryRefs) then
+			AddRef(ref, SecondaryRefs)
 		end
 	end
 end
 
-function isStringEmpty(str)
+function IsStringEmpty(str)
 	if type(str) == "table" then
 		local out = true
 		for key, val in pairs(str) do
-			if not isStringEmpty(val) then
+			if not IsStringEmpty(val) then
 				return false
 			end
 		end
@@ -142,17 +142,17 @@ function isStringEmpty(str)
 	if str == nil then
 		return true
 	else
-		return firstNonWhitespaceChar(str) == nil
+		return FirstNonWhitespaceChar(str) == nil
 	end	
 end
 
-function printAllChars(str)
+function PrintAllChars(str)
 	for i=1,#str do
 		tex.print(str:sub(i,i))
 	end
 end
 
-function firstNonWhitespaceChar(str)
+function FirstNonWhitespaceChar(str)
 	local KEYWORD = [[\par]]
 	local out = str:find("%S")
 	local nextPar = str:find(KEYWORD)

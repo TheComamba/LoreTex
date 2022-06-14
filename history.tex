@@ -3,35 +3,35 @@
 dofile("../shared/luatex-for-dnd/history.lua")
 \end{luacode*}
 
-\newcommand{\setCurrentYearVin}[1]{\directlua{currentYearVin = #1}}
-\newcommand{\setYearFmtDjo}{\directlua{yearFmt = yearFmtDjo}}
-\newcommand{\setYearFmtNar}{\directlua{yearFmt = yearFmtNar}}
-\newcommand{\annoVin}[1]{\directlua{annoVin(#1)}}
-\newcommand{\annoDjo}[1]{\directlua{annoDjo(#1)}}
-\newcommand{\annoNar}[1]{\directlua{annoNar(#1)}}
-\newcommand{\annoAll}[1]{\directlua{annoAll(#1)}}
+\newcommand{\setCurrentYearVin}[1]{\directlua{CurrentYearVin = #1}}
+\newcommand{\setYearFmtDjo}{\directlua{YearFmt = YearFmtDjo}}
+\newcommand{\setYearFmtNar}{\directlua{YearFmt = YearFmtNar}}
+\newcommand{\annoVin}[1]{\directlua{AnnoVin(#1)}}
+\newcommand{\annoDjo}[1]{\directlua{AnnoDjo(#1)}}
+\newcommand{\annoNar}[1]{\directlua{AnnoNar(#1)}}
+\newcommand{\annoAll}[1]{\directlua{AnnoAll(#1)}}
 \newcommand{\bornVin}[1]{Geboren im Jahr \annoVin{#1}}
 \newcommand{\bornDjo}[1]{Geboren im Jahr \annoDjo{#1}}
 \newcommand{\bornNar}[1]{Geboren im Jahr \annoNar{#1}}
 \newcommand{\bornAll}[1]{Geboren im Jahr \annoAll{#1}}
 
-\newcommand{\datefmt}[1]{\directlua{tex.print(date(#1))}}
+\newcommand{\datefmt}[1]{\directlua{tex.print(Date(#1))}}
 
 \newcommand{\addHistory}[3][0]{
 		\directlua{
-			addHistory(currentLabel, [[#2]], [[\detokenize{#3}]], #1)
+			AddHistory(CurrentLabel, [[#2]], [[\detokenize{#3}]], #1)
 		}
 }
 
 \newcommand{\addHistoryDjo}[3][0]{
 	\directlua{
-		addHistory(currentLabel, convertYearToVin([[#2]], yearFmtDjo), [[\detokenize{#3}]], #1)
+		AddHistory(CurrentLabel, ConvertYearToVin([[#2]], YearFmtDjo), [[\detokenize{#3}]], #1)
 	}
 }
 
 \newcommand{\addHistoryNar}[3][0]{
 	\directlua{
-		addHistory(currentLabel, convertYearToVin([[#2]], yearFmtNar), [[\detokenize{#3}]], #1)
+		AddHistory(CurrentLabel, ConvertYearToVin([[#2]], YearFmtNar), [[\detokenize{#3}]], #1)
 	}
 }
 

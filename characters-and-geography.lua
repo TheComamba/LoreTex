@@ -1,138 +1,138 @@
-npcs = {}
-places = {}
-currentLabel = ""
-placeTypes = {"continent", "region", "city"}
-placeDepths = {{placeTypes[1], "section"},
-				{placeTypes[2],"subsection"},
-				{placeTypes[3],"subsubsection"}}
-protectedDescriptors = {"name", "shortname", "type", "parent", "location", "born", "died", "species", "gender"}
-onlyMentioned = "zzz-nur-erwähnt"
-heimatlos = "zzz-heimatlos"
-addRef(onlyMentioned,primaryRefs)
-places[onlyMentioned] = {}
-places[onlyMentioned]["name"] = "Nur erwähnt"
-places[onlyMentioned]["type"] = placeTypes[1]
+Npcs = {}
+Places = {}
+CurrentLabel = ""
+PlaceTypes = {"continent", "region", "city"}
+PlaceDepths = {{PlaceTypes[1], "section"},
+				{PlaceTypes[2],"subsection"},
+				{PlaceTypes[3],"subsubsection"}}
+ProtectedDescriptors = {"name", "shortname", "type", "parent", "location", "born", "died", "species", "gender"}
+OnlyMentioned = "zzz-nur-erwähnt"
+Heimatlos = "zzz-heimatlos"
+AddRef(OnlyMentioned,PrimaryRefs)
+Places[OnlyMentioned] = {}
+Places[OnlyMentioned]["name"] = "Nur erwähnt"
+Places[OnlyMentioned]["type"] = PlaceTypes[1]
 
-function addDescriptor(label, descriptor, description)
-	if isStringEmpty(label) then
+function AddDescriptor(label, descriptor, description)
+	if IsStringEmpty(label) then
 		return
-	elseif isStringEmpty(descriptor) then
+	elseif IsStringEmpty(descriptor) then
 		return
-	elseif isStringEmpty(description) then
+	elseif IsStringEmpty(description) then
 		return
 	end
 	
 	if descriptor == "type" then
-		if isIn(description, placeTypes) then
-			places[label] = {}
+		if IsIn(description, PlaceTypes) then
+			Places[label] = {}
 		elseif description == "npc" then
-			npcs[label] = {}
+			Npcs[label] = {}
 		end
 	end
 	
-	if places[label] ~= nil then
-		places[label][descriptor] = description
-	elseif npcs[label] ~= nil then
-		npcs[label][descriptor] = description
+	if Places[label] ~= nil then
+		Places[label][descriptor] = description
+	elseif Npcs[label] ~= nil then
+		Npcs[label][descriptor] = description
 	end
 end
 
-function setLocation(label, location)
-	if npcs[label] == nil then
+function SetLocation(label, location)
+	if Npcs[label] == nil then
 		return
 	end
 	
 	if location ~= nil then
-		npcs[label]["location"] = location
-	elseif currentCity ~= "" then
-		npcs[label]["location"] = currentCity
-	elseif currentRegion ~= "" then
-		npcs[label]["location"] = currentRegion
-	elseif currentContinent ~= "" then
-		npcs[label]["location"] = currentContinent
+		Npcs[label]["location"] = location
+	elseif CurrentCity ~= "" then
+		Npcs[label]["location"] = CurrentCity
+	elseif CurrentRegion ~= "" then
+		Npcs[label]["location"] = CurrentRegion
+	elseif CurrentContinent ~= "" then
+		Npcs[label]["location"] = CurrentContinent
 	end
 end
 
-function listAllFromMap(listOfThings)
+function ListAllFromMap(listOfThings)
 	local allLabels = {}
 	for label,elem in pairs(listOfThings) do
 		allLabels[#allLabels+1] = label
 	end
-	return listAll(allLabels, namerefString)
+	return ListAll(allLabels, NamerefString)
 end
 
-function addNPCsToPlaces()
-	for label,npc in pairs(npcs) do
+function AddNPCsToPlaces()
+	for label,npc in pairs(Npcs) do
 		local location = npc["location"]
-		if location ~= nil and places[location] ~= nil then
-			if places[location]["NPCs"] == nil then
-				places[location]["NPCs"] = {}
+		if location ~= nil and Places[location] ~= nil then
+			if Places[location]["NPCs"] == nil then
+				Places[location]["NPCs"] = {}
 			end
-			places[location]["NPCs"][label] = npc["name"]
+			Places[location]["NPCs"][label] = npc["name"]
 		end
 	end
 end
 
-function descriptorsString(entity)
+function DescriptorsString(entity)
 	local str = ""
-	if entity["parent"] ~= nil and entity["parent"] == onlyMentioned then
-		return texCmd("hspace","1cm")
-	elseif entity["location"] ~= nil and entity["location"] == onlyMentioned then
-		return texCmd("hspace","1cm")
+	if entity["parent"] ~= nil and entity["parent"] == OnlyMentioned then
+		return TexCmd("hspace","1cm")
+	elseif entity["location"] ~= nil and entity["location"] == OnlyMentioned then
+		return TexCmd("hspace","1cm")
 	end
 	
-	str = str..speciesAndAgeString(entity)..[[
+	str = str..SpeciesAndAgeString(entity)..[[
 	
 	]]
 	
 	local descriptorsList = {}
 	for descriptor, description in pairs(entity) do
-		if not isIn(descriptor, protectedDescriptors) then
+		if not IsIn(descriptor, ProtectedDescriptors) then
 			descriptorsList[#descriptorsList+1] = descriptor
 		end
 	end
 	table.sort(descriptorsList)
 	for key, descriptor in pairs(descriptorsList) do
-		str = str..texCmd("paragraph", descriptor)
-		if descriptor == historyCaption then
-			str = str..listHistory(entity[descriptor])
+		str = str..TexCmd("paragraph", descriptor)
+		if descriptor == HistoryCaption then
+			str = str..ListHistory(entity[descriptor])
 		elseif type(entity[descriptor]) == "string" then
 			str = str..entity[descriptor]
 		elseif type(entity[descriptor]) == "table" then
-			str = str..listAllFromMap(entity[descriptor])
+			str = str..ListAllFromMap(entity[descriptor])
 		end
 	end
 	return str
 end
 
-function createNPCsSortedByPlace()
-	sortedNPCs = {}
+function CreateNPCsSortedByPlace()
+	local sortedNPCs = {}
 	sortedNPCs["labels"] = {}
-	for label, npc in pairs(npcs) do
+	for label, npc in pairs(Npcs) do
 		local city = npc["location"]
 		local region = nil
 		
 		if city == nil then
-			city = heimatlos
+			city = Heimatlos
 			region = "andere"
-		elseif places[city] == nil then
+		elseif Places[city] == nil then
 			city = "notfound"
 			region = "andere"
-		elseif places[city]["type"] == "region" then
+		elseif Places[city]["type"] == "region" then
 			region = city
-			city = heimatlos
-		elseif places[city]["parent"] == nil then
+			city = Heimatlos
+		elseif Places[city]["parent"] == nil then
 			region = "andere"
 		else
-			region =  places[city]["parent"]
+			region =  Places[city]["parent"]
 		end
 		
-		if not isIn(region, sortedNPCs["labels"]) then
+		if not IsIn(region, sortedNPCs["labels"]) then
 			sortedNPCs["labels"][#(sortedNPCs["labels"])+1] = region
 			sortedNPCs[region] = {}
 			sortedNPCs[region]["labels"] = {}
 		end
-		if not isIn(city, sortedNPCs[region]["labels"]) then
+		if not IsIn(city, sortedNPCs[region]["labels"]) then
 			sortedNPCs[region]["labels"][#(sortedNPCs[region]["labels"])+1] = city
 			sortedNPCs[region][city] = {}
 			sortedNPCs[region][city]["labels"] = {}
@@ -143,75 +143,75 @@ function createNPCsSortedByPlace()
 	table.sort(sortedNPCs["labels"])
 	for key1, region in pairs(sortedNPCs["labels"]) do
 		local regionName = "Woanders"
-		if places[region] ~= nil then
-			if places[region]["shortname"] then
-				regionName = places[region]["shortname"]
+		if Places[region] ~= nil then
+			if Places[region]["shortname"] then
+				regionName = Places[region]["shortname"]
 			else
-				regionName = places[region]["name"]
+				regionName = Places[region]["name"]
 			end
 		end
-		tex.print(texCmd("section","NPCs in "..regionName))
+		tex.print(TexCmd("section","NPCs in "..regionName))
 		table.sort(sortedNPCs[region]["labels"])
 		for key2, city in pairs(sortedNPCs[region]["labels"]) do
 			local cityName = "NOT FOUND"
-			if places[city] ~= nil then
-				if places[city]["shortname"] then
-					cityName = places[city]["shortname"]
+			if Places[city] ~= nil then
+				if Places[city]["shortname"] then
+					cityName = Places[city]["shortname"]
 				else
-					cityName = places[city]["name"]
+					cityName = Places[city]["name"]
 				end
-			elseif city == heimatlos then
+			elseif city == Heimatlos then
 				cityName = "Heimatlos"
 			end
-			tex.print(texCmd("subsection", "NPCs in "..cityName))
-			if isIn(city, primaryRefs) or isIn(city, secondaryRefs) then
-				tex.print("Siehe auch "..texCmd("nameref", city))
+			tex.print(TexCmd("subsection", "NPCs in "..cityName))
+			if IsIn(city, PrimaryRefs) or IsIn(city, SecondaryRefs) then
+				tex.print("Siehe auch "..TexCmd("nameref", city))
 			end
 			table.sort(sortedNPCs[region][city]["labels"])
 			for key3, npcLabel in pairs(sortedNPCs[region][city]["labels"]) do
-				local npc = npcs[npcLabel]
-				tex.print(texCmd("subsubsection", npc["name"], npc["shortname"]))
-				tex.print(texCmd("label",npcLabel))
-				tex.print(descriptorsString(npc))
+				local npc = Npcs[npcLabel]
+				tex.print(TexCmd("subsubsection", npc["name"], npc["shortname"]))
+				tex.print(TexCmd("label",npcLabel))
+				tex.print(DescriptorsString(npc))
 			end
 		end
 	end
 end
 
-function addPrimaryPlaceNPCsToRefs()
-	for key, ref in pairs(primaryRefs) do
-		if places[ref] ~= nil then
-			local npcsHere = places[ref]["NPCs"]
+function AddPrimaryPlaceNPCsToRefs()
+	for key, ref in pairs(PrimaryRefs) do
+		if Places[ref] ~= nil then
+			local npcsHere = Places[ref]["NPCs"]
 			if npcsHere ~= nil then
 				for label, npc in pairs(npcsHere) do
-					addRef(label, primaryRefs)
+					AddRef(label, PrimaryRefs)
 				end
 			end
 		end
 	end
 end
 
-function addPrimaryPlaceParentsToRefs()
-	for label, entry in pairs(places) do
-		if isIn(label, primaryRefs) then
+function AddPrimaryPlaceParentsToRefs()
+	for label, entry in pairs(Places) do
+		if IsIn(label, PrimaryRefs) then
 			while label ~= nil do
-				addRef(label, primaryRefs)
-				label = places[label]["parent"]
+				AddRef(label, PrimaryRefs)
+				label = Places[label]["parent"]
 			end
 		end
 	end
 end
 
-function scanContentForSecondaryRefs(list)
+function ScanContentForSecondaryRefs(list)
 	for label, entry in pairs(list) do
-		if isIn(label, primaryRefs) then
+		if IsIn(label, PrimaryRefs) then
 			for key, content in pairs(entry) do
 				if type(content) == "string" then
-					scanForSecondaryRefs(content)
+					ScanForSecondaryRefs(content)
 				elseif type(content) == "table" then
 					for key2, subcontent in pairs(content) do
 						if type(subcontent) == "string" then
-							scanForSecondaryRefs(subcontent)
+							ScanForSecondaryRefs(subcontent)
 						end
 					end
 				end
@@ -220,12 +220,12 @@ function scanContentForSecondaryRefs(list)
 	end
 end
 
-function deleteUnused(list)
+function DeleteUnused(list)
 	for label, entry in pairs(list) do
-		if not isIn(label, primaryRefs) then
-			if isIn(label, secondaryRefs) then
-				list[label]["parent"] = onlyMentioned
-				list[label]["location"] = onlyMentioned
+		if not IsIn(label, PrimaryRefs) then
+			if IsIn(label, SecondaryRefs) then
+				list[label]["parent"] = OnlyMentioned
+				list[label]["location"] = OnlyMentioned
 			else
 				list[label] = nil
 			end
@@ -233,55 +233,55 @@ function deleteUnused(list)
 	end
 end
 
-function addPrimaryNPCLocationsToRefs()
-	for label, npc in pairs(npcs) do
-		if isIn(label, primaryRefs) then
+function AddPrimaryNPCLocationsToRefs()
+	for label, npc in pairs(Npcs) do
+		if IsIn(label, PrimaryRefs) then
 			local location = npc["location"]
 			if location ~= nil then
-				addRef(location, primaryRefs)
+				AddRef(location, PrimaryRefs)
 			end
 		end
 	end
 end
 
-function complementRefs()
-	addPrimaryPlaceNPCsToRefs()
-	addPrimaryNPCLocationsToRefs()
-	addPrimaryPlaceParentsToRefs(places)
-	addHistoryDescriptors()
-	scanContentForSecondaryRefs(npcs)
-	scanContentForSecondaryRefs(places)
-	deleteUnused(npcs)
-	deleteUnused(places)
+function ComplementRefs()
+	AddPrimaryPlaceNPCsToRefs()
+	AddPrimaryNPCLocationsToRefs()
+	AddPrimaryPlaceParentsToRefs()
+	AddHistoryDescriptors()
+	ScanContentForSecondaryRefs(Npcs)
+	ScanContentForSecondaryRefs(Places)
+	DeleteUnused(Npcs)
+	DeleteUnused(Places)
 end
 
-function addHistoryDescriptors()
-	for key, label in pairs(primaryRefs) do
-		local history = histories[label]
+function AddHistoryDescriptors()
+	for key, label in pairs(PrimaryRefs) do
+		local history = Histories[label]
 		if history ~= nil then
-			addDescriptor(label, historyCaption, history)
-			scanHistoryForSecondaryRefs(history)
+			AddDescriptor(label, HistoryCaption, history)
+			ScanHistoryForSecondaryRefs(history)
 		end
 	end
 end
 
-function createNPCs()
-	tex.print(texCmd("twocolumn"))
-	tex.print(texCmd("chapter","NPCs"))
-	tex.print(texCmd("section","Alle NPCs, alphabetisch sortiert"))
-	tex.print(listAllFromMap(npcs))
-	tex.print(texCmd("onecolumn"))
+function CreateNPCs()
+	tex.print(TexCmd("twocolumn"))
+	tex.print(TexCmd("chapter","NPCs"))
+	tex.print(TexCmd("section","Alle NPCs, alphabetisch sortiert"))
+	tex.print(ListAllFromMap(Npcs))
+	tex.print(TexCmd("onecolumn"))
 	
-	createNPCsSortedByPlace()
+	CreateNPCsSortedByPlace()
 end
 
-function createGeographyLayer(currentDepth, parent)
-	if currentDepth > #placeDepths then
+function CreateGeographyLayer(currentDepth, parent)
+	if currentDepth > #PlaceDepths then
 		return
 	end
-	placeLabels = {}
-	for label,place in pairs(places) do
-		if place["type"] == placeDepths[currentDepth][1] or parent == onlyMentioned then
+	local placeLabels = {}
+	for label,place in pairs(Places) do
+		if place["type"] == PlaceDepths[currentDepth][1] or parent == OnlyMentioned then
 			if parent == nil or place["parent"] == parent then
 				placeLabels[#placeLabels+1] = label
 			end
@@ -290,45 +290,45 @@ function createGeographyLayer(currentDepth, parent)
 	table.sort(placeLabels)
 
 	for key,label in pairs(placeLabels) do
-		local place = places[label]
+		local place = Places[label]
 		local str = ""
-		local docStructure = placeDepths[currentDepth][2]
-		if place["parent"] ~= nil and place["parent"] == onlyMentioned then
+		local docStructure = PlaceDepths[currentDepth][2]
+		if place["parent"] ~= nil and place["parent"] == OnlyMentioned then
 			docStructure = "paragraph"
 		end
-		str = str..texCmd(docStructure, place["name"], place["shortname"])
-		str = str..texCmd("label", label)
-		str = str..descriptorsString(place)
+		str = str..TexCmd(docStructure, place["name"], place["shortname"])
+		str = str..TexCmd("label", label)
+		str = str..DescriptorsString(place)
 		tex.print(str)
-		createGeographyLayer(currentDepth + 1, label)
+		CreateGeographyLayer(currentDepth + 1, label)
 	end
 end
 
-function createGeography()
-	tex.print(texCmd("twocolumn"))
-	tex.print(texCmd("chapter","Orte"))
-	tex.print(texCmd("section","Alle Orte, alphabetisch sortiert"))
-	tex.print(listAllFromMap(places))
-	tex.print(texCmd("onecolumn"))
+function CreateGeography()
+	tex.print(TexCmd("twocolumn"))
+	tex.print(TexCmd("chapter","Orte"))
+	tex.print(TexCmd("section","Alle Orte, alphabetisch sortiert"))
+	tex.print(ListAllFromMap(Places))
+	tex.print(TexCmd("onecolumn"))
 	
-	tex.print(texCmd("section", "Yestaiel, die Welt", "Yestaiel"))
-	tex.print(texCmd("label", "yestaiel"))
-	tex.print(texCmd("input", "../shared/geography/yestaiel.tex"))
+	tex.print(TexCmd("section", "Yestaiel, die Welt", "Yestaiel"))
+	tex.print(TexCmd("label", "yestaiel"))
+	tex.print(TexCmd("input", "../shared/geography/yestaiel.tex"))
 	
-	createGeographyLayer(1)
+	CreateGeographyLayer(1)
 end
 
-function automatedChapters()
-	addNPCsToPlaces()
-	complementRefs()
-	createNPCs()
-	createGeography()
+function AutomatedChapters()
+	AddNPCsToPlaces()
+	ComplementRefs()
+	CreateNPCs()
+	CreateGeography()
 end
 
-function addAllRefsToPrimary()
-	for key, list in pairs({npcs,places}) do
+function AddAllRefsToPrimary()
+	for key, list in pairs({Npcs,Places}) do
 		for label, elem in pairs(list) do
-			addRef(label, primaryRefs)
+			AddRef(label, PrimaryRefs)
 		end
 	end
 end

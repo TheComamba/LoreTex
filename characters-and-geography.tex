@@ -3,20 +3,20 @@
 dofile("../shared/luatex-for-dnd/characters-and-geography.lua")
 \end{luacode*}
 
-\newcommand{\setContinent}[1]{\directlua{currentContinent = "#1"}}
-\newcommand{\setRegion}[1]{\directlua{currentRegion = "#1"}}
-\newcommand{\setCity}[1]{\directlua{currentCity = "#1"}}
+\newcommand{\setContinent}[1]{\directlua{CurrentContinent = "#1"}}
+\newcommand{\setRegion}[1]{\directlua{CurrentRegion = "#1"}}
+\newcommand{\setCity}[1]{\directlua{CurrentCity = "#1"}}
 
 \newcommand{\newEntity}[4]{
-	\directlua{currentLabel = "#1"}
-	\directlua{addDescriptor(currentLabel,"type","#2")}
-	\directlua{addDescriptor(currentLabel,"shortname", "#3")}
-	\directlua{addDescriptor(currentLabel,"name", "#4")}
+	\directlua{CurrentLabel = "#1"}
+	\directlua{AddDescriptor(CurrentLabel,"type","#2")}
+	\directlua{AddDescriptor(CurrentLabel,"shortname", "#3")}
+	\directlua{AddDescriptor(CurrentLabel,"name", "#4")}
 }
 
 \newcommand{\newNPC}[3]{
 	\newEntity{#1}{npc}{#2}{#3}
-	\directlua{setLocation(currentLabel)}
+	\directlua{SetLocation(CurrentLabel)}
 }
 
 \newcommand{\newContinent}[3]{
@@ -26,31 +26,31 @@ dofile("../shared/luatex-for-dnd/characters-and-geography.lua")
 
 \newcommand{\newRegion}[3]{
 	\newEntity{#1}{region}{#2}{#3}
-	\directlua{addDescriptor(currentLabel,"parent", currentContinent)}
+	\directlua{AddDescriptor(CurrentLabel,"parent", CurrentContinent)}
 	\setRegion{#1}
 }
 
 \newcommand{\newCity}[3]{
 	\newEntity{#1}{city}{#2}{#3}
-	\directlua{addDescriptor(currentLabel,"parent", currentRegion)}
+	\directlua{AddDescriptor(CurrentLabel,"parent", CurrentRegion)}
 	\setCity{#1}
 }
 
 \newcommand{\addDescriptor}[2]{
 	\directlua{
-		addDescriptor(currentLabel,[[#1]],[[\detokenize{#2}]])
+		AddDescriptor(CurrentLabel,[[#1]],[[\detokenize{#2}]])
 	}
 }
 
 \newcommand{\automatedChapters}{
 	\input{../shared/npcs/all.tex}
 	\input{../shared/geography/all.tex}
-	\directlua{automatedChapters()}
+	\directlua{AutomatedChapters()}
 }
 
 \newcommand{\automatedChaptersFUCKINGEVERYTHING}{
 	\input{../shared/npcs/all.tex}
 	\input{../shared/geography/all.tex}
-	\directlua{addAllRefsToPrimary()}
-	\directlua{automatedChapters()}
+	\directlua{AddAllRefsToPrimary()}
+	\directlua{AutomatedChapters()}
 }

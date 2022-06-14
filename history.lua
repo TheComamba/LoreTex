@@ -1,40 +1,40 @@
-currentYearVin = 0
+CurrentYearVin = 0
 
-yearFmtVin = "Vin"
-yearFmtDjo = [[\'Et]]
-yearFmtNar = "NM"
-yearFmt = yearFmtVin
+YearFmtVin = "Vin"
+YearFmtDjo = [[\'Et]]
+YearFmtNar = "NM"
+YearFmt = YearFmtVin
 
-function convertYearToVin(year, fmt)
-	if fmt == yearFmtVin then
+function ConvertYearToVin(year, fmt)
+	if fmt == YearFmtVin then
 		return year
-	elseif fmt == yearFmtDjo then
+	elseif fmt == YearFmtDjo then
 		return year-1566
-	elseif fmt == yearFmtNar then
+	elseif fmt == YearFmtNar then
 		return year-5077
 	end
 end
 
-function convertYearFromVin(year, fmt)
-	if fmt == yearFmtVin then
+function ConvertYearFromVin(year, fmt)
+	if fmt == YearFmtVin then
 		return year
-	elseif fmt == yearFmtDjo then
+	elseif fmt == YearFmtDjo then
 		return year+1566
-	elseif fmt == yearFmtNar then
+	elseif fmt == YearFmtNar then
 		return year+5077
 	end
 end
 
-function annoString(year, fmt)
+function AnnoString(year, fmt)
 	if type(year) == "string" then
 		year = tonumber(year)
 	end
-	local diff = currentYearVin-year
+	local diff = CurrentYearVin-year
 	
 	if fmt == nil then
-		fmt = yearFmt
+		fmt = YearFmt
 	end
-	year = convertYearFromVin(year, fmt)
+	year = ConvertYearFromVin(year, fmt)
 	
 	local str = tostring(year).." "..fmt
 	if diff == 0 then
@@ -47,26 +47,26 @@ function annoString(year, fmt)
 	return str	
 end
 
-function annoVin(year)
-	tex.print(annoString(year))
+function AnnoVin(year)
+	tex.print(AnnoString(year))
 end
 
-function annoDjo(year)
-	tex.print(annoString(convertYearToVin(year, yearFmtDjo)))
+function AnnoDjo(year)
+	tex.print(AnnoString(ConvertYearToVin(year, YearFmtDjo)))
 end
 
-function annoNar(year)
-	tex.print(annoString(convertYearToVin(year, yearFmtNar)))
+function AnnoNar(year)
+	tex.print(AnnoString(ConvertYearToVin(year, YearFmtNar)))
 end
 
-function annoAll(year)
+function AnnoAll(year)
 	tex.print("(replace this deprecated tex command with annoVin.)")
 	tex.print(year.." Vin / "..(year+1566)..[[ \'Et / ]]..(year+5077).." NM")
 end
 
-daysInYear = 364
+DaysInYear = 364
 
-elvenMonthsAndFirstDays = {
+ElvenMonthsAndFirstDays = {
 	{[[Rin]],1},
 	{[[N\'en]],29},
 	{[[Coi]],57},
@@ -81,7 +81,7 @@ elvenMonthsAndFirstDays = {
 	{[[Nqu]],309},
 	{[[H\'is]],337}}
 	
-realworldMonthsAndFirstDays = {
+RealworldMonthsAndFirstDays = {
 	{[[Jan]],11},
 	{[[Feb]],42},
 	{[[Mär]],70},
@@ -95,16 +95,16 @@ realworldMonthsAndFirstDays = {
 	{[[Nov]],315},
 	{[[Dez]],345}}
 	
-defaultDateFmt = {elvenMonthsAndFirstDays,realworldMonthsAndFirstDays}
-dateFmt = defaultDateFmt
+DefaultDateFmt = {ElvenMonthsAndFirstDays,RealworldMonthsAndFirstDays}
+DateFmt = DefaultDateFmt
 
-function monthAndDay(day, namesAndFirstDays)
+function MonthAndDay(day, namesAndFirstDays)
 	local firstDay = 1
 	local month = "NoMonthFound"
 	if day < namesAndFirstDays[1][2] then
 		month = namesAndFirstDays[#namesAndFirstDays][1]
 		firstDay = namesAndFirstDays[#namesAndFirstDays][2]
-		firstDay = firstDay - daysInYear
+		firstDay = firstDay - DaysInYear
 	else
 		for i=#(namesAndFirstDays),1,-1 do
 			local thisMonth = namesAndFirstDays[i][1]
@@ -120,22 +120,22 @@ function monthAndDay(day, namesAndFirstDays)
 	return month, dayOfMonth
 end
 
-function date(day, fmt)
+function Date(day, fmt)
 	if fmt == nil then
-		fmt = dateFmt
+		fmt = DateFmt
 	end
 	local str = ""..day
 	for key, monthsAndFirstDays in pairs(fmt) do
-		local month, dayOfMonth = monthAndDay(day, monthsAndFirstDays)
+		local month, dayOfMonth = MonthAndDay(day, monthsAndFirstDays)
 		str = str..[[ / ]]..dayOfMonth..[[.]]..month
 	end
 	return str
 end
 
-histories = {}
-historyCaption = "Histori\\\"e"
+Histories = {}
+HistoryCaption = "Histori\\\"e"
 
-function addHistory(label, year, event, day)
+function AddHistory(label, year, event, day)
 	if label == nil or label == "" then
 		return
 	end
@@ -148,39 +148,39 @@ function addHistory(label, year, event, day)
 	end
 	year = tonumber(year)
 	day = tonumber(day)
-	local labels = scanForRefs(event)
-	if not isIn(label, labels) then
+	local labels = ScanForRefs(event)
+	if not IsIn(label, labels) then
 		labels[#labels+1] = label
 	end
 	for key, label in pairs(labels) do
-		if histories[label] == nil then
-			histories[label] = {}
+		if Histories[label] == nil then
+			Histories[label] = {}
 		end
-		if histories[label][year] == nil then
-			histories[label][year] = {}
+		if Histories[label][year] == nil then
+			Histories[label][year] = {}
 		end
-		if histories[label][year][day] == nil then
-			histories[label][year][day] = event
+		if Histories[label][year][day] == nil then
+			Histories[label][year][day] = event
 		else
-			histories[label][year][day] = histories[label][year][day]..[[\\]]..event
+			Histories[label][year][day] = Histories[label][year][day]..[[\\]]..event
 		end
 	end
 end
 
-function historyEventString(yearAndDay, history)
+function HistoryEventString(yearAndDay, history)
 	local year = yearAndDay[1]
 	local day = yearAndDay[2]
-	local out = annoString(year)
+	local out = AnnoString(year)
 	if day > 0 then
-		out = out..", Tag "..date(day, {})
+		out = out..", Tag "..Date(day, {})
 	end
 	return out..": "..history[year][day]
 end
 
-function listHistory(history)
+function ListHistory(history)
 	local years = {}
 	for year, daysAndEvents in pairs(history) do
-		if year <= currentYearVin then
+		if year <= CurrentYearVin then
 			years[#years+1] = year
 		end
 	end
@@ -197,14 +197,14 @@ function listHistory(history)
 		end
 	end
 
-	return listAll(yearsAndDays, historyEventString, history)
+	return ListAll(yearsAndDays, HistoryEventString, history)
 end
 
-function scanHistoryForSecondaryRefs(history)
+function ScanHistoryForSecondaryRefs(history)
 	for year, dayAndEvent in pairs(history) do
-		if year <= currentYearVin then
+		if year <= CurrentYearVin then
 			for day, event in pairs(dayAndEvent) do
-				scanForSecondaryRefs(event)
+				ScanForSecondaryRefs(event)
 			end
 		end
 	end

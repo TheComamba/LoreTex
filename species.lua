@@ -208,7 +208,7 @@ function SpeciesAndAgeString(npc, year)
 end
 
 
-function ageTable()
+function AgeTable()
 	tex.print("Bis zum 10. Lebensjahr altern alle Species gleich schnell. Die durchschnittliche Lebenserwartung sind 60 Jahre.")
 	tex.print("")
 	local speciesNames = {}

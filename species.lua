@@ -25,10 +25,35 @@ Species["firbolg"]["ageExponent"] = 1.81
 Species["firbolg"]["nominative"] = "Firbolg"
 Species["firbolg"]["genitive"] = "Firbolg"
 
+Species["genasi-fire"] = {}
+Species["genasi-fire"]["ageExponent"] = 0.9
+Species["genasi-fire"]["nominative"] = "Feuergenasi"
+Species["genasi-fire"]["genitive"] = "Feuergenasi"
+
+Species["genasi-water"] = {}
+Species["genasi-water"]["ageExponent"] = 1.05
+Species["genasi-water"]["nominative"] = "Wassergenasi"
+Species["genasi-water"]["genitive"] = "Wassergenasi"
+
+Species["genasi-earth"] = {}
+Species["genasi-earth"]["ageExponent"] = 1.1
+Species["genasi-earth"]["nominative"] = "Erdgenasi"
+Species["genasi-earth"]["genitive"] = "Erdgenasi"
+
+Species["genasi-air"] = {}
+Species["genasi-air"]["ageExponent"] = 0.95
+Species["genasi-air"]["nominative"] = "Luftgenasi"
+Species["genasi-air"]["genitive"] = "Luftgenasi"
+
 Species["giant"] = {}
 Species["giant"]["ageExponent"] = 2
 Species["giant"]["nominative"] = "Riese"
 Species["giant"]["genitive"] = "Riesen"
+
+Species["gnoll"] = {}
+Species["gnoll"]["ageExponent"] = 0.6
+Species["gnoll"]["nominative"] = "Gnoll"
+Species["gnoll"]["genitive"] = "Gnoll"
 
 Species["gnome"] = {}
 Species["gnome"]["ageExponent"] = 1.79
@@ -44,11 +69,6 @@ Species["goliath"] = {}
 Species["goliath"]["ageExponent"] = 1
 Species["goliath"]["nominative"] = "Goliath"
 Species["goliath"]["genitive"] = "Goliath"
-
-Species["gnoll"] = {}
-Species["gnoll"]["ageExponent"] = 0.6
-Species["gnoll"]["nominative"] = "Gnoll"
-Species["gnoll"]["genitive"] = "Gnoll"
 
 Species["halfdragon"] = {}
 Species["halfdragon"]["ageExponent"] = 1.85
@@ -86,7 +106,7 @@ Species["kenku"]["nominative"] = "Kenku"
 Species["kenku"]["genitive"] = "Kenku"
 
 Species["kobold"] = {}
-Species["kobold"]["ageExponent"] = 1.1
+Species["kobold"]["ageExponent"] = 1.2
 Species["kobold"]["nominative"] = "Kobold"
 Species["kobold"]["genitive"] = "Kobold"
 

@@ -148,6 +148,12 @@ function AddHistory(label, year, event, day)
 	end
 	year = tonumber(year)
 	day = tonumber(day)
+
+	if year == nil or day == nil then
+		tex.print("Trying to print uninterpretable year or day to label "..label)
+		return
+	end
+
 	local labels = ScanForRefs(event)
 	if not IsIn(label, labels) then
 		labels[#labels+1] = label

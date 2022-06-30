@@ -40,6 +40,20 @@ local function getEntitiesIf(condition)
 	return out
 end
 
+local function getShortname(label)
+	if label == Heimatlos then
+		return "Heimatlos"
+	elseif Entities[label] == nil then
+		return "Anderswo"
+	elseif Entities[label]["shortname"] ~= nil then
+		return Entities[label]["shortname"]
+	elseif Entities[label]["name"] ~= nil then
+		return Entities[label]["name"]
+	else
+		return "NO NAME"
+	end
+end
+
 function AddDescriptor(label, descriptor, description)
 	if IsStringEmpty(label) then
 		return
@@ -162,34 +176,16 @@ local function createNPCsSortedByPlace()
 	end
 	
 	table.sort(sortedNPCs["labels"])
-	for key1, region in pairs(sortedNPCs["labels"]) do
-		local regionName = "Woanders"
-		if Entities[region] ~= nil then
-			if Entities[region]["shortname"] then
-				regionName = Entities[region]["shortname"]
-			else
-				regionName = Entities[region]["name"]
+	for key1, regionLabel in pairs(sortedNPCs["labels"]) do
+		tex.print(TexCmd("section","NPCs in "..getShortname(regionLabel)))
+		table.sort(sortedNPCs[regionLabel]["labels"])
+		for key2, cityLabel in pairs(sortedNPCs[regionLabel]["labels"]) do
+			tex.print(TexCmd("subsection", "NPCs in "..getShortname(cityLabel)))
+			if IsIn(cityLabel, PrimaryRefs) then
+				tex.print("Siehe auch "..TexCmd("nameref", cityLabel)..".")
 			end
-		end
-		tex.print(TexCmd("section","NPCs in "..regionName))
-		table.sort(sortedNPCs[region]["labels"])
-		for key2, city in pairs(sortedNPCs[region]["labels"]) do
-			local cityName = "NOT FOUND"
-			if Entities[city] ~= nil then
-				if Entities[city]["shortname"] then
-					cityName = Entities[city]["shortname"]
-				else
-					cityName = Entities[city]["name"]
-				end
-			elseif city == Heimatlos then
-				cityName = "Heimatlos"
-			end
-			tex.print(TexCmd("subsection", "NPCs in "..cityName))
-			if IsIn(city, PrimaryRefs) or IsIn(city, SecondaryRefs) then
-				tex.print("Siehe auch "..TexCmd("nameref", city))
-			end
-			table.sort(sortedNPCs[region][city]["labels"])
-			for key3, npcLabel in pairs(sortedNPCs[region][city]["labels"]) do
+			table.sort(sortedNPCs[regionLabel][cityLabel]["labels"])
+			for key3, npcLabel in pairs(sortedNPCs[regionLabel][cityLabel]["labels"]) do
 				local npc = Entities[npcLabel]
 				tex.print(TexCmd("subsubsection", npc["name"], npc["shortname"]))
 				tex.print(TexCmd("label",npcLabel))

@@ -1,6 +1,8 @@
-Npcs = {}
-Places = {}
+Entities = {}
 CurrentLabel = ""
+CurrentCity = ""
+CurrentRegion = ""
+CurrentContinent = ""
 PlaceTypes = {"continent", "region", "city"}
 PlaceDepths = {{PlaceTypes[1], "section"},
 				{PlaceTypes[2],"subsection"},
@@ -9,9 +11,9 @@ ProtectedDescriptors = {"name", "shortname", "type", "parent", "location", "born
 OnlyMentioned = "zzz-nur-erwähnt"
 Heimatlos = "zzz-heimatlos"
 AddRef(OnlyMentioned,PrimaryRefs)
-Places[OnlyMentioned] = {}
-Places[OnlyMentioned]["name"] = "Nur erwähnt"
-Places[OnlyMentioned]["type"] = PlaceTypes[1]
+Entities[OnlyMentioned] = {}
+Entities[OnlyMentioned]["name"] = "Nur erwähnt"
+Entities[OnlyMentioned]["type"] = PlaceTypes[1]
 
 function AddDescriptor(label, descriptor, description)
 	if IsStringEmpty(label) then
@@ -22,34 +24,25 @@ function AddDescriptor(label, descriptor, description)
 		return
 	end
 	
-	if descriptor == "type" then
-		if IsIn(description, PlaceTypes) then
-			Places[label] = {}
-		elseif description == "npc" then
-			Npcs[label] = {}
-		end
+	if Entities[label] == nil then
+		Entities[label] = {}
 	end
-	
-	if Places[label] ~= nil then
-		Places[label][descriptor] = description
-	elseif Npcs[label] ~= nil then
-		Npcs[label][descriptor] = description
-	end
+	Entities[label][descriptor] = description
 end
 
 function SetLocation(label, location)
-	if Npcs[label] == nil then
+	if Entities[label] == nil then
 		return
 	end
 	
 	if location ~= nil then
-		Npcs[label]["location"] = location
+		Entities[label]["location"] = location
 	elseif CurrentCity ~= "" then
-		Npcs[label]["location"] = CurrentCity
+		Entities[label]["location"] = CurrentCity
 	elseif CurrentRegion ~= "" then
-		Npcs[label]["location"] = CurrentRegion
+		Entities[label]["location"] = CurrentRegion
 	elseif CurrentContinent ~= "" then
-		Npcs[label]["location"] = CurrentContinent
+		Entities[label]["location"] = CurrentContinent
 	end
 end
 
@@ -62,13 +55,15 @@ function ListAllFromMap(listOfThings)
 end
 
 function AddNPCsToPlaces()
-	for label,npc in pairs(Npcs) do
-		local location = npc["location"]
-		if location ~= nil and Places[location] ~= nil then
-			if Places[location]["NPCs"] == nil then
-				Places[location]["NPCs"] = {}
+	for label,npc in pairs(Entities) do
+		if npc["type"] == "npc" then
+			local location = npc["location"]
+			if location ~= nil and Entities[location] ~= nil then
+				if Entities[location]["NPCs"] == nil then
+					Entities[location]["NPCs"] = {}
+				end
+				Entities[location]["NPCs"][label] = npc["name"]
 			end
-			Places[location]["NPCs"][label] = npc["name"]
 		end
 	end
 end
@@ -108,57 +103,59 @@ end
 function CreateNPCsSortedByPlace()
 	local sortedNPCs = {}
 	sortedNPCs["labels"] = {}
-	for label, npc in pairs(Npcs) do
-		local city = npc["location"]
-		local region = nil
-		
-		if city == nil then
-			city = Heimatlos
-			region = "andere"
-		elseif Places[city] == nil then
-			city = "notfound"
-			region = "andere"
-		elseif Places[city]["type"] == "region" then
-			region = city
-			city = Heimatlos
-		elseif Places[city]["parent"] == nil then
-			region = "andere"
-		else
-			region =  Places[city]["parent"]
+	for label, npc in pairs(Entities) do
+		if npc["type"] == "npc" then
+			local city = npc["location"]
+			local region = nil
+			
+			if city == nil then
+				city = Heimatlos
+				region = "andere"
+			elseif Entities[city] == nil then
+				city = "notfound"
+				region = "andere"
+			elseif Entities[city]["type"] == "region" then
+				region = city
+				city = Heimatlos
+			elseif Entities[city]["parent"] == nil then
+				region = "andere"
+			else
+				region =  Entities[city]["parent"]
+			end
+			
+			if not IsIn(region, sortedNPCs["labels"]) then
+				sortedNPCs["labels"][#(sortedNPCs["labels"])+1] = region
+				sortedNPCs[region] = {}
+				sortedNPCs[region]["labels"] = {}
+			end
+			if not IsIn(city, sortedNPCs[region]["labels"]) then
+				sortedNPCs[region]["labels"][#(sortedNPCs[region]["labels"])+1] = city
+				sortedNPCs[region][city] = {}
+				sortedNPCs[region][city]["labels"] = {}
+			end
+			sortedNPCs[region][city]["labels"][#(sortedNPCs[region][city]["labels"])+1] = label
 		end
-		
-		if not IsIn(region, sortedNPCs["labels"]) then
-			sortedNPCs["labels"][#(sortedNPCs["labels"])+1] = region
-			sortedNPCs[region] = {}
-			sortedNPCs[region]["labels"] = {}
-		end
-		if not IsIn(city, sortedNPCs[region]["labels"]) then
-			sortedNPCs[region]["labels"][#(sortedNPCs[region]["labels"])+1] = city
-			sortedNPCs[region][city] = {}
-			sortedNPCs[region][city]["labels"] = {}
-		end
-		sortedNPCs[region][city]["labels"][#(sortedNPCs[region][city]["labels"])+1] = label
 	end
 	
 	table.sort(sortedNPCs["labels"])
 	for key1, region in pairs(sortedNPCs["labels"]) do
 		local regionName = "Woanders"
-		if Places[region] ~= nil then
-			if Places[region]["shortname"] then
-				regionName = Places[region]["shortname"]
+		if Entities[region] ~= nil then
+			if Entities[region]["shortname"] then
+				regionName = Entities[region]["shortname"]
 			else
-				regionName = Places[region]["name"]
+				regionName = Entities[region]["name"]
 			end
 		end
 		tex.print(TexCmd("section","NPCs in "..regionName))
 		table.sort(sortedNPCs[region]["labels"])
 		for key2, city in pairs(sortedNPCs[region]["labels"]) do
 			local cityName = "NOT FOUND"
-			if Places[city] ~= nil then
-				if Places[city]["shortname"] then
-					cityName = Places[city]["shortname"]
+			if Entities[city] ~= nil then
+				if Entities[city]["shortname"] then
+					cityName = Entities[city]["shortname"]
 				else
-					cityName = Places[city]["name"]
+					cityName = Entities[city]["name"]
 				end
 			elseif city == Heimatlos then
 				cityName = "Heimatlos"
@@ -169,7 +166,7 @@ function CreateNPCsSortedByPlace()
 			end
 			table.sort(sortedNPCs[region][city]["labels"])
 			for key3, npcLabel in pairs(sortedNPCs[region][city]["labels"]) do
-				local npc = Npcs[npcLabel]
+				local npc = Entities[npcLabel]
 				tex.print(TexCmd("subsubsection", npc["name"], npc["shortname"]))
 				tex.print(TexCmd("label",npcLabel))
 				tex.print(DescriptorsString(npc))
@@ -180,8 +177,8 @@ end
 
 function AddPrimaryPlaceNPCsToRefs()
 	for key, ref in pairs(PrimaryRefs) do
-		if Places[ref] ~= nil then
-			local npcsHere = Places[ref]["NPCs"]
+		if Entities[ref] ~= nil then
+			local npcsHere = Entities[ref]["NPCs"]
 			if npcsHere ~= nil then
 				for label, npc in pairs(npcsHere) do
 					AddRef(label, PrimaryRefs)
@@ -192,11 +189,11 @@ function AddPrimaryPlaceNPCsToRefs()
 end
 
 function AddPrimaryPlaceParentsToRefs()
-	for label, entry in pairs(Places) do
+	for label, entry in pairs(Entities) do
 		if IsIn(label, PrimaryRefs) then
 			while label ~= nil do
 				AddRef(label, PrimaryRefs)
-				label = Places[label]["parent"]
+				label = Entities[label]["parent"]
 			end
 		end
 	end
@@ -234,7 +231,7 @@ function DeleteUnused(list)
 end
 
 function AddPrimaryNPCLocationsToRefs()
-	for label, npc in pairs(Npcs) do
+	for label, npc in pairs(Entities) do
 		if IsIn(label, PrimaryRefs) then
 			local location = npc["location"]
 			if location ~= nil then
@@ -249,10 +246,8 @@ function ComplementRefs()
 	AddPrimaryNPCLocationsToRefs()
 	AddPrimaryPlaceParentsToRefs()
 	AddHistoryDescriptors()
-	ScanContentForSecondaryRefs(Npcs)
-	ScanContentForSecondaryRefs(Places)
-	DeleteUnused(Npcs)
-	DeleteUnused(Places)
+	ScanContentForSecondaryRefs(Entities)
+	DeleteUnused(Entities)
 end
 
 function AddHistoryDescriptors()
@@ -269,7 +264,13 @@ function CreateNPCs()
 	tex.print(TexCmd("twocolumn"))
 	tex.print(TexCmd("chapter","NPCs"))
 	tex.print(TexCmd("section","Alle NPCs, alphabetisch sortiert"))
-	tex.print(ListAllFromMap(Npcs))
+	local npcs = {}
+	for key, npc in pairs(Entities) do
+		if npc["type"] == "npc" then
+			npcs[#npcs+1] = npc
+		end
+	end
+	tex.print(ListAllFromMap(npcs))
 	tex.print(TexCmd("onecolumn"))
 	
 	CreateNPCsSortedByPlace()
@@ -280,7 +281,7 @@ function CreateGeographyLayer(currentDepth, parent)
 		return
 	end
 	local placeLabels = {}
-	for label,place in pairs(Places) do
+	for label,place in pairs(Entities) do
 		if place["type"] == PlaceDepths[currentDepth][1] or parent == OnlyMentioned then
 			if parent == nil or place["parent"] == parent then
 				placeLabels[#placeLabels+1] = label
@@ -290,7 +291,7 @@ function CreateGeographyLayer(currentDepth, parent)
 	table.sort(placeLabels)
 
 	for key,label in pairs(placeLabels) do
-		local place = Places[label]
+		local place = Entities[label]
 		local str = ""
 		local docStructure = PlaceDepths[currentDepth][2]
 		if place["parent"] ~= nil and place["parent"] == OnlyMentioned then
@@ -308,7 +309,13 @@ function CreateGeography()
 	tex.print(TexCmd("twocolumn"))
 	tex.print(TexCmd("chapter","Orte"))
 	tex.print(TexCmd("section","Alle Orte, alphabetisch sortiert"))
-	tex.print(ListAllFromMap(Places))
+	local places = {}
+	for key, place in pairs(Entities) do
+		if IsIn(place["type"], PlaceTypes) then
+			places[#places+1] = place
+		end
+	end
+	tex.print(ListAllFromMap(places))
 	tex.print(TexCmd("onecolumn"))
 	
 	tex.print(TexCmd("section", "Yestaiel, die Welt", "Yestaiel"))
@@ -326,9 +333,7 @@ function AutomatedChapters()
 end
 
 function AddAllRefsToPrimary()
-	for key, list in pairs({Npcs,Places}) do
-		for label, elem in pairs(list) do
-			AddRef(label, PrimaryRefs)
-		end
+	for label, elem in pairs(Entities) do
+		AddRef(label, PrimaryRefs)
 	end
 end

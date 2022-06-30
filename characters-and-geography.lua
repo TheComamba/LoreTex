@@ -26,6 +26,10 @@ local function isChar(entity)
 	return type ~= nil and IsIn(entity["type"], CharacterTypes)
 end
 
+local function isOnlyMentioned(entity)
+	return IsIn(OnlyMentioned, entity)
+end
+
 local function getEntitiesIf(condition)
 	local out = {}
 	for key, entity in pairs(Entities) do
@@ -89,17 +93,8 @@ local function addNPCsToPlaces()
 	end
 end
 
-local function descriptorsString(entity)
+local function descriptorsStringPrimaryRef(entity)
 	local str = ""
-	if entity["parent"] ~= nil and entity["parent"] == OnlyMentioned then
-		return TexCmd("hspace","1cm")
-	elseif entity["location"] ~= nil and entity["location"] == OnlyMentioned then
-		return TexCmd("hspace","1cm")
-	end
-	
-	str = str..SpeciesAndAgeString(entity)..[[
-	
-	]]
 	
 	local descriptorsList = {}
 	for descriptor, description in pairs(entity) do
@@ -119,6 +114,14 @@ local function descriptorsString(entity)
 		end
 	end
 	return str
+end
+
+local function descriptorsString(entity)
+	if isOnlyMentioned(entity) then
+		return TexCmd("hspace","1cm")
+	else
+		return descriptorsStringPrimaryRef(entity)
+	end
 end
 
 local function createNPCsSortedByPlace()
@@ -190,6 +193,7 @@ local function createNPCsSortedByPlace()
 				local npc = Entities[npcLabel]
 				tex.print(TexCmd("subsubsection", npc["name"], npc["shortname"]))
 				tex.print(TexCmd("label",npcLabel))
+				tex.print(SpeciesAndAgeString(npc))
 				tex.print(descriptorsString(npc))
 			end
 		end

@@ -4,6 +4,7 @@ CurrentCity = ""
 CurrentRegion = ""
 CurrentContinent = ""
 PlaceTypes = {"continent", "region", "city"}
+CharacterTypes = {"npc", "pc", "god"}
 PlaceDepths = {{PlaceTypes[1], "section"},
 				{PlaceTypes[2],"subsection"},
 				{PlaceTypes[3],"subsubsection"}}
@@ -14,6 +15,26 @@ AddRef(OnlyMentioned,PrimaryRefs)
 Entities[OnlyMentioned] = {}
 Entities[OnlyMentioned]["name"] = "Nur erwähnt"
 Entities[OnlyMentioned]["type"] = PlaceTypes[1]
+
+local function isPlace(entity)
+	local type = entity["type"]
+	return type ~= nil and IsIn(entity["type"], PlaceTypes)
+end
+
+local function isChar(entity)
+	local type = entity["type"]
+	return type ~= nil and IsIn(entity["type"], CharacterTypes)
+end
+
+local function getEntitiesIf(condition)
+	local out = {}
+	for key, entity in pairs(Entities) do
+		if condition(entity) then
+			out[key] = entity
+		end
+	end
+	return out
+end
 
 function AddDescriptor(label, descriptor, description)
 	if IsStringEmpty(label) then
@@ -55,14 +76,14 @@ function ListAllFromMap(listOfThings)
 end
 
 function AddNPCsToPlaces()
-	for label,npc in pairs(Entities) do
-		if npc["type"] == "npc" then
-			local location = npc["location"]
+	for label,char in pairs(Entities) do
+		if isChar(char) then
+			local location = char["location"]
 			if location ~= nil and Entities[location] ~= nil then
 				if Entities[location]["NPCs"] == nil then
 					Entities[location]["NPCs"] = {}
 				end
-				Entities[location]["NPCs"][label] = npc["name"]
+				Entities[location]["NPCs"][label] = char["name"]
 			end
 		end
 	end
@@ -103,9 +124,9 @@ end
 function CreateNPCsSortedByPlace()
 	local sortedNPCs = {}
 	sortedNPCs["labels"] = {}
-	for label, npc in pairs(Entities) do
-		if npc["type"] == "npc" then
-			local city = npc["location"]
+	for label, char in pairs(Entities) do
+		if isChar(char) then
+			local city = char["location"]
 			local region = nil
 			
 			if city == nil then
@@ -264,12 +285,7 @@ function CreateNPCs()
 	tex.print(TexCmd("twocolumn"))
 	tex.print(TexCmd("chapter","NPCs"))
 	tex.print(TexCmd("section","Alle NPCs, alphabetisch sortiert"))
-	local npcs = {}
-	for key, npc in pairs(Entities) do
-		if npc["type"] == "npc" then
-			npcs[#npcs+1] = npc
-		end
-	end
+	local npcs = getEntitiesIf(isChar)
 	tex.print(ListAllFromMap(npcs))
 	tex.print(TexCmd("onecolumn"))
 	
@@ -309,12 +325,7 @@ function CreateGeography()
 	tex.print(TexCmd("twocolumn"))
 	tex.print(TexCmd("chapter","Orte"))
 	tex.print(TexCmd("section","Alle Orte, alphabetisch sortiert"))
-	local places = {}
-	for key, place in pairs(Entities) do
-		if IsIn(place["type"], PlaceTypes) then
-			places[#places+1] = place
-		end
-	end
+	local places = getEntitiesIf(isPlace)
 	tex.print(ListAllFromMap(places))
 	tex.print(TexCmd("onecolumn"))
 	

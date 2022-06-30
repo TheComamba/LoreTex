@@ -40,6 +40,16 @@ local function getEntitiesIf(condition)
 	return out
 end
 
+local function getPrimaryRefEntities(map)
+	local out = {}
+	for label, elem in pairs(map) do
+		if IsIn(label, PrimaryRefs) then
+			out[label] = elem
+		end
+	end
+	return out
+end
+
 local function getShortname(label)
 	if label == Heimatlos then
 		return "Heimatlos"
@@ -94,15 +104,14 @@ local function listAllFromMap(listOfThings)
 end
 
 local function addNPCsToPlaces()
-	for label,char in pairs(Entities) do
-		if isChar(char) then
-			local location = char["location"]
-			if location ~= nil and Entities[location] ~= nil then
-				if Entities[location]["NPCs"] == nil then
-					Entities[location]["NPCs"] = {}
-				end
-				Entities[location]["NPCs"][label] = char["name"]
+	local npcs = getEntitiesIf(isChar)
+	for label, char in pairs(npcs) do
+		local location = char["location"]
+		if location ~= nil and Entities[location] ~= nil then
+			if Entities[location]["NPCs"] == nil then
+				Entities[location]["NPCs"] = {}
 			end
+			Entities[location]["NPCs"][label] = char["name"]
 		end
 	end
 end
@@ -141,40 +150,38 @@ end
 local function createNPCsSortedByPlace()
 	local sortedNPCs = {}
 	sortedNPCs["labels"] = {}
-	for label, char in pairs(Entities) do
-		if isChar(char) then
-			local city = char["location"]
-			local region = nil
-			
-			if city == nil then
-				city = Heimatlos
-				region = "andere"
-			elseif Entities[city] == nil then
-				city = "notfound"
-				region = "andere"
-			elseif Entities[city]["type"] == "region" then
-				region = city
-				city = Heimatlos
-			elseif Entities[city]["parent"] == nil then
-				region = "andere"
-			else
-				region =  Entities[city]["parent"]
-			end
-			
-			if not IsIn(region, sortedNPCs["labels"]) then
-				sortedNPCs["labels"][#(sortedNPCs["labels"])+1] = region
-				sortedNPCs[region] = {}
-				sortedNPCs[region]["labels"] = {}
-			end
-			if not IsIn(city, sortedNPCs[region]["labels"]) then
-				sortedNPCs[region]["labels"][#(sortedNPCs[region]["labels"])+1] = city
-				sortedNPCs[region][city] = {}
-				sortedNPCs[region][city]["labels"] = {}
-			end
-			sortedNPCs[region][city]["labels"][#(sortedNPCs[region][city]["labels"])+1] = label
+	local allNpcs = getEntitiesIf(isChar)
+	for label, char in pairs(allNpcs) do
+		local city = char["location"]
+		local region = nil
+
+		if city == nil then
+			city = Heimatlos
+			region = "andere"
+		elseif Entities[city] == nil then
+			city = "notfound"
+			region = "andere"
+		elseif Entities[city]["type"] == "region" then
+			region = city
+			city = Heimatlos
+		elseif Entities[city]["parent"] == nil then
+			region = "andere"
+		else
+			region = Entities[city]["parent"]
 		end
+
+		if not IsIn(region, sortedNPCs["labels"]) then
+			sortedNPCs["labels"][#(sortedNPCs["labels"]) + 1] = region
+			sortedNPCs[region] = {}
+			sortedNPCs[region]["labels"] = {}
+		end
+		if not IsIn(city, sortedNPCs[region]["labels"]) then
+			sortedNPCs[region]["labels"][#(sortedNPCs[region]["labels"]) + 1] = city
+			sortedNPCs[region][city] = {}
+			sortedNPCs[region][city]["labels"] = {}
+		end
+		sortedNPCs[region][city]["labels"][#(sortedNPCs[region][city]["labels"]) + 1] = label
 	end
-	
 	table.sort(sortedNPCs["labels"])
 	for key1, regionLabel in pairs(sortedNPCs["labels"]) do
 		tex.print(TexCmd("section","NPCs in "..getShortname(regionLabel)))
@@ -197,40 +204,39 @@ local function createNPCsSortedByPlace()
 end
 
 local function addPrimaryPlaceNPCsToRefs()
-	for key, ref in pairs(PrimaryRefs) do
-		if Entities[ref] ~= nil then
-			local npcsHere = Entities[ref]["NPCs"]
-			if npcsHere ~= nil then
-				for label, npc in pairs(npcsHere) do
-					AddRef(label, PrimaryRefs)
-				end
+	local places = getEntitiesIf(isPlace)
+	local primaryPlaces = getPrimaryRefEntities(places)
+	for placeLabel, place in pairs(primaryPlaces) do
+		local npcsHere = place["NPCs"]
+		if npcsHere ~= nil then
+			for label, npc in pairs(npcsHere) do
+				AddRef(label, PrimaryRefs)
 			end
 		end
 	end
 end
 
 local function addPrimaryPlaceParentsToRefs()
-	for label, entry in pairs(Entities) do
-		if IsIn(label, PrimaryRefs) then
-			while label ~= nil do
-				AddRef(label, PrimaryRefs)
-				label = Entities[label]["parent"]
-			end
+	local places = getEntitiesIf(isPlace)
+	local primaryPlaces = getPrimaryRefEntities(places)
+	for label, entry in pairs(primaryPlaces) do
+		while label ~= nil do
+			AddRef(label, PrimaryRefs)
+			label = Entities[label]["parent"]
 		end
 	end
 end
 
 local function scanContentForSecondaryRefs(list)
-	for label, entry in pairs(list) do
-		if IsIn(label, PrimaryRefs) then
-			for key, content in pairs(entry) do
-				if type(content) == "string" then
-					ScanForSecondaryRefs(content)
-				elseif type(content) == "table" then
-					for key2, subcontent in pairs(content) do
-						if type(subcontent) == "string" then
-							ScanForSecondaryRefs(subcontent)
-						end
+	local primaryEntries = getPrimaryRefEntities(list)
+	for label, entry in pairs(primaryEntries) do
+		for key, content in pairs(entry) do
+			if type(content) == "string" then
+				ScanForSecondaryRefs(content)
+			elseif type(content) == "table" then
+				for key2, subcontent in pairs(content) do
+					if type(subcontent) == "string" then
+						ScanForSecondaryRefs(subcontent)
 					end
 				end
 			end
@@ -252,12 +258,12 @@ local function deleteUnused(list)
 end
 
 local function addPrimaryNPCLocationsToRefs()
-	for label, npc in pairs(Entities) do
-		if IsIn(label, PrimaryRefs) then
-			local location = npc["location"]
-			if location ~= nil then
-				AddRef(location, PrimaryRefs)
-			end
+	local npcs = getEntitiesIf(isChar)
+	local primaryNpcs = getPrimaryRefEntities(npcs)
+	for label, npc in pairs(primaryNpcs) do
+		local location = npc["location"]
+		if location ~= nil then
+			AddRef(location, PrimaryRefs)
 		end
 	end
 end

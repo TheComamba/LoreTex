@@ -67,7 +67,7 @@ function SetLocation(label, location)
 	end
 end
 
-function ListAllFromMap(listOfThings)
+local function listAllFromMap(listOfThings)
 	local allLabels = {}
 	for label,elem in pairs(listOfThings) do
 		allLabels[#allLabels+1] = label
@@ -75,7 +75,7 @@ function ListAllFromMap(listOfThings)
 	return ListAll(allLabels, NamerefString)
 end
 
-function AddNPCsToPlaces()
+local function addNPCsToPlaces()
 	for label,char in pairs(Entities) do
 		if isChar(char) then
 			local location = char["location"]
@@ -89,7 +89,7 @@ function AddNPCsToPlaces()
 	end
 end
 
-function DescriptorsString(entity)
+local function descriptorsString(entity)
 	local str = ""
 	if entity["parent"] ~= nil and entity["parent"] == OnlyMentioned then
 		return TexCmd("hspace","1cm")
@@ -115,13 +115,13 @@ function DescriptorsString(entity)
 		elseif type(entity[descriptor]) == "string" then
 			str = str..entity[descriptor]
 		elseif type(entity[descriptor]) == "table" then
-			str = str..ListAllFromMap(entity[descriptor])
+			str = str..listAllFromMap(entity[descriptor])
 		end
 	end
 	return str
 end
 
-function CreateNPCsSortedByPlace()
+local function createNPCsSortedByPlace()
 	local sortedNPCs = {}
 	sortedNPCs["labels"] = {}
 	for label, char in pairs(Entities) do
@@ -190,13 +190,13 @@ function CreateNPCsSortedByPlace()
 				local npc = Entities[npcLabel]
 				tex.print(TexCmd("subsubsection", npc["name"], npc["shortname"]))
 				tex.print(TexCmd("label",npcLabel))
-				tex.print(DescriptorsString(npc))
+				tex.print(descriptorsString(npc))
 			end
 		end
 	end
 end
 
-function AddPrimaryPlaceNPCsToRefs()
+local function addPrimaryPlaceNPCsToRefs()
 	for key, ref in pairs(PrimaryRefs) do
 		if Entities[ref] ~= nil then
 			local npcsHere = Entities[ref]["NPCs"]
@@ -209,7 +209,7 @@ function AddPrimaryPlaceNPCsToRefs()
 	end
 end
 
-function AddPrimaryPlaceParentsToRefs()
+local function addPrimaryPlaceParentsToRefs()
 	for label, entry in pairs(Entities) do
 		if IsIn(label, PrimaryRefs) then
 			while label ~= nil do
@@ -220,7 +220,7 @@ function AddPrimaryPlaceParentsToRefs()
 	end
 end
 
-function ScanContentForSecondaryRefs(list)
+local function scanContentForSecondaryRefs(list)
 	for label, entry in pairs(list) do
 		if IsIn(label, PrimaryRefs) then
 			for key, content in pairs(entry) do
@@ -238,7 +238,7 @@ function ScanContentForSecondaryRefs(list)
 	end
 end
 
-function DeleteUnused(list)
+local function deleteUnused(list)
 	for label, entry in pairs(list) do
 		if not IsIn(label, PrimaryRefs) then
 			if IsIn(label, SecondaryRefs) then
@@ -251,7 +251,7 @@ function DeleteUnused(list)
 	end
 end
 
-function AddPrimaryNPCLocationsToRefs()
+local function addPrimaryNPCLocationsToRefs()
 	for label, npc in pairs(Entities) do
 		if IsIn(label, PrimaryRefs) then
 			local location = npc["location"]
@@ -262,16 +262,7 @@ function AddPrimaryNPCLocationsToRefs()
 	end
 end
 
-function ComplementRefs()
-	AddPrimaryPlaceNPCsToRefs()
-	AddPrimaryNPCLocationsToRefs()
-	AddPrimaryPlaceParentsToRefs()
-	AddHistoryDescriptors()
-	ScanContentForSecondaryRefs(Entities)
-	DeleteUnused(Entities)
-end
-
-function AddHistoryDescriptors()
+local function addHistoryDescriptors()
 	for key, label in pairs(PrimaryRefs) do
 		local history = Histories[label]
 		if history ~= nil then
@@ -281,18 +272,28 @@ function AddHistoryDescriptors()
 	end
 end
 
-function CreateNPCs()
+local function complementRefs()
+	addPrimaryPlaceNPCsToRefs()
+	addPrimaryNPCLocationsToRefs()
+	addPrimaryPlaceParentsToRefs()
+	addHistoryDescriptors()
+	scanContentForSecondaryRefs(Entities)
+	deleteUnused(Entities)
+end
+
+
+local function createNPCs()
 	tex.print(TexCmd("twocolumn"))
 	tex.print(TexCmd("chapter","NPCs"))
 	tex.print(TexCmd("section","Alle NPCs, alphabetisch sortiert"))
 	local npcs = getEntitiesIf(isChar)
-	tex.print(ListAllFromMap(npcs))
+	tex.print(listAllFromMap(npcs))
 	tex.print(TexCmd("onecolumn"))
 	
-	CreateNPCsSortedByPlace()
+	createNPCsSortedByPlace()
 end
 
-function CreateGeographyLayer(currentDepth, parent)
+local function createGeographyLayer(currentDepth, parent)
 	if currentDepth > #PlaceDepths then
 		return
 	end
@@ -315,32 +316,32 @@ function CreateGeographyLayer(currentDepth, parent)
 		end
 		str = str..TexCmd(docStructure, place["name"], place["shortname"])
 		str = str..TexCmd("label", label)
-		str = str..DescriptorsString(place)
+		str = str..descriptorsString(place)
 		tex.print(str)
-		CreateGeographyLayer(currentDepth + 1, label)
+		createGeographyLayer(currentDepth + 1, label)
 	end
 end
 
-function CreateGeography()
+local function createGeography()
 	tex.print(TexCmd("twocolumn"))
 	tex.print(TexCmd("chapter","Orte"))
 	tex.print(TexCmd("section","Alle Orte, alphabetisch sortiert"))
 	local places = getEntitiesIf(isPlace)
-	tex.print(ListAllFromMap(places))
+	tex.print(listAllFromMap(places))
 	tex.print(TexCmd("onecolumn"))
 	
 	tex.print(TexCmd("section", "Yestaiel, die Welt", "Yestaiel"))
 	tex.print(TexCmd("label", "yestaiel"))
 	tex.print(TexCmd("input", "../shared/geography/yestaiel.tex"))
 	
-	CreateGeographyLayer(1)
+	createGeographyLayer(1)
 end
 
 function AutomatedChapters()
-	AddNPCsToPlaces()
-	ComplementRefs()
-	CreateNPCs()
-	CreateGeography()
+	addNPCsToPlaces()
+	complementRefs()
+	createNPCs()
+	createGeography()
 end
 
 function AddAllRefsToPrimary()

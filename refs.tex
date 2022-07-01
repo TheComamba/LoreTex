@@ -1,0 +1,8 @@
+\begin{luacode*}
+    dofile("../shared/luatex-for-dnd/refs.lua")
+\end{luacode*}
+
+\newcommand{\myref}[1]{\directlua{AddRefPrimaryOrSecondary("#1")}\nameref{#1}}
+\newcommand{\primaryref}[1]{\directlua{AddRef("#1", PrimaryRefs)}\nameref{#1}}
+\newcommand{\secondaryref}[1]{\directlua{AddRef("#1", SecondaryRefs)}\nameref{#1}}
+\newcommand{\listAllRefs}{\directlua{ListAllRefs()}}

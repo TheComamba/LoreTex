@@ -39,21 +39,6 @@ function GetShortname(label)
     end
 end
 
-function AddDescriptor(label, descriptor, description)
-    if IsStringEmpty(label) then
-        return
-    elseif IsStringEmpty(descriptor) then
-        return
-    elseif IsStringEmpty(description) then
-        return
-    end
-
-    if Entities[label] == nil then
-        Entities[label] = {}
-    end
-    Entities[label][descriptor] = description
-end
-
 local function descriptorsStringPrimaryRef(entity)
     local str = ""
 
@@ -108,7 +93,7 @@ local function addHistoryDescriptors()
     end
 end
 
-local function complementRefs()
+function ComplementRefs()
     AddPrimaryPlaceNPCsToRefs()
     AddPrimaryNPCLocationsToRefs()
     AddPrimaryPlaceParentsToRefs()
@@ -117,12 +102,6 @@ local function complementRefs()
     deleteUnused(Entities)
 end
 
-function AutomatedChapters()
-    AddNPCsToPlaces()
-    complementRefs()
-    CreateNPCs()
-    CreateGeography()
-end
-
-dofile("../shared/luatex-for-dnd/characters.lua")
-dofile("../shared/luatex-for-dnd/geography.lua")
+dofile("../shared/luatex-for-dnd/entities-characters.lua")
+dofile("../shared/luatex-for-dnd/entities-geography.lua")
+dofile("../shared/luatex-for-dnd/entities-tex-api.lua")

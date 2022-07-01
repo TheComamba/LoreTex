@@ -6,22 +6,6 @@ local function isChar(entity)
     return type ~= nil and IsIn(entity["type"], CharacterTypes)
 end
 
-function SetLocation(label, location)
-    if Entities[label] == nil then
-        return
-    end
-
-    if location ~= nil then
-        Entities[label]["location"] = location
-    elseif CurrentCity ~= "" then
-        Entities[label]["location"] = CurrentCity
-    elseif CurrentRegion ~= "" then
-        Entities[label]["location"] = CurrentRegion
-    elseif CurrentContinent ~= "" then
-        Entities[label]["location"] = CurrentContinent
-    end
-end
-
 function AddNPCsToPlaces()
     local npcs = GetEntitiesIf(isChar)
     for label, char in pairs(npcs) do

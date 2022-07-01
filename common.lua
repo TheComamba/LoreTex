@@ -32,7 +32,7 @@ function IsIn(elem, list)
 	return false
 end
 
-function UnknownProcessor(content)
+function UnknownProcessor(content, additionalContent)
 	return "UNKNOWN PROCESSOR"
 end
 

@@ -64,7 +64,7 @@ function AnnoAll(year)
 	tex.print(year .. " Vin / " .. (year + 1566) .. [[ \'Et / ]] .. (year + 5077) .. " NM")
 end
 
-DaysInYear = 364
+DaysPerYear = 364
 
 ElvenMonthsAndFirstDays = {
 	{ [[Rin]], 1 },
@@ -104,7 +104,7 @@ function MonthAndDay(day, namesAndFirstDays)
 	if day < namesAndFirstDays[1][2] then
 		month = namesAndFirstDays[#namesAndFirstDays][1]
 		firstDay = namesAndFirstDays[#namesAndFirstDays][2]
-		firstDay = firstDay - DaysInYear
+		firstDay = firstDay - DaysPerYear
 	else
 		for i = #(namesAndFirstDays), 1, -1 do
 			local thisMonth = namesAndFirstDays[i][1]

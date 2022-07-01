@@ -1,0 +1,17 @@
+\begin{luacode*}
+    dofile("../shared/luatex-for-dnd/dates-and-years.lua")
+\end{luacode*}
+
+\newcommand{\setCurrentYearVin}[1]{\directlua{CurrentYearVin = #1}}
+\newcommand{\setYearFmtDjo}{\directlua{YearFmt = YearFmtDjo}}
+\newcommand{\setYearFmtNar}{\directlua{YearFmt = YearFmtNar}}
+\newcommand{\annoVin}[1]{\directlua{AnnoVin(#1)}}
+\newcommand{\annoDjo}[1]{\directlua{AnnoDjo(#1)}}
+\newcommand{\annoNar}[1]{\directlua{AnnoNar(#1)}}
+\newcommand{\annoAll}[1]{\directlua{AnnoAll(#1)}}
+\newcommand{\bornVin}[1]{Geboren im Jahr \annoVin{#1}}
+\newcommand{\bornDjo}[1]{Geboren im Jahr \annoDjo{#1}}
+\newcommand{\bornNar}[1]{Geboren im Jahr \annoNar{#1}}
+\newcommand{\bornAll}[1]{Geboren im Jahr \annoAll{#1}}
+
+\newcommand{\datefmt}[1]{\directlua{tex.print(Date(#1))}}

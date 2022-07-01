@@ -5,19 +5,19 @@ dofile("../shared/luatex-for-dnd/history.lua")
 
 \newcommand{\addHistory}[3][0]{
 		\directlua{
-			AddHistory(CurrentLabel, #2, [[\detokenize{#3}]], #1)
+			AddEvent(CurrentLabel, #2, [[\detokenize{#3}]], #1)
 		}
 }
 
 \newcommand{\addHistoryDjo}[3][0]{
 	\directlua{
-		AddHistory(CurrentLabel, ConvertYearToVin(#2, YearFmtDjo), [[\detokenize{#3}]], #1)
+		AddEvent(CurrentLabel, ConvertYearToVin(#2, YearFmtDjo), [[\detokenize{#3}]], #1)
 	}
 }
 
 \newcommand{\addHistoryNar}[3][0]{
 	\directlua{
-		AddHistory(CurrentLabel, ConvertYearToVin(#2, YearFmtNar), [[\detokenize{#3}]], #1)
+		AddEvent(CurrentLabel, ConvertYearToVin(#2, YearFmtNar), [[\detokenize{#3}]], #1)
 	}
 }
 

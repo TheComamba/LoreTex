@@ -1,41 +1,39 @@
 Histories = {}
 HistoryCaption = "Histori\\\"e"
 
-function AddHistory(label, year, event, day)
-	if label == nil or label == "" then
-		return
-	end
-	if event == nil or event == "" then
-		return
-	end
+function AddHistoryItemToHistory(historyItem, history)
+    local year = historyItem["year"]
+    local day = historyItem["day"]
+    local event = historyItem["event"]
+    if history[year] == nil then
+        history[year] = {}
+    end
+    if history[year][day] == nil then
+        history[year][day] = event
+    else
+        history[year][day] = history[year][day] .. [[\\]] .. event
+    end
+end
 
+local function newHistoryItem(originator, year, event, day)
+	local item = {}
+	item["originator"] = originator
+	item["year"] = tonumber(year)
+	item["day"] = tonumber(day)
+	local concerns = ScanForRefs(event)
+	if not IsIn(originator, concerns) then
+		concerns[#concerns + 1] = originator
+	end
+	item["concerns"] = concerns
+	return item
+end
+
+function AddEvent(originator, year, event, day)
 	if day == nil or day == "" then
 		day = 0
 	end
-	year = tonumber(year)
-	day = tonumber(day)
-
-	if year == nil or day == nil then
-		tex.print("Trying to print uninterpretable year or day to label " .. label)
-		return
-	end
-
-	local labels = ScanForRefs(event)
-	if not IsIn(label, labels) then
-		labels[#labels + 1] = label
-	end
-	for key, label in pairs(labels) do
-		if Histories[label] == nil then
-			Histories[label] = {}
-		end
-		if Histories[label][year] == nil then
-			Histories[label][year] = {}
-		end
-		if Histories[label][year][day] == nil then
-			Histories[label][year][day] = event
-		else
-			Histories[label][year][day] = Histories[label][year][day] .. [[\\]] .. event
-		end
+	if year <= CurrentYearVin then
+		Histories[#Histories + 1] = newHistoryItem(originator, year, event, day)
 	end
 end
 

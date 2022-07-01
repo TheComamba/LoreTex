@@ -83,13 +83,21 @@ local function deleteUnused(list)
     end
 end
 
-local function addHistoryDescriptors()
-    for key, label in pairs(PrimaryRefs) do
-        local history = Histories[label]
-        if history ~= nil then
-            AddDescriptor(label, HistoryCaption, history)
-            ScanHistoryForSecondaryRefs(history)
+local function addHistoryToEntity(label)
+    local history = {}
+    for key, historyItem in pairs(Histories) do
+        local concerns = historyItem["concerns"]
+        if IsIn(label, concerns) then
+            AddHistoryItemToHistory(historyItem, history)
         end
+    end
+    AddDescriptor(label, HistoryCaption, history)
+    ScanHistoryForSecondaryRefs(history)
+end
+
+local function addHistoryDescriptorsToPrimaryRefs()
+    for key, label in pairs(PrimaryRefs) do
+        addHistoryToEntity(label)
     end
 end
 
@@ -97,7 +105,7 @@ function ComplementRefs()
     AddPrimaryPlaceNPCsToRefs()
     AddPrimaryNPCLocationsToRefs()
     AddPrimaryPlaceParentsToRefs()
-    addHistoryDescriptors()
+    addHistoryDescriptorsToPrimaryRefs()
     ScanContentForSecondaryRefs(Entities)
     deleteUnused(Entities)
 end

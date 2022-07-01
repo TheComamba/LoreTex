@@ -153,7 +153,7 @@ function SpeciesToHuman(years, speciesName)
 		return years
 	else
 		local exponent = Species[speciesName]["ageExponent"]
-		return math.round(10*(years/10)^exponent)
+		return math.round(10 * (years / 10) ^ exponent)
 	end
 end
 
@@ -165,17 +165,17 @@ function HumanToSpecies(years, speciesName)
 		return years
 	else
 		local exponent = Species[speciesName]["ageExponent"]
-		return math.round((years/10)^(1/exponent) * 10)
+		return math.round((years / 10) ^ (1 / exponent) * 10)
 	end
 end
 
 function ConvertAge(age, speciesName)
 	if Species[speciesName] == nil then
-		tex.print("UNKNOWN SPECIES OF AGE "..age)
+		tex.print("UNKNOWN SPECIES OF AGE " .. age)
 	end
 	local speciesAge = SpeciesToHuman(age, speciesName)
 	local gen = Species[speciesName]["genitive"]
-	tex.print(speciesAge.." Jahre ("..age.." "..gen.."jahre)")
+	tex.print(speciesAge .. " Jahre (" .. age .. " " .. gen .. "jahre)")
 end
 
 function SpeciesAndAgeString(npc, year)
@@ -187,22 +187,22 @@ function SpeciesAndAgeString(npc, year)
 		if gender ~= nil then
 			local gen = Species[speciesName]["genitive"]
 			if gender == "male" then
-				str = str..gen.."-Mann"
+				str = str .. gen .. "-Mann"
 			elseif gender == "female" then
-				str = str..gen.."-Frau"
+				str = str .. gen .. "-Frau"
 			else
-				str = str..gen.."-Person"
+				str = str .. gen .. "-Person"
 			end
 		else
-			str = str..Species[speciesName]["nominative"]
+			str = str .. Species[speciesName]["nominative"]
 		end
 	end
-	
+
 	local born = npc["born"]
 	if born ~= nil then
 		born = tonumber(born)
 		if str ~= "" then
-			str = str..", "
+			str = str .. ", "
 		end
 		if year == nil then
 			year = CurrentYearVin
@@ -213,20 +213,19 @@ function SpeciesAndAgeString(npc, year)
 			died = tonumber(died)
 			if died <= CurrentYearVin then
 				age = died - born
-				str = str.."wurde "
+				str = str .. "wurde "
 			end
 		end
-		str = str..age.." Jahre "
+		str = str .. age .. " Jahre "
 		if speciesName ~= nil and Species[speciesName] ~= nil and Species[speciesName]["ageExponent"] ~= 1 then
-			str = str.."("..HumanToSpecies(age, speciesName).." "
-			str = str..Species[speciesName]["genitive"].."jahre) "
+			str = str .. "(" .. HumanToSpecies(age, speciesName) .. " "
+			str = str .. Species[speciesName]["genitive"] .. "jahre) "
 		end
-		str = str.."alt."
+		str = str .. "alt."
 	end
-	
+
 	return str
 end
-
 
 function AgeTable()
 	tex.print("Bis zum 10. Lebensjahr altern alle Species gleich schnell. Die durchschnittliche Lebenserwartung sind 60 Jahre.")
@@ -237,19 +236,19 @@ function AgeTable()
 	end
 	table.sort(speciesNames)
 	local str = TexCmd("begin", "tabular")
-	str = str..[[{c|ccccc}
+	str = str .. [[{c|ccccc}
 	Species& jugendlich& jung& mittel& alt& sehr alt\\]]
-	str = str..TexCmd("hline").." "
+	str = str .. TexCmd("hline") .. " "
 	for key, speciesName in pairs(speciesNames) do
-		str = str..Species[speciesName]["nominative"]..[[&]]
-		for key2, age in pairs({15, 25, 40,60,80}) do
+		str = str .. Species[speciesName]["nominative"] .. [[&]]
+		for key2, age in pairs({ 15, 25, 40, 60, 80 }) do
 			if key2 ~= 1 then
-				str = str..[[&]]
+				str = str .. [[&]]
 			end
-			str = str..SpeciesToHuman(age, speciesName).." a"
+			str = str .. SpeciesToHuman(age, speciesName) .. " a"
 		end
-		str = str..[[\\]]
+		str = str .. [[\\]]
 	end
-	str = str..TexCmd("end", "tabular")
+	str = str .. TexCmd("end", "tabular")
 	tex.print(str)
 end

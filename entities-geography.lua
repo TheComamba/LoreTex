@@ -11,13 +11,13 @@ Entities[OnlyMentioned] = {}
 Entities[OnlyMentioned]["name"] = "Nur erwähnt"
 Entities[OnlyMentioned]["type"] = PlaceTypes[1]
 
-local function isPlace(entity)
+function IsPlace(entity)
     local type = entity["type"]
     return type ~= nil and IsIn(entity["type"], PlaceTypes)
 end
 
 function AddPrimaryPlaceNPCsToRefs()
-    local places = GetEntitiesIf(isPlace)
+    local places = GetEntitiesIf(IsPlace)
     local primaryPlaces = GetPrimaryRefEntities(places)
     for placeLabel, place in pairs(primaryPlaces) do
         local npcsHere = place["NPCs"]
@@ -30,7 +30,7 @@ function AddPrimaryPlaceNPCsToRefs()
 end
 
 function AddPrimaryPlaceParentsToRefs()
-    local places = GetEntitiesIf(isPlace)
+    local places = GetEntitiesIf(IsPlace)
     local primaryPlaces = GetPrimaryRefEntities(places)
     for label, entry in pairs(primaryPlaces) do
         while label ~= nil do
@@ -73,7 +73,7 @@ function CreateGeography()
     tex.print(TexCmd("twocolumn"))
     tex.print(TexCmd("chapter", "Orte"))
     tex.print(TexCmd("section", "Alle Orte, alphabetisch sortiert"))
-    local places = GetEntitiesIf(isPlace)
+    local places = GetEntitiesIf(IsPlace)
     tex.print(ListAllFromMap(places))
     tex.print(TexCmd("onecolumn"))
 

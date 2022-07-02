@@ -95,7 +95,7 @@ function ScanContentForSecondaryRefs(list)
     end
 end
 
-function AddAllRefsToPrimary()
+function AddAllEntitiesToPrimaryRefs()
     for label, elem in pairs(Entities) do
         AddRef(label, PrimaryRefs)
     end

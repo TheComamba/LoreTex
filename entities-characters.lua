@@ -1,13 +1,13 @@
 CharacterTypes = { "npc", "pc", "god" }
 local Heimatlos = "zzz-heimatlos"
 
-local function isChar(entity)
+function IsChar(entity)
     local type = entity["type"]
     return type ~= nil and IsIn(entity["type"], CharacterTypes)
 end
 
 function AddNPCsToPlaces()
-    local npcs = GetEntitiesIf(isChar)
+    local npcs = GetEntitiesIf(IsChar)
     for label, char in pairs(npcs) do
         local location = char["location"]
         if location ~= nil and Entities[location] ~= nil then
@@ -22,7 +22,7 @@ end
 local function createNPCsSortedByPlace()
     local sortedNPCs = {}
     sortedNPCs["labels"] = {}
-    local allNpcs = GetEntitiesIf(isChar)
+    local allNpcs = GetEntitiesIf(IsChar)
     for label, char in pairs(allNpcs) do
         local city = char["location"]
         local region = nil
@@ -76,7 +76,7 @@ local function createNPCsSortedByPlace()
 end
 
 function AddPrimaryNPCLocationsToRefs()
-    local npcs = GetEntitiesIf(isChar)
+    local npcs = GetEntitiesIf(IsChar)
     local primaryNpcs = GetPrimaryRefEntities(npcs)
     for label, npc in pairs(primaryNpcs) do
         local location = npc["location"]
@@ -90,7 +90,7 @@ function CreateNPCs()
     tex.print(TexCmd("twocolumn"))
     tex.print(TexCmd("chapter", "NPCs"))
     tex.print(TexCmd("section", "Alle NPCs, alphabetisch sortiert"))
-    local npcs = GetEntitiesIf(isChar)
+    local npcs = GetEntitiesIf(IsChar)
     tex.print(ListAllFromMap(npcs))
     tex.print(TexCmd("onecolumn"))
 

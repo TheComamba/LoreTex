@@ -2,17 +2,17 @@ Histories = {}
 HistoryCaption = "Histori\\\"e"
 
 function AddHistoryItemToHistory(historyItem, history)
-    local year = historyItem["year"]
-    local day = historyItem["day"]
-    local event = historyItem["event"]
-    if history[year] == nil then
-        history[year] = {}
-    end
-    if history[year][day] == nil then
-        history[year][day] = event
-    else
-        history[year][day] = history[year][day] .. [[\\]] .. event
-    end
+	local year = historyItem["year"]
+	local day = historyItem["day"]
+	local event = historyItem["event"]
+	if history[year] == nil then
+		history[year] = {}
+	end
+	if history[year][day] == nil then
+		history[year][day] = event
+	else
+		history[year][day] = history[year][day] .. [[\\]] .. event
+	end
 end
 
 local function newHistoryItem(originator, year, event, day)

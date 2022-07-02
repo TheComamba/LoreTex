@@ -88,7 +88,6 @@ function ComplementRefs()
     AddPrimaryNPCLocationsToRefs()
     AddPrimaryPlaceParentsToRefs()
     AddHistoryDescriptorsToPrimaryRefs()
-    AddHistoryRefsToSecondary()
     ScanContentForSecondaryRefs(Entities)
     deleteUnused(Entities)
 end

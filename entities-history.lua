@@ -14,16 +14,3 @@ function AddHistoryDescriptorsToPrimaryRefs()
         addHistoryToEntity(label)
     end
 end
-
-function AddHistoryRefsToSecondary()
-    for key1, historyItem in pairs(Histories) do
-        local concerns = historyItem["concerns"]
-        if IsContainsPrimary(concerns) then
-            for key2, label in pairs(concerns) do
-                if not IsIn(label, PrimaryRefs) then
-                    AddRef(label, SecondaryRefs)
-                end
-            end
-        end
-    end
-end

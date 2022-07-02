@@ -70,13 +70,3 @@ function ListHistory(history)
 
 	return ListAll(yearsAndDays, HistoryEventString, history)
 end
-
-function ScanHistoryForSecondaryRefs(history)
-	for year, dayAndEvent in pairs(history) do
-		if year <= CurrentYearVin then
-			for day, event in pairs(dayAndEvent) do
-				ScanForSecondaryRefs(event)
-			end
-		end
-	end
-end

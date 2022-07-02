@@ -1,13 +1,33 @@
 PrimaryRefs = {}
 SecondaryRefs = {}
 UnfoundRefs = {}
-function AddRef(label, refs)
+IsAppendix = false
+
+local function addSingleRef(label, refs)
     if label ~= nil and not IsIn(label, refs) then
         refs[#refs + 1] = label
     end
 end
 
-IsAppendix = false
+function AddRef(labels, refs)
+    if type(labels) == "string" then
+        addSingleRef(labels, refs)
+    elseif type(labels) == "table" then
+        for key, label in pairs(labels) do
+            addSingleRef(label, refs)
+        end
+    end
+end
+
+function IsContainsPrimary(list)
+    for key, label in pairs(list) do
+        if IsIn(label, PrimaryRefs) then
+            return true
+        end
+    end
+    return false
+end
+
 function AddRefPrimaryOrSecondary(label)
     if not IsAppendix then
         AddRef(label, PrimaryRefs)

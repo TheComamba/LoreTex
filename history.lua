@@ -20,6 +20,7 @@ local function newHistoryItem(originator, year, event, day)
 	item["originator"] = originator
 	item["year"] = tonumber(year)
 	item["day"] = tonumber(day)
+	item["event"] = event
 	local concerns = ScanForRefs(event)
 	if not IsIn(originator, concerns) then
 		concerns[#concerns + 1] = originator

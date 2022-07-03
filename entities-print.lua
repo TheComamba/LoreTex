@@ -69,7 +69,6 @@ local function printEntities(sectionname, entitiesList)
     for label, entity in pairs(entitiesList) do
         tex.print(TexCmd("subsection", entity["name"], entity["shortname"]))
         tex.print(TexCmd("label", label))
-        tex.print(SpeciesAndAgeString(entity))
         tex.print(DescriptorsString(entity))
     end
 end

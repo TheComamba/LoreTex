@@ -40,11 +40,26 @@ local function deleteUnused(list)
     end
 end
 
+local function addPrimaryEntitiesLocationsToRefs()
+    local primaryEntities = GetPrimaryRefEntities(Entities)
+    for label, entity in pairs(primaryEntities) do
+        local location = entity["location"]
+        if location ~= nil then
+            AddRef(location, PrimaryRefs)
+        end
+    end
+end
+
+function AddAutomatedDescriptors()
+    AddHistoryDescriptors()
+    AddNPCsToPlaces()
+    AddSpeciesAndAgeStringToNPCs()
+end
+
 function ComplementRefs()
     AddPrimaryPlaceNPCsToRefs()
-    AddPrimaryNPCLocationsToRefs()
     AddPrimaryPlaceParentsToRefs()
-    AddHistoryDescriptors()
+    addPrimaryEntitiesLocationsToRefs()
     ScanContentForSecondaryRefs(Entities)
     deleteUnused(Entities)
 end

@@ -22,13 +22,9 @@ function AddNPCsToPlaces()
     end
 end
 
-function AddPrimaryNPCLocationsToRefs()
+function AddSpeciesAndAgeStringToNPCs()
     local npcs = GetEntitiesIf(IsChar)
-    local primaryNpcs = GetPrimaryRefEntities(npcs)
-    for label, npc in pairs(primaryNpcs) do
-        local location = npc["location"]
-        if location ~= nil then
-            AddRef(location, PrimaryRefs)
-        end
+    for label, char in pairs(npcs) do
+        AddDescriptor(label, "Erscheinung", SpeciesAndAgeString(char))
     end
 end

@@ -10,7 +10,13 @@ function AddDescriptor(label, descriptor, description)
     if Entities[label] == nil then
         Entities[label] = {}
     end
-    Entities[label][descriptor] = description
+    if Entities[label][descriptor] == nil then
+        Entities[label][descriptor] = description
+    else
+        Entities[label][descriptor] = Entities[label][descriptor] .. [[
+
+        ]] .. description
+    end
 end
 
 function SetLocation(label, location)
@@ -30,7 +36,7 @@ function SetLocation(label, location)
 end
 
 function AutomatedChapters()
-    AddNPCsToPlaces()
+    AddAutomatedDescriptors()
     ComplementRefs()
     CreateGeography()
     PrintEntityChapterSortedByLocation("Charaktere", GetEntitiesIf(IsChar))

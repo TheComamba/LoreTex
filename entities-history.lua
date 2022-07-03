@@ -22,7 +22,7 @@ local function addHistoryToEntity(label)
 end
 
 function AddHistoryDescriptors()
-    for key, label in pairs(PrimaryRefs) do
+    for label, entity in pairs(Entities) do
         addHistoryToEntity(label)
     end
 end

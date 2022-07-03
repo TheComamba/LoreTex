@@ -47,6 +47,9 @@ end
 
 dofile("../shared/luatex-for-dnd/entities-geography.lua")
 dofile("../shared/luatex-for-dnd/entities-characters.lua")
+dofile("../shared/luatex-for-dnd/entities-organisations.lua")
+dofile("../shared/luatex-for-dnd/entities-languages.lua")
+dofile("../shared/luatex-for-dnd/entities-items.lua")
 dofile("../shared/luatex-for-dnd/entities-history.lua")
 dofile("../shared/luatex-for-dnd/entities-print.lua")
 dofile("../shared/luatex-for-dnd/entities-tex-api.lua")

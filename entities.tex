@@ -6,17 +6,13 @@ dofile("../shared/luatex-for-dnd/entities.lua")
 \newcommand{\setContinent}[1]{\directlua{CurrentContinent = "#1"}}
 \newcommand{\setRegion}[1]{\directlua{CurrentRegion = "#1"}}
 \newcommand{\setCity}[1]{\directlua{CurrentCity = "#1"}}
+\newcommand{\resetCurrentLabels}{\directlua{ResetCurrentLabels()}}
 
 \newcommand{\newEntity}[4]{
 	\directlua{CurrentLabel = "#1"}
-	\directlua{AddDescriptor(CurrentLabel,"type","#2")}
-	\directlua{AddDescriptor(CurrentLabel,"shortname", [[\detokenize{#3}]])}
-	\directlua{AddDescriptor(CurrentLabel,"name", [[\detokenize{#4}]])}
-}
-
-\newcommand{\newNPC}[3]{
-	\newEntity{#1}{npc}{#2}{#3}
-	\directlua{SetLocation(CurrentLabel)}
+	\directlua{SetDescriptor(CurrentLabel,"type","#2")}
+	\directlua{SetDescriptor(CurrentLabel,"shortname", [[\detokenize{#3}]])}
+	\directlua{SetDescriptor(CurrentLabel,"name", [[\detokenize{#4}]])}
 }
 
 \newcommand{\newContinent}[3]{
@@ -26,31 +22,63 @@ dofile("../shared/luatex-for-dnd/entities.lua")
 
 \newcommand{\newRegion}[3]{
 	\newEntity{#1}{region}{#2}{#3}
-	\directlua{AddDescriptor(CurrentLabel,"parent", CurrentContinent)}
+	\directlua{SetDescriptor(CurrentLabel,"parent", CurrentContinent)}
 	\setRegion{#1}
 }
 
 \newcommand{\newCity}[3]{
 	\newEntity{#1}{city}{#2}{#3}
-	\directlua{AddDescriptor(CurrentLabel,"parent", CurrentRegion)}
+	\directlua{SetDescriptor(CurrentLabel,"parent", CurrentRegion)}
 	\setCity{#1}
+}
+
+\newcommand{\newNPC}[3]{
+	\newEntity{#1}{npc}{#2}{#3}
+	\directlua{SetLocation(CurrentLabel)}
+}
+
+\newcommand{\newOrganisation}[3]{
+	\newEntity{#1}{organisation}{#2}{#3}
+	\directlua{SetLocation(CurrentLabel)}
+}
+
+\newcommand{\newLanguage}[3]{
+	\newEntity{#1}{language}{#2}{#3}
+	\directlua{SetLocation(CurrentLabel)}
+}
+
+\newcommand{\newItem}[3]{
+	\newEntity{#1}{item}{#2}{#3}
+	\directlua{SetLocation(CurrentLabel)}
 }
 
 \newcommand{\addDescriptor}[2]{
 	\directlua{
-		AddDescriptor(CurrentLabel,[[#1]],[[\detokenize{#2}]])
+		SetDescriptor(CurrentLabel,[[#1]],[[\detokenize{#2}]])
+	}
+}
+
+\newcommand{\setLoation}[1]{
+	\directlua{
+		SetDescriptor(CurrentLabel,"location","#1")
 	}
 }
 
 \newcommand{\automatedChapters}{
-	\input{../shared/npcs/all.tex}
 	\input{../shared/geography/all.tex}
+	\input{../shared/npcs/all.tex}
+	\input{../shared/organisations/all.tex}
+	\input{../shared/languages/all.tex}
+	\input{../shared/items/all.tex}
 	\directlua{AutomatedChapters()}
 }
 
 \newcommand{\automatedChaptersFUCKINGEVERYTHING}{
-	\input{../shared/npcs/all.tex}
 	\input{../shared/geography/all.tex}
+	\input{../shared/npcs/all.tex}
+	\input{../shared/organisations/all.tex}
+	\input{../shared/languages/all.tex}
+	\input{../shared/items/all.tex}
 	\directlua{AddAllEntitiesToPrimaryRefs()}
 	\directlua{AutomatedChapters()}
 }

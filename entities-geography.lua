@@ -1,17 +1,17 @@
 CurrentCity = ""
 CurrentRegion = ""
 CurrentContinent = ""
-PlaceTypes = { "continent", "region", "city" }
-PlaceDepths = { { PlaceTypes[1], "section" },
-    { PlaceTypes[2], "subsection" },
-    { PlaceTypes[3], "subsubsection" } }
+local placeTypes = { "continent", "region", "city" }
+local placeDepths = { { placeTypes[1], "section" },
+    { placeTypes[2], "subsection" },
+    { placeTypes[3], "subsubsection" } }
 
 function IsPlace(entity)
     if entity == nil then
         return false
     end
     local type = entity["type"]
-    return type ~= nil and IsIn(entity["type"], PlaceTypes)
+    return type ~= nil and IsIn(entity["type"], placeTypes)
 end
 
 function AddPrimaryPlaceNPCsToRefs()
@@ -39,12 +39,12 @@ function AddPrimaryPlaceParentsToRefs()
 end
 
 local function createGeographyLayer(currentDepth, parent)
-    if currentDepth > #PlaceDepths then
+    if currentDepth > #placeDepths then
         return
     end
     local placeLabels = {}
     for label, place in pairs(Entities) do
-        if place["type"] == PlaceDepths[currentDepth][1] and IsIn(label, PrimaryRefs) then
+        if place["type"] == placeDepths[currentDepth][1] and IsIn(label, PrimaryRefs) then
             if parent == nil or place["parent"] == parent then
                 placeLabels[#placeLabels + 1] = label
             end
@@ -55,7 +55,7 @@ local function createGeographyLayer(currentDepth, parent)
     for key, label in pairs(placeLabels) do
         local place = Entities[label]
         local str = ""
-        local docStructure = PlaceDepths[currentDepth][2]
+        local docStructure = placeDepths[currentDepth][2]
         str = str .. TexCmd(docStructure, place["name"], place["shortname"])
         str = str .. TexCmd("label", label)
         str = str .. DescriptorsString(place)

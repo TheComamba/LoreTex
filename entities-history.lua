@@ -18,7 +18,7 @@ local function addHistoryToEntity(label)
             end
         end
     end
-    AddDescriptor(label, HistoryCaption, history)
+    SetDescriptor(label, HistoryCaption, history)
 end
 
 function AddHistoryDescriptors()

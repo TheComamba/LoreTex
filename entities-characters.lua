@@ -1,12 +1,11 @@
-CharacterTypes = { "npc", "pc", "god" }
-local Heimatlos = "zzz-heimatlos"
+local characterTypes = { "pc", "npc", "god" }
 
 function IsChar(entity)
     if entity == nil then
         return false
     end
     local type = entity["type"]
-    return type ~= nil and IsIn(entity["type"], CharacterTypes)
+    return type ~= nil and IsIn(entity["type"], characterTypes)
 end
 
 function AddNPCsToPlaces()
@@ -25,6 +24,6 @@ end
 function AddSpeciesAndAgeStringToNPCs()
     local npcs = GetEntitiesIf(IsChar)
     for label, char in pairs(npcs) do
-        AddDescriptor(label, "Erscheinung", SpeciesAndAgeString(char))
+        SetDescriptor(label, "Erscheinung", SpeciesAndAgeString(char))
     end
 end

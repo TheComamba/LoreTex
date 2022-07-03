@@ -1,4 +1,4 @@
-function AddDescriptor(label, descriptor, description)
+function SetDescriptor(label, descriptor, description)
     if IsStringEmpty(label) then
         return
     elseif IsStringEmpty(descriptor) then
@@ -10,13 +10,7 @@ function AddDescriptor(label, descriptor, description)
     if Entities[label] == nil then
         Entities[label] = {}
     end
-    if Entities[label][descriptor] == nil then
-        Entities[label][descriptor] = description
-    else
-        Entities[label][descriptor] = Entities[label][descriptor] .. [[
-
-        ]] .. description
-    end
+    Entities[label][descriptor] = description
 end
 
 function SetLocation(label, location)
@@ -40,4 +34,14 @@ function AutomatedChapters()
     ComplementRefs()
     CreateGeography()
     PrintEntityChapter("Charaktere", GetEntitiesIf(IsChar))
+    PrintEntityChapter("Organisationen", GetEntitiesIf(IsOrganisation))
+    PrintEntityChapter("Sprachen", GetEntitiesIf(IsLanguage))
+    PrintEntityChapter("Gegenstände", GetEntitiesIf(IsItem))
+end
+
+function ResetCurrentLabels()
+    CurrentLabel = ""
+    CurrentContinent = ""
+    CurrentRegion = ""
+    CurrentCity = ""
 end

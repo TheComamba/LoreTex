@@ -21,7 +21,7 @@ local function addHistoryToEntity(label)
     AddDescriptor(label, HistoryCaption, history)
 end
 
-function AddHistoryDescriptorsToPrimaryRefs()
+function AddHistoryDescriptors()
     for key, label in pairs(PrimaryRefs) do
         addHistoryToEntity(label)
     end

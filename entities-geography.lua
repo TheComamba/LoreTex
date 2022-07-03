@@ -85,6 +85,8 @@ function CreateGeography()
     tex.print(TexCmd("input", "../shared/geography/yestaiel.tex"))
 
     createGeographyLayer(1)
+
+    PrintOnlyMentionedSection(places)
 end
 
 function LocationLabelToName(label)

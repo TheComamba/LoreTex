@@ -73,28 +73,7 @@ local function printEntities(sectionname, entitiesList)
     end
 end
 
-function PrintEntityChapterSortedByLocation(name, entitiesList)
-    local primaryEntities = GetPrimaryRefEntities(entitiesList)
-    if not next(primaryEntities) then
-        return
-    end
-
-    tex.print(TexCmd("twocolumn"))
-    tex.print(TexCmd("chapter", name))
-    tex.print(TexCmd("section*", "Alle " .. name))
-    tex.print(ListAllFromMap(primaryEntities))
-    tex.print(TexCmd("onecolumn"))
-
-    local sectionname = "In der ganzen Welt"
-    local entitiesHere = extractEntitiesAtLocation(primaryEntities, nil)
-    printEntities(sectionname, entitiesHere)
-
-    for index, label in pairs(AllLocationLabelsSorted()) do
-        local sectionname = "In " .. LocationLabelToName(label)
-        local entitiesHere = extractEntitiesAtLocation(primaryEntities, label)
-        printEntities(sectionname, entitiesHere)
-    end
-
+function PrintOnlyMentionedSection(entitiesList)
     local secondaryRefLabels = getSecondaryRefEntitiesLabels(entitiesList)
     if #secondaryRefLabels > 0 then
         tex.print(TexCmd("twocolumn"))
@@ -107,4 +86,35 @@ function PrintEntityChapterSortedByLocation(name, entitiesList)
         end
         tex.print(TexCmd("onecolumn"))
     end
+end
+
+local function printEntityChapterBeginning(name, primaryEntities)
+    tex.print(TexCmd("twocolumn"))
+    tex.print(TexCmd("chapter", name))
+    tex.print(TexCmd("section*", "Alle " .. name))
+    tex.print(ListAllFromMap(primaryEntities))
+    tex.print(TexCmd("onecolumn"))
+end
+
+local function printEntityChapterSortedByLocation(primaryEntities)
+    local sectionname = "In der ganzen Welt"
+    local entitiesHere = extractEntitiesAtLocation(primaryEntities, nil)
+    printEntities(sectionname, entitiesHere)
+
+    for index, label in pairs(AllLocationLabelsSorted()) do
+        local sectionname = "In " .. LocationLabelToName(label)
+        local entitiesHere = extractEntitiesAtLocation(primaryEntities, label)
+        printEntities(sectionname, entitiesHere)
+    end
+end
+
+function PrintEntityChapter(name, entitiesList)
+    local primaryEntities = GetPrimaryRefEntities(entitiesList)
+    if not next(primaryEntities) then
+        return
+    end
+
+    printEntityChapterBeginning(name, primaryEntities)
+    printEntityChapterSortedByLocation(primaryEntities)
+    PrintOnlyMentionedSection(entitiesList)
 end

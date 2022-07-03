@@ -39,5 +39,5 @@ function AutomatedChapters()
     AddAutomatedDescriptors()
     ComplementRefs()
     CreateGeography()
-    PrintEntityChapterSortedByLocation("Charaktere", GetEntitiesIf(IsChar))
+    PrintEntityChapter("Charaktere", GetEntitiesIf(IsChar))
 end

@@ -1,11 +1,6 @@
 Entities = {}
 CurrentLabel = ""
 ProtectedDescriptors = { "name", "shortname", "type", "parent", "location", "born", "died", "species", "gender" }
-OnlyMentioned = "zzz-nur-erwähnt"
-
-function IsOnlyMentioned(entity)
-    return IsIn(OnlyMentioned, entity)
-end
 
 function GetEntitiesIf(condition)
     local out = {}
@@ -25,19 +20,6 @@ function GetPrimaryRefEntities(map)
         end
     end
     return out
-end
-
-local function deleteUnused(list)
-    for label, entry in pairs(list) do
-        if not IsIn(label, PrimaryRefs) then
-            if IsIn(label, SecondaryRefs) then
-                list[label]["parent"] = OnlyMentioned
-                list[label]["location"] = OnlyMentioned
-            else
-                list[label] = nil
-            end
-        end
-    end
 end
 
 local function addPrimaryEntitiesLocationsToRefs()
@@ -61,7 +43,6 @@ function ComplementRefs()
     AddPrimaryPlaceParentsToRefs()
     addPrimaryEntitiesLocationsToRefs()
     ScanContentForSecondaryRefs(Entities)
-    deleteUnused(Entities)
 end
 
 dofile("../shared/luatex-for-dnd/entities-geography.lua")

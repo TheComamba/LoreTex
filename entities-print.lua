@@ -30,7 +30,7 @@ function GetShortname(label)
     end
 end
 
-local function descriptorsStringPrimaryRef(entity)
+function DescriptorsString(entity)
     local str = ""
 
     local descriptorsList = {}
@@ -51,14 +51,6 @@ local function descriptorsStringPrimaryRef(entity)
         end
     end
     return str
-end
-
-function DescriptorsString(entity)
-    if IsOnlyMentioned(entity) then
-        return TexCmd("hspace", "1cm")
-    else
-        return descriptorsStringPrimaryRef(entity)
-    end
 end
 
 local function printEntities(sectionname, entitiesList)
@@ -88,7 +80,7 @@ function PrintOnlyMentionedSection(entitiesList)
     end
 end
 
-local function printEntityChapterBeginning(name, primaryEntities)
+function PrintEntityChapterBeginning(name, primaryEntities)
     tex.print(TexCmd("twocolumn"))
     tex.print(TexCmd("chapter", name))
     tex.print(TexCmd("section*", "Alle " .. name))
@@ -114,7 +106,7 @@ function PrintEntityChapter(name, entitiesList)
         return
     end
 
-    printEntityChapterBeginning(name, primaryEntities)
+    PrintEntityChapterBeginning(name, primaryEntities)
     printEntityChapterSortedByLocation(primaryEntities)
     PrintOnlyMentionedSection(entitiesList)
 end

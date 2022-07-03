@@ -6,11 +6,6 @@ PlaceDepths = { { PlaceTypes[1], "section" },
     { PlaceTypes[2], "subsection" },
     { PlaceTypes[3], "subsubsection" } }
 
-AddRef(OnlyMentioned, PrimaryRefs)
-Entities[OnlyMentioned] = {}
-Entities[OnlyMentioned]["name"] = "Nur erwähnt"
-Entities[OnlyMentioned]["type"] = PlaceTypes[1]
-
 function IsPlace(entity)
     if entity == nil then
         return false
@@ -49,7 +44,7 @@ local function createGeographyLayer(currentDepth, parent)
     end
     local placeLabels = {}
     for label, place in pairs(Entities) do
-        if place["type"] == PlaceDepths[currentDepth][1] or parent == OnlyMentioned then
+        if place["type"] == PlaceDepths[currentDepth][1] and IsIn(label, PrimaryRefs) then
             if parent == nil or place["parent"] == parent then
                 placeLabels[#placeLabels + 1] = label
             end
@@ -61,9 +56,6 @@ local function createGeographyLayer(currentDepth, parent)
         local place = Entities[label]
         local str = ""
         local docStructure = PlaceDepths[currentDepth][2]
-        if place["parent"] ~= nil and place["parent"] == OnlyMentioned then
-            docStructure = "paragraph"
-        end
         str = str .. TexCmd(docStructure, place["name"], place["shortname"])
         str = str .. TexCmd("label", label)
         str = str .. DescriptorsString(place)
@@ -73,12 +65,9 @@ local function createGeographyLayer(currentDepth, parent)
 end
 
 function CreateGeography()
-    tex.print(TexCmd("twocolumn"))
-    tex.print(TexCmd("chapter", "Orte"))
-    tex.print(TexCmd("section", "Alle Orte, alphabetisch sortiert"))
     local places = GetEntitiesIf(IsPlace)
-    tex.print(ListAllFromMap(places))
-    tex.print(TexCmd("onecolumn"))
+    local primaryPlaces = GetPrimaryRefEntities(places)
+    PrintEntityChapterBeginning("Orte", primaryPlaces)
 
     tex.print(TexCmd("section", "Yestaiel, die Welt", "Yestaiel"))
     tex.print(TexCmd("label", "yestaiel"))

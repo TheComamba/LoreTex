@@ -39,17 +39,14 @@ dofile("../shared/luatex-for-dnd/entities.lua")
 
 \newcommand{\newOrganisation}[3]{
 	\newEntity{#1}{organisation}{#2}{#3}
-	\directlua{SetLocation(CurrentLabel)}
 }
 
 \newcommand{\newLanguage}[3]{
 	\newEntity{#1}{language}{#2}{#3}
-	\directlua{SetLocation(CurrentLabel)}
 }
 
 \newcommand{\newItem}[3]{
 	\newEntity{#1}{item}{#2}{#3}
-	\directlua{SetLocation(CurrentLabel)}
 }
 
 \newcommand{\addDescriptor}[2]{
@@ -58,10 +55,8 @@ dofile("../shared/luatex-for-dnd/entities.lua")
 	}
 }
 
-\newcommand{\setLoation}[1]{
-	\directlua{
-		SetDescriptor(CurrentLabel,"location","#1")
-	}
+\newcommand{\setLocation}[1]{
+	\directlua{SetLocation(CurrentLabel, "#1")}
 }
 
 \newcommand{\automatedChapters}{

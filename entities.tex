@@ -10,8 +10,8 @@ dofile("../shared/luatex-for-dnd/entities.lua")
 \newcommand{\newEntity}[4]{
 	\directlua{CurrentLabel = "#1"}
 	\directlua{AddDescriptor(CurrentLabel,"type","#2")}
-	\directlua{AddDescriptor(CurrentLabel,"shortname", "#3")}
-	\directlua{AddDescriptor(CurrentLabel,"name", "#4")}
+	\directlua{AddDescriptor(CurrentLabel,"shortname", [[\detokenize{#3}]])}
+	\directlua{AddDescriptor(CurrentLabel,"name", [[\detokenize{#4}]])}
 }
 
 \newcommand{\newNPC}[3]{

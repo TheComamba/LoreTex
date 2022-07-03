@@ -49,9 +49,9 @@ dofile("../shared/luatex-for-dnd/entities.lua")
 	\newEntity{#1}{item}{#2}{#3}
 }
 
-\newcommand{\addDescriptor}[2]{
+\newcommand{\addDescriptor}[3][]{
 	\directlua{
-		SetDescriptor(CurrentLabel,[[#1]],[[\detokenize{#2}]])
+		SetDescriptor(CurrentLabel,"#2",[[\detokenize{#3}]], "#1")
 	}
 }
 

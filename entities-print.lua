@@ -30,6 +30,19 @@ function GetShortname(label)
     end
 end
 
+local function descritptorTableString(map)
+    local keys = {}
+    for key, elem in pairs(map) do
+        keys[#keys + 1] = key
+    end
+    table.sort(keys)
+    local str = ""
+    for index, key in pairs(keys) do
+        str = str .. key .. ": " .. map[key] .. TexCmd("newline")
+    end
+    return str
+end
+
 function DescriptorsString(entity)
     local str = ""
 
@@ -47,7 +60,7 @@ function DescriptorsString(entity)
         elseif type(entity[descriptor]) == "string" then
             str = str .. entity[descriptor]
         elseif type(entity[descriptor]) == "table" then
-            str = str .. ListAllFromMap(entity[descriptor])
+            str = str .. descritptorTableString(entity[descriptor])
         end
     end
     return str

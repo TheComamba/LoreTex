@@ -1,4 +1,4 @@
-function SetDescriptor(label, descriptor, description)
+function SetDescriptor(label, descriptor, description, subdescriptor)
     if IsStringEmpty(label) then
         return
     elseif IsStringEmpty(descriptor) then
@@ -10,7 +10,14 @@ function SetDescriptor(label, descriptor, description)
     if Entities[label] == nil then
         Entities[label] = {}
     end
-    Entities[label][descriptor] = description
+    if subdescriptor == nil then
+        Entities[label][descriptor] = description
+    else
+        if Entities[label][descriptor] == nil then
+            Entities[label][descriptor] = {}
+        end
+        Entities[label][descriptor][subdescriptor] = description
+    end
 end
 
 function SetLocation(label, location)

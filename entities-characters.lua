@@ -24,6 +24,6 @@ end
 function AddSpeciesAndAgeStringToNPCs()
     local npcs = GetEntitiesIf(IsChar)
     for label, char in pairs(npcs) do
-        SetDescriptor(label, "Erscheinung", SpeciesAndAgeString(char))
+        SetDescriptor(label, "Erscheinung", SpeciesAndAgeString(char), "Spezies und Alter")
     end
 end

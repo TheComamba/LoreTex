@@ -15,10 +15,12 @@ function TexCmd(cmd, args, options)
 		end
 	end
 
-	if args ~= nil then
+	if args ~= nil and #args > 0 then
 		for key, arg in pairs(args) do
 			out = out .. [[{]] .. arg .. [[}]]
 		end
+	else
+		out = out .. [[{}]]
 	end
 	return out
 end

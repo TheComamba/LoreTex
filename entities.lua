@@ -27,49 +27,6 @@ function GetPrimaryRefEntities(map)
     return out
 end
 
-function GetShortname(label)
-    if Entities[label] == nil then
-        return "Anderswo"
-    elseif Entities[label]["shortname"] ~= nil then
-        return Entities[label]["shortname"]
-    elseif Entities[label]["name"] ~= nil then
-        return Entities[label]["name"]
-    else
-        return "NO NAME"
-    end
-end
-
-local function descriptorsStringPrimaryRef(entity)
-    local str = ""
-
-    local descriptorsList = {}
-    for descriptor, description in pairs(entity) do
-        if not IsIn(descriptor, ProtectedDescriptors) then
-            descriptorsList[#descriptorsList + 1] = descriptor
-        end
-    end
-    table.sort(descriptorsList)
-    for key, descriptor in pairs(descriptorsList) do
-        str = str .. TexCmd("paragraph", descriptor)
-        if descriptor == HistoryCaption then
-            str = str .. ListHistory(entity[descriptor])
-        elseif type(entity[descriptor]) == "string" then
-            str = str .. entity[descriptor]
-        elseif type(entity[descriptor]) == "table" then
-            str = str .. ListAllFromMap(entity[descriptor])
-        end
-    end
-    return str
-end
-
-function DescriptorsString(entity)
-    if IsOnlyMentioned(entity) then
-        return TexCmd("hspace", "1cm")
-    else
-        return descriptorsStringPrimaryRef(entity)
-    end
-end
-
 local function deleteUnused(list)
     for label, entry in pairs(list) do
         if not IsIn(label, PrimaryRefs) then
@@ -95,4 +52,5 @@ end
 dofile("../shared/luatex-for-dnd/entities-characters.lua")
 dofile("../shared/luatex-for-dnd/entities-geography.lua")
 dofile("../shared/luatex-for-dnd/entities-history.lua")
+dofile("../shared/luatex-for-dnd/entities-print.lua")
 dofile("../shared/luatex-for-dnd/entities-tex-api.lua")

@@ -32,6 +32,6 @@ end
 function AutomatedChapters()
     AddNPCsToPlaces()
     ComplementRefs()
-    CreateNPCs()
     CreateGeography()
+    PrintEntityChapterSortedByLocation("Charaktere", GetEntitiesIf(IsChar))
 end

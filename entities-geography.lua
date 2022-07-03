@@ -12,6 +12,9 @@ Entities[OnlyMentioned]["name"] = "Nur erwähnt"
 Entities[OnlyMentioned]["type"] = PlaceTypes[1]
 
 function IsPlace(entity)
+    if entity == nil then
+        return false
+    end
     local type = entity["type"]
     return type ~= nil and IsIn(entity["type"], PlaceTypes)
 end
@@ -82,4 +85,33 @@ function CreateGeography()
     tex.print(TexCmd("input", "../shared/geography/yestaiel.tex"))
 
     createGeographyLayer(1)
+end
+
+function LocationLabelToName(label)
+    local name = ""
+    while label ~= nil do
+        if name == "" then
+            name = GetShortname(label)
+        else
+            name = GetShortname(label) .. " - " .. name
+        end
+        label = Entities[label]["parent"]
+    end
+    return name
+end
+
+local function compareLabelsByFullName(label1, label2)
+    local name1 = LocationLabelToName(label1)
+    local name2 = LocationLabelToName(label2)
+    return name1 < name2
+end
+
+function AllLocationLabelsSorted()
+    local locations = GetEntitiesIf(IsPlace)
+    local labels = {}
+    for label, elem in pairs(locations) do
+        labels[#labels + 1] = label
+    end
+    table.sort(labels, compareLabelsByFullName)
+    return labels
 end

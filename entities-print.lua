@@ -38,7 +38,10 @@ local function descritptorTableString(map)
     table.sort(keys)
     local str = ""
     for index, key in pairs(keys) do
-        str = str .. key .. ": " .. map[key] .. "." .. TexCmd("newline")
+        local content = map[key]
+        if not IsStringEmpty(content) then
+            str = str .. TexCmd("subparagraph",key) .. content
+        end
     end
     return str
 end

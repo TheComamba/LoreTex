@@ -51,7 +51,7 @@ dofile("../shared/luatex-for-dnd/entities.lua")
 
 \newcommand{\addDescriptor}[3][]{
 	\directlua{
-		SetDescriptor(CurrentLabel,"#2",[[\detokenize{#3}]], "#1")
+		SetDescriptor(CurrentLabel,[[\detokenize{#2}]],[[\detokenize{#3}]], [[\detokenize{#1}]])
 	}
 }
 

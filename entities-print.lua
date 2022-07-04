@@ -38,7 +38,7 @@ local function descritptorTableString(map)
     table.sort(keys)
     local str = ""
     for index, key in pairs(keys) do
-        str = str .. key .. ": " .. map[key] .. TexCmd("newline")
+        str = str .. key .. ": " .. map[key] .. "." .. TexCmd("newline")
     end
     return str
 end

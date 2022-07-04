@@ -10,11 +10,16 @@ function SetDescriptor(label, descriptor, description, subdescriptor)
     if Entities[label] == nil then
         Entities[label] = {}
     end
-    if subdescriptor == nil then
+    if IsStringEmpty(subdescriptor) then
         Entities[label][descriptor] = description
     else
         if Entities[label][descriptor] == nil then
             Entities[label][descriptor] = {}
+        end
+        if type(Entities[label][descriptor]) ~= "table" then
+            local value = Entities[label][descriptor]
+            Entities[label][descriptor] = {}
+            Entities[label][descriptor]["I WANT TO BE A TABLE"] = value
         end
         Entities[label][descriptor][subdescriptor] = description
     end

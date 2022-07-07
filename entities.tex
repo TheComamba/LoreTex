@@ -37,6 +37,11 @@ dofile("../shared/luatex-for-dnd/entities.lua")
 	\directlua{SetLocation(CurrentLabel)}
 }
 
+\newcommand{\newGod}[3]{
+	\newEntity{#1}{god}{#2}{#3}
+	\directlua{SetLocation(CurrentLabel)}
+}
+
 \newcommand{\newOrganisation}[3]{
 	\newEntity{#1}{organisation}{#2}{#3}
 }
@@ -52,6 +57,24 @@ dofile("../shared/luatex-for-dnd/entities.lua")
 \newcommand{\addDescriptor}[3][]{
 	\directlua{
 		SetDescriptor(CurrentLabel,[[\detokenize{#2}]],[[\detokenize{#3}]], [[\detokenize{#1}]])
+	}
+}
+
+\newcommand{\setDescription}[1]{
+	\directlua{
+		SetDescriptor(CurrentLabel,[[Beschreibung]],[[\detokenize{#1}]])
+	}
+}
+
+\newcommand{\setEtymology}[1]{
+	\directlua{
+		SetDescriptor(CurrentLabel,[[Etymologie]],[[\detokenize{#1}]])
+	}
+}
+
+\newcommand{\setStats}[1]{
+	\directlua{
+		SetDescriptor(CurrentLabel,[[Werte]],[[\detokenize{#1}]])
 	}
 }
 

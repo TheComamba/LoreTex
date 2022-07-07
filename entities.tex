@@ -46,6 +46,10 @@ dofile("../shared/luatex-for-dnd/entities.lua")
 	\newEntity{#1}{organisation}{#2}{#3}
 }
 
+\newcommand{\newShip}[3]{
+	\newEntity{#1}{ship}{#2}{#3}
+}
+
 \newcommand{\newLanguage}[3]{
 	\newEntity{#1}{language}{#2}{#3}
 }
@@ -78,6 +82,12 @@ dofile("../shared/luatex-for-dnd/entities.lua")
 	}
 }
 
+\newcommand{\setSpells}[1]{
+	\directlua{
+		SetDescriptor(CurrentLabel,[[Zauber]],[[\detokenize{#1}]])
+	}
+}
+
 \newcommand{\setLocation}[1]{
 	\directlua{SetLocation(CurrentLabel, "#1")}
 }
@@ -86,6 +96,7 @@ dofile("../shared/luatex-for-dnd/entities.lua")
 	\input{../shared/geography/all.tex}
 	\input{../shared/npcs/all.tex}
 	\input{../shared/organisations/all.tex}
+	\input{../shared/ships/all.tex}
 	\input{../shared/languages/all.tex}
 	\input{../shared/items/all.tex}
 	\directlua{AutomatedChapters()}
@@ -95,6 +106,7 @@ dofile("../shared/luatex-for-dnd/entities.lua")
 	\input{../shared/geography/all.tex}
 	\input{../shared/npcs/all.tex}
 	\input{../shared/organisations/all.tex}
+	\input{../shared/ships/all.tex}
 	\input{../shared/languages/all.tex}
 	\input{../shared/items/all.tex}
 	\directlua{AddAllEntitiesToPrimaryRefs()}

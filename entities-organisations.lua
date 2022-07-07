@@ -1,4 +1,4 @@
-local organisationTypes = { "organisation" }
+local organisationTypes = { "organisation", "ship" }
 
 function IsOrganisation(entity)
     if entity == nil then

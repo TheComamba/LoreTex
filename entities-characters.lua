@@ -1,11 +1,11 @@
-local characterTypes = { "pc", "npc", "god" }
+CharacterTypes = { "pc", "npc", "god" }
 
 function IsChar(entity)
     if entity == nil then
         return false
     end
     local type = entity["type"]
-    return type ~= nil and IsIn(entity["type"], characterTypes)
+    return type ~= nil and IsIn(entity["type"], CharacterTypes)
 end
 
 function AddNPCsToPlaces()

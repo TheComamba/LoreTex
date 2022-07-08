@@ -40,7 +40,7 @@ local function descritptorTableString(map)
     for index, key in pairs(keys) do
         local content = map[key]
         if not IsStringEmpty(content) then
-            str = str .. TexCmd("subparagraph",key) .. content
+            str = str .. TexCmd("subparagraph", key) .. content
         end
     end
     return str
@@ -73,9 +73,9 @@ local function printEntities(sectionname, entitiesList)
     if not next(entitiesList) then
         return
     end
-    tex.print(TexCmd("section", sectionname))
+    tex.print(TexCmd("subsection", sectionname))
     for label, entity in pairs(entitiesList) do
-        tex.print(TexCmd("subsection", entity["name"], entity["shortname"]))
+        tex.print(TexCmd("subsubsection", entity["name"], entity["shortname"]))
         tex.print(TexCmd("label", label))
         tex.print(DescriptorsString(entity))
     end
@@ -116,13 +116,19 @@ local function printEntityChapterSortedByLocation(primaryEntities)
     end
 end
 
-function PrintEntityChapter(name, entitiesList)
+function PrintEntityChapter(name, entitiesList, types)
     local primaryEntities = GetPrimaryRefEntities(entitiesList)
     if not next(primaryEntities) then
         return
     end
 
     PrintEntityChapterBeginning(name, primaryEntities)
-    printEntityChapterSortedByLocation(primaryEntities)
+    for i, type in pairs(types) do
+        local entitiesOfType = GetEntitiesOfType(type, primaryEntities)
+        if entitiesOfType ~= {} then
+            tex.print(TexCmd("section", type .. "s"))
+            printEntityChapterSortedByLocation(entitiesOfType)
+        end
+    end
     PrintOnlyMentionedSection(entitiesList)
 end

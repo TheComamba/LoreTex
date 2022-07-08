@@ -12,6 +12,19 @@ function GetEntitiesIf(condition)
     return out
 end
 
+function GetEntitiesOfType(type, map)
+    local out = {}
+    if map == nil then
+        map = Entities
+    end
+    for key, entity in pairs(Entities) do
+        if entity["type"] == type then
+            out[key] = entity
+        end
+    end
+    return out
+end
+
 function GetPrimaryRefEntities(map)
     local out = {}
     for label, elem in pairs(map) do

@@ -2,9 +2,12 @@ Entities = {}
 CurrentLabel = ""
 ProtectedDescriptors = { "name", "shortname", "type", "parent", "location", "born", "died", "species", "gender" }
 
-function GetEntitiesIf(condition)
+function GetEntitiesIf(condition, map)
     local out = {}
-    for key, entity in pairs(Entities) do
+    if map == nil then
+        map = Entities
+    end
+    for key, entity in pairs(map) do
         if condition(entity) then
             out[key] = entity
         end

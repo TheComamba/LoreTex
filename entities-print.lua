@@ -115,14 +115,19 @@ end
 
 local function printEntityChapterSortedByLocation(primaryEntities)
     local sectionname = "In der ganzen Welt"
-    local entitiesHere = extractEntitiesAtLocation(primaryEntities, nil)
-    local out = printEntities(sectionname, entitiesHere)
+    local entitiesWorldwide = extractEntitiesAtLocation(primaryEntities, nil)
+    local out = printEntities(sectionname, entitiesWorldwide)
 
     for index, label in pairs(AllLocationLabelsSorted()) do
         local sectionname = "In " .. LocationLabelToName(label)
         local entitiesHere = extractEntitiesAtLocation(primaryEntities, label)
         Append(out, printEntities(sectionname, entitiesHere))
     end
+
+    local sectionname = "An mysteriösen Orten"
+    local entitiesSomewhere = GetEntitiesIf(IsLocationUnknown, primaryEntities)
+    Append(out, printEntities(sectionname, entitiesSomewhere))
+
     return out
 end
 

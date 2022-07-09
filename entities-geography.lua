@@ -14,6 +14,25 @@ function IsPlace(entity)
     return type ~= nil and IsIn(entity["type"], placeTypes)
 end
 
+function IsLocationUnknown(entity)
+    local location = entity["location"]
+    if IsEmpty(location) then
+        return false
+    else
+        if Entities[location] == nil then
+            local err = "Location\""
+            err = err .. location
+            err = err .. "\" of entity \""
+            err = err .. entity["name"]
+            err = err .. "\"not found."
+            LogError(err)
+            return true
+        else
+            return false
+        end
+    end
+end
+
 function AddPrimaryPlaceNPCsToRefs()
     local places = GetEntitiesIf(IsPlace)
     local primaryPlaces = GetPrimaryRefEntities(places)

@@ -39,8 +39,9 @@ function AddPrimaryPlaceParentsToRefs()
 end
 
 local function createGeographyLayer(currentDepth, parent)
+    local out = {}
     if currentDepth > #placeDepths then
-        return
+        return out
     end
     local placeLabels = {}
     for label, place in pairs(Entities) do
@@ -54,28 +55,28 @@ local function createGeographyLayer(currentDepth, parent)
 
     for key, label in pairs(placeLabels) do
         local place = Entities[label]
-        local str = ""
         local docStructure = placeDepths[currentDepth][2]
-        str = str .. TexCmd(docStructure, place["name"], place["shortname"])
-        str = str .. TexCmd("label", label)
-        str = str .. DescriptorsString(place)
-        tex.print(str)
-        createGeographyLayer(currentDepth + 1, label)
+        Append(out, TexCmd(docStructure, place["name"], place["shortname"]))
+        Append(out, TexCmd("label", label))
+        Append(out, DescriptorsString(place))
+        Append(out, createGeographyLayer(currentDepth + 1, label))
     end
+    return out
 end
 
 function CreateGeography()
     local places = GetEntitiesIf(IsPlace)
     local primaryPlaces = GetPrimaryRefEntities(places)
-    PrintEntityChapterBeginning("Orte", primaryPlaces)
+    local out = PrintEntityChapterBeginning("Orte", primaryPlaces)
 
-    tex.print(TexCmd("section", "Yestaiel, die Welt", "Yestaiel"))
-    tex.print(TexCmd("label", "yestaiel"))
-    tex.print(TexCmd("input", "../shared/geography/yestaiel.tex"))
+    Append(out, TexCmd("section", "Yestaiel, die Welt", "Yestaiel"))
+    Append(out, TexCmd("label", "yestaiel"))
+    Append(out, TexCmd("input", "../shared/geography/yestaiel.tex"))
 
-    createGeographyLayer(1)
+    Append(out, createGeographyLayer(1))
 
     PrintOnlyMentionedSection(places)
+    return out
 end
 
 function LocationLabelToName(label)

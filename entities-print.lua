@@ -48,7 +48,7 @@ local function descritptorMapString(map)
 end
 
 function DescriptorsString(entity)
-    local str = ""
+    local out = {}
 
     local descriptorsList = {}
     for descriptor, description in pairs(entity) do
@@ -58,80 +58,90 @@ function DescriptorsString(entity)
     end
     table.sort(descriptorsList)
     for key, descriptor in pairs(descriptorsList) do
-        str = str .. TexCmd("paragraph", descriptor)
+        Append(out, TexCmd("paragraph", descriptor))
         if descriptor == HistoryCaption then
-            str = str .. ListHistory(entity[descriptor])
+            Append(out, ListHistory(entity[descriptor]))
         elseif type(entity[descriptor]) == "string" then
-            str = str .. entity[descriptor]
+            Append(out, entity[descriptor])
         elseif IsList(entity[descriptor]) then
-            str = str .. ListAll(entity[descriptor])
+            Append(out, ListAll(entity[descriptor]))
         elseif IsMap(entity[descriptor]) then
-            str = str .. descritptorMapString(entity[descriptor])
+            Append(out, descritptorMapString(entity[descriptor]))
         end
     end
-    return str
+    return out
 end
 
 local function printEntities(sectionname, entitiesList)
+    local out = {}
     if not next(entitiesList) then
-        return
+        return out
     end
-    tex.print(TexCmd("subsection", sectionname))
+    Append(out, TexCmd("subsection", sectionname))
     for label, entity in pairs(entitiesList) do
-        tex.print(TexCmd("subsubsection", entity["name"], entity["shortname"]))
-        tex.print(TexCmd("label", label))
-        tex.print(DescriptorsString(entity))
+        Append(out, TexCmd("subsubsection", entity["name"], entity["shortname"]))
+        Append(out, TexCmd("label", label))
+        Append(out, DescriptorsString(entity))
     end
+    return out
 end
 
 function PrintOnlyMentionedSection(entitiesList)
     local secondaryRefLabels = getSecondaryRefEntitiesLabels(entitiesList)
+    local out = {}
     if #secondaryRefLabels > 0 then
-        tex.print(TexCmd("twocolumn"))
-        tex.print(TexCmd("section", "Nur erwähnt"))
+        Append(out, TexCmd("twocolumn"))
+        Append(out, TexCmd("section", "Nur erwähnt"))
         table.sort(secondaryRefLabels)
         for index, label in pairs(secondaryRefLabels) do
-            tex.print(TexCmd("paragraph", GetShortname(label)))
-            tex.print(TexCmd("label", label))
-            tex.print(TexCmd("hspace", "1cm"))
+            Append(out, TexCmd("paragraph", GetShortname(label)))
+            Append(out, TexCmd("label", label))
+            Append(out, TexCmd("hspace", "1cm"))
         end
-        tex.print(TexCmd("onecolumn"))
+        Append(out, TexCmd("onecolumn"))
     end
+    return out
 end
 
 function PrintEntityChapterBeginning(name, primaryEntities)
-    tex.print(TexCmd("twocolumn"))
-    tex.print(TexCmd("chapter", name))
-    tex.print(TexCmd("section*", "Alle " .. name))
-    tex.print(ListAllFromMap(primaryEntities))
-    tex.print(TexCmd("onecolumn"))
+    local out = {}
+    Append(out, TexCmd("twocolumn"))
+    Append(out, TexCmd("chapter", name))
+    Append(out, TexCmd("section*", "Alle " .. name))
+    Append(out, ListAllFromMap(primaryEntities))
+    Append(out, TexCmd("onecolumn"))
+    return out
 end
 
 local function printEntityChapterSortedByLocation(primaryEntities)
     local sectionname = "In der ganzen Welt"
     local entitiesHere = extractEntitiesAtLocation(primaryEntities, nil)
-    printEntities(sectionname, entitiesHere)
+    local out = printEntities(sectionname, entitiesHere)
 
     for index, label in pairs(AllLocationLabelsSorted()) do
         local sectionname = "In " .. LocationLabelToName(label)
         local entitiesHere = extractEntitiesAtLocation(primaryEntities, label)
-        printEntities(sectionname, entitiesHere)
+        Append(out, printEntities(sectionname, entitiesHere))
     end
+    return out
 end
 
 function PrintEntityChapter(name, entitiesList, types)
     local primaryEntities = GetPrimaryRefEntities(entitiesList)
+
+    local out = {}
     if IsEmpty(primaryEntities) then
-        return
+        return out
     end
 
-    PrintEntityChapterBeginning(name, primaryEntities)
+    Append(out, PrintEntityChapterBeginning(name, primaryEntities))
     for i, type in pairs(types) do
         local entitiesOfType = GetEntitiesOfType(type, primaryEntities)
         if not IsEmpty(entitiesOfType) then
-            tex.print(TexCmd("section", TypeToName(type)))
-            printEntityChapterSortedByLocation(entitiesOfType)
+            Append(out, TexCmd("section", TypeToName(type)))
+            Append(out, printEntityChapterSortedByLocation(entitiesOfType))
         end
     end
-    PrintOnlyMentionedSection(entitiesList)
+    Append(out, PrintOnlyMentionedSection(entitiesList))
+    return out
 end

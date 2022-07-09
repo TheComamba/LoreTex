@@ -5,11 +5,13 @@ function LogError(error)
 end
 
 function PrintErrors()
+	local out = {}
 	if not IsEmpty(errorMessages) then
-		tex.print(TexCmd("chapter", "Error Messages"))
-		tex.print("DnDTex encountered " .. #errorMessages .. " errors:")
-		tex.print(ListAll(errorMessages))
+		Append(out, TexCmd("chapter", "Error Messages"))
+		Append(out, "DnDTex encountered " .. #errorMessages .. " errors:")
+		Append(out, ListAll(errorMessages))
 	end
+	return out
 end
 
 function TexCmd(cmd, args, options)
@@ -138,4 +140,14 @@ function FirstNonWhitespaceChar(str)
 		out = str:find("%S", out + #KEYWORD)
 	end
 	return out
+end
+
+function Append(dest, src)
+	if type(src) == "table" then
+		for key, elem in pairs(src) do
+			Append(dest, elem)
+		end
+	else
+		table.insert(dest, src)
+	end
 end

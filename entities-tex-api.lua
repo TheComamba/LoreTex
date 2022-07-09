@@ -46,6 +46,26 @@ function SetLocation(label, location)
     end
 end
 
+function DeclarePC(label)
+    PCs[#PCs + 1] = label
+end
+
+function NewEntity(label, type, shortname, name)
+    CurrentLabel = label
+    SetDescriptor(CurrentLabel, "type", type)
+    SetDescriptor(CurrentLabel, "shortname", shortname)
+    SetDescriptor(CurrentLabel, "name", name)
+end
+
+function NewNPC(label, shortname, name)
+    if IsIn(label, PCs) then
+        NewEntity(label, "pc", shortname, name)
+        LogError("Creating PC " .. label)
+    else
+        NewEntity(label, "npc", shortname, name)
+    end
+end
+
 function AutomatedChapters()
     AddAutomatedDescriptors()
     ComplementRefs()

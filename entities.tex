@@ -9,10 +9,9 @@ dofile("../shared/luatex-for-dnd/entities.lua")
 \newcommand{\resetCurrentLabels}{\directlua{ResetCurrentLabels()}}
 
 \newcommand{\newEntity}[4]{
-	\directlua{CurrentLabel = "#1"}
-	\directlua{SetDescriptor(CurrentLabel,"type","#2")}
-	\directlua{SetDescriptor(CurrentLabel,"shortname", [[\detokenize{#3}]])}
-	\directlua{SetDescriptor(CurrentLabel,"name", [[\detokenize{#4}]])}
+	\directlua{
+		NewEntity("#1","#2", [[\detokenize{#3}]], [[\detokenize{#4}]])
+	}
 }
 
 \newcommand{\newContinent}[3]{
@@ -32,9 +31,15 @@ dofile("../shared/luatex-for-dnd/entities.lua")
 	\setCity{#1}
 }
 
+\newcommand{\declarePC}[1]{
+	\directlua{DeclarePC("#1")}
+}
+
 \newcommand{\newNPC}[3]{
-	\newEntity{#1}{npc}{#2}{#3}
-	\directlua{SetLocation(CurrentLabel)}
+	\directlua{
+		NewNPC("#1", [[\detokenize{#2}]], [[\detokenize{#3}]])
+		SetLocation(CurrentLabel)
+	}
 }
 
 \newcommand{\newGod}[3]{

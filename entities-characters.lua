@@ -1,5 +1,6 @@
 CharacterTypes = { "pc", "npc", "god" }
 CharacterTypeNames = { "Spielercharaktere", "NPCs", "Götter" }
+PCs = {}
 
 function IsChar(entity)
     if entity == nil then

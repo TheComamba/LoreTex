@@ -1,16 +1,16 @@
 function SetDescriptor(label, descriptor, description, subdescriptor)
-    if IsStringEmpty(label) then
+    if IsEmpty(label) then
         return
-    elseif IsStringEmpty(descriptor) then
+    elseif IsEmpty(descriptor) then
         return
-    elseif IsStringEmpty(description) then
+    elseif IsEmpty(description) then
         return
     end
 
     if Entities[label] == nil then
         Entities[label] = {}
     end
-    if IsStringEmpty(subdescriptor) then
+    if IsEmpty(subdescriptor) then
         Entities[label][descriptor] = description
     else
         if Entities[label][descriptor] == nil then

@@ -39,7 +39,7 @@ local function descritptorTableString(map)
     local str = ""
     for index, key in pairs(keys) do
         local content = map[key]
-        if not IsStringEmpty(content) then
+        if not IsEmpty(content) then
             str = str .. TexCmd("subparagraph", key) .. content
         end
     end
@@ -118,14 +118,14 @@ end
 
 function PrintEntityChapter(name, entitiesList, types)
     local primaryEntities = GetPrimaryRefEntities(entitiesList)
-    if not next(primaryEntities) then
+    if IsEmpty(primaryEntities) then
         return
     end
 
     PrintEntityChapterBeginning(name, primaryEntities)
     for i, type in pairs(types) do
         local entitiesOfType = GetEntitiesOfType(type, primaryEntities)
-        if entitiesOfType ~= {} then
+        if not IsEmpty(entitiesOfType) then
             tex.print(TexCmd("section", TypeToName(type)))
             printEntityChapterSortedByLocation(entitiesOfType)
         end

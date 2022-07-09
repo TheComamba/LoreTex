@@ -38,36 +38,38 @@ function UnknownProcessor(content, additionalContent)
 	return "UNKNOWN PROCESSOR"
 end
 
-function ListAll(list, processor, additionalProcessorArg)
-	local str = ""
-
-	if type(list[1]) ~= "table" then
-		table.sort(list)
-	end
-
+local function processLabelList(list, processor, additionalProcessorArg)
 	if processor == nil then
 		processor = UnknownProcessor
 	end
 
-	local isContainsAtLeastOneItem = false
-
-	str = str .. TexCmd("begin", "itemize")
+	local out = {}
 	for key, label in pairs(list) do
 		local content = processor(label, additionalProcessorArg)
-		if content ~= nil and content ~= "" then
-			str = str .. TexCmd("item") .. " "
-			str = str .. content
-
-			isContainsAtLeastOneItem = true
+		if not IsEmpty(content) then
+			out[#out + 1] = content
 		end
 	end
-	str = str .. TexCmd("end", "itemize")
+	return out
+end
 
-	if isContainsAtLeastOneItem then
-		return str
-	else
+function ListAll(list, processor, additionalProcessorArg)
+	if type(list[1]) ~= "table" then
+		table.sort(list)
+	end
+
+	local processedList = processLabelList(list, processor, additionalProcessorArg)
+	if IsEmpty(processedList) then
 		return ""
 	end
+
+	local str = TexCmd("begin", "itemize")
+	for key, content in pairs(processedList) do
+		str = str .. TexCmd("item") .. " "
+		str = str .. content
+	end
+	str = str .. TexCmd("end", "itemize")
+	return str
 end
 
 function ListAllFromMap(listOfThings)
@@ -78,11 +80,11 @@ function ListAllFromMap(listOfThings)
 	return ListAll(allLabels, NamerefString)
 end
 
-function IsStringEmpty(str)
+function IsEmpty(str)
 	if type(str) == "table" then
 		local out = true
 		for key, val in pairs(str) do
-			if not IsStringEmpty(val) then
+			if not IsEmpty(val) then
 				return false
 			end
 		end

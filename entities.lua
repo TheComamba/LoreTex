@@ -50,6 +50,7 @@ function TypeToName(type)
             end
         end
     end
+    LogError("Could not convert type \"" .. type .. "\" to typename.")
     return "TYPENAME NOT FOUND"
 end
 

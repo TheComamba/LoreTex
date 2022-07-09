@@ -19,7 +19,15 @@ local function newHistoryItem(originator, year, event, day)
 	local item = {}
 	item["originator"] = originator
 	item["year"] = tonumber(year)
+	if item["year"] == nil then
+		LogError("Yould not convert year \"" .. year .. "\" to number.")
+		return {}
+	end
 	item["day"] = tonumber(day)
+	if item["day"] == nil then
+		LogError("Yould not convert day \"" .. day .. "\" to number.")
+		return {}
+	end
 	item["event"] = event
 	local concerns = ScanForRefs(event)
 	if not IsIn(originator, concerns) then
@@ -30,7 +38,7 @@ local function newHistoryItem(originator, year, event, day)
 end
 
 function AddEvent(originator, year, event, day)
-	if day == nil or day == "" then
+	if IsEmpty(day) then
 		day = 0
 	end
 	if year <= CurrentYearVin then

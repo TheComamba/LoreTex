@@ -171,6 +171,7 @@ end
 
 function ConvertAge(age, speciesName)
 	if Species[speciesName] == nil then
+		LogError("Could not find species with name \"" .. speciesName .. "\".")
 		tex.print("UNKNOWN SPECIES OF AGE " .. age)
 	end
 	local speciesAge = SpeciesToHuman(age, speciesName)

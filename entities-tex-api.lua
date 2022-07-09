@@ -17,9 +17,14 @@ function SetDescriptor(label, descriptor, description, subdescriptor)
             Entities[label][descriptor] = {}
         end
         if type(Entities[label][descriptor]) ~= "table" then
-            local value = Entities[label][descriptor]
-            Entities[label][descriptor] = {}
-            Entities[label][descriptor]["I WANT TO BE A TABLE"] = value
+            local error = "Trying to add subdescriptor \""
+            error = error .. subdescriptor
+            error = error .. "\" to descriptor \""
+            error = error .. descriptor
+            error = error .. "\" of entity \""
+            error = error .. label
+            error = error .. "\", which already contains a string content."
+            LogError(error)
         end
         Entities[label][descriptor][subdescriptor] = description
     end
@@ -49,6 +54,7 @@ function AutomatedChapters()
     PrintEntityChapter("Organisationen", GetEntitiesIf(IsOrganisation), OrganisationTypes)
     PrintEntityChapter("Sprachen", GetEntitiesIf(IsLanguage), LanguageTypes)
     PrintEntityChapter("Gegenstände", GetEntitiesIf(IsItem), ItemTypes)
+    PrintErrors()
 end
 
 function ResetCurrentLabels()

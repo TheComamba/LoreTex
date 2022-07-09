@@ -26,6 +26,7 @@ function GetShortname(label)
     elseif Entities[label]["name"] ~= nil then
         return Entities[label]["name"]
     else
+        LogError("Entity \"" .. label .. "\" has no name.")
         return "NO NAME"
     end
 end

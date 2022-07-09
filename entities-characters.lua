@@ -13,11 +13,15 @@ function AddNPCsToPlaces()
     local npcs = GetEntitiesIf(IsChar)
     for label, char in pairs(npcs) do
         local location = char["location"]
-        if location ~= nil and Entities[location] ~= nil then
-            if Entities[location]["NPCs"] == nil then
-                Entities[location]["NPCs"] = {}
+        if location ~= nil then
+            if Entities[location] == nil then
+                LogError("Location \"" .. location .. "\" not found in entities.")
+            else
+                if Entities[location]["NPCs"] == nil then
+                    Entities[location]["NPCs"] = {}
+                end
+                Entities[location]["NPCs"][#Entities[location]["NPCs"] + 1] = TexCmd("nameref", label)
             end
-            Entities[location]["NPCs"][#Entities[location]["NPCs"] + 1] = TexCmd("nameref", label)
         end
     end
 end

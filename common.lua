@@ -1,3 +1,17 @@
+local errorMessages = {}
+
+function LogError(error)
+	errorMessages[#errorMessages + 1] = error
+end
+
+function PrintErrors()
+	if not IsEmpty(errorMessages) then
+		tex.print(TexCmd("chapter", "Error Messages"))
+		tex.print("DnDTex encountered " .. #errorMessages .. " errors:")
+		tex.print(ListAll(errorMessages))
+	end
+end
+
 function TexCmd(cmd, args, options)
 	if type(args) ~= "table" then
 		args = { args }
@@ -44,16 +58,19 @@ local function processLabelList(list, processor, additionalProcessorArg)
 	end
 
 	local out = {}
-	for key, label in pairs(list) do
-		local content = processor(label, additionalProcessorArg)
-		if not IsEmpty(content) then
-			out[#out + 1] = content
+	for key, content in pairs(list) do
+		local processedContent = processor(content, additionalProcessorArg)
+		if not IsEmpty(processedContent) then
+			out[#out + 1] = processedContent
 		end
 	end
 	return out
 end
 
 function ListAll(list, processor, additionalProcessorArg)
+	if #list == 0 then
+		return ""
+	end
 	if type(list[1]) ~= "table" then
 		table.sort(list)
 	end
@@ -80,21 +97,21 @@ function ListAllFromMap(listOfThings)
 	return ListAll(allLabels, NamerefString)
 end
 
-function IsEmpty(str)
-	if type(str) == "table" then
+function IsEmpty(obj)
+	if obj == nil then
+		return true
+	elseif type(obj) == "table" then
 		local out = true
-		for key, val in pairs(str) do
+		for key, val in pairs(obj) do
 			if not IsEmpty(val) then
 				return false
 			end
 		end
 		return out
-	end
-
-	if str == nil then
-		return true
+	elseif type(obj) == "string" then
+		return FirstNonWhitespaceChar(obj) == nil
 	else
-		return FirstNonWhitespaceChar(str) == nil
+		return false
 	end
 end
 

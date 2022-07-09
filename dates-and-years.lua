@@ -25,9 +25,10 @@ function ConvertYearFromVin(year, fmt)
     end
 end
 
-function AnnoString(year, fmt)
-    if type(year) == "string" then
-        year = tonumber(year)
+function AnnoString(yearIn, fmt)
+    local year = tonumber(yearIn)
+    if year == nil then
+        LogError("Could  not convert year string \"" .. yearIn .. "\" to number.")
     end
     local diff = CurrentYearVin - year
 
@@ -60,7 +61,7 @@ function AnnoNar(year)
 end
 
 function AnnoAll(year)
-    tex.print("(replace this deprecated tex command with annoVin.)")
+    LogError("Replace the deprecated tex command annoAll with annoVin.")
     tex.print(year .. " Vin / " .. (year + 1566) .. [[ \'Et / ]] .. (year + 5077) .. " NM")
 end
 
@@ -115,6 +116,9 @@ function MonthAndDay(day, namesAndFirstDays)
                 break
             end
         end
+    end
+    if month == "NoMonthFound" then
+        LogError("Could not find month for day " .. day .. ".")
     end
     local dayOfMonth = day - firstDay + 1
     return month, dayOfMonth

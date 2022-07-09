@@ -126,7 +126,7 @@ function PrintEntityChapter(name, entitiesList, types)
     for i, type in pairs(types) do
         local entitiesOfType = GetEntitiesOfType(type, primaryEntities)
         if entitiesOfType ~= {} then
-            tex.print(TexCmd("section", type .. "s"))
+            tex.print(TexCmd("section", TypeToName(type)))
             printEntityChapterSortedByLocation(entitiesOfType)
         end
     end

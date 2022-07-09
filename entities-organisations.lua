@@ -1,4 +1,5 @@
 OrganisationTypes = { "organisation", "ship" }
+OrganisationTypeNames = { "Organisationen", "Schiffe" }
 
 function IsOrganisation(entity)
     if entity == nil then

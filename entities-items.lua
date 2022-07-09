@@ -1,4 +1,5 @@
 ItemTypes = { "item" }
+ItemTypeNames = { "Gegenstände" }
 
 function IsItem(entity)
     if entity == nil then

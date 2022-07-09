@@ -1,4 +1,5 @@
 LanguageTypes = { "language" }
+LanguageTypeNames = { "Sprachen" }
 
 function IsLanguage(entity)
     if entity == nil then

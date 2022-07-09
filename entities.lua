@@ -35,6 +35,24 @@ function GetPrimaryRefEntities(map)
     return out
 end
 
+function TypeToName(type)
+    local typesAndNames = {}
+    typesAndNames[#typesAndNames + 1] = { CharacterTypes, CharacterTypeNames }
+    typesAndNames[#typesAndNames + 1] = { ItemTypes, ItemTypeNames }
+    typesAndNames[#typesAndNames + 1] = { LanguageTypes, LanguageTypeNames }
+    typesAndNames[#typesAndNames + 1] = { OrganisationTypes, OrganisationTypeNames }
+    for key, specificTypesAndNames in pairs(typesAndNames) do
+        local types = specificTypesAndNames[1]
+        local typeNames = specificTypesAndNames[2]
+        for i, thisType in pairs(types) do
+            if thisType == type then
+                return typeNames[i]
+            end
+        end
+    end
+    return "TYPENAME NOT FOUND"
+end
+
 local function addPrimaryEntitiesLocationsToRefs()
     local primaryEntities = GetPrimaryRefEntities(Entities)
     for label, entity in pairs(primaryEntities) do

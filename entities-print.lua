@@ -30,7 +30,7 @@ function GetShortname(label)
     end
 end
 
-local function descritptorTableString(map)
+local function descritptorMapString(map)
     local keys = {}
     for key, elem in pairs(map) do
         keys[#keys + 1] = key
@@ -62,8 +62,10 @@ function DescriptorsString(entity)
             str = str .. ListHistory(entity[descriptor])
         elseif type(entity[descriptor]) == "string" then
             str = str .. entity[descriptor]
-        elseif type(entity[descriptor]) == "table" then
-            str = str .. descritptorTableString(entity[descriptor])
+        elseif IsList(entity[descriptor]) then
+            str = str .. ListAll(entity[descriptor])
+        elseif IsMap(entity[descriptor]) then
+            str = str .. descritptorMapString(entity[descriptor])
         end
     end
     return str

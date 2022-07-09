@@ -17,7 +17,7 @@ function AddNPCsToPlaces()
             if Entities[location]["NPCs"] == nil then
                 Entities[location]["NPCs"] = {}
             end
-            Entities[location]["NPCs"][label] = char["name"]
+            Entities[location]["NPCs"][#Entities[location]["NPCs"] + 1] = TexCmd("nameref", label)
         end
     end
 end

@@ -34,13 +34,13 @@ function IsIn(elem, list)
 	return false
 end
 
-function UnknownProcessor(content, additionalContent)
-	return "UNKNOWN PROCESSOR"
+function IdentityProcessor(content, additionalContent)
+	return content
 end
 
 local function processLabelList(list, processor, additionalProcessorArg)
 	if processor == nil then
-		processor = UnknownProcessor
+		processor = IdentityProcessor
 	end
 
 	local out = {}
@@ -96,6 +96,14 @@ function IsEmpty(str)
 	else
 		return FirstNonWhitespaceChar(str) == nil
 	end
+end
+
+function IsList(list)
+	return type(list) == "table" and #list > 0
+end
+
+function IsMap(list)
+	return type(list) == "table" and #list == 0
 end
 
 function PrintAllChars(str)

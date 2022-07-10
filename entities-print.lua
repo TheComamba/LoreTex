@@ -74,11 +74,17 @@ end
 
 local function printEntities(sectionname, entitiesList)
     local out = {}
-    if not next(entitiesList) then
+    if IsEmpty(entitiesList) then
         return out
     end
     Append(out, TexCmd("subsection", sectionname))
+    local labels = {}
     for label, entity in pairs(entitiesList) do
+        labels[#labels + 1] = label
+    end
+    table.sort(labels, CompareLabelsByName)
+    for i, label in pairs(labels) do
+        local entity = entitiesList[label]
         Append(out, TexCmd("subsubsection", entity["name"], entity["shortname"]))
         Append(out, TexCmd("label", label))
         Append(out, DescriptorsString(entity))
@@ -91,7 +97,7 @@ function PrintOnlyMentionedSection(secondaryRefLabels)
     if #secondaryRefLabels > 0 then
         Append(out, TexCmd("twocolumn"))
         Append(out, TexCmd("section", "Nur erwähnt"))
-        table.sort(secondaryRefLabels)
+        table.sort(secondaryRefLabels, CompareLabelsByName)
         for index, label in pairs(secondaryRefLabels) do
             Append(out, TexCmd("paragraph", GetShortname(label)))
             Append(out, TexCmd("label", label))

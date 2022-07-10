@@ -62,6 +62,12 @@ function AddPrimaryPlaceParentsToRefs()
     end
 end
 
+local function compareLocationLabelsByName(label1, label2)
+    local name1 = LocationLabelToName(label1)
+    local name2 = LocationLabelToName(label2)
+    return name1 < name2
+end
+
 local function createGeographyLayer(currentDepth, parent)
     local out = {}
     if currentDepth > #placeDepths then
@@ -75,7 +81,7 @@ local function createGeographyLayer(currentDepth, parent)
             end
         end
     end
-    table.sort(placeLabels)
+    table.sort(placeLabels, compareLocationLabelsByName)
 
     for key, label in pairs(placeLabels) do
         local place = Entities[label]
@@ -117,18 +123,12 @@ function LocationLabelToName(label)
     return name
 end
 
-local function compareLabelsByFullName(label1, label2)
-    local name1 = LocationLabelToName(label1)
-    local name2 = LocationLabelToName(label2)
-    return name1 < name2
-end
-
 function AllLocationLabelsSorted()
     local locations = GetEntitiesIf(IsPlace)
     local labels = {}
     for label, elem in pairs(locations) do
         labels[#labels + 1] = label
     end
-    table.sort(labels, compareLabelsByFullName)
+    table.sort(labels, compareLocationLabelsByName)
     return labels
 end

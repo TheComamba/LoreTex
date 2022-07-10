@@ -39,6 +39,12 @@ function GetPrimaryRefEntities(map)
     return out
 end
 
+function CompareLabelsByName(label1, label2)
+    local name1 = GetShortname(label1)
+    local name2 = GetShortname(label2)
+    return name1 < name2
+end
+
 local function typeToNameMap()
     local allTypes = {}
     local allTypeNames = {}

@@ -49,18 +49,22 @@ dofile(RelativePath .. "entities.lua")
 
 \newcommand{\newOrganisation}[3]{
 	\newEntity{#1}{organisation}{#2}{#3}
+	\directlua{SetLocation(CurrentLabel)}
 }
 
 \newcommand{\newShip}[3]{
 	\newEntity{#1}{ship}{#2}{#3}
+	\directlua{SetLocation(CurrentLabel)}
 }
 
 \newcommand{\newLanguage}[3]{
 	\newEntity{#1}{language}{#2}{#3}
+	\directlua{SetLocation(CurrentLabel)}
 }
 
 \newcommand{\newItem}[3]{
 	\newEntity{#1}{item}{#2}{#3}
+	\directlua{SetLocation(CurrentLabel)}
 }
 
 \newcommand{\addDescriptor}[3][]{

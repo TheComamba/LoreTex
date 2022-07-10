@@ -17,6 +17,8 @@ function AddNPCsToPlaces()
         if location ~= nil then
             if Entities[location] == nil then
                 LogError("Location \"" .. location .. "\" not found in entities.")
+            elseif not IsPlace(Entities[location]) then
+                LogError("Location \"" .. location .. "\" is not a place.")
             else
                 if Entities[location]["NPCs"] == nil then
                     Entities[location]["NPCs"] = {}

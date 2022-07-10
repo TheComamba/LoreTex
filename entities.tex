@@ -62,6 +62,31 @@ dofile(RelativePath .. "entities.lua")
 	\directlua{SetLocation(CurrentLabel)}
 }
 
+\newcommand{\newForest}[3]{
+	\newEntity{#1}{forest}{#2}{#3}
+	\directlua{SetLocation(CurrentLabel)}
+}
+
+\newcommand{\newGrassland}[3]{
+	\newEntity{#1}{grassland}{#2}{#3}
+	\directlua{SetLocation(CurrentLabel)}
+}
+
+\newcommand{\newRange}[3]{
+	\newEntity{#1}{range}{#2}{#3}
+	\directlua{SetLocation(CurrentLabel)}
+}
+
+\newcommand{\newMountain}[3]{
+	\newEntity{#1}{mountain}{#2}{#3}
+	\directlua{SetLocation(CurrentLabel)}
+}
+
+\newcommand{\newRiver}[3]{
+	\newEntity{#1}{river}{#2}{#3}
+	\directlua{SetLocation(CurrentLabel)}
+}
+
 \newcommand{\newItem}[3]{
 	\newEntity{#1}{item}{#2}{#3}
 	\directlua{SetLocation(CurrentLabel)}
@@ -110,6 +135,7 @@ dofile(RelativePath .. "entities.lua")
 	\input{../shared/npcs/all.tex}
 	\input{../shared/associations/all.tex}
 	\input{../shared/languages/all.tex}
+	\input{../shared/landmarks/all.tex}
 	\input{../shared/items/all.tex}
 	\directlua{AutomatedChapters()}
 }
@@ -119,6 +145,7 @@ dofile(RelativePath .. "entities.lua")
 	\input{../shared/npcs/all.tex}
 	\input{../shared/associations/all.tex}
 	\input{../shared/languages/all.tex}
+	\input{../shared/landmarks/all.tex}
 	\input{../shared/items/all.tex}
 	\directlua{AddAllEntitiesToPrimaryRefs()}
 	\directlua{AutomatedChapters()}

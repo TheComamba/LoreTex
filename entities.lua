@@ -58,6 +58,8 @@ local function typeToNameMap()
     Append(allTypeNames, ItemTypeNames)
     Append(allTypes, LanguageTypes)
     Append(allTypeNames, LanguageTypeNames)
+    Append(allTypes, LandmarkTypes)
+    Append(allTypeNames, LandmarkTypeNames)
     local out = {}
     for i, key in pairs(allTypes) do
         out[key] = allTypeNames[i]
@@ -139,6 +141,7 @@ end
 dofile(RelativePath .. "entities-geography.lua")
 dofile(RelativePath .. "entities-characters.lua")
 dofile(RelativePath .. "entities-associations.lua")
+dofile(RelativePath .. "entities-landmarks.lua")
 dofile(RelativePath .. "entities-languages.lua")
 dofile(RelativePath .. "entities-items.lua")
 dofile(RelativePath .. "entities-history.lua")

@@ -70,7 +70,7 @@ function ScanForRefs(str)
     return refs
 end
 
-function ScanForSecondaryRefs(str)
+local function scanStringForSecondaryRefs(str)
     for key, ref in pairs(ScanForRefs(str)) do
         if not IsIn(ref, PrimaryRefs) then
             AddRef(ref, SecondaryRefs)
@@ -78,20 +78,15 @@ function ScanForSecondaryRefs(str)
     end
 end
 
-function ScanContentForSecondaryRefs(list)
-    local primaryEntries = GetPrimaryRefEntities(list)
-    for label, entry in pairs(primaryEntries) do
-        for key, content in pairs(entry) do
-            if type(content) == "string" then
-                ScanForSecondaryRefs(content)
-            elseif type(content) == "table" then
-                for key2, subcontent in pairs(content) do
-                    if type(subcontent) == "string" then
-                        ScanForSecondaryRefs(subcontent)
-                    end
-                end
-            end
+function ScanContentForSecondaryRefs(content)
+    if type(content) == "string" then
+        scanStringForSecondaryRefs(content)
+    elseif type(content) == "table" then
+        for key, elem in pairs(content) do
+            ScanContentForSecondaryRefs(elem)
         end
+    else
+        LogError("Tried to scan content of type " .. type(content) .. "!")
     end
 end
 

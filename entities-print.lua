@@ -1,4 +1,4 @@
-local function getSecondaryRefEntitiesLabels(map)
+function GetSecondaryRefEntitiesLabels(map)
     local out = {}
     for label, elem in pairs(map) do
         if IsIn(label, SecondaryRefs) then
@@ -86,8 +86,7 @@ local function printEntities(sectionname, entitiesList)
     return out
 end
 
-function PrintOnlyMentionedSection(entitiesList)
-    local secondaryRefLabels = getSecondaryRefEntitiesLabels(entitiesList)
+function PrintOnlyMentionedSection(secondaryRefLabels)
     local out = {}
     if #secondaryRefLabels > 0 then
         Append(out, TexCmd("twocolumn"))
@@ -133,9 +132,10 @@ end
 
 function PrintEntityChapter(name, entitiesList, types)
     local primaryEntities = GetPrimaryRefEntities(entitiesList)
+    local secondaryRefLabels = GetSecondaryRefEntitiesLabels(entitiesList)
 
     local out = {}
-    if IsEmpty(primaryEntities) then
+    if IsEmpty(primaryEntities) and IsEmpty(secondaryRefLabels) then
         return out
     end
 
@@ -147,6 +147,6 @@ function PrintEntityChapter(name, entitiesList, types)
             Append(out, printEntityChapterSortedByLocation(entitiesOfType))
         end
     end
-    Append(out, PrintOnlyMentionedSection(entitiesList))
+    Append(out, PrintOnlyMentionedSection(secondaryRefLabels))
     return out
 end

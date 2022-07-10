@@ -77,7 +77,8 @@ function ComplementRefs()
     AddPrimaryPlaceNPCsToRefs()
     AddPrimaryPlaceParentsToRefs()
     addPrimaryEntitiesLocationsToRefs()
-    ScanContentForSecondaryRefs(Entities)
+    local primaryEntities = GetPrimaryRefEntities(Entities)
+    ScanContentForSecondaryRefs(primaryEntities)
 end
 
 dofile(RelativePath .. "entities-geography.lua")

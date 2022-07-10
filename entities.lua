@@ -39,23 +39,28 @@ function GetPrimaryRefEntities(map)
     return out
 end
 
-function TypeToName(type)
-    local typesAndNames = {}
-    typesAndNames[#typesAndNames + 1] = { CharacterTypes, CharacterTypeNames }
-    typesAndNames[#typesAndNames + 1] = { ItemTypes, ItemTypeNames }
-    typesAndNames[#typesAndNames + 1] = { LanguageTypes, LanguageTypeNames }
-    typesAndNames[#typesAndNames + 1] = { AssociationTypes, AssociationTypeNames }
-    for key, specificTypesAndNames in pairs(typesAndNames) do
-        local types = specificTypesAndNames[1]
-        local typeNames = specificTypesAndNames[2]
-        for i, thisType in pairs(types) do
-            if thisType == type then
-                return typeNames[i]
-            end
-        end
+local function typeToNameMap()
+    local allTypes = {}
+    local allTypeNames = {}
+    Append(allTypes, AssociationTypes)
+    Append(allTypeNames, AssociationTypeNames)
+    Append(allTypes, CharacterTypes)
+    Append(allTypeNames, CharacterTypeNames)
+    Append(allTypes, PlaceTypes)
+    Append(allTypeNames, PlaceTypeNames)
+    Append(allTypes, ItemTypes)
+    Append(allTypeNames, ItemTypeNames)
+    Append(allTypes, LanguageTypes)
+    Append(allTypeNames, LanguageTypeNames)
+    local out = {}
+    for i, key in pairs(allTypes) do
+        out[key] = allTypeNames[i]
     end
-    LogError("Could not convert type \"" .. type .. "\" to typename.")
-    return "TYPENAME NOT FOUND"
+    return out
+end
+
+function TypeToName(type)
+    return typeToNameMap()[type]
 end
 
 local function addPrimaryEntitiesLocationsToRefs()
@@ -78,8 +83,9 @@ end
 
 local function addEntitiesTo(type, keyword)
     local entityMap = GetEntitiesOfType(type)
-    for label, char in pairs(entityMap) do
-        local targetLabel = char[keyword]
+    for label, entity in pairs(entityMap) do
+        local targetLabel = entity[keyword]
+        local role = entity[keyword .. "-role"]
         if targetLabel ~= nil then
             local targetCondition = getTargetCondition(keyword)
             if Entities[targetLabel] == nil then
@@ -91,14 +97,18 @@ local function addEntitiesTo(type, keyword)
                 if Entities[targetLabel][name] == nil then
                     Entities[targetLabel][name] = {}
                 end
-                Entities[targetLabel][name][#Entities[targetLabel][name] + 1] = TexCmd("myref", label)
+                local content = TexCmd("myref", label)
+                if not IsEmpty(role) then
+                    content = content .. " (" .. role .. ")"
+                end
+                Entities[targetLabel][name][#Entities[targetLabel][name] + 1] = content
             end
         end
     end
 end
 
 local function addAllEntitiesTo()
-    for key1, type in pairs({ "npc" }) do
+    for type, name in pairs(typeToNameMap()) do
         for key2, keyword in pairs({ "location", "association" }) do
             addEntitiesTo(type, keyword)
         end

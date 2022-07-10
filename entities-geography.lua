@@ -1,17 +1,18 @@
 CurrentCity = ""
 CurrentRegion = ""
 CurrentContinent = ""
-local placeTypes = { "continent", "region", "city" }
-local placeDepths = { { placeTypes[1], "section" },
-    { placeTypes[2], "subsection" },
-    { placeTypes[3], "subsubsection" } }
+PlaceTypes = { "continent", "region", "city" }
+PlaceTypeNames = { "Kontinente", "Regionen", "Städte" }
+local placeDepths = { { PlaceTypes[1], "section" },
+    { PlaceTypes[2], "subsection" },
+    { PlaceTypes[3], "subsubsection" } }
 
 function IsPlace(entity)
     if entity == nil then
         return false
     end
     local type = entity["type"]
-    return type ~= nil and IsIn(entity["type"], placeTypes)
+    return type ~= nil and IsIn(entity["type"], PlaceTypes)
 end
 
 function IsLocationUnknown(entity)

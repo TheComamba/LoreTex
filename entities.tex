@@ -97,8 +97,8 @@ dofile(RelativePath .. "entities.lua")
 	\directlua{SetLocation(CurrentLabel, "#1")}
 }
 
-\newcommand{\setAssociation}[1]{
-	\directlua{SetAssociation(CurrentLabel, "#1")}
+\newcommand{\setAssociation}[2][]{
+	\directlua{SetAssociation(CurrentLabel, "#2", "#1")}
 }
 
 \newcommand{\automatedChapters}{

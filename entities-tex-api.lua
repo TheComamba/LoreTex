@@ -46,6 +46,12 @@ function SetLocation(label, location)
     end
 end
 
+function SetAssociation(label, association)
+    if Entities[label] ~= nil then
+        Entities[label]["association"] = association
+    end
+end
+
 function DeclarePC(label)
     PCs[#PCs + 1] = label
 end
@@ -57,10 +63,9 @@ function NewEntity(label, type, shortname, name)
     SetDescriptor(CurrentLabel, "name", name)
 end
 
-function NewNPC(label, shortname, name)
+function NewCharacter(label, shortname, name)
     if IsIn(label, PCs) then
         NewEntity(label, "pc", shortname, name)
-        LogError("Creating PC " .. label)
     else
         NewEntity(label, "npc", shortname, name)
     end
@@ -71,7 +76,7 @@ function AutomatedChapters()
     ComplementRefs()
     local output = CreateGeography()
     Append(output, PrintEntityChapter("Charaktere", GetEntitiesIf(IsChar), CharacterTypes))
-    Append(output, PrintEntityChapter("Organisationen", GetEntitiesIf(IsOrganisation), OrganisationTypes))
+    Append(output, PrintEntityChapter("Zusammenschlüsse", GetEntitiesIf(IsAssociation), AssociationTypes))
     Append(output, PrintEntityChapter("Sprachen", GetEntitiesIf(IsLanguage), LanguageTypes))
     Append(output, PrintEntityChapter("Gegenstände", GetEntitiesIf(IsItem), ItemTypes))
     Append(output, PrintErrors())

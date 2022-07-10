@@ -29,6 +29,25 @@ function AddNPCsToPlaces()
     end
 end
 
+function AddNPCsToAssociations()
+    local npcs = GetEntitiesIf(IsChar)
+    for label, char in pairs(npcs) do
+        local association = char["association"]
+        if association ~= nil then
+            if Entities[association] == nil then
+                LogError("Association \"" .. association .. "\" not found in entities.")
+            elseif not IsAssociation(Entities[association]) then
+                LogError("Association \"" .. association .. "\" is not an association.")
+            else
+                if Entities[association]["NPCs"] == nil then
+                    Entities[association]["NPCs"] = {}
+                end
+                Entities[association]["NPCs"][#Entities[association]["NPCs"] + 1] = TexCmd("nameref", label)
+            end
+        end
+    end
+end
+
 function AddSpeciesAndAgeStringToNPCs()
     local npcs = GetEntitiesIf(IsChar)
     for label, char in pairs(npcs) do

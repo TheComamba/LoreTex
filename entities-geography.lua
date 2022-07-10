@@ -19,12 +19,16 @@ function IsLocationUnknown(entity)
     if IsEmpty(location) then
         return false
     else
+        local err = "Location\""
+        err = err .. location
+        err = err .. "\" of entity \""
+        err = err .. entity["name"]
         if Entities[location] == nil then
-            local err = "Location\""
-            err = err .. location
-            err = err .. "\" of entity \""
-            err = err .. entity["name"]
-            err = err .. "\"not found."
+            err = err .. "\" not found."
+            LogError(err)
+            return true
+        elseif not IsPlace(Entities[location]) then
+            err = err .. "\" is not a place."
             LogError(err)
             return true
         else

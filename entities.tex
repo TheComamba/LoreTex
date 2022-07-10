@@ -37,7 +37,7 @@ dofile(RelativePath .. "entities.lua")
 
 \newcommand{\newNPC}[3]{
 	\directlua{
-		NewNPC("#1", [[\detokenize{#2}]], [[\detokenize{#3}]])
+		NewCharacter("#1", [[\detokenize{#2}]], [[\detokenize{#3}]])
 		SetLocation(CurrentLabel)
 	}
 }
@@ -97,11 +97,14 @@ dofile(RelativePath .. "entities.lua")
 	\directlua{SetLocation(CurrentLabel, "#1")}
 }
 
+\newcommand{\setAssociation}[1]{
+	\directlua{SetAssociation(CurrentLabel, "#1")}
+}
+
 \newcommand{\automatedChapters}{
 	\input{../shared/geography/all.tex}
 	\input{../shared/npcs/all.tex}
-	\input{../shared/organisations/all.tex}
-	\input{../shared/ships/all.tex}
+	\input{../shared/associations/all.tex}
 	\input{../shared/languages/all.tex}
 	\input{../shared/items/all.tex}
 	\directlua{AutomatedChapters()}
@@ -110,8 +113,7 @@ dofile(RelativePath .. "entities.lua")
 \newcommand{\automatedChaptersFUCKINGEVERYTHING}{
 	\input{../shared/geography/all.tex}
 	\input{../shared/npcs/all.tex}
-	\input{../shared/organisations/all.tex}
-	\input{../shared/ships/all.tex}
+	\input{../shared/associations/all.tex}
 	\input{../shared/languages/all.tex}
 	\input{../shared/items/all.tex}
 	\directlua{AddAllEntitiesToPrimaryRefs()}

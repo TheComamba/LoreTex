@@ -1,6 +1,7 @@
 Entities = {}
 CurrentLabel = ""
-ProtectedDescriptors = { "name", "shortname", "type", "parent", "location", "born", "died", "species", "gender" }
+ProtectedDescriptors = { "name", "shortname", "type", "parent", "location", "born", "died", "species", "gender",
+    "association" }
 
 function GetEntitiesIf(condition, map)
     local out = {}
@@ -43,7 +44,7 @@ function TypeToName(type)
     typesAndNames[#typesAndNames + 1] = { CharacterTypes, CharacterTypeNames }
     typesAndNames[#typesAndNames + 1] = { ItemTypes, ItemTypeNames }
     typesAndNames[#typesAndNames + 1] = { LanguageTypes, LanguageTypeNames }
-    typesAndNames[#typesAndNames + 1] = { OrganisationTypes, OrganisationTypeNames }
+    typesAndNames[#typesAndNames + 1] = { AssociationTypes, AssociationTypeNames }
     for key, specificTypesAndNames in pairs(typesAndNames) do
         local types = specificTypesAndNames[1]
         local typeNames = specificTypesAndNames[2]
@@ -70,6 +71,7 @@ end
 function AddAutomatedDescriptors()
     AddHistoryDescriptors()
     AddNPCsToPlaces()
+    AddNPCsToAssociations()
     AddSpeciesAndAgeStringToNPCs()
 end
 
@@ -84,7 +86,7 @@ end
 
 dofile(RelativePath .. "entities-geography.lua")
 dofile(RelativePath .. "entities-characters.lua")
-dofile(RelativePath .. "entities-organisations.lua")
+dofile(RelativePath .. "entities-associations.lua")
 dofile(RelativePath .. "entities-languages.lua")
 dofile(RelativePath .. "entities-items.lua")
 dofile(RelativePath .. "entities-history.lua")

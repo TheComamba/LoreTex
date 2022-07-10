@@ -79,6 +79,7 @@ function ComplementRefs()
     addPrimaryEntitiesLocationsToRefs()
     local primaryEntities = GetPrimaryRefEntities(Entities)
     ScanContentForSecondaryRefs(primaryEntities)
+    ReplaceMyrefWithNameref(primaryEntities)
 end
 
 dofile(RelativePath .. "entities-geography.lua")

@@ -20,7 +20,7 @@ function GetEntitiesOfType(type, map)
     if map == nil then
         map = Entities
     end
-    for key, entity in pairs(Entities) do
+    for key, entity in pairs(map) do
         if entity["type"] == type then
             out[key] = entity
         end

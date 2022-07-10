@@ -68,10 +68,46 @@ local function addPrimaryEntitiesLocationsToRefs()
     end
 end
 
+local function getTargetCondition(keyword)
+    if keyword == "location" then
+        return IsPlace
+    elseif keyword == "association" then
+        return IsAssociation
+    end
+end
+
+local function addEntitiesTo(type, keyword)
+    local entityMap = GetEntitiesOfType(type)
+    for label, char in pairs(entityMap) do
+        local targetLabel = char[keyword]
+        if targetLabel ~= nil then
+            local targetCondition = getTargetCondition(keyword)
+            if Entities[targetLabel] == nil then
+                LogError("Entity \"" .. targetLabel .. "\" not found.")
+            elseif not targetCondition(Entities[targetLabel]) then
+                LogError("Entity \"" .. targetLabel .. "\" is not a " .. keyword .. ".")
+            else
+                local name = TypeToName(type)
+                if Entities[targetLabel][name] == nil then
+                    Entities[targetLabel][name] = {}
+                end
+                Entities[targetLabel][name][#Entities[targetLabel][name] + 1] = TexCmd("myref", label)
+            end
+        end
+    end
+end
+
+local function addAllEntitiesTo()
+    for key1, type in pairs({ "npc" }) do
+        for key2, keyword in pairs({ "location", "association" }) do
+            addEntitiesTo(type, keyword)
+        end
+    end
+end
+
 function AddAutomatedDescriptors()
     AddHistoryDescriptors()
-    AddNPCsToPlaces()
-    AddNPCsToAssociations()
+    addAllEntitiesTo()
     AddSpeciesAndAgeStringToNPCs()
 end
 

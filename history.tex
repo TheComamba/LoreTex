@@ -25,7 +25,36 @@ dofile(RelativePath .. "history.lua")
 	\addHistory[#1]{#2}{#3}
 	\addDescriptor{born}{#2}
 }
+
+\newcommand{\bornDjo}[3][0]{
+	\addHistoryDjo[#1]{#2}{#3}
+	\directlua{
+		SetDescriptor(CurrentLabel,"born",ConvertYearToVin(#2, YearFmtDjo))
+	}
+}
+
+\newcommand{\bornNar}[3][0]{
+	\addHistoryNar[#1]{#2}{#3}
+	\directlua{
+	SetDescriptor(CurrentLabel,"born",ConvertYearToVin(#2, YearFmtNar))
+	}
+}
+
 \newcommand{\died}[3][0]{
 	\addHistory[#1]{#2}{#3}
 	\addDescriptor{died}{#2}
+}
+
+\newcommand{\diedDjo}[3][0]{
+	\addHistoryDjo[#1]{#2}{#3}
+	\directlua{
+		SetDescriptor(CurrentLabel,"died",ConvertYearToVin(#2, YearFmtDjo))
+	}
+}
+
+\newcommand{\diedNar}[3][0]{
+	\addHistoryNar[#1]{#2}{#3}
+	\directlua{
+		SetDescriptor(CurrentLabel,"died",ConvertYearToVin(#2, YearFmtNar))
+	}
 }

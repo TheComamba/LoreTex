@@ -106,7 +106,8 @@ function CreateGeography()
     Append(out, createGeographyLayer(1))
 
     local secondaryRefLabels = GetSecondaryRefEntitiesLabels(places)
-    PrintOnlyMentionedSection(secondaryRefLabels)
+
+    Append(out, PrintOnlyMentionedSection(secondaryRefLabels))
     return out
 end
 

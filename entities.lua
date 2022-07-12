@@ -95,7 +95,7 @@ local function addEntitiesTo(type, keyword)
                 if Entities[targetLabel][name] == nil then
                     Entities[targetLabel][name] = {}
                 end
-                local content = TexCmd("myref", label)
+                local content = TexCmd("myref ", label)
                 if not IsEmpty(role) then
                     content = content .. " (" .. role .. ")"
                 end

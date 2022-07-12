@@ -29,14 +29,14 @@ dofile(RelativePath .. "history.lua")
 \newcommand{\bornDjo}[3][0]{
 	\addHistoryDjo[#1]{#2}{#3}
 	\directlua{
-		SetDescriptor(CurrentLabel,"born",ConvertYearToVin(#2, YearFmtDjo))
+		SetDescriptor(CurrentLabel,"born",tostring(ConvertYearToVin(#2, YearFmtDjo)))
 	}
 }
 
 \newcommand{\bornNar}[3][0]{
 	\addHistoryNar[#1]{#2}{#3}
 	\directlua{
-	SetDescriptor(CurrentLabel,"born",ConvertYearToVin(#2, YearFmtNar))
+	SetDescriptor(CurrentLabel,"born",tostring(ConvertYearToVin(#2, YearFmtNar)))
 	}
 }
 

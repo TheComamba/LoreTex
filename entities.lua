@@ -71,16 +71,6 @@ function TypeToName(type)
     return typeToNameMap()[type]
 end
 
-local function addPrimaryEntitiesLocationsToRefs()
-    local primaryEntities = GetPrimaryRefEntities(Entities)
-    for label, entity in pairs(primaryEntities) do
-        local location = entity["location"]
-        if location ~= nil then
-            AddRef(location, PrimaryRefs)
-        end
-    end
-end
-
 local function getTargetCondition(keyword)
     if keyword == "location" then
         return IsPlace
@@ -132,7 +122,6 @@ end
 function ComplementRefs()
     AddPrimaryPlaceNPCsToRefs()
     AddPrimaryPlaceParentsToRefs()
-    addPrimaryEntitiesLocationsToRefs()
     local primaryEntities = GetPrimaryRefEntities(Entities)
     ScanContentForSecondaryRefs(primaryEntities)
     ReplaceMyrefWithNameref(primaryEntities)

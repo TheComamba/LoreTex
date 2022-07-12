@@ -3,10 +3,39 @@
 dofile(RelativePath .. "entities.lua")
 \end{luacode*}
 
-\newcommand{\setContinent}[1]{\directlua{CurrentContinent = "#1"}}
-\newcommand{\setRegion}[1]{\directlua{CurrentRegion = "#1"}}
-\newcommand{\setCity}[1]{\directlua{CurrentCity = "#1"}}
-\newcommand{\resetCurrentLabels}{\directlua{ResetCurrentLabels()}}
+
+\newcommand{\setContinent}[1]{
+	\directlua{
+		CurrentContinent = "#1"
+		CurrentRegion = ""
+		CurrentCity = ""
+		CurrentLabel = ""
+	}
+}
+
+\newcommand{\setRegion}[1]{
+	\directlua{
+		CurrentRegion = "#1"
+		CurrentCity = ""
+		CurrentLabel = ""
+	}
+}
+
+\newcommand{\setCity}[1]{
+	\directlua{
+		CurrentCity = "#1"
+		CurrentLabel = ""
+	}
+}
+
+\newcommand{\resetCurrentLabels}{\newcommand{\setContinent}[1]{
+	\directlua{
+		CurrentContinent = ""
+		CurrentRegion = ""
+		CurrentCity = ""
+		CurrentLabel = ""
+	}
+}
 
 \newcommand{\newEntity}[4]{
 	\directlua{

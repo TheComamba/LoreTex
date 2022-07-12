@@ -87,9 +87,3 @@ function AutomatedChapters()
     tex.print(table.concat(output))
 end
 
-function ResetCurrentLabels()
-    CurrentLabel = ""
-    CurrentContinent = ""
-    CurrentRegion = ""
-    CurrentCity = ""
-end

@@ -57,6 +57,7 @@ end
 
 function DeclarePC(label)
     PCs[#PCs + 1] = label
+    AddRef(label, PrimaryRefs)
 end
 
 function NewEntity(label, type, shortname, name)

@@ -14,7 +14,7 @@ function AddRef(labels, refs)
         addSingleRef(labels, refs)
     elseif type(labels) == "table" then
         for key, label in pairs(labels) do
-            addSingleRef(label, refs)
+            AddRef(label, refs)
         end
     end
 end
@@ -71,7 +71,9 @@ local function scanStringForRefs(str)
 end
 
 function ScanForRefs(content)
-    if type(content) == "string" then
+    if content == nil then
+        return {}
+    elseif type(content) == "string" then
         return scanStringForRefs(content)
     elseif type(content) == "table" then
         local out = {}

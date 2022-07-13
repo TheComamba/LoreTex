@@ -113,6 +113,17 @@ local function addAllEntitiesTo()
     end
 end
 
+local function addPrimaryPlaceEntitiesToRefs()
+    local places = GetEntitiesIf(IsPlace)
+    local primaryPlaces = GetPrimaryRefEntities(places)
+    for placeLabel, place in pairs(primaryPlaces) do
+        for type, typeName in pairs(typeToNameMap()) do
+            local entitiesHere = place[typeName]
+            AddRef(ScanForRefs(entitiesHere), PrimaryRefs)
+        end
+    end
+end
+
 function AddAutomatedDescriptors()
     AddHistoryDescriptors()
     addAllEntitiesTo()
@@ -120,7 +131,7 @@ function AddAutomatedDescriptors()
 end
 
 function ComplementRefs()
-    AddPrimaryPlaceNPCsToRefs()
+    addPrimaryPlaceEntitiesToRefs()
     AddPrimaryPlaceParentsToRefs()
     local primaryEntities = GetPrimaryRefEntities(Entities)
     ScanContentForSecondaryRefs(primaryEntities)

@@ -38,21 +38,6 @@ function IsLocationUnknown(entity)
     end
 end
 
-function AddPrimaryPlaceNPCsToRefs()
-    local places = GetEntitiesIf(IsPlace)
-    local primaryPlaces = GetPrimaryRefEntities(places)
-    for placeLabel, place in pairs(primaryPlaces) do
-        local npcsHere = place["NPCs"]
-        if npcsHere ~= nil then
-            for key1, ref in pairs(npcsHere) do
-                for key2, label in pairs(ScanForRefs(ref)) do
-                    AddRef(label, PrimaryRefs)
-                end
-            end
-        end
-    end
-end
-
 function AddPrimaryPlaceParentsToRefs()
     local places = GetEntitiesIf(IsPlace)
     local primaryPlaces = GetPrimaryRefEntities(places)

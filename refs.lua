@@ -51,7 +51,7 @@ function ListAllRefs()
     tex.print(ListAll(SecondaryRefs, NamerefString))
 end
 
-function ScanForRefs(str)
+local function scanStringForRefs(str)
     if str == nil then
         return
     end
@@ -70,23 +70,25 @@ function ScanForRefs(str)
     return refs
 end
 
-local function scanStringForSecondaryRefs(str)
-    for key, ref in pairs(ScanForRefs(str)) do
-        if not IsIn(ref, PrimaryRefs) then
-            AddRef(ref, SecondaryRefs)
+function ScanForRefs(content)
+    if type(content) == "string" then
+        return scanStringForRefs(content)
+    elseif type(content) == "table" then
+        local out = {}
+        for key, elem in pairs(content) do
+            Append(out, ScanForRefs(elem))
         end
+        return out
+    else
+        LogError("Tried to scan content of type " .. type(content) .. "!")
     end
 end
 
 function ScanContentForSecondaryRefs(content)
-    if type(content) == "string" then
-        scanStringForSecondaryRefs(content)
-    elseif type(content) == "table" then
-        for key, elem in pairs(content) do
-            ScanContentForSecondaryRefs(elem)
+    for key, ref in pairs(ScanForRefs(content)) do
+        if not IsIn(ref, PrimaryRefs) then
+            AddRef(ref, SecondaryRefs)
         end
-    else
-        LogError("Tried to scan content of type " .. type(content) .. "!")
     end
 end
 

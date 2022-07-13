@@ -44,8 +44,10 @@ function AddPrimaryPlaceNPCsToRefs()
     for placeLabel, place in pairs(primaryPlaces) do
         local npcsHere = place["NPCs"]
         if npcsHere ~= nil then
-            for label, npc in pairs(npcsHere) do
-                AddRef(label, PrimaryRefs)
+            for key1, ref in pairs(npcsHere) do
+                for key2, label in pairs(ScanForRefs(ref)) do
+                    AddRef(label, PrimaryRefs)
+                end
             end
         end
     end

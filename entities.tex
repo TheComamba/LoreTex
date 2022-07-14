@@ -9,7 +9,6 @@ dofile(RelativePath .. "entities.lua")
 		CurrentContinent = "#1"
 		CurrentRegion = ""
 		CurrentCity = ""
-		CurrentLabel = ""
 	}
 }
 
@@ -17,14 +16,12 @@ dofile(RelativePath .. "entities.lua")
 	\directlua{
 		CurrentRegion = "#1"
 		CurrentCity = ""
-		CurrentLabel = ""
 	}
 }
 
 \newcommand{\setCity}[1]{
 	\directlua{
 		CurrentCity = "#1"
-		CurrentLabel = ""
 	}
 }
 

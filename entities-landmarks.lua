@@ -1,5 +1,5 @@
-LandmarkTypes = { "forest", "grassland", "range", "mountain", "river" }
-LandmarkTypeNames = { "Wälder", "Grasländer", "Gebirge", "Berge", "Flüsse" }
+LandmarkTypes = { "forest", "grassland", "range", "mountain", "river", "glacier" }
+LandmarkTypeNames = { "Wälder", "Grasländer", "Gebirge", "Berge", "Flüsse", "Gletscher" }
 
 function IsLandmark(entity)
     if entity == nil then

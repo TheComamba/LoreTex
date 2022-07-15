@@ -1,5 +1,5 @@
-AssociationTypes = { "organisation", "ship" }
-AssociationTypeNames = { "Organisationen", "Schiffe" }
+AssociationTypes = { "organisation", "family", "ship" }
+AssociationTypeNames = { "Organisationen", "Familien", "Schiffe" }
 
 function IsAssociation(entity)
     if entity == nil then

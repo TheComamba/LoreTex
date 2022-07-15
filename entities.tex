@@ -78,6 +78,11 @@ dofile(RelativePath .. "entities.lua")
 	\directlua{SetLocation(CurrentLabel)}
 }
 
+\newcommand{\newFamily}[3]{
+	\newEntity{#1}{family}{#2}{#3}
+	\directlua{SetLocation(CurrentLabel)}
+}
+
 \newcommand{\newShip}[3]{
 	\newEntity{#1}{ship}{#2}{#3}
 	\directlua{SetLocation(CurrentLabel)}
@@ -113,6 +118,11 @@ dofile(RelativePath .. "entities.lua")
 	\directlua{SetLocation(CurrentLabel)}
 }
 
+\newcommand{\newGlacier}[3]{
+	\newEntity{#1}{glacier}{#2}{#3}
+	\directlua{SetLocation(CurrentLabel)}
+}
+
 \newcommand{\newItem}[3]{
 	\newEntity{#1}{item}{#2}{#3}
 	\directlua{SetLocation(CurrentLabel)}
@@ -145,6 +155,18 @@ dofile(RelativePath .. "entities.lua")
 \newcommand{\setSpells}[1]{
 	\directlua{
 		SetDescriptor(CurrentLabel,[[Zauber]],[[\detokenize{#1}]])
+	}
+}
+
+\newcommand{\setPlayer}[1]{
+	\directlua{
+		SetDescriptor(CurrentLabel,[[Spieler]],[[\detokenize{#1}]])
+	}
+}
+
+\newcommand{\setHeight}[1]{
+	\directlua{
+		SetDescriptor(CurrentLabel,[[Höhe]],[[\detokenize{#1}m]])
 	}
 }
 

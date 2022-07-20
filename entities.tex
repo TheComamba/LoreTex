@@ -123,6 +123,11 @@ dofile(RelativePath .. "entities.lua")
 	\directlua{SetLocation(CurrentLabel)}
 }
 
+\newcommand{\newLake}[3]{
+	\newEntity{#1}{lake}{#2}{#3}
+	\directlua{SetLocation(CurrentLabel)}
+}
+
 \newcommand{\newItem}[3]{
 	\newEntity{#1}{item}{#2}{#3}
 	\directlua{SetLocation(CurrentLabel)}

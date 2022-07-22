@@ -1,6 +1,9 @@
 \begin{luacode}
-	ftInM = 0.3048
-	
+	local ftInM = 0.3048
+	local MiInKM = 1.609
+	local lbInKg = 0.4536
+	local gallonInLiter = 3.785
+
 	function RoundedNum(num, decimals)
 		local decimalFactor = math.pow(10,decimals)
 		return tostring(math.round(num*decimalFactor)/decimalFactor)
@@ -21,6 +24,30 @@
 		str = str.." Fuß)"
 		tex.print(str)
 	end
+
+	function PrintMiToKm(valInMi)
+		local str = RoundedNum(valInMi*MiInKM,1)
+		str = str.." km ("
+		str = str..RoundedNum(valInMi,1)
+		str = str.." mi)"
+		tex.print(str)
+	end
+
+	function PrintLbToKg(valInLb)
+		local str = RoundedNum(valInLb*lbInKg,1)
+		str = str.." kg ("
+		str = str..RoundedNum(valInLb,1)
+		str = str.." pounds)"
+		tex.print(str)
+	end
+
+	function PrintGallonToLiter(valInGallons)
+		local str = RoundedNum(valInGallons*gallonInLiter,1)
+		str = str.." l ("
+		str = str..RoundedNum(valInGallons,1)
+		str = str.." gallons)"
+		tex.print(str)
+	end
 \end{luacode}
 
 \newcommand{\ft}[1]{
@@ -29,4 +56,16 @@
 
 \newcommand{\metre}[1]{
 	\directlua{PrintMToFt(#1)}
+}
+
+\newcommand{\mile}[1]{
+	\directlua{PrintMiToKm(#1)}
+}
+
+\newcommand{\lb}[1]{
+	\directlua{PrintLbToKg(#1)}
+}
+
+\newcommand{\gallon}[1]{
+	\directlua{PrintGallonToLiter(#1)}
 }

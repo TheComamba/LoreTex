@@ -93,6 +93,21 @@ dofile(RelativePath .. "entities.lua")
 	\directlua{SetLocation(CurrentLabel)}
 }
 
+\newcommand{\newSpell}[2]{
+	\newEntity{#1}{spell}{}{#2}
+}
+
+\newcommand{\spellProperties}[6]{
+	\directlua{
+		SetDescriptor(CurrentLabel,"level", "#1")
+		SetDescriptor(CurrentLabel,"school", "#2")
+		SetDescriptor(CurrentLabel,"casting-time", "#3")
+		SetDescriptor(CurrentLabel,"range", "#4")
+		SetDescriptor(CurrentLabel,"components", "#5")
+		SetDescriptor(CurrentLabel,"duration", "#6")
+	}
+}
+
 \newcommand{\newForest}[3]{
 	\newEntity{#1}{forest}{#2}{#3}
 	\directlua{SetLocation(CurrentLabel)}
@@ -188,6 +203,7 @@ dofile(RelativePath .. "entities.lua")
 	\input{../shared/npcs/all.tex}
 	\input{../shared/associations/all.tex}
 	\input{../shared/languages/all.tex}
+	\input{../shared/spells/all.tex}
 	\input{../shared/landmarks/all.tex}
 	\input{../shared/items/all.tex}
 	\directlua{AutomatedChapters()}
@@ -198,6 +214,7 @@ dofile(RelativePath .. "entities.lua")
 	\input{../shared/npcs/all.tex}
 	\input{../shared/associations/all.tex}
 	\input{../shared/languages/all.tex}
+	\input{../shared/spells/all.tex}
 	\input{../shared/landmarks/all.tex}
 	\input{../shared/items/all.tex}
 	\directlua{AddAllEntitiesToPrimaryRefs()}

@@ -1,5 +1,5 @@
-LanguageTypes = { "language" }
-LanguageTypeNames = { "Sprachen" }
+LanguageTypes = { "language", "spell" }
+LanguageTypeNames = { "Sprachen", "Zauber" }
 
 function IsLanguage(entity)
     if entity == nil then

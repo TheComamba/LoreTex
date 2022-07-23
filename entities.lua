@@ -1,7 +1,7 @@
 Entities = {}
 CurrentLabel = ""
 ProtectedDescriptors = { "name", "shortname", "type", "parent", "location", "born", "died", "species", "gender",
-    "association" }
+    "association", "association-role" }
 
 function GetEntitiesIf(condition, map)
     local out = {}

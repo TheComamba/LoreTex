@@ -76,6 +76,7 @@ function NewCharacter(label, shortname, name)
 end
 
 function AutomatedChapters()
+    DeleteUnborn()
     AddAutomatedDescriptors()
     ComplementRefs()
     local output = CreateGeography()

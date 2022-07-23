@@ -8,3 +8,17 @@ function IsAssociation(entity)
     local type = entity["type"]
     return type ~= nil and IsIn(entity["type"], AssociationTypes)
 end
+
+function AddAssociationDescriptors()
+    for label, entity in pairs(Entities) do
+        local associationLabel = entity["association"]
+        local assocationRole = entity["association-role"]
+        if not IsEmpty(associationLabel) then
+            if IsEmpty(assocationRole) then
+                assocationRole = "Mitglied"
+            end
+            local description = assocationRole .. " der " .. TexCmd("myref ", associationLabel) .. "."
+            SetDescriptor(label, "Zusammenschluss", description)
+        end
+    end
+end

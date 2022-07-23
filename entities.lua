@@ -128,6 +128,7 @@ function AddAutomatedDescriptors()
     AddHistoryDescriptors()
     addAllEntitiesTo()
     AddSpeciesAndAgeStringToNPCs()
+    AddAssociationDescriptors()
 end
 
 function ComplementRefs()

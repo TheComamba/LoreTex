@@ -52,3 +52,14 @@ function DeleteUnborn()
         end
     end
 end
+
+function MarkDead()
+    for key, entity in pairs(Entities) do
+        if IsDead(entity) then
+            if entity["shortname"] == nil then
+                entity["shortname"] = entity["name"]
+            end
+            entity["name"] = entity["name"] .. " " .. TexCmd("textdied")
+        end
+    end
+end

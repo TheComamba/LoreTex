@@ -96,6 +96,9 @@ local function addEntitiesTo(type, keyword)
                     Entities[targetLabel][name] = {}
                 end
                 local content = TexCmd("myref ", label)
+                if IsDead(label) then
+                    content = content .. " " .. TexCmd("textdied")
+                end
                 if not IsEmpty(role) then
                     content = content .. " (" .. role .. ")"
                 end

@@ -73,6 +73,12 @@ dofile(RelativePath .. "entities.lua")
 	\directlua{SetLocation(CurrentLabel)}
 }
 
+\newcommand{\charappearance}[3]{
+	\addDescriptor[Körper:]{Erscheinung}{#1}
+	\addDescriptor[Kleidung und Ausrüstung:]{Erscheinung}{#2}
+	\addDescriptor[Stimme / Verhalten:]{Erscheinung}{#3}
+}
+
 \newcommand{\newOrganisation}[3]{
 	\newEntity{#1}{organisation}{#2}{#3}
 	\directlua{SetLocation(CurrentLabel)}
@@ -99,12 +105,12 @@ dofile(RelativePath .. "entities.lua")
 
 \newcommand{\spellProperties}[6]{
 	\directlua{
-		SetDescriptor(CurrentLabel,"level", "#1")
-		SetDescriptor(CurrentLabel,"school", "#2")
-		SetDescriptor(CurrentLabel,"casting-time", "#3")
-		SetDescriptor(CurrentLabel,"range", "#4")
-		SetDescriptor(CurrentLabel,"components", "#5")
-		SetDescriptor(CurrentLabel,"duration", "#6")
+		SetDescriptor(CurrentLabel, "Properties", "#1","Level:")
+		SetDescriptor(CurrentLabel, "Properties", "#2","School:")
+		SetDescriptor(CurrentLabel, "Properties", "#3","Casting-time:")
+		SetDescriptor(CurrentLabel, "Properties", "#4","Range:")
+		SetDescriptor(CurrentLabel, "Properties", "#5","Components:")
+		SetDescriptor(CurrentLabel, "Properties", "#6","Duration:")
 	}
 }
 

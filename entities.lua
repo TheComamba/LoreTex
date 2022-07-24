@@ -1,8 +1,8 @@
 Entities = {}
 CurrentLabel = ""
-ShowSecrets = false
+IsShowSecrets = false
 ProtectedDescriptors = { "name", "shortname", "type", "parent", "location", "born", "died", "species", "gender",
-    "association", "association-role", "isSecret", "label" }
+    "association", "association-role", "isSecret", "isShown", "label" }
 
 function GetEntitiesIf(condition, map)
     local out = {}
@@ -63,13 +63,21 @@ function ToEntity(input)
     end
 end
 
+function ToLabel(input)
+    if input == nil then
+        return nil
+    elseif type(input) == "string" then
+        return input
+    elseif type(input) == "table" then
+        return input["label"]
+    else
+        return nil
+    end
+end
+
 function IsSecret(entity)
     entity = ToEntity(entity)
     if entity == nil then
-        return false
-    end
-    local label = entity["label"]
-    if label ~= nil and IsIn(label, PrimaryRefs) then
         return false
     end
     local isSecret = entity["isSecret"]
@@ -77,14 +85,34 @@ function IsSecret(entity)
         return false
     end
     if type(isSecret) ~= "boolean" then
-        LogError("isSecret property of " .. label .. " should be boolean, but is " .. type(isSecret) .. ".")
+        LogError("isSecret property of " .. entity["label"] .. " should be boolean, but is " .. type(isSecret) .. ".")
         return false
     end
     return isSecret
 end
 
-function IsNotSecret(entity)
-    return not IsSecret(entity)
+function IsShown(entity)
+    entity = ToEntity(entity)
+    if IsEmpty(entity) then
+        return false
+    elseif IsShowSecrets then
+        return true
+    elseif not IsSecret(entity) then
+        return true
+    elseif entity["isShown"] ~= nil then
+        return entity["isShown"]
+    else
+        local label = ToLabel(entity)
+        if label == nil then
+            return false
+        end
+        if IsIn(label, PrimaryRefs) then
+            entity["isShown"] = true
+            return true
+        else
+            return false
+        end
+    end
 end
 
 function CompareLabelsByName(label1, label2)
@@ -129,9 +157,7 @@ end
 
 local function addEntitiesTo(type, keyword)
     local entityMap = GetEntitiesOfType(type)
-    if not ShowSecrets then
-        entityMap = GetEntitiesIf(IsNotSecret, entityMap)
-    end
+    entityMap = GetEntitiesIf(IsShown, entityMap)
     for label, entity in pairs(entityMap) do
         local targetLabel = entity[keyword]
         local role = entity[keyword .. "-role"]

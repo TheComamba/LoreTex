@@ -13,17 +13,15 @@ function AddAssociationDescriptors()
     for label, entity in pairs(Entities) do
         local associationLabel = entity["association"]
         local assocationRole = entity["association-role"]
-        if not IsEmpty(associationLabel) then
-            if not IsSecret(associationLabel) or ShowSecrets then
-                if IsEmpty(assocationRole) then
-                    assocationRole = "Mitglied"
-                end
-                local description = assocationRole .. " der " .. TexCmd("myref ", associationLabel) .. "."
-                if IsSecret(associationLabel) then
-                    description = "(Geheim) " .. description
-                end
-                SetDescriptor(label, "Zusammenschluss", description)
+        if IsShown(associationLabel) then
+            if IsEmpty(assocationRole) then
+                assocationRole = "Mitglied"
             end
+            local description = assocationRole .. " der " .. TexCmd("myref ", associationLabel) .. "."
+            if IsSecret(associationLabel) then
+                description = "(Geheim) " .. description
+            end
+            SetDescriptor(label, "Zusammenschluss", description)
         end
     end
 end
@@ -34,7 +32,7 @@ function MarkSecret()
             if entity["shortname"] == nil then
                 entity["shortname"] = entity["name"]
             end
-            entity["name"] = "(Geheim)" .. entity["name"]
+            entity["name"] = "(Geheim) " .. entity["name"]
         end
     end
 end

@@ -71,7 +71,7 @@ local function scanStringForRefs(str)
 end
 
 function ScanForRefs(content)
-    if content == nil then
+    if content == nil or type(content) == "boolean" or type(content) == "number" then
         return {}
     elseif type(content) == "string" then
         return scanStringForRefs(content)
@@ -83,6 +83,7 @@ function ScanForRefs(content)
         return out
     else
         LogError("Tried to scan content of type " .. type(content) .. "!")
+        return {}
     end
 end
 
@@ -102,8 +103,11 @@ function ReplaceMyrefWithNameref(content)
             content[key] = ReplaceMyrefWithNameref(elem)
         end
         return content
+    elseif type(content) == "boolean" or type(content) == "number" then
+        return content
     else
         LogError("Tried to replace myref in an object of type " .. type(content) .. "!")
+        return content
     end
 end
 

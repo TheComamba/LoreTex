@@ -8,13 +8,33 @@ local function isAcceptsHistoryFrom(receiverLabel, originatorLabel)
     end
 end
 
+local function concernsSecret(historyItem)
+    if historyItem == nil then
+        LogError("concernsSecret called with nil value")
+        return false
+    end
+    local concerns = historyItem["concerns"]
+    if concerns == nil then
+        LogError("This history item concerns nobody:" .. historyItem["event"])
+        return false
+    end
+    for key, label in pairs(concerns) do
+        if IsSecret(label) then
+            return true
+        end
+    end
+    return false
+end
+
 local function addHistoryToEntity(label)
     local history = {}
     for key, historyItem in pairs(Histories) do
-        local concerns = historyItem["concerns"]
-        if IsIn(label, concerns) then
-            if isAcceptsHistoryFrom(label, historyItem["originator"]) then
-                AddHistoryItemToHistory(historyItem, history)
+        if not concernsSecret(historyItem) or ShowSecrets then
+            local concerns = historyItem["concerns"]
+            if IsIn(label, concerns) then
+                if isAcceptsHistoryFrom(label, historyItem["originator"]) then
+                    AddHistoryItemToHistory(historyItem, history)
+                end
             end
         end
     end

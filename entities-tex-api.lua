@@ -9,6 +9,7 @@ function SetDescriptor(label, descriptor, description, subdescriptor)
 
     if Entities[label] == nil then
         Entities[label] = {}
+        Entities[label]["label"] = label
     end
     if IsEmpty(subdescriptor) then
         Entities[label][descriptor] = description
@@ -28,6 +29,10 @@ function SetDescriptor(label, descriptor, description, subdescriptor)
         end
         Entities[label][descriptor][subdescriptor] = description
     end
+end
+
+function SetSecret(label)
+    SetDescriptor(label, "isSecret", true)
 end
 
 function SetLocation(label, location)
@@ -89,4 +94,3 @@ function AutomatedChapters()
     Append(output, PrintErrors())
     tex.print(table.concat(output))
 end
-

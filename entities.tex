@@ -204,6 +204,14 @@ dofile(RelativePath .. "entities.lua")
 	\directlua{SetAssociation(CurrentLabel, "#2", [[\detokenize{#1}]])}
 }
 
+\newcommand{\setSecret}{
+	\directlua{SetSecret(CurrentLabel)}
+}
+
+\newcommand{\showSecrets}{
+	\directlua{ShowSecrets = true}
+}
+
 \newcommand{\automatedChapters}{
 	\input{../shared/geography/all.tex}
 	\input{../shared/npcs/all.tex}

@@ -1,7 +1,8 @@
 Entities = {}
 CurrentLabel = ""
+ShowSecrets = false
 ProtectedDescriptors = { "name", "shortname", "type", "parent", "location", "born", "died", "species", "gender",
-    "association", "association-role" }
+    "association", "association-role", "isSecret", "label" }
 
 function GetEntitiesIf(condition, map)
     local out = {}
@@ -37,6 +38,53 @@ function GetPrimaryRefEntities(map)
         end
     end
     return out
+end
+
+function ToEntity(input)
+    if input == nil then
+        LogError("ToEntity called with nil input.")
+        return nil
+    elseif type(input) == "table" then
+        return input
+    elseif type(input) == "string" then
+        local entity = Entities[input]
+        if entity == nil then
+            if not IsIn(input, UnfoundRefs) then
+                --LogError("Entity with label \"" .. input .. "\" not found.")
+                AddRef(input, UnfoundRefs)
+            end
+            return nil
+        else
+            return entity
+        end
+    else
+        LogError("Tried to convert input of type " .. type(input) .. " to entity.")
+        return nil
+    end
+end
+
+function IsSecret(entity)
+    entity = ToEntity(entity)
+    if entity == nil then
+        return false
+    end
+    local label = entity["label"]
+    if label ~= nil and IsIn(label, PrimaryRefs) then
+        return false
+    end
+    local isSecret = entity["isSecret"]
+    if isSecret == nil then
+        return false
+    end
+    if type(isSecret) ~= "boolean" then
+        LogError("isSecret property of " .. label .. " should be boolean, but is " .. type(isSecret) .. ".")
+        return false
+    end
+    return isSecret
+end
+
+function IsNotSecret(entity)
+    return not IsSecret(entity)
 end
 
 function CompareLabelsByName(label1, label2)
@@ -81,6 +129,9 @@ end
 
 local function addEntitiesTo(type, keyword)
     local entityMap = GetEntitiesOfType(type)
+    if not ShowSecrets then
+        entityMap = GetEntitiesIf(IsNotSecret, entityMap)
+    end
     for label, entity in pairs(entityMap) do
         local targetLabel = entity[keyword]
         local role = entity[keyword .. "-role"]

@@ -164,7 +164,14 @@ local function addEntitiesTo(type, keyword)
         if targetLabel ~= nil then
             local targetCondition = getTargetCondition(keyword)
             if Entities[targetLabel] == nil then
-                LogError("Entity \"" .. targetLabel .. "\" not found.")
+                local err = { "Entity \"" }
+                Append(err, targetLabel)
+                Append(err, "\" not found, although it is listed as ")
+                Append(err, keyword)
+                Append(err, " of ")
+                Append(err, label)
+                Append(err, ".")
+                LogError(err)
             elseif not targetCondition(Entities[targetLabel]) then
                 LogError("Entity \"" .. targetLabel .. "\" is not a " .. keyword .. ".")
             else

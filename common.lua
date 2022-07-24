@@ -1,6 +1,14 @@
 local errorMessages = {}
 
 function LogError(error)
+	if type(error) == "table" then
+		error = table.concat(error)
+	end
+	error = tostring(error)
+	if error == nil or type(error) ~= "string" then
+		LogError("Something went seriously wrong...")
+		return
+	end
 	local caller = debug.getinfo(2).name
 	if caller ~= nil and type(caller) == "string" then
 		error = "In function \"" .. caller .. "\": " .. error

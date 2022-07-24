@@ -13,7 +13,7 @@ function AddAssociationDescriptors()
     for label, entity in pairs(Entities) do
         local associationLabel = entity["association"]
         local assocationRole = entity["association-role"]
-        if IsShown(associationLabel) then
+        if not IsEmpty(associationLabel) and IsShown(associationLabel) then
             if IsEmpty(assocationRole) then
                 assocationRole = "Mitglied"
             end

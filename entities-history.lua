@@ -10,7 +10,7 @@ end
 
 local function isConcernsSecret(historyItem)
     if historyItem == nil then
-        LogError("concernsSecret called with nil value")
+        LogError("called with nil value")
         return false
     end
     local concerns = historyItem["concerns"]
@@ -34,7 +34,7 @@ end
 
 local function isAllConcnernsShown(historyItem)
     if historyItem == nil then
-        LogError("isAllConcnernsShown called with nil value")
+        LogError("called with nil value")
         return false
     end
     local concerns = historyItem["concerns"]

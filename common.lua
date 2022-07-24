@@ -1,6 +1,10 @@
 local errorMessages = {}
 
 function LogError(error)
+	local caller = debug.getinfo(2).name
+	if caller ~= nil and type(caller) == "string" then
+		error = "In function \"" .. caller .. "\": " .. error
+	end
 	errorMessages[#errorMessages + 1] = error
 end
 

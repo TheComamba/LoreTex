@@ -42,7 +42,7 @@ end
 
 function ToEntity(input)
     if input == nil then
-        LogError("ToEntity called with nil input.")
+        LogError("called with nil input.")
         return nil
     elseif type(input) == "table" then
         return input

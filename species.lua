@@ -125,6 +125,11 @@ Species["shai"]["ageExponent"] = 1.75
 Species["shai"]["nominative"] = "Sandelb"
 Species["shai"]["genitive"] = "Sandelben"
 
+Species["sphinx"] = {}
+Species["sphinx"]["ageExponent"] = 2.3
+Species["sphinx"]["nominative"] = "Sphinx"
+Species["sphinx"]["genitive"] = "Sphinxen"
+
 Species["tabaxi"] = {}
 Species["tabaxi"]["ageExponent"] = 1
 Species["tabaxi"]["nominative"] = "Tabaxi"

@@ -50,7 +50,7 @@ function ToEntity(input)
         local entity = Entities[input]
         if entity == nil then
             if not IsIn(input, UnfoundRefs) then
-                --LogError("Entity with label \"" .. input .. "\" not found.")
+                LogError("Entity with label \"" .. input .. "\" not found.")
                 AddRef(input, UnfoundRefs)
             end
             return nil

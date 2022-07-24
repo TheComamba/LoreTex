@@ -26,10 +26,17 @@ local function concernsSecret(historyItem)
     return false
 end
 
+local function setSecrecy(historyItem)
+    if not IsSecret(historyItem) and concernsSecret(historyItem) then
+        historyItem["isSecret"] = true
+    end
+end
+
 local function addHistoryToEntity(label)
     local history = {}
     for key, historyItem in pairs(Histories) do
-        if not concernsSecret(historyItem) or ShowSecrets then
+        setSecrecy(historyItem)
+        if not IsSecret(historyItem) or ShowSecrets then
             local concerns = historyItem["concerns"]
             if IsIn(label, concerns) then
                 if isAcceptsHistoryFrom(label, historyItem["originator"]) then

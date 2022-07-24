@@ -9,6 +9,12 @@ dofile(RelativePath .. "history.lua")
 		}
 }
 
+\newcommand{\addSecretHistory}[3][0]{
+		\directlua{
+			AddEvent(CurrentLabel, #2, [[\detokenize{#3}]], #1, true)
+		}
+}
+
 \newcommand{\addHistoryDjo}[3][0]{
 	\directlua{
 		AddEvent(CurrentLabel, ConvertYearToVin(#2, YearFmtDjo), [[\detokenize{#3}]], #1)

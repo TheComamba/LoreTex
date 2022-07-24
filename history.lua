@@ -15,17 +15,17 @@ function AddHistoryItemToHistory(historyItem, history)
 	end
 end
 
-local function newHistoryItem(originator, year, event, day)
+local function newHistoryItem(originator, year, event, day, isSecret)
 	local item = {}
 	item["originator"] = originator
 	item["year"] = tonumber(year)
 	if item["year"] == nil then
-		LogError("Yould not convert year \"" .. year .. "\" to number.")
+		LogError("Could not convert year \"" .. year .. "\" to number.")
 		return {}
 	end
 	item["day"] = tonumber(day)
 	if item["day"] == nil then
-		LogError("Yould not convert day \"" .. day .. "\" to number.")
+		LogError("Could not convert day \"" .. day .. "\" to number.")
 		return {}
 	end
 	item["event"] = event
@@ -34,15 +34,18 @@ local function newHistoryItem(originator, year, event, day)
 		concerns[#concerns + 1] = originator
 	end
 	item["concerns"] = concerns
+	if isSecret ~= nil then
+		item["isSecret"] = isSecret
+	end
 	return item
 end
 
-function AddEvent(originator, year, event, day)
+function AddEvent(originator, year, event, day, isSecret)
 	if IsEmpty(day) then
 		day = 0
 	end
 	if year <= CurrentYearVin then
-		Histories[#Histories + 1] = newHistoryItem(originator, year, event, day)
+		Histories[#Histories + 1] = newHistoryItem(originator, year, event, day, isSecret)
 	end
 end
 

@@ -5,6 +5,9 @@ function AddHistoryItemToHistory(historyItem, history)
 	local year = historyItem["year"]
 	local day = historyItem["day"]
 	local event = historyItem["event"]
+	if IsSecret(historyItem) then
+		event = "(Geheim) " .. event
+	end
 	if history[year] == nil then
 		history[year] = {}
 	end

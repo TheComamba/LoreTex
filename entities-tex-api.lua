@@ -83,6 +83,7 @@ end
 function AutomatedChapters()
     DeleteUnborn()
     MarkDead()
+    MarkSecret()
     AddAutomatedDescriptors()
     ComplementRefs()
     local output = CreateGeography()

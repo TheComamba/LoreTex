@@ -150,6 +150,9 @@ local function addEntitiesTo(type, keyword)
                 if IsDead(label) then
                     content = content .. " " .. TexCmd("textdied")
                 end
+                if IsSecret(label) then
+                    content = "(Geheim) " .. content
+                end
                 if not IsEmpty(role) then
                     content = content .. " (" .. role .. ")"
                 end

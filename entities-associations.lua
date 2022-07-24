@@ -19,8 +19,22 @@ function AddAssociationDescriptors()
                     assocationRole = "Mitglied"
                 end
                 local description = assocationRole .. " der " .. TexCmd("myref ", associationLabel) .. "."
+                if IsSecret(associationLabel) then
+                    description = "(Geheim) " .. description
+                end
                 SetDescriptor(label, "Zusammenschluss", description)
             end
+        end
+    end
+end
+
+function MarkSecret()
+    for key, entity in pairs(Entities) do
+        if IsSecret(entity) then
+            if entity["shortname"] == nil then
+                entity["shortname"] = entity["name"]
+            end
+            entity["name"] = "(Geheim)" .. entity["name"]
         end
     end
 end

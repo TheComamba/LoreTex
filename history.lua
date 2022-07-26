@@ -44,6 +44,10 @@ local function newHistoryItem(originator, year, event, day, isSecret)
 end
 
 function AddEvent(originator, year, event, day, isSecret)
+	if IsEmpty(year) then
+		LogError(originator .. " has a history item without a year!")
+		return
+	end
 	if IsEmpty(day) then
 		day = 0
 	end

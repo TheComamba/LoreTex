@@ -160,17 +160,34 @@ local function addSingleEntity(label, targetLabel, entityType, role)
     if Entities[targetLabel][name] == nil then
         Entities[targetLabel][name] = {}
     end
-    local content = TexCmd("myref ", label)
-    if IsDead(label) then
-        content = content .. " " .. TexCmd("textdied")
-    end
+    local content = {}
     if IsSecret(label) then
-        content = "(Geheim) " .. content
+        Append(content, "(Geheim) ")
     end
-    if not IsEmpty(role) then
-        content = content .. " (" .. role .. ")"
+    Append(content, TexCmd("myref ", label))
+    if IsDead(label) then
+        Append(content, " " .. TexCmd("textdied"))
     end
-    Entities[targetLabel][name][#Entities[targetLabel][name] + 1] = content
+    local location = Entities[label]["location"]
+    local targetLocation = Entities[targetLabel]["location"]
+    local locationRef = ""
+    if not IsEmpty(location) and location ~= targetLocation then
+        locationRef = "in " .. TexCmd("myref ", location)
+    end
+    if not IsEmpty(role) or not IsEmpty(locationRef) then
+        Append(content, " (")
+        if not IsEmpty(role) then
+            Append(content, role)
+        end
+        if not IsEmpty(role) and not IsEmpty(locationRef) then
+            Append(content, ", ")
+        end
+        if not IsEmpty(locationRef) then
+            Append(content, locationRef)
+        end
+        Append(content, ")")
+    end
+    Entities[targetLabel][name][#Entities[targetLabel][name] + 1] = table.concat(content)
 end
 
 local function addEntitiesTo(entityType, keyword)

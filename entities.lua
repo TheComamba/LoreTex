@@ -171,7 +171,7 @@ local function addSingleEntity(label, targetLabel, entityType, role)
     local location = Entities[label]["location"]
     local targetLocation = Entities[targetLabel]["location"]
     local locationRef = ""
-    if not IsEmpty(location) and location ~= targetLocation then
+    if not IsPlace(Entities[targetLabel]) and not IsEmpty(location) and location ~= targetLocation then
         locationRef = "in " .. TexCmd("myref ", location)
     end
     if not IsEmpty(role) or not IsEmpty(locationRef) then
@@ -230,7 +230,7 @@ end
 
 local function addAllEntitiesTo()
     for type, name in pairs(typeToNameMap()) do
-        for key2, keyword in pairs({ "association" }) do
+        for key2, keyword in pairs({ "location", "association" }) do
             addEntitiesTo(type, keyword)
         end
     end

@@ -51,12 +51,12 @@ function SetLocation(label, location)
     end
 end
 
-function SetAssociation(label, association, role)
+function AddAssociation(label, association, role)
     if Entities[label] ~= nil then
-        Entities[label]["association"] = association
-        if not IsEmpty(role) then
-            Entities[label]["association-role"] = role
+        if Entities[label]["association"] == nil then
+            Entities[label]["association"] = {}
         end
+        Entities[label]["association"][#Entities[label]["association"]+1] = {association, role}
     end
 end
 

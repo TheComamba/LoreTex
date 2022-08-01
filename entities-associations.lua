@@ -11,17 +11,23 @@ end
 
 function AddAssociationDescriptors()
     for label, entity in pairs(Entities) do
-        local associationLabel = entity["association"]
-        local assocationRole = entity["association-role"]
-        if not IsEmpty(associationLabel) and IsShown(associationLabel) then
-            if IsEmpty(assocationRole) then
-                assocationRole = "Mitglied"
+        local associationList = {}
+        if entity["association"] ~= nil then
+            for key, associationAndRole in pairs(entity["association"]) do
+                local associationLabel = associationAndRole[1]
+                local assocationRole = associationAndRole[2]
+                if not IsEmpty(associationLabel) and IsShown(associationLabel) then
+                    if IsEmpty(assocationRole) then
+                        assocationRole = "Mitglied"
+                    end
+                    local description = assocationRole .. " der " .. TexCmd("myref ", associationLabel) .. "."
+                    if IsSecret(associationLabel) then
+                        description = "(Geheim) " .. description
+                    end
+                    Append(associationList, description)
+                end
             end
-            local description = assocationRole .. " der " .. TexCmd("myref ", associationLabel) .. "."
-            if IsSecret(associationLabel) then
-                description = "(Geheim) " .. description
-            end
-            SetDescriptor(label, "Zusammenschluss", description)
+            SetDescriptor(label, "Zusammenschlüsse", associationList)
         end
     end
 end

@@ -2,7 +2,7 @@ Entities = {}
 CurrentLabel = ""
 IsShowSecrets = false
 ProtectedDescriptors = { "name", "shortname", "type", "parent", "location", "born", "died", "species", "gender",
-    "association", "association-role", "isSecret", "isShown", "label" }
+    "association", "isSecret", "isShown", "label" }
 
 function GetEntitiesIf(condition, map)
     local out = {}
@@ -155,41 +155,57 @@ local function getTargetCondition(keyword)
     end
 end
 
-local function addEntitiesTo(type, keyword)
-    local entityMap = GetEntitiesOfType(type)
+local function addSingleEntity(label, targetLabel, entityType, role)
+    local name = TypeToName(entityType)
+    if Entities[targetLabel][name] == nil then
+        Entities[targetLabel][name] = {}
+    end
+    local content = TexCmd("myref ", label)
+    if IsDead(label) then
+        content = content .. " " .. TexCmd("textdied")
+    end
+    if IsSecret(label) then
+        content = "(Geheim) " .. content
+    end
+    if not IsEmpty(role) then
+        content = content .. " (" .. role .. ")"
+    end
+    Entities[targetLabel][name][#Entities[targetLabel][name] + 1] = content
+end
+
+local function addEntitiesTo(entityType, keyword)
+    local entityMap = GetEntitiesOfType(entityType)
     entityMap = GetEntitiesIf(IsShown, entityMap)
     for label, entity in pairs(entityMap) do
-        local targetLabel = entity[keyword]
-        local role = entity[keyword .. "-role"]
-        if targetLabel ~= nil then
-            local targetCondition = getTargetCondition(keyword)
-            if Entities[targetLabel] == nil then
-                local err = { "Entity \"" }
-                Append(err, targetLabel)
-                Append(err, "\" not found, although it is listed as ")
-                Append(err, keyword)
-                Append(err, " of ")
-                Append(err, label)
-                Append(err, ".")
-                LogError(err)
-            elseif not targetCondition(Entities[targetLabel]) then
-                LogError("Entity \"" .. targetLabel .. "\" is not a " .. keyword .. ".")
-            else
-                local name = TypeToName(type)
-                if Entities[targetLabel][name] == nil then
-                    Entities[targetLabel][name] = {}
+        local targets = entity[keyword]
+        if targets ~= nil then
+            if type(targets) ~= "table" then
+                targets = { targets }
+            end
+            for key, target in pairs(targets) do
+                local targetLabel = ""
+                local role = ""
+                if type(target) == "string" then
+                    targetLabel = target
+                elseif type(target) == "table" then
+                    targetLabel = target[1]
+                    role = target[2]
                 end
-                local content = TexCmd("myref ", label)
-                if IsDead(label) then
-                    content = content .. " " .. TexCmd("textdied")
+                local targetCondition = getTargetCondition(keyword)
+                if Entities[targetLabel] == nil then
+                    local err = { "Entity \"" }
+                    Append(err, targetLabel)
+                    Append(err, "\" not found, although it is listed as ")
+                    Append(err, keyword)
+                    Append(err, " of ")
+                    Append(err, label)
+                    Append(err, ".")
+                    LogError(err)
+                elseif not targetCondition(Entities[targetLabel]) then
+                    LogError("Entity \"" .. targetLabel .. "\" is not a " .. keyword .. ".")
+                else
+                    addSingleEntity(label, targetLabel, entityType, role)
                 end
-                if IsSecret(label) then
-                    content = "(Geheim) " .. content
-                end
-                if not IsEmpty(role) then
-                    content = content .. " (" .. role .. ")"
-                end
-                Entities[targetLabel][name][#Entities[targetLabel][name] + 1] = content
             end
         end
     end
@@ -197,7 +213,7 @@ end
 
 local function addAllEntitiesTo()
     for type, name in pairs(typeToNameMap()) do
-        for key2, keyword in pairs({ "location", "association" }) do
+        for key2, keyword in pairs({ "association" }) do
             addEntitiesTo(type, keyword)
         end
     end

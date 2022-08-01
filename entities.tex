@@ -201,7 +201,7 @@ dofile(RelativePath .. "entities.lua")
 }
 
 \newcommand{\setAssociation}[2][]{
-	\directlua{SetAssociation(CurrentLabel, "#2", [[\detokenize{#1}]])}
+	\directlua{AddAssociation(CurrentLabel, "#2", [[\detokenize{#1}]])}
 }
 
 \newcommand{\setSecret}{

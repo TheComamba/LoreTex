@@ -20,7 +20,7 @@ local function cleanedErrors()
 	table.sort(errorMessages)
 	local out = {}
 	local count = 1
-	local lastMess = nil
+	local lastMess = errorMessages[1]
 	for i, mess in pairs(errorMessages) do
 		if mess ~= lastMess or i == #errorMessages then
 			if count > 1 then

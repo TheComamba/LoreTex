@@ -30,7 +30,6 @@ dofile(RelativePath .. "entities.lua")
 		CurrentContinent = ""
 		CurrentRegion = ""
 		CurrentCity = ""
-		CurrentLabel = ""
 	}
 }
 
@@ -47,13 +46,13 @@ dofile(RelativePath .. "entities.lua")
 
 \newcommand{\newRegion}[3]{
 	\newEntity{#1}{region}{#2}{#3}
-	\directlua{SetDescriptor(CurrentLabel,"parent", CurrentContinent)}
+	\directlua{SetDescriptor(CurrentEntity(),"parent", CurrentContinent)}
 	\setRegion{#1}
 }
 
 \newcommand{\newCity}[3]{
 	\newEntity{#1}{city}{#2}{#3}
-	\directlua{SetDescriptor(CurrentLabel,"parent", CurrentRegion)}
+	\directlua{SetDescriptor(CurrentEntity(),"parent", CurrentRegion)}
 	\setCity{#1}
 }
 
@@ -64,13 +63,13 @@ dofile(RelativePath .. "entities.lua")
 \newcommand{\newNPC}[3]{
 	\directlua{
 		NewCharacter("#1", [[\detokenize{#2}]], [[\detokenize{#3}]])
-		SetLocation(CurrentLabel)
+		SetLocation(CurrentEntity())
 	}
 }
 
 \newcommand{\newGod}[3]{
 	\newEntity{#1}{god}{#2}{#3}
-	\directlua{SetLocation(CurrentLabel)}
+	\directlua{SetLocation(CurrentEntity())}
 }
 
 \newcommand{\charappearance}[3]{
@@ -81,22 +80,22 @@ dofile(RelativePath .. "entities.lua")
 
 \newcommand{\newOrganisation}[3]{
 	\newEntity{#1}{organisation}{#2}{#3}
-	\directlua{SetLocation(CurrentLabel)}
+	\directlua{SetLocation(CurrentEntity())}
 }
 
 \newcommand{\newFamily}[3]{
 	\newEntity{#1}{family}{#2}{#3}
-	\directlua{SetLocation(CurrentLabel)}
+	\directlua{SetLocation(CurrentEntity())}
 }
 
 \newcommand{\newShip}[3]{
 	\newEntity{#1}{ship}{#2}{#3}
-	\directlua{SetLocation(CurrentLabel)}
+	\directlua{SetLocation(CurrentEntity())}
 }
 
 \newcommand{\newLanguage}[3]{
 	\newEntity{#1}{language}{#2}{#3}
-	\directlua{SetLocation(CurrentLabel)}
+	\directlua{SetLocation(CurrentEntity())}
 }
 
 \newcommand{\newSpell}[2]{
@@ -105,107 +104,107 @@ dofile(RelativePath .. "entities.lua")
 
 \newcommand{\spellProperties}[6]{
 	\directlua{
-		SetDescriptor(CurrentLabel, "Properties", "#1","Level:")
-		SetDescriptor(CurrentLabel, "Properties", "#2","School:")
-		SetDescriptor(CurrentLabel, "Properties", "#3","Casting-time:")
-		SetDescriptor(CurrentLabel, "Properties", "#4","Range:")
-		SetDescriptor(CurrentLabel, "Properties", "#5","Components:")
-		SetDescriptor(CurrentLabel, "Properties", "#6","Duration:")
+		SetDescriptor(CurrentEntity(), "Properties", "#1","Level:")
+		SetDescriptor(CurrentEntity(), "Properties", "#2","School:")
+		SetDescriptor(CurrentEntity(), "Properties", "#3","Casting-time:")
+		SetDescriptor(CurrentEntity(), "Properties", "#4","Range:")
+		SetDescriptor(CurrentEntity(), "Properties", "#5","Components:")
+		SetDescriptor(CurrentEntity(), "Properties", "#6","Duration:")
 	}
 }
 
 \newcommand{\newForest}[3]{
 	\newEntity{#1}{forest}{#2}{#3}
-	\directlua{SetLocation(CurrentLabel)}
+	\directlua{SetLocation(CurrentEntity())}
 }
 
 \newcommand{\newGrassland}[3]{
 	\newEntity{#1}{grassland}{#2}{#3}
-	\directlua{SetLocation(CurrentLabel)}
+	\directlua{SetLocation(CurrentEntity())}
 }
 
 \newcommand{\newRange}[3]{
 	\newEntity{#1}{range}{#2}{#3}
-	\directlua{SetLocation(CurrentLabel)}
+	\directlua{SetLocation(CurrentEntity())}
 }
 
 \newcommand{\newMountain}[3]{
 	\newEntity{#1}{mountain}{#2}{#3}
-	\directlua{SetLocation(CurrentLabel)}
+	\directlua{SetLocation(CurrentEntity())}
 }
 
 \newcommand{\newRiver}[3]{
 	\newEntity{#1}{river}{#2}{#3}
-	\directlua{SetLocation(CurrentLabel)}
+	\directlua{SetLocation(CurrentEntity())}
 }
 
 \newcommand{\newGlacier}[3]{
 	\newEntity{#1}{glacier}{#2}{#3}
-	\directlua{SetLocation(CurrentLabel)}
+	\directlua{SetLocation(CurrentEntity())}
 }
 
 \newcommand{\newLake}[3]{
 	\newEntity{#1}{lake}{#2}{#3}
-	\directlua{SetLocation(CurrentLabel)}
+	\directlua{SetLocation(CurrentEntity())}
 }
 
 \newcommand{\newItem}[3]{
 	\newEntity{#1}{item}{#2}{#3}
-	\directlua{SetLocation(CurrentLabel)}
+	\directlua{SetLocation(CurrentEntity())}
 }
 
 \newcommand{\addDescriptor}[3][]{
 	\directlua{
-		SetDescriptor(CurrentLabel,[[\detokenize{#2}]],[[\detokenize{#3}]], [[\detokenize{#1}]])
+		SetDescriptor(CurrentEntity(),[[\detokenize{#2}]],[[\detokenize{#3}]], [[\detokenize{#1}]])
 	}
 }
 
 \newcommand{\setDescription}[1]{
 	\directlua{
-		SetDescriptor(CurrentLabel,[[Beschreibung]],[[\detokenize{#1}]])
+		SetDescriptor(CurrentEntity(),[[Beschreibung]],[[\detokenize{#1}]])
 	}
 }
 
 \newcommand{\setEtymology}[1]{
 	\directlua{
-		SetDescriptor(CurrentLabel,[[Etymologie]],[[\detokenize{#1}]])
+		SetDescriptor(CurrentEntity(),[[Etymologie]],[[\detokenize{#1}]])
 	}
 }
 
 \newcommand{\setStats}[1]{
 	\directlua{
-		SetDescriptor(CurrentLabel,[[Werte]],[[\detokenize{#1}]])
+		SetDescriptor(CurrentEntity(),[[Werte]],[[\detokenize{#1}]])
 	}
 }
 
 \newcommand{\setSpells}[1]{
 	\directlua{
-		SetDescriptor(CurrentLabel,[[Zauber]],[[\detokenize{#1}]])
+		SetDescriptor(CurrentEntity(),[[Zauber]],[[\detokenize{#1}]])
 	}
 }
 
 \newcommand{\setPlayer}[1]{
 	\directlua{
-		SetDescriptor(CurrentLabel,[[Spieler]],[[\detokenize{#1}]])
+		SetDescriptor(CurrentEntity(),[[Spieler]],[[\detokenize{#1}]])
 	}
 }
 
 \newcommand{\setHeight}[1]{
 	\directlua{
-		SetDescriptor(CurrentLabel,[[Höhe]],[[\detokenize{#1}m]])
+		SetDescriptor(CurrentEntity(),[[Höhe]],[[\detokenize{#1}m]])
 	}
 }
 
 \newcommand{\setLocation}[1]{
-	\directlua{SetLocation(CurrentLabel, "#1")}
+	\directlua{SetLocation(CurrentEntity(), "#1")}
 }
 
 \newcommand{\setAssociation}[2][]{
-	\directlua{AddAssociation(CurrentLabel, "#2", [[\detokenize{#1}]])}
+	\directlua{AddAssociation(CurrentEntity(), "#2", [[\detokenize{#1}]])}
 }
 
 \newcommand{\setSecret}{
-	\directlua{SetSecret(CurrentLabel)}
+	\directlua{SetSecret(CurrentEntity())}
 }
 
 \newcommand{\showSecrets}{

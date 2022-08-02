@@ -1,45 +1,99 @@
 Entities = {}
-CurrentLabel = ""
 IsShowSecrets = false
 ProtectedDescriptors = { "name", "shortname", "type", "parent", "location", "born", "died", "species", "gender",
     "association", "isSecret", "isShown", "label" }
 
-function GetEntitiesIf(condition, map)
-    local out = {}
-    if map == nil then
-        map = Entities
+function DebugPrint(entity)
+    if entity == nil then
+        return "nil"
+    elseif type(entity) == "string" then
+        return " \"" .. entity .. "\" "
+    elseif type(entity) ~= "table" then
+        return tostring(entity)
     end
-    for key, entity in pairs(map) do
+    local out = {}
+    local keys = {}
+    for key, elem in pairs(entity) do
+        keys[#keys+1] = key
+    end
+    table.sort(keys)
+    for i, key in pairs(keys) do
+        if i == 1 then
+            Append(out, [[\{]])
+        else
+            Append(out, ", ")
+        end
+        Append(out, key)
+        Append(out, " = ")
+        Append(out, DebugPrint(entity[key]))
+        if i == #keys then
+            Append(out, [[\}]])
+        end
+    end
+    return table.concat(out)
+end
+
+function CurrentEntity()
+    return Entities[#Entities]
+end
+
+function GetEntitiesIf(condition, list)
+    local out = {}
+    if list == nil then
+        list = Entities
+    end
+    for key, entity in pairs(list) do
         if condition(entity) then
-            out[key] = entity
+            out[#out+1] = entity
         end
     end
     return out
 end
 
-function GetEntitiesOfType(type, map)
+function GetEntitiesOfType(type, list)
     local out = {}
-    if map == nil then
-        map = Entities
+    if list == nil then
+        list = Entities
     end
-    for key, entity in pairs(map) do
+    for key, entity in pairs(list) do
         if entity["type"] == type then
-            out[key] = entity
+            out[#out+1] = entity
         end
     end
     return out
 end
 
-function GetPrimaryRefEntities(map)
+--TODO: Adjust for more than one label.
+function GetPrimaryRefEntities(list)
     local out = {}
-    for label, elem in pairs(map) do
+    for key, entity in pairs(list) do
+        local label = entity["label"]
         if IsIn(label, PrimaryRefs) then
-            out[label] = elem
+            out[#out+1] = entity
         end
     end
     return out
 end
 
+--TODO: Adjust for more than one label
+function GetEntity(label)
+    if IsEmpty(label) then
+        LogError("Called with empty label!")
+        return {}
+    elseif type(label) ~= "string" then
+        LogError("Called with non-string type!")
+        return {}
+    end
+    for key, entity in pairs(Entities) do
+        if label == entity["label"] then
+            return entity
+        end
+    end
+    LogError("Entity with label \"" .. label .. "\" not found.")
+    return {}
+end
+
+--TODO: Can we remove this function because we never deal with labels again?
 function ToEntity(input)
     if input == nil then
         LogError("called with nil input.")
@@ -47,19 +101,14 @@ function ToEntity(input)
     elseif type(input) == "table" then
         return input
     elseif type(input) == "string" then
-        local entity = Entities[input]
-        if entity == nil then
-            LogError("Entity with label \"" .. input .. "\" not found.")
-            return nil
-        else
-            return entity
-        end
+        return GetEntity(input)
     else
         LogError("Tried to convert input of type " .. type(input) .. " to entity.")
         return nil
     end
 end
 
+--TODO: Can we remove or adjust this function? Maybe ruturn first label.
 function ToLabel(input)
     if input == nil then
         return nil
@@ -112,9 +161,9 @@ function IsShown(entity)
     end
 end
 
-function CompareLabelsByName(label1, label2)
-    local name1 = GetShortname(label1)
-    local name2 = GetShortname(label2)
+function CompareByName(entity1, entity2)
+    local name1 = GetShortname(entity1)
+    local name2 = GetShortname(entity2)
     return name1 < name2
 end
 
@@ -152,23 +201,23 @@ local function getTargetCondition(keyword)
     end
 end
 
-local function addSingleEntity(label, targetLabel, entityType, role)
+local function addSingleEntity(srcEntity, targetEntity, entityType, role)
     local name = TypeToName(entityType)
-    if Entities[targetLabel][name] == nil then
-        Entities[targetLabel][name] = {}
+    if targetEntity[name] == nil then
+        targetEntity[name] = {}
     end
     local content = {}
-    if IsSecret(label) then
+    if IsSecret(srcEntity) then
         Append(content, "(Geheim) ")
     end
-    Append(content, TexCmd("myref ", label))
-    if IsDead(label) then
+    Append(content, TexCmd("myref ", srcEntity["label"])) --TODO: Adjust for more labels
+    if IsDead(srcEntity) then
         Append(content, " " .. TexCmd("textdied"))
     end
-    local location = Entities[label]["location"]
-    local targetLocation = Entities[targetLabel]["location"]
+    local location = srcEntity["location"]
+    local targetLocation = targetEntity["location"]
     local locationRef = ""
-    if not IsPlace(Entities[targetLabel]) and not IsEmpty(location) and location ~= targetLocation then
+    if not IsPlace(targetEntity) and not IsEmpty(location) and location ~= targetLocation then
         locationRef = "in " .. TexCmd("myref ", location)
     end
     if not IsEmpty(role) or not IsEmpty(locationRef) then
@@ -184,14 +233,14 @@ local function addSingleEntity(label, targetLabel, entityType, role)
         end
         Append(content, ")")
     end
-    Entities[targetLabel][name][#Entities[targetLabel][name] + 1] = table.concat(content)
+    targetEntity[name][#targetEntity[name] + 1] = table.concat(content)
 end
 
 local function addEntitiesTo(entityType, keyword)
     local entityMap = GetEntitiesOfType(entityType)
     entityMap = GetEntitiesIf(IsShown, entityMap)
-    for label, entity in pairs(entityMap) do
-        local targets = entity[keyword]
+    for label, srcEntity in pairs(entityMap) do
+        local targets = srcEntity[keyword]
         if targets ~= nil then
             if type(targets) ~= "table" then
                 targets = { targets }
@@ -206,7 +255,8 @@ local function addEntitiesTo(entityType, keyword)
                     role = target[2]
                 end
                 local targetCondition = getTargetCondition(keyword)
-                if Entities[targetLabel] == nil then
+                local targetEntity = GetEntity(targetLabel)
+                if targetEntity == nil then
                     local err = { "Entity \"" }
                     Append(err, targetLabel)
                     Append(err, "\" not found, although it is listed as ")
@@ -215,10 +265,10 @@ local function addEntitiesTo(entityType, keyword)
                     Append(err, label)
                     Append(err, ".")
                     LogError(err)
-                elseif not targetCondition(Entities[targetLabel]) then
+                elseif not targetCondition(targetEntity) then
                     LogError("Entity \"" .. targetLabel .. "\" is not a " .. keyword .. ".")
                 else
-                    addSingleEntity(label, targetLabel, entityType, role)
+                    addSingleEntity(srcEntity, targetEntity, entityType, role)
                 end
             end
         end

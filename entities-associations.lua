@@ -10,7 +10,7 @@ function IsAssociation(entity)
 end
 
 function AddAssociationDescriptors()
-    for label, entity in pairs(Entities) do
+    for key, entity in pairs(Entities) do
         local associationList = {}
         if entity["association"] ~= nil then
             for key, associationAndRole in pairs(entity["association"]) do
@@ -27,14 +27,16 @@ function AddAssociationDescriptors()
                     Append(associationList, description)
                 end
             end
-            SetDescriptor(label, "Zusammenschlüsse", associationList)
+            SetDescriptor(entity, "Zusammenschlüsse", associationList)
         end
     end
 end
 
 function MarkSecret()
     for key, entity in pairs(Entities) do
-        if IsSecret(entity) then
+        if IsEmpty(entity["name"]) then
+            LogError("Entity at position " .. key .. " has no name!")
+        elseif IsSecret(entity) then
             if entity["shortname"] == nil then
                 entity["shortname"] = entity["name"]
             end

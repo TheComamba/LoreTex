@@ -5,31 +5,31 @@ dofile(RelativePath .. "history.lua")
 
 \newcommand{\addHistory}[3][0]{
 		\directlua{
-			AddEvent(CurrentLabel, #2, [[\detokenize{#3}]], #1)
+			AddEvent(CurrentEntity(), #2, [[\detokenize{#3}]], #1)
 		}
 }
 
 \newcommand{\addSecretHistory}[3][0]{
 		\directlua{
-			AddEvent(CurrentLabel, #2, [[\detokenize{#3}]], #1, true)
+			AddEvent(CurrentEntity(), #2, [[\detokenize{#3}]], #1, true)
 		}
 }
 
 \newcommand{\addHistoryDjo}[3][0]{
 	\directlua{
-		AddEvent(CurrentLabel, ConvertYearToVin(#2, YearFmtDjo), [[\detokenize{#3}]], #1)
+		AddEvent(CurrentEntity(), ConvertYearToVin(#2, YearFmtDjo), [[\detokenize{#3}]], #1)
 	}
 }
 
 \newcommand{\addSecretHistoryDjo}[3][0]{
 	\directlua{
-		AddEvent(CurrentLabel, ConvertYearToVin(#2, YearFmtDjo), [[\detokenize{#3}]], #1, true)
+		AddEvent(CurrentEntity(), ConvertYearToVin(#2, YearFmtDjo), [[\detokenize{#3}]], #1, true)
 	}
 }
 
 \newcommand{\addHistoryNar}[3][0]{
 	\directlua{
-		AddEvent(CurrentLabel, ConvertYearToVin(#2, YearFmtNar), [[\detokenize{#3}]], #1)
+		AddEvent(CurrentEntity(), ConvertYearToVin(#2, YearFmtNar), [[\detokenize{#3}]], #1)
 	}
 }
 
@@ -41,14 +41,14 @@ dofile(RelativePath .. "history.lua")
 \newcommand{\bornDjo}[3][0]{
 	\addHistoryDjo[#1]{#2}{#3}
 	\directlua{
-		SetDescriptor(CurrentLabel,"born",tostring(ConvertYearToVin(#2, YearFmtDjo)))
+		SetDescriptor(CurrentEntity(),"born",tostring(ConvertYearToVin(#2, YearFmtDjo)))
 	}
 }
 
 \newcommand{\bornNar}[3][0]{
 	\addHistoryNar[#1]{#2}{#3}
 	\directlua{
-	SetDescriptor(CurrentLabel,"born",tostring(ConvertYearToVin(#2, YearFmtNar)))
+	SetDescriptor(CurrentEntity(),"born",tostring(ConvertYearToVin(#2, YearFmtNar)))
 	}
 }
 
@@ -60,13 +60,13 @@ dofile(RelativePath .. "history.lua")
 \newcommand{\diedDjo}[3][0]{
 	\addHistoryDjo[#1]{#2}{#3}
 	\directlua{
-		SetDescriptor(CurrentLabel,"died",ConvertYearToVin(#2, YearFmtDjo))
+		SetDescriptor(CurrentEntity(),"died",ConvertYearToVin(#2, YearFmtDjo))
 	}
 }
 
 \newcommand{\diedNar}[3][0]{
 	\addHistoryNar[#1]{#2}{#3}
 	\directlua{
-		SetDescriptor(CurrentLabel,"died",ConvertYearToVin(#2, YearFmtNar))
+		SetDescriptor(CurrentEntity(),"died",ConvertYearToVin(#2, YearFmtNar))
 	}
 }

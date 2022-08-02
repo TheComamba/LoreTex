@@ -12,8 +12,8 @@ end
 
 function AddSpeciesAndAgeStringToNPCs()
     local npcs = GetEntitiesIf(IsChar)
-    for label, char in pairs(npcs) do
-        SetDescriptor(label, "Erscheinung", SpeciesAndAgeString(char), "Spezies und Alter:")
+    for key, char in pairs(npcs) do
+        SetDescriptor(char, "Erscheinung", SpeciesAndAgeString(char), "Spezies und Alter:")
     end
 end
 
@@ -21,8 +21,9 @@ local function isHasHappened(entity, keyword, onNil)
     if entity == nil then
         return onNil
     end
-    if type(entity) == "string" then
-        return isHasHappened(Entities[entity], keyword, onNil)
+    if type(entity) ~= "table" then
+        LogError("Called with: " .. DebugPrint(entity))
+        return onNil
     end
     local year = entity[keyword]
     if year == nil then
@@ -55,7 +56,9 @@ end
 
 function MarkDead()
     for key, entity in pairs(Entities) do
-        if IsDead(entity) then
+        if IsEmpty(entity["name"]) then
+            LogError("Entity at position " .. key .. " has no name!")
+        elseif IsDead(entity) then
             if entity["shortname"] == nil then
                 entity["shortname"] = entity["name"]
             end

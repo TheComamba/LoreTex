@@ -74,6 +74,10 @@ function TexCmd(cmd, args, options)
 end
 
 function IsIn(elem, list)
+	if list == nil then
+		LogError("List is nil!")
+		return false
+	end
 	for key, val in pairs(list) do
 		if val == elem then
 			return true
@@ -123,6 +127,7 @@ function ListAll(list, processor, additionalProcessorArg)
 	return str
 end
 
+--TODO: Do I still need this function?
 function ListAllFromMap(listOfThings)
 	local allLabels = {}
 	for label, elem in pairs(listOfThings) do

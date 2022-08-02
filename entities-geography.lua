@@ -16,19 +16,20 @@ function IsPlace(entity)
 end
 
 function IsLocationUnknown(entity)
-    local location = entity["location"]
-    if IsEmpty(location) then
+    local locationLabel = entity["location"]
+    if IsEmpty(locationLabel) then
         return false
     else
+        local location = GetEntity(locationLabel)
         local err = "Location\""
-        err = err .. location
+        err = err .. locationLabel
         err = err .. "\" of entity \""
         err = err .. entity["name"]
-        if Entities[location] == nil then
+        if IsEmpty(location) then
             err = err .. "\" not found."
             LogError(err)
             return true
-        elseif not IsPlace(Entities[location]) then
+        elseif not IsPlace(location) then
             err = err .. "\" is not a place."
             LogError(err)
             return true
@@ -38,45 +39,61 @@ function IsLocationUnknown(entity)
     end
 end
 
+local function getParent(entity)
+    local parentLabel = entity["parent"]
+    if IsEmpty(parentLabel) then
+        return {}
+    else
+        return GetEntity(parentLabel)
+    end
+end
+
+local function getChildren(entity)
+    local parentLabel = nil
+    if not IsEmpty(entity) then
+        parentLabel = entity["label"] --TODO: Adjust
+    end
+    local places = GetEntitiesIf(IsPlace)
+    local out = {}
+    for key, place in pairs(places) do
+        if place["parent"] == parentLabel then
+            out[#out+1] = place
+        end
+    end
+    return out
+end
+
 function AddPrimaryPlaceParentsToRefs()
     local places = GetEntitiesIf(IsPlace)
     local primaryPlaces = GetPrimaryRefEntities(places)
-    for label, entry in pairs(primaryPlaces) do
-        while label ~= nil do
+    for key, entity in pairs(primaryPlaces) do
+        while not IsEmpty(entity) do
+            local label = entity["label"] --TODO: Adjust
             AddRef(label, PrimaryRefs)
-            label = Entities[label]["parent"]
+            entity = getParent(entity)
         end
     end
 end
 
 local function compareLocationLabelsByName(label1, label2)
-    local name1 = LocationLabelToName(label1)
-    local name2 = LocationLabelToName(label2)
+    local entity1 = GetEntity(label1)
+    local entity2 = GetEntity(label2)
+    local name1 = PlaceToName(entity1)
+    local name2 = PlaceToName(entity2)
     return name1 < name2
 end
 
 local function createGeographyLayer(currentDepth, parent)
     local out = {}
-    if currentDepth > #placeDepths then
-        return out
-    end
-    local placeLabels = {}
-    for label, place in pairs(Entities) do
-        if place["type"] == placeDepths[currentDepth][1] and IsIn(label, PrimaryRefs) then
-            if parent == nil or place["parent"] == parent then
-                placeLabels[#placeLabels + 1] = label
-            end
-        end
-    end
-    table.sort(placeLabels, compareLocationLabelsByName)
-
-    for key, label in pairs(placeLabels) do
-        local place = Entities[label]
+    local children = getChildren(parent)
+    children = GetPrimaryRefEntities(children)
+    table.sort(children, CompareByName)
+    for key, place in pairs(children) do
         local docStructure = placeDepths[currentDepth][2]
         Append(out, TexCmd(docStructure, place["name"], place["shortname"]))
-        Append(out, TexCmd("label", label))
+        Append(out, TexCmd("label", place["label"])) --TODO: Adjust
         Append(out, DescriptorsString(place))
-        Append(out, createGeographyLayer(currentDepth + 1, label))
+        Append(out, createGeographyLayer(currentDepth + 1, place))
     end
     return out
 end
@@ -92,30 +109,29 @@ function CreateGeography()
 
     Append(out, createGeographyLayer(1))
 
-    local secondaryRefLabels = GetSecondaryRefEntitiesLabels(places)
-
-    Append(out, PrintOnlyMentionedSection(secondaryRefLabels))
+    local secondaryEntities = GetSecondaryEntities(places)
+    Append(out, PrintOnlyMentionedSection(secondaryEntities))
     return out
 end
 
-function LocationLabelToName(label)
+function PlaceToName(place)
     local name = ""
-    while label ~= nil do
+    while not IsEmpty(place) do
         if name == "" then
-            name = GetShortname(label)
+            name = GetShortname(place)
         else
-            name = GetShortname(label) .. " - " .. name
+            name = GetShortname(place) .. " - " .. name
         end
-        label = Entities[label]["parent"]
+        place = getParent(place)
     end
     return name
 end
 
 function AllLocationLabelsSorted()
-    local locations = GetEntitiesIf(IsPlace)
+    local places = GetEntitiesIf(IsPlace)
     local labels = {}
-    for label, elem in pairs(locations) do
-        labels[#labels + 1] = label
+    for key, place in pairs(places) do
+        labels[#labels + 1] = place["label"]
     end
     table.sort(labels, compareLocationLabelsByName)
     return labels

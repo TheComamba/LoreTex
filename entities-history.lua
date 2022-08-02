@@ -1,6 +1,4 @@
-local function isAcceptsHistoryFrom(receiverLabel, originatorLabel)
-    local receiver = Entities[receiverLabel]
-    local originator = Entities[originatorLabel]
+local function isAcceptsHistoryFrom(receiver, originator)
     if IsChar(originator) and IsPlace(receiver) then
         return false
     else
@@ -15,11 +13,11 @@ local function isConcernsSecret(historyItem)
     end
     local concerns = historyItem["concerns"]
     if concerns == nil then
-        LogError("This history item concerns nobody:" .. historyItem["event"])
+        LogError("This history item concerns nobody:" .. DebugPrint(historyItem))
         return false
     end
     for key, label in pairs(concerns) do
-        if IsSecret(label) then
+        if IsSecret(GetEntity(label)) then
             return true
         end
     end
@@ -39,11 +37,11 @@ local function isAllConcnernsShown(historyItem)
     end
     local concerns = historyItem["concerns"]
     if concerns == nil then
-        LogError("This history item concerns nobody:" .. historyItem["event"])
+        LogError("This history item concerns nobody: " ..DebugPrint(historyItem))
         return false
     end
     for key, label in pairs(concerns) do
-        if not IsShown(label) then
+        if not IsShown(GetEntity(label)) then
             return false
         end
     end
@@ -56,25 +54,26 @@ local function setShown(historyItem)
     end
 end
 
-local function addHistoryToEntity(label)
+local function addHistoryToEntity(entity)
     local history = {}
     for key, historyItem in pairs(Histories) do
         setSecrecy(historyItem)
         setShown(historyItem)
         if IsShown(historyItem) then
+            local originator = GetEntity(historyItem["originator"])
             local concerns = historyItem["concerns"]
-            if IsIn(label, concerns) then
-                if isAcceptsHistoryFrom(label, historyItem["originator"]) then
+            if IsIn(entity["label"], concerns) then
+                if isAcceptsHistoryFrom(entity, originator) then
                     AddHistoryItemToHistory(historyItem, history)
                 end
             end
         end
     end
-    SetDescriptor(label, HistoryCaption, history)
+    SetDescriptor(entity, HistoryCaption, history)
 end
 
 function AddHistoryDescriptors()
-    for label, entity in pairs(Entities) do
-        addHistoryToEntity(label)
+    for key, entity in pairs(Entities) do
+        addHistoryToEntity(entity)
     end
 end

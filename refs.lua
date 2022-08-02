@@ -111,7 +111,7 @@ function ReplaceMyrefWithNameref(content)
 end
 
 function AddAllEntitiesToPrimaryRefs()
-    for label, elem in pairs(Entities) do
-        AddRef(label, PrimaryRefs)
+    for key, entity in pairs(Entities) do
+        AddRef(entity["label"], PrimaryRefs)
     end
 end

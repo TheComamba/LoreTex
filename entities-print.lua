@@ -1,32 +1,33 @@
-function GetSecondaryRefEntitiesLabels(map)
+function GetSecondaryEntities(list)
     local out = {}
-    for label, elem in pairs(map) do
+    for key, entity in pairs(list) do
+        local label = entity["label"] --TODO
         if IsIn(label, SecondaryRefs) then
-            out[#out + 1] = label
+            out[#out + 1] = entity
         end
     end
     return out
 end
 
-local function extractEntitiesAtLocation(map, location)
+local function extractEntitiesAtLocation(list, location)
     local out = {}
-    for label, elem in pairs(map) do
-        if elem["location"] == location then
-            out[label] = elem
+    for key, entity in pairs(list) do
+        if entity["location"] == location then
+            out[#out+1] = entity
         end
     end
     return out
 end
 
-function GetShortname(label)
-    if Entities[label] == nil then
-        return "Anderswo"
-    elseif Entities[label]["shortname"] ~= nil then
-        return Entities[label]["shortname"]
-    elseif Entities[label]["name"] ~= nil then
-        return Entities[label]["name"]
+function GetShortname(entity)
+    if entity == nil then
+        return "NIL"
+    elseif entity["shortname"] ~= nil then
+        return entity["shortname"]
+    elseif entity["name"] ~= nil then
+        return entity["name"]
     else
-        LogError("Entity \"" .. label .. "\" has no name.")
+        LogError("Entity " .. DebugPrint(entity) .. " has no name.")
         return "NO NAME"
     end
 end
@@ -78,32 +79,35 @@ local function printEntities(sectionname, entitiesList)
         return out
     end
     Append(out, TexCmd("subsection", sectionname))
-    local labels = {}
-    for label, entity in pairs(entitiesList) do
-        labels[#labels + 1] = label
-    end
-    table.sort(labels, CompareLabelsByName)
-    for i, label in pairs(labels) do
-        local entity = entitiesList[label]
+    table.sort(entitiesList, CompareByName)
+    for key, entity in pairs(entitiesList) do
         Append(out, TexCmd("subsubsection", entity["name"], entity["shortname"]))
-        Append(out, TexCmd("label", label))
+        Append(out, TexCmd("label", entity["label"])) --TODO
         Append(out, DescriptorsString(entity))
     end
     return out
 end
 
-function PrintOnlyMentionedSection(secondaryRefLabels)
+function PrintOnlyMentionedSection(secondaryEntities)
     local out = {}
-    if #secondaryRefLabels > 0 then
+    if #secondaryEntities > 0 then
         Append(out, TexCmd("twocolumn"))
         Append(out, TexCmd("section", "Nur erwähnt"))
-        table.sort(secondaryRefLabels, CompareLabelsByName)
-        for index, label in pairs(secondaryRefLabels) do
-            Append(out, TexCmd("paragraph", GetShortname(label)))
-            Append(out, TexCmd("label", label))
+        table.sort(secondaryEntities, CompareByName)
+        for index, entity in pairs(secondaryEntities) do
+            Append(out, TexCmd("paragraph", GetShortname(entity)))
+            Append(out, TexCmd("label", entity["label"]))
             Append(out, TexCmd("hspace", "1cm"))
         end
         Append(out, TexCmd("onecolumn"))
+    end
+    return out
+end
+
+local function getLabels(list)
+    local out = {}
+    for key, entity in pairs(list) do
+        Append(out, entity["label"])
     end
     return out
 end
@@ -113,7 +117,7 @@ function PrintEntityChapterBeginning(name, primaryEntities)
     Append(out, TexCmd("twocolumn"))
     Append(out, TexCmd("chapter", name))
     Append(out, TexCmd("section*", "Alle " .. name))
-    Append(out, ListAllFromMap(primaryEntities))
+    Append(out, ListAll(getLabels(primaryEntities), NamerefString))
     Append(out, TexCmd("onecolumn"))
     return out
 end
@@ -123,9 +127,10 @@ local function printEntityChapterSortedByLocation(primaryEntities)
     local entitiesWorldwide = extractEntitiesAtLocation(primaryEntities, nil)
     local out = printEntities(sectionname, entitiesWorldwide)
 
-    for index, label in pairs(AllLocationLabelsSorted()) do
-        local sectionname = "In " .. LocationLabelToName(label)
-        local entitiesHere = extractEntitiesAtLocation(primaryEntities, label)
+    for index, locationLabel in pairs(AllLocationLabelsSorted()) do
+        local location = GetEntity(locationLabel)
+        local sectionname = "In " .. PlaceToName(location)
+        local entitiesHere = extractEntitiesAtLocation(primaryEntities, locationLabel)
         Append(out, printEntities(sectionname, entitiesHere))
     end
 
@@ -138,10 +143,10 @@ end
 
 function PrintEntityChapter(name, entitiesList, types)
     local primaryEntities = GetPrimaryRefEntities(entitiesList)
-    local secondaryRefLabels = GetSecondaryRefEntitiesLabels(entitiesList)
+    local secondaryEntities = GetSecondaryEntities(entitiesList)
 
     local out = {}
-    if IsEmpty(primaryEntities) and IsEmpty(secondaryRefLabels) then
+    if IsEmpty(primaryEntities) and IsEmpty(secondaryEntities) then
         return out
     end
 
@@ -153,6 +158,6 @@ function PrintEntityChapter(name, entitiesList, types)
             Append(out, printEntityChapterSortedByLocation(entitiesOfType))
         end
     end
-    Append(out, PrintOnlyMentionedSection(secondaryRefLabels))
+    Append(out, PrintOnlyMentionedSection(secondaryEntities))
     return out
 end

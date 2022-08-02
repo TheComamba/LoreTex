@@ -20,7 +20,12 @@ end
 
 local function newHistoryItem(originator, year, event, day, isSecret)
 	local item = {}
-	item["originator"] = originator
+	local originatorLabel = originator["label"]
+	if originatorLabel == nil then
+		LogError("This originator has no label: " .. DebugPrint(originator))
+		return {}
+	end
+	item["originator"] = originatorLabel
 	item["year"] = tonumber(year)
 	if item["year"] == nil then
 		LogError("Could not convert year \"" .. year .. "\" to number.")
@@ -33,8 +38,8 @@ local function newHistoryItem(originator, year, event, day, isSecret)
 	end
 	item["event"] = event
 	local concerns = ScanForRefs(event)
-	if not IsIn(originator, concerns) then
-		concerns[#concerns + 1] = originator
+	if not IsIn(originatorLabel, concerns) then
+		concerns[#concerns + 1] = originatorLabel
 	end
 	item["concerns"] = concerns
 	if isSecret ~= nil then

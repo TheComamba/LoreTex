@@ -1,62 +1,52 @@
-function SetDescriptor(label, descriptor, description, subdescriptor)
-    if IsEmpty(label) then
-        return
-    elseif IsEmpty(descriptor) then
+function SetDescriptor(entity, descriptor, description, subdescriptor)
+    if IsEmpty(descriptor) then
         return
     elseif IsEmpty(description) then
         return
     end
 
-    if Entities[label] == nil then
-        Entities[label] = {}
-        Entities[label]["label"] = label
-    end
     if IsEmpty(subdescriptor) then
-        Entities[label][descriptor] = description
+        entity[descriptor] = description
     else
-        if Entities[label][descriptor] == nil then
-            Entities[label][descriptor] = {}
+        if entity[descriptor] == nil then
+            entity[descriptor] = {}
         end
-        if type(Entities[label][descriptor]) ~= "table" then
+        if type(entity[descriptor]) ~= "table" then
             local error = "Trying to add subdescriptor \""
             error = error .. subdescriptor
             error = error .. "\" to descriptor \""
             error = error .. descriptor
             error = error .. "\" of entity \""
-            error = error .. label
+            error = error .. entity["label"] --TODO: GetShortname, Name or Label
             error = error .. "\", which already contains a string content."
             LogError(error)
         end
-        Entities[label][descriptor][subdescriptor] = description
+        entity[descriptor][subdescriptor] = description
     end
 end
 
-function SetSecret(label)
-    SetDescriptor(label, "isSecret", true)
+function SetSecret(entity)
+    SetDescriptor(entity, "isSecret", true)
 end
 
-function SetLocation(label, location)
-    if Entities[label] == nil then
-        return
-    end
-
+function SetLocation(entity, location)
     if location ~= nil then
-        Entities[label]["location"] = location
+        entity["location"] = location
     elseif CurrentCity ~= "" then
-        Entities[label]["location"] = CurrentCity
+        entity["location"] = CurrentCity
     elseif CurrentRegion ~= "" then
-        Entities[label]["location"] = CurrentRegion
+        entity["location"] = CurrentRegion
     elseif CurrentContinent ~= "" then
-        Entities[label]["location"] = CurrentContinent
+        entity["location"] = CurrentContinent
     end
 end
 
-function AddAssociation(label, association, role)
-    if Entities[label] ~= nil then
-        if Entities[label]["association"] == nil then
-            Entities[label]["association"] = {}
+function AddAssociation(entity, association, role)
+    if entity ~= nil then
+        if entity["association"] == nil then
+            entity["association"] = {}
         end
-        Entities[label]["association"][#Entities[label]["association"]+1] = {association, role}
+        entity["association"][#entity["association"] + 1] = { association, role }
     end
 end
 
@@ -66,10 +56,22 @@ function DeclarePC(label)
 end
 
 function NewEntity(label, type, shortname, name)
-    CurrentLabel = label
-    SetDescriptor(CurrentLabel, "type", type)
-    SetDescriptor(CurrentLabel, "shortname", shortname)
-    SetDescriptor(CurrentLabel, "name", name)
+    if IsEmpty(label) then
+        LogError("Called with no label!")
+        return
+    elseif IsEmpty(type) then
+        LogError("Entity " .. label .. " has no type!")
+        return
+    elseif IsEmpty(name) then
+        LogError("Entity " .. name .. " has no name!")
+        return
+    end
+    local entity = {}
+    SetDescriptor(entity, "label", label)
+    SetDescriptor(entity, "type", type)
+    SetDescriptor(entity, "shortname", shortname)
+    SetDescriptor(entity, "name", name)
+    Entities[#Entities + 1] = entity
 end
 
 function NewCharacter(label, shortname, name)

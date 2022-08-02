@@ -89,7 +89,10 @@ function GetEntity(label)
             return entity
         end
     end
-    LogError("Entity with label \"" .. label .. "\" not found.")
+    if not IsIn(label, UnfoundRefs) then
+        LogError("Entity with label \"" .. label .. "\" not found.")
+        AddRef(label, UnfoundRefs)
+    end
     return {}
 end
 
@@ -277,6 +280,15 @@ local function addPrimaryPlaceEntitiesToRefs()
     end
 end
 
+local function checkAllRefs()
+    for key, label in pairs(PrimaryRefs) do
+        GetEntity(label)
+    end
+    for key, label in pairs(SecondaryRefs) do
+        GetEntity(label)
+    end
+end
+
 function AddAutomatedDescriptors()
     AddHistoryDescriptors()
     addAllEntitiesTo()
@@ -290,6 +302,7 @@ function ComplementRefs()
     local primaryEntities = GetPrimaryRefEntities(Entities)
     ScanContentForSecondaryRefs(primaryEntities)
     ReplaceMyrefWithNameref(primaryEntities)
+    checkAllRefs()
 end
 
 dofile(RelativePath .. "entities-geography.lua")

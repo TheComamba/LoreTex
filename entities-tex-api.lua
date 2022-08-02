@@ -83,10 +83,10 @@ function NewCharacter(label, shortname, name)
 end
 
 function AutomatedChapters()
-    MarkDead()
-    MarkSecret()
     AddAutomatedDescriptors()
     ComplementRefs()
+    MarkDead()
+    MarkSecret()
     local output = CreateGeography()
     Append(output, PrintEntityChapter("Landmarken", GetEntitiesIf(IsLandmark), LandmarkTypes))
     Append(output, PrintEntityChapter("Charaktere", GetEntitiesIf(IsChar), CharacterTypes))

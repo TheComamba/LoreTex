@@ -34,7 +34,8 @@ function AddAssociationDescriptors()
 end
 
 function MarkSecret()
-    for key, entity in pairs(Entities) do
+    local primaryEntities = GetPrimaryRefEntities(Entities)
+    for key, entity in pairs(primaryEntities) do
         if IsEmpty(entity["name"]) then
             LogError("Entity at position " .. key .. " has no name!")
         elseif IsSecret(entity) then

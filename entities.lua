@@ -93,21 +93,6 @@ function GetEntity(label)
     return {}
 end
 
---TODO: Can we remove this function because we never deal with labels again?
-function ToEntity(input)
-    if input == nil then
-        LogError("called with nil input.")
-        return nil
-    elseif type(input) == "table" then
-        return input
-    elseif type(input) == "string" then
-        return GetEntity(input)
-    else
-        LogError("Tried to convert input of type " .. type(input) .. " to entity.")
-        return nil
-    end
-end
-
 --TODO: Can we remove or adjust this function? Maybe ruturn first label.
 function ToLabel(input)
     if input == nil then
@@ -122,7 +107,6 @@ function ToLabel(input)
 end
 
 function IsSecret(entity)
-    entity = ToEntity(entity)
     if entity == nil then
         return false
     end
@@ -138,7 +122,6 @@ function IsSecret(entity)
 end
 
 function IsShown(entity)
-    entity = ToEntity(entity)
     if IsEmpty(entity) then
         return false
     elseif IsShowSecrets then

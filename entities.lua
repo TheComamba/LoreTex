@@ -49,10 +49,7 @@ function ToEntity(input)
     elseif type(input) == "string" then
         local entity = Entities[input]
         if entity == nil then
-            if not IsIn(input, UnfoundRefs) then
-                LogError("Entity with label \"" .. input .. "\" not found.")
-                AddRef(input, UnfoundRefs)
-            end
+            LogError("Entity with label \"" .. input .. "\" not found.")
             return nil
         else
             return entity

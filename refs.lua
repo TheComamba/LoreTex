@@ -1,6 +1,5 @@
 PrimaryRefs = {}
 SecondaryRefs = {}
-UnfoundRefs = {}
 IsAppendix = false
 
 local function addSingleRef(label, refs)

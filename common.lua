@@ -16,12 +16,32 @@ function LogError(error)
 	errorMessages[#errorMessages + 1] = error
 end
 
+local function cleanedErrors()
+	table.sort(errorMessages)
+	local out = {}
+	local count = 1
+	local lastMess = nil
+	for i, mess in pairs(errorMessages) do
+		if mess ~= lastMess or i == #errorMessages then
+			if count > 1 then
+				lastMess = lastMess .. " (encountered " .. count .. " times)"
+			end
+			out[#out+1] = lastMess
+			lastMess = mess
+			count = 1
+		else
+			count = count + 1
+		end
+	end
+	return out
+end
+
 function PrintErrors()
 	local out = {}
 	if not IsEmpty(errorMessages) then
 		Append(out, TexCmd("chapter", "Error Messages"))
 		Append(out, "DnDTex encountered " .. #errorMessages .. " errors:")
-		Append(out, ListAll(errorMessages))
+		Append(out, ListAll(cleanedErrors()))
 	end
 	return out
 end

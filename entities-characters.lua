@@ -46,14 +46,6 @@ function IsDead(entity)
     return isHasHappened(entity, "died", false)
 end
 
-function DeleteUnborn()
-    for key, entity in pairs(Entities) do
-        if not IsBorn(entity) then
-            Entities[key] = nil
-        end
-    end
-end
-
 function MarkDead()
     for key, entity in pairs(Entities) do
         if IsEmpty(entity["name"]) then

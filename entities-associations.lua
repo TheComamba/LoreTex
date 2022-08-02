@@ -16,12 +16,13 @@ function AddAssociationDescriptors()
             for key, associationAndRole in pairs(entity["association"]) do
                 local associationLabel = associationAndRole[1]
                 local assocationRole = associationAndRole[2]
-                if not IsEmpty(associationLabel) and IsShown(associationLabel) then
+                local association = GetEntity(associationLabel)
+                if not IsEmpty(association) and IsShown(association) then
                     if IsEmpty(assocationRole) then
                         assocationRole = "Mitglied"
                     end
                     local description = assocationRole .. " der " .. TexCmd("myref ", associationLabel) .. "."
-                    if IsSecret(associationLabel) then
+                    if IsSecret(association) then
                         description = "(Geheim) " .. description
                     end
                     Append(associationList, description)

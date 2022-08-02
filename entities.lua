@@ -127,6 +127,8 @@ end
 function IsShown(entity)
     if IsEmpty(entity) then
         return false
+    elseif not IsBorn(entity) then
+        return false
     elseif IsShowSecrets then
         return true
     elseif not IsSecret(entity) then

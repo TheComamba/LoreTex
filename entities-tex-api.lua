@@ -83,7 +83,6 @@ function NewCharacter(label, shortname, name)
 end
 
 function AutomatedChapters()
-    DeleteUnborn()
     MarkDead()
     MarkSecret()
     AddAutomatedDescriptors()

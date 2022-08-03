@@ -34,7 +34,7 @@ function AddAssociationDescriptors()
 end
 
 function MarkSecret()
-    local primaryEntities = GetPrimaryRefEntities(Entities)
+    local primaryEntities = GetEntitiesIf(IsPrimary, Entities)
     for key, entity in pairs(primaryEntities) do
         if IsEmpty(entity["name"]) then
             LogError("Entity at position " .. key .. " has no name!")

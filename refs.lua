@@ -113,6 +113,6 @@ end
 
 function AddAllEntitiesToPrimaryRefs()
     for key, entity in pairs(Entities) do
-        AddRef(entity["label"], PrimaryRefs)
+        AddRef(GetLabels(entity), PrimaryRefs)
     end
 end

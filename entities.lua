@@ -1,7 +1,7 @@
 Entities = {}
 IsShowSecrets = false
 ProtectedDescriptors = { "name", "shortname", "type", "parent", "location", "born", "died", "species", "gender",
-    "association", "isSecret", "isShown", "label" }
+    "association", "isSecret", "isShown", "labels" }
 
 function DebugPrint(entity)
     if entity == nil then
@@ -14,7 +14,7 @@ function DebugPrint(entity)
     local out = {}
     local keys = {}
     for key, elem in pairs(entity) do
-        keys[#keys+1] = key
+        keys[#keys + 1] = key
     end
     table.sort(keys)
     for i, key in pairs(keys) do
@@ -37,6 +37,38 @@ function CurrentEntity()
     return Entities[#Entities]
 end
 
+function GetLabels(entity)
+    local labels = entity["labels"]
+    if labels == nil then
+        LogError("This entity has no labels field: " .. DebugPrint(entity))
+        return {}
+    elseif type(labels) ~= "table" then
+        LogError("This entities' labels field is not a list: " .. DebugPrint(entity))
+        return {}
+    else
+        return labels
+    end
+end
+
+function GetMainLabel(entity)
+    local labels = GetLabels(entity)
+    if IsEmpty(labels) then
+        return "MAIN LABEL NOT FOUND"
+    else
+        return labels[1]
+    end
+end
+
+function IsPrimary(entity)
+    local labels = GetLabels(entity)
+    return IsAnyElemIn(labels, PrimaryRefs)
+end
+
+function IsSecondary(entity)
+    local labels = GetLabels(entity)
+    return IsAnyElemIn(labels, SecondaryRefs) and not IsPrimary(entity)
+end
+
 function GetEntitiesIf(condition, list)
     local out = {}
     if list == nil then
@@ -44,7 +76,7 @@ function GetEntitiesIf(condition, list)
     end
     for key, entity in pairs(list) do
         if condition(entity) then
-            out[#out+1] = entity
+            out[#out + 1] = entity
         end
     end
     return out
@@ -57,25 +89,12 @@ function GetEntitiesOfType(type, list)
     end
     for key, entity in pairs(list) do
         if entity["type"] == type then
-            out[#out+1] = entity
+            out[#out + 1] = entity
         end
     end
     return out
 end
 
---TODO: Adjust for more than one label.
-function GetPrimaryRefEntities(list)
-    local out = {}
-    for key, entity in pairs(list) do
-        local label = entity["label"]
-        if IsIn(label, PrimaryRefs) then
-            out[#out+1] = entity
-        end
-    end
-    return out
-end
-
---TODO: Adjust for more than one label
 function GetEntity(label)
     if IsEmpty(label) then
         LogError("Called with empty label!")
@@ -85,7 +104,7 @@ function GetEntity(label)
         return {}
     end
     for key, entity in pairs(Entities) do
-        if label == entity["label"] then
+        if IsIn(label, GetLabels(entity)) then
             return entity
         end
     end
@@ -94,19 +113,6 @@ function GetEntity(label)
         AddRef(label, UnfoundRefs)
     end
     return {}
-end
-
---TODO: Can we remove or adjust this function? Maybe ruturn first label.
-function ToLabel(input)
-    if input == nil then
-        return nil
-    elseif type(input) == "string" then
-        return input
-    elseif type(input) == "table" then
-        return input["label"]
-    else
-        return nil
-    end
 end
 
 function IsSecret(entity)
@@ -118,7 +124,7 @@ function IsSecret(entity)
         return false
     end
     if type(isSecret) ~= "boolean" then
-        LogError("isSecret property of " .. entity["label"] .. " should be boolean, but is " .. type(isSecret) .. ".")
+        LogError("isSecret property of " .. DebugPrint(entity) .. " should be boolean, but is " .. type(isSecret) .. ".")
         return false
     end
     return isSecret
@@ -136,16 +142,14 @@ function IsShown(entity)
     elseif entity["isShown"] ~= nil then
         return entity["isShown"]
     else
-        local label = ToLabel(entity)
-        if label == nil then
-            return false
+        local labels = GetLabels(entity)
+        for key, label in pairs(labels) do
+            if IsIn(label, PrimaryRefs) then
+                entity["isShown"] = true
+                return true
+            end
         end
-        if IsIn(label, PrimaryRefs) then
-            entity["isShown"] = true
-            return true
-        else
-            return false
-        end
+        return false
     end
 end
 
@@ -198,7 +202,8 @@ local function addSingleEntity(srcEntity, targetEntity, entityType, role)
     if IsSecret(srcEntity) then
         Append(content, "(Geheim) ")
     end
-    Append(content, TexCmd("myref ", srcEntity["label"])) --TODO: Adjust for more labels
+    local srcLabel = GetMainLabel(srcEntity)
+    Append(content, TexCmd("myref ", srcLabel))
     if IsDead(srcEntity) then
         Append(content, " " .. TexCmd("textdied"))
     end
@@ -273,7 +278,7 @@ end
 
 local function addPrimaryPlaceEntitiesToRefs()
     local places = GetEntitiesIf(IsPlace)
-    local primaryPlaces = GetPrimaryRefEntities(places)
+    local primaryPlaces = GetEntitiesIf(IsPrimary, places)
     for placeLabel, place in pairs(primaryPlaces) do
         for type, typeName in pairs(typeToNameMap()) do
             local entitiesHere = place[typeName]
@@ -301,7 +306,7 @@ end
 function ComplementRefs()
     addPrimaryPlaceEntitiesToRefs()
     AddPrimaryPlaceParentsToRefs()
-    local primaryEntities = GetPrimaryRefEntities(Entities)
+    local primaryEntities = GetEntitiesIf(IsPrimary, Entities)
     ScanContentForSecondaryRefs(primaryEntities)
     ReplaceMyrefWithNameref(primaryEntities)
     checkAllRefs()

@@ -51,7 +51,7 @@ end
 local function getChildren(entity)
     local parentLabel = nil
     if not IsEmpty(entity) then
-        parentLabel = entity["label"] --TODO: Adjust
+        parentLabel = GetMainLabel(entity)
     end
     local places = GetEntitiesIf(IsPlace)
     local out = {}
@@ -65,11 +65,11 @@ end
 
 function AddPrimaryPlaceParentsToRefs()
     local places = GetEntitiesIf(IsPlace)
-    local primaryPlaces = GetPrimaryRefEntities(places)
+    local primaryPlaces = GetEntitiesIf(IsPrimary, places)
     for key, entity in pairs(primaryPlaces) do
         while not IsEmpty(entity) do
-            local label = entity["label"] --TODO: Adjust
-            AddRef(label, PrimaryRefs)
+            local labels = GetLabels(entity)
+            AddRef(labels, PrimaryRefs)
             entity = getParent(entity)
         end
     end
@@ -86,12 +86,12 @@ end
 local function createGeographyLayer(currentDepth, parent)
     local out = {}
     local children = getChildren(parent)
-    children = GetPrimaryRefEntities(children)
+    children = GetEntitiesIf(IsPrimary, children)
     table.sort(children, CompareByName)
     for key, place in pairs(children) do
         local docStructure = placeDepths[currentDepth][2]
         Append(out, TexCmd(docStructure, place["name"], place["shortname"]))
-        Append(out, TexCmd("label", place["label"])) --TODO: Adjust
+        Append(out, TexCmd("label", GetMainLabel(place)))
         Append(out, DescriptorsString(place))
         Append(out, createGeographyLayer(currentDepth + 1, place))
     end
@@ -100,7 +100,7 @@ end
 
 function CreateGeography()
     local places = GetEntitiesIf(IsPlace)
-    local primaryPlaces = GetPrimaryRefEntities(places)
+    local primaryPlaces = GetEntitiesIf(IsPrimary, places)
     local out = PrintEntityChapterBeginning("Orte", primaryPlaces)
 
     Append(out, TexCmd("section", "Yestaiel, die Welt", "Yestaiel"))
@@ -109,7 +109,7 @@ function CreateGeography()
 
     Append(out, createGeographyLayer(1))
 
-    local secondaryEntities = GetSecondaryEntities(places)
+    local secondaryEntities = GetEntitiesIf(IsSecondary, places)
     Append(out, PrintOnlyMentionedSection(secondaryEntities))
     return out
 end
@@ -131,7 +131,7 @@ function AllLocationLabelsSorted()
     local places = GetEntitiesIf(IsPlace)
     local labels = {}
     for key, place in pairs(places) do
-        labels[#labels + 1] = place["label"]
+        labels[#labels + 1] = GetMainLabel(place)
     end
     table.sort(labels, compareLocationLabelsByName)
     return labels

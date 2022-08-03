@@ -20,7 +20,7 @@ end
 
 local function newHistoryItem(originator, year, event, day, isSecret)
 	local item = {}
-	local originatorLabel = originator["label"]
+	local originatorLabel = GetMainLabel(originator)
 	if originatorLabel == nil then
 		LogError("This originator has no label: " .. DebugPrint(originator))
 		return {}

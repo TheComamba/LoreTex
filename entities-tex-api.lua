@@ -16,9 +16,8 @@ function SetDescriptor(entity, descriptor, description, subdescriptor)
             error = error .. subdescriptor
             error = error .. "\" to descriptor \""
             error = error .. descriptor
-            error = error .. "\" of entity \""
-            error = error .. entity["label"] --TODO: GetShortname, Name or Label
-            error = error .. "\", which already contains a string content."
+            error = error .. "\" of an entity which already contains a string content: "
+            error = error .. DebugPrint(entity)
             LogError(error)
         end
         entity[descriptor][subdescriptor] = description
@@ -67,7 +66,7 @@ function NewEntity(label, type, shortname, name)
         return
     end
     local entity = {}
-    SetDescriptor(entity, "label", label)
+    SetDescriptor(entity, "labels", {label})
     SetDescriptor(entity, "type", type)
     SetDescriptor(entity, "shortname", shortname)
     SetDescriptor(entity, "name", name)

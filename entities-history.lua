@@ -62,7 +62,8 @@ local function addHistoryToEntity(entity)
         if IsShown(historyItem) then
             local originator = GetEntity(historyItem["originator"])
             local concerns = historyItem["concerns"]
-            if IsIn(entity["label"], concerns) then
+            local labels = GetLabels(entity)
+            if IsAnyElemIn(labels, concerns) then
                 if isAcceptsHistoryFrom(entity, originator) then
                     AddHistoryItemToHistory(historyItem, history)
                 end

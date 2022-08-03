@@ -1,14 +1,3 @@
-function GetSecondaryEntities(list)
-    local out = {}
-    for key, entity in pairs(list) do
-        local label = entity["label"] --TODO
-        if IsIn(label, SecondaryRefs) then
-            out[#out + 1] = entity
-        end
-    end
-    return out
-end
-
 local function extractEntitiesAtLocation(list, location)
     local out = {}
     for key, entity in pairs(list) do
@@ -82,7 +71,7 @@ local function printEntities(sectionname, entitiesList)
     table.sort(entitiesList, CompareByName)
     for key, entity in pairs(entitiesList) do
         Append(out, TexCmd("subsubsection", entity["name"], entity["shortname"]))
-        Append(out, TexCmd("label", entity["label"])) --TODO
+        Append(out, TexCmd("label", GetMainLabel(entity)))
         Append(out, DescriptorsString(entity))
     end
     return out
@@ -96,7 +85,9 @@ function PrintOnlyMentionedSection(secondaryEntities)
         table.sort(secondaryEntities, CompareByName)
         for index, entity in pairs(secondaryEntities) do
             Append(out, TexCmd("paragraph", GetShortname(entity)))
-            Append(out, TexCmd("label", entity["label"]))
+            for key, label in pairs(GetLabels(entity)) do
+                Append(out, TexCmd("label", label))
+            end
             Append(out, TexCmd("hspace", "1cm"))
         end
         Append(out, TexCmd("onecolumn"))
@@ -104,10 +95,10 @@ function PrintOnlyMentionedSection(secondaryEntities)
     return out
 end
 
-local function getLabels(list)
+local function getAllLabels(list)
     local out = {}
     for key, entity in pairs(list) do
-        Append(out, entity["label"])
+        Append(out, GetLabels(entity))
     end
     return out
 end
@@ -117,7 +108,7 @@ function PrintEntityChapterBeginning(name, primaryEntities)
     Append(out, TexCmd("twocolumn"))
     Append(out, TexCmd("chapter", name))
     Append(out, TexCmd("section*", "Alle " .. name))
-    Append(out, ListAll(getLabels(primaryEntities), NamerefString))
+    Append(out, ListAll(getAllLabels(primaryEntities), NamerefString))
     Append(out, TexCmd("onecolumn"))
     return out
 end
@@ -142,8 +133,8 @@ local function printEntityChapterSortedByLocation(primaryEntities)
 end
 
 function PrintEntityChapter(name, entitiesList, types)
-    local primaryEntities = GetPrimaryRefEntities(entitiesList)
-    local secondaryEntities = GetSecondaryEntities(entitiesList)
+    local primaryEntities = GetEntitiesIf(IsPrimary, entitiesList)
+    local secondaryEntities = GetEntitiesIf(IsSecondary, entitiesList)
 
     local out = {}
     if IsEmpty(primaryEntities) and IsEmpty(secondaryEntities) then

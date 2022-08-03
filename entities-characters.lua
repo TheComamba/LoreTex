@@ -47,7 +47,7 @@ function IsDead(entity)
 end
 
 function MarkDead()
-    local primaryEntites = GetPrimaryRefEntities(Entities)
+    local primaryEntites = GetEntitiesIf(IsPrimary, Entities)
     for key, entity in pairs(primaryEntites) do
         if IsEmpty(entity["name"]) then
             LogError("Entity at position " .. key .. " has no name!")

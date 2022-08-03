@@ -37,7 +37,7 @@ local function isAllConcnernsShown(historyItem)
     end
     local concerns = historyItem["concerns"]
     if concerns == nil then
-        LogError("This history item concerns nobody: " ..DebugPrint(historyItem))
+        LogError("This history item concerns nobody: " .. DebugPrint(historyItem))
         return false
     end
     for key, label in pairs(concerns) do
@@ -54,27 +54,34 @@ local function setShown(historyItem)
     end
 end
 
-local function addHistoryToEntity(entity)
-    local history = {}
+local function getHistory(entity)
+    local history = entity[HistoryCaption]
+    if IsEmpty(history) then
+        return {}
+    else
+        return history
+    end
+end
+
+local function addHistoryToEntities(historyItem)
+    local originator = GetEntity(historyItem["originator"])
+    local concerns = historyItem["concerns"]
+    for key, label in pairs(concerns) do
+        local concnerendEntity = GetEntity(label)
+        if isAcceptsHistoryFrom(concnerendEntity, originator) then
+            local history = getHistory(concnerendEntity)
+            AddHistoryItemToHistory(historyItem, history)
+            SetDescriptor(concnerendEntity, HistoryCaption, history)
+        end
+    end
+end
+
+function AddHistoryDescriptors()
     for key, historyItem in pairs(Histories) do
         setSecrecy(historyItem)
         setShown(historyItem)
         if IsShown(historyItem) then
-            local originator = GetEntity(historyItem["originator"])
-            local concerns = historyItem["concerns"]
-            local labels = GetLabels(entity)
-            if IsAnyElemIn(labels, concerns) then
-                if isAcceptsHistoryFrom(entity, originator) then
-                    AddHistoryItemToHistory(historyItem, history)
-                end
-            end
+            addHistoryToEntities(historyItem)
         end
-    end
-    SetDescriptor(entity, HistoryCaption, history)
-end
-
-function AddHistoryDescriptors()
-    for key, entity in pairs(Entities) do
-        addHistoryToEntity(entity)
     end
 end

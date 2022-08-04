@@ -173,6 +173,8 @@ local function typeToNameMap()
     Append(allTypeNames, LanguageTypeNames)
     Append(allTypes, LandmarkTypes)
     Append(allTypeNames, LandmarkTypeNames)
+    Append(allTypes, SpeciesTypes)
+    Append(allTypeNames, SpeciesTypeNames)
     local out = {}
     for i, key in pairs(allTypes) do
         out[key] = allTypeNames[i]
@@ -320,9 +322,10 @@ function ComplementRefs()
 end
 
 dofile(RelativePath .. "entities-geography.lua")
+dofile(RelativePath .. "entities-landmarks.lua")
 dofile(RelativePath .. "entities-characters.lua")
 dofile(RelativePath .. "entities-associations.lua")
-dofile(RelativePath .. "entities-landmarks.lua")
+dofile(RelativePath .. "entities-species.lua")
 dofile(RelativePath .. "entities-languages.lua")
 dofile(RelativePath .. "entities-items.lua")
 dofile(RelativePath .. "entities-history.lua")

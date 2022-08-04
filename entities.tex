@@ -93,6 +93,11 @@ dofile(RelativePath .. "entities.lua")
 	\directlua{SetLocation(CurrentEntity())}
 }
 
+\newcommand{\newSpecies}[3]{
+	\newEntity{#1}{species}{#2}{#3}
+	\directlua{SetLocation(CurrentEntity())}
+}
+
 \newcommand{\newLanguage}[3]{
 	\newEntity{#1}{language}{#2}{#3}
 	\directlua{SetLocation(CurrentEntity())}
@@ -215,6 +220,7 @@ dofile(RelativePath .. "entities.lua")
 	\input{../shared/geography/all.tex}
 	\input{../shared/npcs/all.tex}
 	\input{../shared/associations/all.tex}
+	\input{../shared/species/all.tex}
 	\input{../shared/languages/all.tex}
 	\input{../shared/spells/all.tex}
 	\input{../shared/landmarks/all.tex}
@@ -226,6 +232,7 @@ dofile(RelativePath .. "entities.lua")
 	\input{../shared/geography/all.tex}
 	\input{../shared/npcs/all.tex}
 	\input{../shared/associations/all.tex}
+	\input{../shared/species/all.tex}
 	\input{../shared/languages/all.tex}
 	\input{../shared/spells/all.tex}
 	\input{../shared/landmarks/all.tex}

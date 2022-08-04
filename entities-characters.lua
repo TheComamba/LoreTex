@@ -1,3 +1,4 @@
+Append(ProtectedDescriptors, {"born", "died", "species", "gender"})
 CharacterTypes = { "pc", "npc", "god" }
 CharacterTypeNames = { "Spielercharaktere", "NPCs", "Götter" }
 PCs = {}

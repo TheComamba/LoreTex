@@ -1,3 +1,4 @@
+Append(ProtectedDescriptors, {"parent", "location"})
 CurrentCity = ""
 CurrentRegion = ""
 CurrentContinent = ""

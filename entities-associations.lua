@@ -1,3 +1,4 @@
+Append(ProtectedDescriptors, {"association"})
 AssociationTypes = { "organisation", "family", "ship" }
 AssociationTypeNames = { "Organisationen", "Familien", "Schiffe" }
 

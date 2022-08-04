@@ -1,7 +1,6 @@
 Entities = {}
 IsShowSecrets = false
-ProtectedDescriptors = { "name", "shortname", "type", "parent", "location", "born", "died", "species", "gender",
-    "association", "isSecret", "isShown", "labels" }
+ProtectedDescriptors = { "name", "shortname", "type", "isSecret", "isShown", "labels" }
 
 function DebugPrint(entity)
     if entity == nil then

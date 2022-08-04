@@ -208,6 +208,24 @@ dofile(RelativePath .. "entities.lua")
 	\directlua{AddAssociation(CurrentEntity(), "#2", [[\detokenize{#1}]])}
 }
 
+\newcommand{\setSpecies}[1]{
+	\directlua{
+		SetDescriptor(CurrentEntity(),[[species]],[[\detokenize{#1}]])
+	}
+}
+
+\newcommand{\setGender}[1]{
+	\directlua{
+		SetDescriptor(CurrentEntity(),[[gender]],[[\detokenize{#1}]])
+	}
+}
+
+\newcommand{\setMorphs}[1]{
+	\directlua{
+		SetDescriptor(CurrentEntity(),[[Morphen]],[[\detokenize{#1}]])
+	}
+}
+
 \newcommand{\setSecret}{
 	\directlua{SetSecret(CurrentEntity())}
 }

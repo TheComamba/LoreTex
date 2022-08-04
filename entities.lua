@@ -315,6 +315,7 @@ end
 function ComplementRefs()
     addPrimaryPlaceEntitiesToRefs()
     AddPrimaryPlaceParentsToRefs()
+    AddSpeciesToPrimaryRefs()
     local primaryEntities = GetEntitiesIf(IsPrimary, Entities)
     ScanContentForSecondaryRefs(primaryEntities)
     ReplaceMyrefWithNameref(primaryEntities)

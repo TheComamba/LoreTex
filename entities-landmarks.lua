@@ -1,5 +1,7 @@
+HeightCaption = "Höhe"
 LandmarkTypes = { "forest", "grassland", "range", "mountain", "river", "glacier", "lake" }
 LandmarkTypeNames = { "Wälder", "Grasländer", "Gebirge", "Berge", "Flüsse", "Gletscher", "Seen" }
+local planetRadiusInKM = 6371
 
 function IsLandmark(entity)
     if entity == nil then
@@ -7,4 +9,25 @@ function IsLandmark(entity)
     end
     local type = entity["type"]
     return type ~= nil and IsIn(entity["type"], LandmarkTypes)
+end
+
+local function distanceToHorizon(heightInM)
+    local heightInKM = heightInM / 1000.
+    local distanceFromCentre = planetRadiusInKM + heightInKM
+    return math.sqrt(distanceFromCentre ^ 2 - planetRadiusInKM ^ 2)
+end
+
+function HeightDescriptor(inputInM)
+    local heightInM = tonumber(inputInM)
+    if heightInM == nil then
+        LogError("Called with " .. DebugPrint(inputInM))
+    end
+    local toHorizon = distanceToHorizon(heightInM)
+    toHorizon = RoundedNum(toHorizon, -1)
+    local out = {}
+    Append(out, heightInM)
+    Append(out, "m (")
+    Append(out, toHorizon)
+    Append(out, "km Sichtweite bis zum Horizont auf Meereshöhe).")
+    return out
 end

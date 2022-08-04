@@ -51,6 +51,8 @@ function DescriptorsString(entity)
         Append(out, TexCmd("paragraph", descriptor))
         if descriptor == HistoryCaption then
             Append(out, ListHistory(entity[descriptor]))
+        elseif descriptor == HeightCaption then
+            Append(out, HeightDescriptor(entity[descriptor]))
         elseif type(entity[descriptor]) == "string" then
             Append(out, entity[descriptor])
         elseif IsList(entity[descriptor]) then

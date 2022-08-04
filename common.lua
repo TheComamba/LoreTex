@@ -46,6 +46,11 @@ function PrintErrors()
 	return out
 end
 
+function RoundedNum(num, decimals)
+	local decimalFactor = math.pow(10,decimals)
+	return math.round(num*decimalFactor)/decimalFactor
+end
+
 function TexCmd(cmd, args, options)
 	if type(args) ~= "table" then
 		args = { args }

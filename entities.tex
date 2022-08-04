@@ -191,7 +191,7 @@ dofile(RelativePath .. "entities.lua")
 
 \newcommand{\setHeight}[1]{
 	\directlua{
-		SetDescriptor(CurrentEntity(),[[Höhe]],[[\detokenize{#1}m]])
+		SetDescriptor(CurrentEntity(),HeightCaption,[[\detokenize{#1}]])
 	}
 }
 

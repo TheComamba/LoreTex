@@ -3,11 +3,6 @@
 	local MiInKM = 1.609
 	local lbInKg = 0.4536
 	local gallonInLiter = 3.785
-
-	function RoundedNum(num, decimals)
-		local decimalFactor = math.pow(10,decimals)
-		return tostring(math.round(num*decimalFactor)/decimalFactor)
-	end
 	
 	function PrintFtToM(valInFt)
 		local str = RoundedNum(valInFt*ftInM,1)

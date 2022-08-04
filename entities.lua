@@ -282,7 +282,7 @@ local function addPrimaryPlaceEntitiesToRefs()
     for placeLabel, place in pairs(primaryPlaces) do
         for type, typeName in pairs(typeToNameMap()) do
             local entitiesHere = place[typeName]
-            AddRef(ScanForRefs(entitiesHere), PrimaryRefs)
+            AddRef(ScanForCmd(entitiesHere, "myref"), PrimaryRefs)
         end
     end
 end

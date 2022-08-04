@@ -37,7 +37,7 @@ local function newHistoryItem(originator, year, event, day, isSecret)
 		return {}
 	end
 	item["event"] = event
-	local concerns = ScanForRefs(event)
+	local concerns = ScanForCmd(event, "myref")
 	if not IsIn(originatorLabel, concerns) then
 		concerns[#concerns + 1] = originatorLabel
 	end

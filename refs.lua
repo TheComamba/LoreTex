@@ -51,12 +51,13 @@ function ListAllRefs()
     tex.print(ListAll(SecondaryRefs, NamerefString))
 end
 
-local function scanStringForRefs(str)
-    if str == nil then
-        return
+local function scanStringFor(str, cmd)
+    if IsEmpty(cmd) then
+        LogError("Called with empty command!")
+        return {}
     end
     local refs = {}
-    local keyword1 = [[\myref {]]
+    local keyword1 = [[\]] .. cmd .. [[ {]] --TODO: I do not like the space...
     local keyword2 = [[}]]
     local pos1 = string.find(str, keyword1)
     while pos1 ~= nil do
@@ -70,15 +71,15 @@ local function scanStringForRefs(str)
     return refs
 end
 
-function ScanForRefs(content)
+function ScanForCmd(content, cmd)
     if content == nil or type(content) == "boolean" or type(content) == "number" then
         return {}
     elseif type(content) == "string" then
-        return scanStringForRefs(content)
+        return scanStringFor(content, cmd)
     elseif type(content) == "table" then
         local out = {}
         for key, elem in pairs(content) do
-            Append(out, ScanForRefs(elem))
+            Append(out, ScanForCmd(elem, cmd))
         end
         return out
     else
@@ -88,7 +89,7 @@ function ScanForRefs(content)
 end
 
 function ScanContentForSecondaryRefs(content)
-    for key, ref in pairs(ScanForRefs(content)) do
+    for key, ref in pairs(ScanForCmd(content, "myref")) do
         if not IsIn(ref, PrimaryRefs) then
             AddRef(ref, SecondaryRefs)
         end

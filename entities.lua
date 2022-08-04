@@ -296,6 +296,14 @@ local function checkAllRefs()
     end
 end
 
+function ScanEntitiesForLabels()
+    for key, entity in pairs(Entities) do
+        local labels = GetLabels(entity)
+        local additionalLabels = ScanForCmd(entity, "label")
+        Append(labels, additionalLabels)
+    end
+end
+
 function AddAutomatedDescriptors()
     AddHistoryDescriptors()
     addAllEntitiesTo()

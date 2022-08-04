@@ -82,6 +82,7 @@ function NewCharacter(label, shortname, name)
 end
 
 function AutomatedChapters()
+    ScanEntitiesForLabels()
     AddAutomatedDescriptors()
     ComplementRefs()
     MarkDead()

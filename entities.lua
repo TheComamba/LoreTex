@@ -49,6 +49,19 @@ function GetLabels(entity)
     end
 end
 
+function GetNumberField(entity, key, default)
+    local out = entity[key]
+	if out == nil then
+		out = default
+	elseif tonumber(out) == nil then
+		LogError("Could not convert to number: " .. DebugPrint(out))
+		out = default
+	else
+		out = tonumber(out)
+	end
+    return out
+end
+
 function GetMainLabel(entity)
     local labels = GetLabels(entity)
     if IsEmpty(labels) then

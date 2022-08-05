@@ -220,6 +220,18 @@ dofile(RelativePath .. "entities.lua")
 	}
 }
 
+\newcommand{\setAgeFactor}[1]{
+	\directlua{
+		SetDescriptor(CurrentEntity(),[[ageFactor]],#1)
+	}
+}
+
+\newcommand{\setAgeExponent}[1]{
+	\directlua{
+		SetDescriptor(CurrentEntity(),[[ageExponent]],#1)
+	}
+}
+
 \newcommand{\setMorphs}[1]{
 	\directlua{
 		SetDescriptor(CurrentEntity(),[[Morphen]],[[\detokenize{#1}]])

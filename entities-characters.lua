@@ -13,7 +13,7 @@ end
 function AddSpeciesAndAgeStringToNPCs()
     local npcs = GetEntitiesIf(IsChar)
     for key, char in pairs(npcs) do
-        SetDescriptor(char, "Erscheinung", SpeciesAndAgeString(char), "Spezies und Alter:")
+        SetDescriptor(char, "Erscheinung", SpeciesAndAgeString(char, CurrentYearVin), "Spezies und Alter:")
     end
 end
 
@@ -57,5 +57,35 @@ function MarkDead()
             end
             entity["name"] = entity["name"] .. " " .. TexCmd("textdied")
         end
+    end
+end
+
+local function getYear(entity, key)
+    local value = entity[key]
+    if value == nil then
+        return nil
+    end
+    local year = tonumber(value)
+    if year == nil then
+        LogError("Could not convert " .. DebugPrint(value) .. " to year in entity: " .. DebugPrint(entity))
+        return nil
+    else
+        return year
+    end
+end
+
+function GetAgeInYears(entity, year)
+    if year == nil or type(year) ~= "number" then
+        LogError("Called with " .. DebugPrint(year))
+        return nil
+    end
+    local born = getYear(entity, "born")
+    local died = getYear(entity, "died")
+    if born == nil then
+        return nil
+    elseif died == nil or died > year then
+        return year - born
+    else
+        return died - born
     end
 end

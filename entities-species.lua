@@ -129,7 +129,6 @@ local function lifestagesDescription(species)
 	end
 	local out = {}
 	local factor, exponent = getAgeFactorAndExponent(species)
-	LogError(DebugPrint(species))
 	for i, stageAndAge in pairs(lifestagesAndAges) do
 		local stage = stageAndAge[1]
 		local begins = stageAndAge[2]
@@ -150,12 +149,11 @@ local function lifestagesDescription(species)
 end
 
 function AddLifeStagesToSpecies()
-	local species = GetEntitiesIf(IsSpecies)
-	for key, entity in pairs(species) do
+	local allSpecies = GetEntitiesIf(IsSpecies)
+	for key, species in pairs(allSpecies) do
 		local lifestages = lifestagesDescription(species)
 		if not IsEmpty(lifestages) then
 			SetDescriptor(species, "Lebensabschnitte", lifestages)
-			LogError(DebugPrint(species["Lebensabschnitte"]))
 		end
 	end
 end

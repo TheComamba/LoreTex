@@ -232,6 +232,12 @@ dofile(RelativePath .. "entities.lua")
 	}
 }
 
+\newcommand{\setAgeModifierMixing}[2]{
+	\directlua{
+		SetAgeModifierMixing(CurrentEntity(),"#1","#2")
+	}
+}
+
 \newcommand{\setMorphs}[1]{
 	\directlua{
 		SetDescriptor(CurrentEntity(),[[Morphen]],[[\detokenize{#1}]])

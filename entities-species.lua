@@ -1,4 +1,4 @@
-Append(ProtectedDescriptors, { "born", "died", "species", "gender", "ageFactor", "ageExponent" })
+Append(ProtectedDescriptors, { "born", "died", "species", "gender", "ageFactor", "ageExponent", "ageMixing" })
 SpeciesTypes = { "species" }
 SpeciesTypeNames = { "Spezies" }
 local lifestagesAndAges = {}
@@ -44,7 +44,27 @@ local function yearsToAge(years, factor, exponent)
 	return (years / factor) ^ (1 / exponent)
 end
 
-local function getAgeFactorAndExponent(species)
+local function getMixedAgeFactorAndExponent(speciesMixing)
+	if type(speciesMixing) ~= "table" or #speciesMixing ~= 2 then
+		LogError("Called with " .. DebugPrint(speciesMixing))
+		return 1, 1
+	end
+	local species1 = GetEntity(speciesMixing[1])
+	local species2 = GetEntity(speciesMixing[2])
+	if IsEmpty(species1) or IsEmpty(species2) then
+		LogError("One of " .. DebugPrint(speciesMixing) .. " not found!")
+		return 1, 1
+	end
+	local f1, e1 = GetAgeFactorAndExponent(species1)
+	local f2, e2 = GetAgeFactorAndExponent(species2)
+	return (f1 + f2) / 2, math.sqrt(e1 * e2)
+end
+
+function GetAgeFactorAndExponent(species)
+	local speciesMixing = species["ageMixing"]
+	if not IsEmpty(speciesMixing) then
+		return getMixedAgeFactorAndExponent(speciesMixing)
+	end
 	local factor = GetNumberField(species, "ageFactor", 1)
 	local exponent = GetNumberField(species, "ageExponent", 1)
 	return factor, exponent
@@ -59,7 +79,7 @@ local function specificAgeString(entity, age)
 	if IsEmpty(species) then
 		return ""
 	end
-	local factor, exponent = getAgeFactorAndExponent(species)
+	local factor, exponent = GetAgeFactorAndExponent(species)
 	local out = {}
 	if factor ~= 1 or exponent ~= 1 then
 		Append(out, " (entspricht einem Menschenalter von ")
@@ -128,7 +148,7 @@ local function lifestagesDescription(species)
 		return ""
 	end
 	local out = {}
-	local factor, exponent = getAgeFactorAndExponent(species)
+	local factor, exponent = GetAgeFactorAndExponent(species)
 	for i, stageAndAge in pairs(lifestagesAndAges) do
 		local stage = stageAndAge[1]
 		local begins = stageAndAge[2]

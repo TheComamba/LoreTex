@@ -1,10 +1,5 @@
 Species = {}
 
-Species["dragon"] = {}
-Species["dragon"]["ageExponent"] = 2.6
-Species["dragon"]["nominative"] = "Drache"
-Species["dragon"]["genitive"] = "Drachen"
-
 Species["dragonborn"] = {}
 Species["dragonborn"]["ageExponent"] = 1
 Species["dragonborn"]["nominative"] = "Drachenspross"
@@ -14,16 +9,6 @@ Species["dwarf"] = {}
 Species["dwarf"]["ageExponent"] = 1.9
 Species["dwarf"]["nominative"] = "Zwerg"
 Species["dwarf"]["genitive"] = "Zwergen"
-
-Species["elf"] = {}
-Species["elf"]["ageExponent"] = 2.2
-Species["elf"]["nominative"] = "Elb"
-Species["elf"]["genitive"] = "Elben"
-
-Species["firbolg"] = {}
-Species["firbolg"]["ageExponent"] = 1.81
-Species["firbolg"]["nominative"] = "Firbolg"
-Species["firbolg"]["genitive"] = "Firbolg"
 
 Species["genasi-fire"] = {}
 Species["genasi-fire"]["ageExponent"] = 0.9

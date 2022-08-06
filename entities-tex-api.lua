@@ -54,6 +54,10 @@ function DeclarePC(label)
     AddRef(label, PrimaryRefs)
 end
 
+function SetAgeModifierMixing(entity, species1, species2)
+    SetDescriptor(entity, "ageMixing", { species1, species2 })
+end
+
 function NewEntity(label, type, shortname, name)
     if IsEmpty(label) then
         LogError("Called with no label!")
@@ -66,7 +70,7 @@ function NewEntity(label, type, shortname, name)
         return
     end
     local entity = {}
-    SetDescriptor(entity, "labels", {label})
+    SetDescriptor(entity, "labels", { label })
     SetDescriptor(entity, "type", type)
     SetDescriptor(entity, "shortname", shortname)
     SetDescriptor(entity, "name", name)

@@ -1,6 +1,14 @@
 Append(ProtectedDescriptors, { "born", "died", "species", "gender", "ageFactor", "ageExponent" })
 SpeciesTypes = { "species" }
 SpeciesTypeNames = { "Spezies" }
+local lifestagesAndAges = {}
+lifestagesAndAges[#lifestagesAndAges + 1] = { "Kind", 0 }
+lifestagesAndAges[#lifestagesAndAges + 1] = { "Jugendlich", 12 }
+lifestagesAndAges[#lifestagesAndAges + 1] = { "Jung", 20 }
+lifestagesAndAges[#lifestagesAndAges + 1] = { "Erwachsen", 30 }
+lifestagesAndAges[#lifestagesAndAges + 1] = { "Alt", 60 }
+lifestagesAndAges[#lifestagesAndAges + 1] = { "Uralt", 90 }
+
 
 function IsSpecies(entity)
 	if entity == nil then
@@ -110,6 +118,44 @@ function AddSpeciesToPrimaryRefs()
 		local speciesRef = getSpeciesRef(entity)
 		if not IsEmpty(speciesRef) then
 			AddRef(speciesRef, PrimaryRefs)
+		end
+	end
+end
+
+local function lifestagesDescription(species)
+	if IsEmpty(species) then
+		LogError("Called with " .. DebugPrint(species))
+		return ""
+	end
+	local out = {}
+	local factor, exponent = getAgeFactorAndExponent(species)
+	LogError(DebugPrint(species))
+	for i, stageAndAge in pairs(lifestagesAndAges) do
+		local stage = stageAndAge[1]
+		local begins = stageAndAge[2]
+		begins = ageToYears(begins, factor, exponent)
+		Append(out, TexCmd("subparagraph", stage))
+		Append(out, begins)
+		if i < #lifestagesAndAges then
+			local ends = lifestagesAndAges[i + 1][2]
+			ends = ageToYears(ends, factor, exponent)
+			Append(out, "-")
+			Append(out, ends)
+		else
+			Append(out, "+")
+		end
+		Append(out, " Jahre")
+	end
+	return table.concat(out)
+end
+
+function AddLifeStagesToSpecies()
+	local species = GetEntitiesIf(IsSpecies)
+	for key, entity in pairs(species) do
+		local lifestages = lifestagesDescription(species)
+		if not IsEmpty(lifestages) then
+			SetDescriptor(species, "Lebensabschnitte", lifestages)
+			LogError(DebugPrint(species["Lebensabschnitte"]))
 		end
 	end
 end

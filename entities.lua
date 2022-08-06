@@ -2,6 +2,24 @@ Entities = {}
 IsShowSecrets = false
 ProtectedDescriptors = { "name", "shortname", "type", "isSecret", "isShown", "labels" }
 
+local function getKeysOfType(tableInput, keyType)
+    local out = {}
+    for key, elem in pairs(tableInput) do
+        if type(key) == keyType then
+            Append(out, key)
+        end
+    end
+    table.sort(out)
+    return out
+end
+
+local function getSortedKeys(tableInput)
+    local out = {}
+    Append(out, getKeysOfType(tableInput, "number"))
+    Append(out, getKeysOfType(tableInput, "string"))
+    return out
+end
+
 function DebugPrint(entity)
     if entity == nil then
         return "nil"
@@ -11,11 +29,7 @@ function DebugPrint(entity)
         return tostring(entity)
     end
     local out = {}
-    local keys = {}
-    for key, elem in pairs(entity) do
-        keys[#keys + 1] = key
-    end
-    table.sort(keys)
+    local keys = getSortedKeys(entity)
     for i, key in pairs(keys) do
         if i == 1 then
             Append(out, [[\{]])
@@ -323,6 +337,7 @@ function AddAutomatedDescriptors()
     addAllEntitiesTo()
     AddSpeciesAndAgeStringToNPCs()
     AddAssociationDescriptors()
+    AddLifeStagesToSpecies()
 end
 
 function ComplementRefs()

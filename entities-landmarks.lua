@@ -23,11 +23,11 @@ function HeightDescriptor(inputInM)
         LogError("Called with " .. DebugPrint(inputInM))
     end
     local toHorizon = distanceToHorizon(heightInM)
-    toHorizon = RoundedNum(toHorizon, -1)
+    local toHorizonString = RoundedNumString(toHorizon, -1)
     local out = {}
     Append(out, heightInM)
     Append(out, "m (")
-    Append(out, toHorizon)
+    Append(out, toHorizonString)
     Append(out, "km Sichtweite bis zum Horizont auf Meereshöhe).")
     return out
 end

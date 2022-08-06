@@ -26,7 +26,7 @@ local function cleanedErrors()
 			if count > 1 then
 				lastMess = lastMess .. " (encountered " .. count .. " times)"
 			end
-			out[#out+1] = lastMess
+			out[#out + 1] = lastMess
 			lastMess = mess
 			count = 1
 		else
@@ -46,9 +46,14 @@ function PrintErrors()
 	return out
 end
 
-function RoundedNum(num, decimals)
-	local decimalFactor = math.pow(10,decimals)
-	return math.round(num*decimalFactor)/decimalFactor
+function RoundedNumString(num, decimals)
+	local decimalFactor = 10 ^ decimals
+	local rounded = math.round(num * decimalFactor) / decimalFactor
+	if decimals < 0 then
+		decimals = 0
+	end
+	local formatString = string.format("%%.%df", decimals)
+	return string.format(formatString, rounded)
 end
 
 function TexCmd(cmd, args, options)

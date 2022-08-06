@@ -64,8 +64,8 @@ local function specificAgeString(entity, age)
 	if factor ~= 1 or exponent ~= 1 then
 		Append(out, " (entspricht einem Menschenalter von ")
 		local specificAge = yearsToAge(age, factor, exponent)
-		specificAge = RoundedNum(specificAge, 0)
-		Append(out, specificAge)
+		local specificAgeString = RoundedNumString(specificAge, 0)
+		Append(out, specificAgeString)
 		Append(out, " Jahren)")
 	end
 	return table.concat(out)
@@ -133,13 +133,15 @@ local function lifestagesDescription(species)
 		local stage = stageAndAge[1]
 		local begins = stageAndAge[2]
 		begins = ageToYears(begins, factor, exponent)
+		local beginsString = RoundedNumString(begins, 0)
 		Append(out, TexCmd("subparagraph", stage))
-		Append(out, begins)
+		Append(out, beginsString)
 		if i < #lifestagesAndAges then
 			local ends = lifestagesAndAges[i + 1][2]
 			ends = ageToYears(ends, factor, exponent)
+			local endsString = RoundedNumString(ends, 0)
 			Append(out, "-")
-			Append(out, ends)
+			Append(out, endsString)
 		else
 			Append(out, "+")
 		end

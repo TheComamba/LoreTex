@@ -20,14 +20,13 @@ local function cleanedErrors()
 	table.sort(errorMessages)
 	local out = {}
 	local count = 1
-	local lastMess = errorMessages[1]
 	for i, mess in pairs(errorMessages) do
-		if mess ~= lastMess or i == #errorMessages then
+		if mess ~= errorMessages[i + 1] then
+			local str = mess
 			if count > 1 then
-				lastMess = lastMess .. " (encountered " .. count .. " times)"
+				str = str .. " (encountered " .. count .. " times)"
 			end
-			out[#out + 1] = lastMess
-			lastMess = mess
+			out[#out + 1] = str
 			count = 1
 		else
 			count = count + 1

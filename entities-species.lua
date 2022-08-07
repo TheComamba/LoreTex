@@ -18,6 +18,11 @@ function IsSpecies(entity)
 	return type ~= nil and IsIn(entity["type"], SpeciesTypes)
 end
 
+local function isAges(species)
+	local factor, exponent = GetAgeFactorAndExponent(species)
+	return factor ~= 0 and exponent ~= 0
+end
+
 local function getSpeciesRef(entity)
 	local species = entity["species"]
 	if IsEmpty(species) then
@@ -70,15 +75,7 @@ function GetAgeFactorAndExponent(species)
 	return factor, exponent
 end
 
-local function specificAgeString(entity, age)
-	local speciesRef = getSpeciesRef(entity)
-	if IsEmpty(speciesRef) then
-		return ""
-	end
-	local species = GetEntity(speciesRef)
-	if IsEmpty(species) then
-		return ""
-	end
+local function correspondingHumanAgeString(species, age)
 	local factor, exponent = GetAgeFactorAndExponent(species)
 	local out = {}
 	if factor ~= 1 or exponent ~= 1 then
@@ -89,6 +86,22 @@ local function specificAgeString(entity, age)
 		Append(out, " Jahren)")
 	end
 	return table.concat(out)
+end
+
+local function specificAgeString(entity, age)
+	local speciesRef = getSpeciesRef(entity)
+	if IsEmpty(speciesRef) then
+		return ""
+	end
+	local species = GetEntity(speciesRef)
+	if IsEmpty(species) then
+		return ""
+	end
+	if isAges(species) then
+		return correspondingHumanAgeString(species, age)
+	else
+		return " (altert nicht)"
+	end
 end
 
 local function ageString(entity, year)
@@ -117,8 +130,6 @@ function SpeciesAndAgeString(entity, year)
 	local gender = getGender(entity)
 	if not IsEmpty(gender) then
 		Append(parts, gender)
-	else
-		LogError(GetShortname(entity) .. " has no gender defined!")
 	end
 	local ageDescription = ageString(entity, year)
 	if not IsEmpty(ageDescription) then
@@ -177,9 +188,11 @@ end
 function AddLifeStagesToSpecies()
 	local allSpecies = GetEntitiesIf(IsSpecies)
 	for key, species in pairs(allSpecies) do
-		local lifestages = lifestagesDescription(species)
-		if not IsEmpty(lifestages) then
-			SetDescriptor(species, "Lebensabschnitte", lifestages)
+		if isAges(species) then
+			local lifestages = lifestagesDescription(species)
+			if not IsEmpty(lifestages) then
+				SetDescriptor(species, "Lebensabschnitte", lifestages)
+			end
 		end
 	end
 end

@@ -70,6 +70,7 @@ dofile(RelativePath .. "entities.lua")
 \newcommand{\newGod}[3]{
 	\newEntity{#1}{god}{#2}{#3}
 	\directlua{SetLocation(CurrentEntity())}
+	\setSpecies{gott}
 }
 
 \newcommand{\charappearance}[3]{

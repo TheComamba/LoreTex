@@ -1,6 +1,8 @@
 local function isAcceptsHistoryFrom(receiver, originator)
     if IsChar(originator) and IsPlace(receiver) then
         return false
+    elseif IsChar(originator) and IsSpecies(receiver) then
+        return false
     else
         return true
     end

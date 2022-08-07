@@ -83,7 +83,7 @@ function PrintOnlyMentionedSection(secondaryEntities)
     local out = {}
     if #secondaryEntities > 0 then
         Append(out, TexCmd("twocolumn"))
-        Append(out, TexCmd("section", "Nur erwähnt"))
+        Append(out, TexCmd("section*", "Nur erwähnt"))
         table.sort(secondaryEntities, CompareByName)
         for index, entity in pairs(secondaryEntities) do
             Append(out, TexCmd("paragraph", GetShortname(entity)))

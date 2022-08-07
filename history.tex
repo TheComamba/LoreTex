@@ -33,6 +33,10 @@ dofile(RelativePath .. "history.lua")
 	}
 }
 
+\newcommand{\concerns}[1]{}
+\newcommand{\birthof}[1]{}
+\newcommand{\deathof}[1]{}
+
 \newcommand{\born}[3][0]{
 	\addHistory[#1]{#2}{#3}
 	\addDescriptor{born}{#2}

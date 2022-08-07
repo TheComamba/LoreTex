@@ -67,12 +67,21 @@ local function addHistoryToEntities(historyItem)
     local originator = GetEntity(historyItem["originator"])
     local concerns = historyItem["concerns"]
     for key, label in pairs(concerns) do
-        local concnerendEntity = GetEntity(label)
-        if isAcceptsHistoryFrom(concnerendEntity, originator) then
-            local history = getHistory(concnerendEntity)
+        local concernedEntity = GetEntity(label)
+        if isAcceptsHistoryFrom(concernedEntity, originator) then
+            local history = getHistory(concernedEntity)
             AddHistoryItemToHistory(historyItem, history)
-            SetDescriptor(concnerendEntity, HistoryCaption, history)
+            SetDescriptor(concernedEntity, HistoryCaption, history)
         end
+    end
+    local year = historyItem["year"]
+    for key, label in pairs(historyItem["birthof"]) do
+        local entity = GetEntity(label)
+        SetDescriptor(entity, "born", year)
+    end
+    for key, label in pairs(historyItem["deathof"]) do
+        local entity = GetEntity(label)
+        SetDescriptor(entity, "died", year)
     end
 end
 

@@ -37,7 +37,9 @@ local function newHistoryItem(originator, year, event, day, isSecret)
 		return {}
 	end
 	item["event"] = event
-	local concerns = ScanForCmd(event, "myref")
+	local concerns = {}
+	Append(concerns, ScanForCmd(event, "concerns"))
+	Append(concerns, ScanForCmd(event, "myref"))
 	if not IsIn(originatorLabel, concerns) then
 		concerns[#concerns + 1] = originatorLabel
 	end
@@ -45,6 +47,8 @@ local function newHistoryItem(originator, year, event, day, isSecret)
 	if isSecret ~= nil then
 		item["isSecret"] = isSecret
 	end
+	item["birthof"] = ScanForCmd(event, "birthof")
+	item["deathof"] = ScanForCmd(event, "deathof")
 	return item
 end
 

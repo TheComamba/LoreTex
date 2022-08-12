@@ -62,7 +62,7 @@ local function getMixedAgeFactorAndExponent(speciesMixing)
 	end
 	local f1, e1 = GetAgeFactorAndExponent(species1)
 	local f2, e2 = GetAgeFactorAndExponent(species2)
-	return (f1 + f2) / 2, math.sqrt(e1 * e2)
+	return math.sqrt(f1 * f2), math.sqrt(e1 * e2)
 end
 
 function GetAgeFactorAndExponent(species)

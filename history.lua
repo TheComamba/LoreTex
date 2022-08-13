@@ -55,6 +55,10 @@ local function newHistoryItem(originator, year, event, day, isSecret)
 end
 
 function AddEvent(originator, year, event, day, isSecret)
+	if type(originator) ~= "table" then
+		LogError("Called with " .. DebugPrint(originator))
+		return
+	end
 	if IsEmpty(year) then
 		LogError(originator .. " has a history item without a year!")
 		return

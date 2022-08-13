@@ -77,6 +77,10 @@ function GetNumberField(entity, key, default)
 end
 
 function GetMainLabel(entity)
+    if type(entity) ~= "table" then
+        LogError("Called with " .. DebugPrint(entity))
+        return "CALLED WITH WRONG TYPE"
+    end
     local labels = GetLabels(entity)
     if IsEmpty(labels) then
         return "MAIN LABEL NOT FOUND"
@@ -333,11 +337,12 @@ function ScanEntitiesForLabels()
 end
 
 function AddAutomatedDescriptors()
-    AddHistoryDescriptors()
     addAllEntitiesTo()
     AddSpeciesAndAgeStringToNPCs()
+    AddLifestageHistoryItemsToNPCs()
     AddAssociationDescriptors()
     AddLifeStagesToSpecies()
+    AddHistoryDescriptors()
 end
 
 function ComplementRefs()

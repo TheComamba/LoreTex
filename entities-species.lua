@@ -147,6 +147,35 @@ function SpeciesAndAgeString(entity, year)
 	return table.concat(out)
 end
 
+local function addLifestageHistoryItems(entity)
+	local label = GetMainLabel(entity)
+	local birthyear = tonumber(entity["born"])
+	local speciesRef = getSpeciesRef(entity)
+	local species = GetEntity(speciesRef)
+	if not IsEmpty(label) and not IsEmpty(birthyear) and not IsEmpty(species) then
+		local deathyear = tonumber(entity["died"])
+		local factor, exponent = GetAgeFactorAndExponent(species)
+		for i = 2, #lifestagesAndAges do
+			local lifestage = lifestagesAndAges[i][1]
+			local humanAge = lifestagesAndAges[i][2]
+			local realAge = ageToYears(humanAge, factor, exponent)
+			realAge =math.round(realAge)
+			local year = birthyear + realAge
+			if deathyear == nil or year <= deathyear then
+				local event = TexCmd("nameref", label) .. " ist " .. lifestage .. "."
+				AddEvent(entity, year, event, 0, false)
+			end
+		end
+	end
+end
+
+function AddLifestageHistoryItemsToNPCs()
+	local npcs = GetEntitiesIf(IsChar)
+	for key, char in pairs(npcs) do
+		addLifestageHistoryItems(char)
+	end
+end
+
 function AddSpeciesToPrimaryRefs()
 	local primaryEntities = GetEntitiesIf(IsPrimary)
 	for key, entity in pairs(primaryEntities) do

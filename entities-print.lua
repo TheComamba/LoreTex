@@ -82,7 +82,6 @@ end
 function PrintOnlyMentionedSection(secondaryEntities)
     local out = {}
     if #secondaryEntities > 0 then
-        Append(out, TexCmd("twocolumn"))
         Append(out, TexCmd("section*", "Nur erwähnt"))
         table.sort(secondaryEntities, CompareByName)
         for index, entity in pairs(secondaryEntities) do
@@ -92,7 +91,6 @@ function PrintOnlyMentionedSection(secondaryEntities)
             end
             Append(out, TexCmd("hspace", "1cm"))
         end
-        Append(out, TexCmd("onecolumn"))
     end
     return out
 end
@@ -107,11 +105,11 @@ end
 
 function PrintEntityChapterBeginning(name, primaryEntities)
     local out = {}
-    Append(out, TexCmd("twocolumn"))
     Append(out, TexCmd("chapter", name))
-    Append(out, TexCmd("section*", "Alle " .. name))
-    Append(out, ListAll(getAllLabels(primaryEntities), NamerefString))
-    Append(out, TexCmd("onecolumn"))
+    if not IsEmpty(primaryEntities) then
+        Append(out, TexCmd("section*", "Alle " .. name))
+        Append(out, ListAll(getAllLabels(primaryEntities), NamerefString))
+    end
     return out
 end
 

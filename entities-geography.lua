@@ -35,24 +35,12 @@ function IsLocationUnknown(entity)
     end
 end
 
-local function getParent(entity)
-    local parentLabel = entity["parent"]
+local function getLocation(entity)
+    local parentLabel = entity["location"]
     if IsEmpty(parentLabel) then
         return {}
     else
         return GetEntity(parentLabel)
-    end
-end
-
-function AddPrimaryPlaceParentsToRefs()
-    local places = GetEntitiesIf(IsPlace)
-    local primaryPlaces = GetEntitiesIf(IsPrimary, places)
-    for key, entity in pairs(primaryPlaces) do
-        while not IsEmpty(entity) do
-            local labels = GetLabels(entity)
-            AddRef(labels, PrimaryRefs)
-            entity = getParent(entity)
-        end
     end
 end
 
@@ -72,7 +60,7 @@ function PlaceToName(place)
         else
             name = GetShortname(place) .. " - " .. name
         end
-        place = getParent(place)
+        place = getLocation(place)
     end
     return name
 end

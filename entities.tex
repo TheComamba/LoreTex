@@ -40,19 +40,19 @@ dofile(RelativePath .. "entities.lua")
 }
 
 \newcommand{\newContinent}[3]{
-	\newEntity{#1}{continent}{#2}{#3}
+	\newEntity{#1}{place}{#2}{#3}
 	\setContinent{#1}
 }
 
 \newcommand{\newRegion}[3]{
-	\newEntity{#1}{region}{#2}{#3}
-	\directlua{SetDescriptor(CurrentEntity(),"parent", CurrentContinent)}
+	\newEntity{#1}{place}{#2}{#3}
+	\directlua{SetDescriptor(CurrentEntity(),"location", CurrentContinent)}
 	\setRegion{#1}
 }
 
 \newcommand{\newCity}[3]{
-	\newEntity{#1}{city}{#2}{#3}
-	\directlua{SetDescriptor(CurrentEntity(),"parent", CurrentRegion)}
+	\newEntity{#1}{place}{#2}{#3}
+	\directlua{SetDescriptor(CurrentEntity(),"location", CurrentRegion)}
 	\setCity{#1}
 }
 

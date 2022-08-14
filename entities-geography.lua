@@ -2,8 +2,8 @@ Append(ProtectedDescriptors, {"parent", "location"})
 CurrentCity = ""
 CurrentRegion = ""
 CurrentContinent = ""
-PlaceTypes = { "continent", "region", "city" }
-PlaceTypeNames = { "Kontinente", "Regionen", "Städte" }
+PlaceTypes = { "place" }
+PlaceTypeNames = { "Orte" }
 local placeDepths = { { PlaceTypes[1], "section" },
     { PlaceTypes[2], "subsection" },
     { PlaceTypes[3], "subsubsection" } }

@@ -1,7 +1,5 @@
 Append(ProtectedDescriptors, {"location"})
-CurrentCity = ""
-CurrentRegion = ""
-CurrentContinent = ""
+DefaultLocation = ""
 PlaceTypes = { "place" }
 PlaceTypeNames = { "Orte" }
 

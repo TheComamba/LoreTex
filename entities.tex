@@ -3,40 +3,47 @@
 dofile(RelativePath .. "entities.lua")
 \end{luacode*}
 
+\newcommand{\setDefaultLocation}[1]{
+	\directlua{DefaultLocation = "#1"}
+}
 
 \newcommand{\setContinent}[1]{
+	\setDefaultLocation{#1}
 	\directlua{
-		CurrentContinent = "#1"
-		CurrentRegion = ""
-		CurrentCity = ""
+		LogError("Use of deprecated function setContinent.")
 	}
 }
 
 \newcommand{\setRegion}[1]{
+	\setDefaultLocation{#1}
 	\directlua{
-		CurrentRegion = "#1"
-		CurrentCity = ""
+		LogError("Use of deprecated function setRegion.")
 	}
 }
 
 \newcommand{\setCity}[1]{
+	\setDefaultLocation{#1}
 	\directlua{
-		CurrentCity = "#1"
+		LogError("Use of deprecated function setCity.")
 	}
 }
 
 \newcommand{\resetCurrentLabels}{
+	\setDefaultLocation{}
 	\directlua{
-		CurrentContinent = ""
-		CurrentRegion = ""
-		CurrentCity = ""
+		LogError("Use of deprecated function resetCurrentLabels.")
 	}
 }
 
 \newcommand{\newEntity}[4]{
 	\directlua{
 		NewEntity("#1","#2", [[\detokenize{#3}]], [[\detokenize{#4}]])
+		SetDescriptor(CurrentEntity(), "location", DefaultLocation)
 	}
+}
+
+\newcommand{\newPlace}[3]{
+	\newEntity{#1}{place}{#2}{#3}
 }
 
 \newcommand{\newContinent}[3]{
@@ -63,13 +70,11 @@ dofile(RelativePath .. "entities.lua")
 \newcommand{\newNPC}[3]{
 	\directlua{
 		NewCharacter("#1", [[\detokenize{#2}]], [[\detokenize{#3}]])
-		SetLocation(CurrentEntity())
 	}
 }
 
 \newcommand{\newGod}[3]{
 	\newEntity{#1}{god}{#2}{#3}
-	\directlua{SetLocation(CurrentEntity())}
 	\setSpecies{gott}
 }
 
@@ -81,27 +86,22 @@ dofile(RelativePath .. "entities.lua")
 
 \newcommand{\newOrganisation}[3]{
 	\newEntity{#1}{organisation}{#2}{#3}
-	\directlua{SetLocation(CurrentEntity())}
 }
 
 \newcommand{\newFamily}[3]{
 	\newEntity{#1}{family}{#2}{#3}
-	\directlua{SetLocation(CurrentEntity())}
 }
 
 \newcommand{\newShip}[3]{
 	\newEntity{#1}{ship}{#2}{#3}
-	\directlua{SetLocation(CurrentEntity())}
 }
 
 \newcommand{\newSpecies}[3]{
 	\newEntity{#1}{species}{#2}{#3}
-	\directlua{SetLocation(CurrentEntity())}
 }
 
 \newcommand{\newLanguage}[3]{
 	\newEntity{#1}{language}{#2}{#3}
-	\directlua{SetLocation(CurrentEntity())}
 }
 
 \newcommand{\newSpell}[2]{
@@ -121,42 +121,34 @@ dofile(RelativePath .. "entities.lua")
 
 \newcommand{\newForest}[3]{
 	\newEntity{#1}{forest}{#2}{#3}
-	\directlua{SetLocation(CurrentEntity())}
 }
 
 \newcommand{\newGrassland}[3]{
 	\newEntity{#1}{grassland}{#2}{#3}
-	\directlua{SetLocation(CurrentEntity())}
 }
 
 \newcommand{\newRange}[3]{
 	\newEntity{#1}{range}{#2}{#3}
-	\directlua{SetLocation(CurrentEntity())}
 }
 
 \newcommand{\newMountain}[3]{
 	\newEntity{#1}{mountain}{#2}{#3}
-	\directlua{SetLocation(CurrentEntity())}
 }
 
 \newcommand{\newRiver}[3]{
 	\newEntity{#1}{river}{#2}{#3}
-	\directlua{SetLocation(CurrentEntity())}
 }
 
 \newcommand{\newGlacier}[3]{
 	\newEntity{#1}{glacier}{#2}{#3}
-	\directlua{SetLocation(CurrentEntity())}
 }
 
 \newcommand{\newLake}[3]{
 	\newEntity{#1}{lake}{#2}{#3}
-	\directlua{SetLocation(CurrentEntity())}
 }
 
 \newcommand{\newItem}[3]{
 	\newEntity{#1}{item}{#2}{#3}
-	\directlua{SetLocation(CurrentEntity())}
 }
 
 \newcommand{\addDescriptor}[3][]{
@@ -202,7 +194,7 @@ dofile(RelativePath .. "entities.lua")
 }
 
 \newcommand{\setLocation}[1]{
-	\directlua{SetLocation(CurrentEntity(), "#1")}
+	\directlua{SetDescriptor(CurrentEntity(), "location", "#1")}
 }
 
 \newcommand{\setAssociation}[2][]{

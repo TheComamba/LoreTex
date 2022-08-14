@@ -28,18 +28,6 @@ function SetSecret(entity)
     SetDescriptor(entity, "isSecret", true)
 end
 
-function SetLocation(entity, location)
-    if location ~= nil then
-        entity["location"] = location
-    elseif CurrentCity ~= "" then
-        entity["location"] = CurrentCity
-    elseif CurrentRegion ~= "" then
-        entity["location"] = CurrentRegion
-    elseif CurrentContinent ~= "" then
-        entity["location"] = CurrentContinent
-    end
-end
-
 function AddAssociation(entity, association, role)
     if entity ~= nil then
         if entity["association"] == nil then

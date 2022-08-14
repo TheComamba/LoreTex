@@ -1,12 +1,9 @@
-Append(ProtectedDescriptors, {"parent", "location"})
+Append(ProtectedDescriptors, {"location"})
 CurrentCity = ""
 CurrentRegion = ""
 CurrentContinent = ""
 PlaceTypes = { "place" }
 PlaceTypeNames = { "Orte" }
-local placeDepths = { { PlaceTypes[1], "section" },
-    { PlaceTypes[2], "subsection" },
-    { PlaceTypes[3], "subsubsection" } }
 
 function IsPlace(entity)
     if entity == nil then
@@ -49,21 +46,6 @@ local function getParent(entity)
     end
 end
 
-local function getChildren(entity)
-    local parentLabel = nil
-    if not IsEmpty(entity) then
-        parentLabel = GetMainLabel(entity)
-    end
-    local places = GetEntitiesIf(IsPlace)
-    local out = {}
-    for key, place in pairs(places) do
-        if place["parent"] == parentLabel then
-            out[#out+1] = place
-        end
-    end
-    return out
-end
-
 function AddPrimaryPlaceParentsToRefs()
     local places = GetEntitiesIf(IsPlace)
     local primaryPlaces = GetEntitiesIf(IsPrimary, places)
@@ -82,37 +64,6 @@ local function compareLocationLabelsByName(label1, label2)
     local name1 = PlaceToName(entity1)
     local name2 = PlaceToName(entity2)
     return name1 < name2
-end
-
-local function createGeographyLayer(currentDepth, parent)
-    local out = {}
-    local children = getChildren(parent)
-    children = GetEntitiesIf(IsPrimary, children)
-    table.sort(children, CompareByName)
-    for key, place in pairs(children) do
-        local docStructure = placeDepths[currentDepth][2]
-        Append(out, TexCmd(docStructure, place["name"], place["shortname"]))
-        Append(out, TexCmd("label", GetMainLabel(place)))
-        Append(out, DescriptorsString(place))
-        Append(out, createGeographyLayer(currentDepth + 1, place))
-    end
-    return out
-end
-
-function CreateGeography()
-    local places = GetEntitiesIf(IsPlace)
-    local primaryPlaces = GetEntitiesIf(IsPrimary, places)
-    local out = PrintEntityChapterBeginning("Orte", primaryPlaces)
-
-    Append(out, TexCmd("section", "Yestaiel, die Welt", "Yestaiel"))
-    Append(out, TexCmd("label", "yestaiel"))
-    Append(out, TexCmd("input", "../shared/geography/yestaiel.tex"))
-
-    Append(out, createGeographyLayer(1))
-
-    local secondaryEntities = GetEntitiesIf(IsSecondary, places)
-    Append(out, PrintOnlyMentionedSection(secondaryEntities))
-    return out
 end
 
 function PlaceToName(place)

@@ -326,12 +326,11 @@ function ScanEntitiesForLabels()
 end
 
 function AddAutomatedDescriptors()
+    ProcessHistory()
     addAllEntitiesTo()
     AddSpeciesAndAgeStringToNPCs()
-    AddLifestageHistoryItemsToNPCs()
     AddAssociationDescriptors()
     AddLifeStagesToSpecies()
-    AddHistoryDescriptors()
 end
 
 function ComplementRefs()

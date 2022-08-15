@@ -2,7 +2,7 @@ local function isAcceptsHistoryFrom(receiver, originator)
     if IsChar(originator) and IsPlace(receiver) then
         return false
     elseif IsAssociation(originator) and IsPlace(receiver) then
-            return false
+        return false
     elseif IsChar(originator) and IsSpecies(receiver) then
         return false
     else
@@ -78,18 +78,9 @@ local function addHistoryToEntities(historyItem)
             SetDescriptor(concernedEntity, HistoryCaption, history)
         end
     end
-    local year = historyItem["year"]
-    for key, label in pairs(historyItem["birthof"]) do
-        local entity = GetEntity(label)
-        SetDescriptor(entity, "born", year)
-    end
-    for key, label in pairs(historyItem["deathof"]) do
-        local entity = GetEntity(label)
-        SetDescriptor(entity, "died", year)
-    end
 end
 
-function AddHistoryDescriptors()
+local function addHistoryDescriptors()
     for key, historyItem in pairs(Histories) do
         setSecrecy(historyItem)
         setShown(historyItem)
@@ -97,4 +88,24 @@ function AddHistoryDescriptors()
             addHistoryToEntities(historyItem)
         end
     end
+end
+
+local function scanHistoryItemsForSpecialEvents()
+    for key1, historyItem in pairs(Histories) do
+        local year = historyItem["year"]
+        for key2, label in pairs(historyItem["birthof"]) do
+            local entity = GetEntity(label)
+            SetDescriptor(entity, "born", year)
+        end
+        for key2, label in pairs(historyItem["deathof"]) do
+            local entity = GetEntity(label)
+            SetDescriptor(entity, "died", year)
+        end
+    end
+end
+
+function ProcessHistory()
+    scanHistoryItemsForSpecialEvents()
+    AddLifestageHistoryItemsForNPCs()
+    addHistoryDescriptors()
 end

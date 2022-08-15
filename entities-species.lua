@@ -169,7 +169,7 @@ local function addLifestageHistoryItems(entity)
 	end
 end
 
-function AddLifestageHistoryItemsToNPCs()
+function AddLifestageHistoryItemsForNPCs()
 	local npcs = GetEntitiesIf(IsChar)
 	for key, char in pairs(npcs) do
 		addLifestageHistoryItems(char)

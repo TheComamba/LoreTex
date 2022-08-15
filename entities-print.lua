@@ -1,8 +1,8 @@
 local function extractEntitiesAtLocation(list, location)
     local out = {}
     for key, entity in pairs(list) do
-        if entity["location"] == location then
-            out[#out+1] = entity
+        if entity["location"] == location or (IsEmpty(entity["location"]) and IsEmpty(location)) then
+            out[#out + 1] = entity
         end
     end
     return out

@@ -36,11 +36,14 @@ function IsLocationUnknown(entity)
 end
 
 local function getLocation(entity)
-    local parentLabel = entity["location"]
-    if IsEmpty(parentLabel) then
+    local locationLabel = entity["location"]
+    if IsEmpty(locationLabel) then
+        return {}
+    elseif IsIn(locationLabel, GetLabels(entity)) then
+        LogError(locationLabel .. " is listed as location of " .. GetMainLabel(entity) .. " itself!")
         return {}
     else
-        return GetEntity(parentLabel)
+        return GetEntity(locationLabel)
     end
 end
 

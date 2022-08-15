@@ -68,7 +68,11 @@ local function getHistory(entity)
 end
 
 local function addHistoryToEntities(historyItem)
-    local originator = GetEntity(historyItem["originator"])
+    local originator = {}
+    local originatorLabel = historyItem["originator"]
+    if not IsEmpty(originatorLabel) then
+        originator = GetEntity(originatorLabel)
+    end
     local concerns = historyItem["concerns"]
     for key, label in pairs(concerns) do
         local concernedEntity = GetEntity(label)

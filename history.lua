@@ -20,12 +20,16 @@ end
 
 local function newHistoryItem(originator, year, event, day, isSecret)
 	local item = {}
-	local originatorLabel = GetMainLabel(originator)
-	if originatorLabel == nil then
-		LogError("This originator has no label: " .. DebugPrint(originator))
-		return {}
+	local concerns = {}
+	if not IsEmpty(originator) then
+		local originatorLabel = GetMainLabel(originator)
+		if IsEmpty(originatorLabel) then
+			LogError("This originator has no label: " .. DebugPrint(originator))
+			return {}
+		end
+		item["originator"] = originatorLabel
+		Append(concerns, originatorLabel)
 	end
-	item["originator"] = originatorLabel
 	item["year"] = tonumber(year)
 	if item["year"] == nil then
 		LogError("Could not convert year \"" .. year .. "\" to number.")
@@ -37,14 +41,10 @@ local function newHistoryItem(originator, year, event, day, isSecret)
 		return {}
 	end
 	item["event"] = event
-	local concerns = {}
 	Append(concerns, ScanForCmd(event, "concerns"))
 	Append(concerns, ScanForCmd(event, "myref"))
 	Append(concerns, ScanForCmd(event, "deathof"))
 	Append(concerns, ScanForCmd(event, "birthof"))
-	if not IsIn(originatorLabel, concerns) then
-		concerns[#concerns + 1] = originatorLabel
-	end
 	item["concerns"] = concerns
 	if isSecret ~= nil then
 		item["isSecret"] = isSecret
@@ -55,7 +55,7 @@ local function newHistoryItem(originator, year, event, day, isSecret)
 end
 
 function AddEvent(originator, year, event, day, isSecret)
-	if type(originator) ~= "table" then
+	if originator ~= nil and type(originator) ~= "table" then
 		LogError("Called with " .. DebugPrint(originator))
 		return
 	end

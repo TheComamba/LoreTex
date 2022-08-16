@@ -1,6 +1,10 @@
 RelativePath = ""
 local errorMessages = {}
 
+function Round(num)
+	return math.floor(num + 0.5)
+end
+
 function LogError(error)
 	if type(error) == "table" then
 		error = table.concat(error)
@@ -48,7 +52,7 @@ end
 
 function RoundedNumString(num, decimals)
 	local decimalFactor = 10 ^ decimals
-	local rounded = math.round(num * decimalFactor) / decimalFactor
+	local rounded = Round(num * decimalFactor) / decimalFactor
 	if decimals < 0 then
 		decimals = 0
 	end

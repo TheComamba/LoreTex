@@ -159,7 +159,7 @@ local function addLifestageHistoryItems(entity)
 			local lifestage = lifestagesAndAges[i][1]
 			local humanAge = lifestagesAndAges[i][2]
 			local realAge = ageToYears(humanAge, factor, exponent)
-			realAge =math.round(realAge)
+			realAge = Round(realAge)
 			local year = birthyear + realAge
 			if deathyear == nil or year <= deathyear then
 				local event = TexCmd("nameref", label) .. " ist " .. lifestage .. "."

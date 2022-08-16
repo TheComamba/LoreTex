@@ -1,5 +1,5 @@
 \begin{luacode*}
-    dofile(RelativePath .. "refs.lua")
+    dofile(RelativePath .. "/refs.lua")
 \end{luacode*}
 
 \newcommand{\myref}[1]{\directlua{AddRefPrimaryOrSecondary("#1")}\nameref{#1}}

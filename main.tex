@@ -1,12 +1,14 @@
 \usepackage{luacode}
 
-\begin{luacode*}
-RelativePath = "../shared/luatex-for-dnd/"
-dofile(RelativePath .. "common.lua")
-\end{luacode*}
+\newcommand{\loadLuacode}[1]{
+    \directlua{
+        dofile([[#1]] .. "/common.lua")
+        RelativePath = [[#1]]
+    }
+    \input{#1/refs.tex}
+    \input{#1/ft.tex}
+    \input{#1/dates-and-years.tex}
+    \input{#1/history.tex}
+    \input{#1/entities.tex}
+}
 
-\input{../shared/luatex-for-dnd/refs.tex}
-\input{../shared/luatex-for-dnd/ft.tex}
-\input{../shared/luatex-for-dnd/dates-and-years.tex}
-\input{../shared/luatex-for-dnd/history.tex}
-\input{../shared/luatex-for-dnd/entities.tex}

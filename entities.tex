@@ -249,26 +249,10 @@ dofile(RelativePath .. "/entities.lua")
 }
 
 \newcommand{\automatedChapters}{
-	\input{../shared/geography/all.tex}
-	\input{../shared/npcs/all.tex}
-	\input{../shared/associations/all.tex}
-	\input{../shared/species/all.tex}
-	\input{../shared/languages/all.tex}
-	\input{../shared/spells/all.tex}
-	\input{../shared/landmarks/all.tex}
-	\input{../shared/items/all.tex}
 	\directlua{AutomatedChapters()}
 }
 
 \newcommand{\automatedChaptersFUCKINGEVERYTHING}{
-	\input{../shared/geography/all.tex}
-	\input{../shared/npcs/all.tex}
-	\input{../shared/associations/all.tex}
-	\input{../shared/species/all.tex}
-	\input{../shared/languages/all.tex}
-	\input{../shared/spells/all.tex}
-	\input{../shared/landmarks/all.tex}
-	\input{../shared/items/all.tex}
 	\directlua{AddAllEntitiesToPrimaryRefs()}
 	\directlua{AutomatedChapters()}
 }

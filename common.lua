@@ -206,3 +206,19 @@ function Append(dest, src)
 		table.insert(dest, src)
 	end
 end
+
+function Replace(strOld, strNew, content)
+    if type(content) == "string" then
+        return string.gsub(content, strOld, strNew)
+    elseif type(content) == "table" then
+        for key, elem in pairs(content) do
+            content[key] = Replace(strOld, strNew, elem)
+        end
+        return content
+    elseif type(content) == "boolean" or type(content) == "number" then
+        return content
+    else
+        LogError("Tried to replace myref in an object of type " .. type(content) .. "!")
+        return content
+    end
+end

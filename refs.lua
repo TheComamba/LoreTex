@@ -96,22 +96,6 @@ function ScanContentForSecondaryRefs(content)
     end
 end
 
-function ReplaceMyrefWithNameref(content)
-    if type(content) == "string" then
-        return string.gsub(content, [[\myref]], [[\nameref]])
-    elseif type(content) == "table" then
-        for key, elem in pairs(content) do
-            content[key] = ReplaceMyrefWithNameref(elem)
-        end
-        return content
-    elseif type(content) == "boolean" or type(content) == "number" then
-        return content
-    else
-        LogError("Tried to replace myref in an object of type " .. type(content) .. "!")
-        return content
-    end
-end
-
 function AddAllEntitiesToPrimaryRefs()
     for key, entity in pairs(Entities) do
         AddRef(GetLabels(entity), PrimaryRefs)

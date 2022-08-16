@@ -65,14 +65,14 @@ end
 
 function GetNumberField(entity, key, default)
     local out = entity[key]
-	if out == nil then
-		out = default
-	elseif tonumber(out) == nil then
-		LogError("Could not convert to number: " .. DebugPrint(out))
-		out = default
-	else
-		out = tonumber(out)
-	end
+    if out == nil then
+        out = default
+    elseif tonumber(out) == nil then
+        LogError("Could not convert to number: " .. DebugPrint(out))
+        out = default
+    else
+        out = tonumber(out)
+    end
     return out
 end
 
@@ -337,7 +337,7 @@ function ComplementRefs()
     AddSpeciesToPrimaryRefs()
     local primaryEntities = GetEntitiesIf(IsPrimary, Entities)
     ScanContentForSecondaryRefs(primaryEntities)
-    ReplaceMyrefWithNameref(primaryEntities)
+    Replace([[\myref]], [[\nameref]], primaryEntities)
     checkAllRefs()
 end
 

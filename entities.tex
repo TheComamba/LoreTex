@@ -7,27 +7,6 @@ dofile(RelativePath .. "/entities.lua")
 	\directlua{DefaultLocation = "#1"}
 }
 
-\newcommand{\setContinent}[1]{
-	\setDefaultLocation{#1}
-	\directlua{
-		LogError("Use of deprecated function setContinent.")
-	}
-}
-
-\newcommand{\setRegion}[1]{
-	\setDefaultLocation{#1}
-	\directlua{
-		LogError("Use of deprecated function setRegion.")
-	}
-}
-
-\newcommand{\setCity}[1]{
-	\setDefaultLocation{#1}
-	\directlua{
-		LogError("Use of deprecated function setCity.")
-	}
-}
-
 \newcommand{\resetCurrentLabels}{
 	\setDefaultLocation{}
 	\directlua{
@@ -48,19 +27,14 @@ dofile(RelativePath .. "/entities.lua")
 
 \newcommand{\newContinent}[3]{
 	\newEntity{#1}{place}{#2}{#3}
-	\setContinent{#1}
 }
 
 \newcommand{\newRegion}[3]{
 	\newEntity{#1}{place}{#2}{#3}
-	\directlua{SetDescriptor(CurrentEntity(),"location", CurrentContinent)}
-	\setRegion{#1}
 }
 
 \newcommand{\newCity}[3]{
 	\newEntity{#1}{place}{#2}{#3}
-	\directlua{SetDescriptor(CurrentEntity(),"location", CurrentRegion)}
-	\setCity{#1}
 }
 
 \newcommand{\declarePC}[1]{

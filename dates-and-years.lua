@@ -12,6 +12,9 @@ function ConvertYearToVin(year, fmt)
         return year - 1566
     elseif fmt == YearFmtNar then
         return year - 5077
+    else
+        LogError("Called with fmt " .. DebugPrint(fmt))
+        return 0
     end
 end
 
@@ -22,6 +25,9 @@ function ConvertYearFromVin(year, fmt)
         return year + 1566
     elseif fmt == YearFmtNar then
         return year + 5077
+    else
+        LogError("Called with fmt " .. DebugPrint(fmt))
+        return 0
     end
 end
 
@@ -80,7 +86,8 @@ ElvenMonthsAndFirstDays = {
     { [[S\'ul]], 253 },
     { [[Las]], 281 },
     { [[Nqu]], 309 },
-    { [[H\'is]], 337 } }
+    { [[H\'is]], 337 }
+}
 
 RealworldMonthsAndFirstDays = {
     { [[Jan]], 11 },
@@ -94,7 +101,8 @@ RealworldMonthsAndFirstDays = {
     { [[Sep]], 254 },
     { [[Okt]], 284 },
     { [[Nov]], 315 },
-    { [[Dez]], 345 } }
+    { [[Dez]], 345 }
+}
 
 DefaultDateFmt = { ElvenMonthsAndFirstDays, RealworldMonthsAndFirstDays }
 DateFmt = DefaultDateFmt

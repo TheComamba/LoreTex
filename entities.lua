@@ -225,39 +225,48 @@ local function getTargetCondition(keyword)
     end
 end
 
+local function entityQualifiersString(srcEntity, targetEntity, role)
+    local content = {}
+    if IsSecret(srcEntity) then
+        Append(content, "Geheim")
+    end
+    if not IsEmpty(role) then
+        Append(content, role)
+    end
+    local birthyearstr = srcEntity["born"]
+    local birthyear = tonumber(birthyearstr)
+    if not IsEmpty(birthyear) and birthyear <= CurrentYearVin then
+        birthyear = ConvertYearFromVin(birthyear, YearFmt)
+        Append(content, TexCmd("textborn") .. birthyear)
+    end
+    local deathyearstr = srcEntity["died"]
+    local deathyear = tonumber(deathyearstr)
+    if not IsEmpty(deathyear) and deathyear <= CurrentYearVin then
+        deathyear = ConvertYearFromVin(deathyear, YearFmt)
+        Append(content, TexCmd("textdied") .. deathyear)
+    end
+    local location = srcEntity["location"]
+    local targetLocation = targetEntity["location"]
+    if not IsPlace(targetEntity) and not IsEmpty(location) and location ~= targetLocation then
+        Append(content, "in " .. TexCmd("myref ", location))
+    end
+    if not IsEmpty(content) then
+        return "(" .. table.concat(content, ", ") .. ")"
+    else
+        return ""
+    end
+end
+
 local function addSingleEntity(srcEntity, targetEntity, entityType, role)
     local name = TypeToName(entityType)
     if targetEntity[name] == nil then
         targetEntity[name] = {}
     end
     local content = {}
-    if IsSecret(srcEntity) then
-        Append(content, "(Geheim) ")
-    end
     local srcLabel = GetMainLabel(srcEntity)
     Append(content, TexCmd("myref ", srcLabel))
-    if IsDead(srcEntity) then
-        Append(content, " " .. TexCmd("textdied"))
-    end
-    local location = srcEntity["location"]
-    local targetLocation = targetEntity["location"]
-    local locationRef = ""
-    if not IsPlace(targetEntity) and not IsEmpty(location) and location ~= targetLocation then
-        locationRef = "in " .. TexCmd("myref ", location)
-    end
-    if not IsEmpty(role) or not IsEmpty(locationRef) then
-        Append(content, " (")
-        if not IsEmpty(role) then
-            Append(content, role)
-        end
-        if not IsEmpty(role) and not IsEmpty(locationRef) then
-            Append(content, ", ")
-        end
-        if not IsEmpty(locationRef) then
-            Append(content, locationRef)
-        end
-        Append(content, ")")
-    end
+    Append(content, " ")
+    Append(content, entityQualifiersString(srcEntity, targetEntity, role))
     targetEntity[name][#targetEntity[name] + 1] = table.concat(content)
 end
 

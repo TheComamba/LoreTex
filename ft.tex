@@ -1,5 +1,6 @@
 \begin{luacode}
 	local ftInM = 0.3048
+	local inInCm = 2.54
 	local MiInKM = 1.609
 	local lbInKg = 0.4536
 	local gallonInLiter = 3.785
@@ -7,7 +8,7 @@
 	function PrintFtToM(valInFt)
 		local str = RoundedNumString(valInFt*ftInM,1)
 		str = str.." m ("
-		str = str..RoundedNumString(valInFt,1)
+		str = str..RoundedNumString(valInFt,0)
 		str = str.." Fuß)"
 		tex.print(str)
 	end
@@ -15,8 +16,16 @@
 	function PrintMToFt(valInM)
 		local str = RoundedNumString(valInM,1)
 		str = str.." m ("
-		str = str..RoundedNumString(valInM/ftInM,1)
+		str = str..RoundedNumString(valInM/ftInM,0)
 		str = str.." Fuß)"
+		tex.print(str)
+	end
+
+	function PrintInToCM(valInIn)
+		local str = RoundedNumString(valInIn*inInCm,0)
+		str = str.." cm ("
+		str = str..RoundedNumString(valInIn,1)
+		str = str.." inch)"
 		tex.print(str)
 	end
 
@@ -51,6 +60,10 @@
 
 \newcommand{\metre}[1]{
 	\directlua{PrintMToFt(#1)}
+}
+
+\newcommand{\inch}[1]{
+	\directlua{PrintInToCM(#1)}
 }
 
 \newcommand{\mile}[1]{

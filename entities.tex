@@ -25,18 +25,6 @@ dofile(RelativePath .. "/entities.lua")
 	\newEntity{#1}{place}{#2}{#3}
 }
 
-\newcommand{\newContinent}[3]{
-	\newEntity{#1}{place}{#2}{#3}
-}
-
-\newcommand{\newRegion}[3]{
-	\newEntity{#1}{place}{#2}{#3}
-}
-
-\newcommand{\newCity}[3]{
-	\newEntity{#1}{place}{#2}{#3}
-}
-
 \newcommand{\declarePC}[1]{
 	\directlua{DeclarePC("#1")}
 }

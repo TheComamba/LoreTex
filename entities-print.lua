@@ -79,10 +79,11 @@ local function printEntities(sectionname, entitiesList)
     return out
 end
 
-function PrintOnlyMentionedSection(secondaryEntities)
+function PrintOnlyMentionedChapter()
     local out = {}
+    local secondaryEntities = GetEntitiesIf(IsSecondary)
     if #secondaryEntities > 0 then
-        Append(out, TexCmd("section*", "Nur erwähnt"))
+        Append(out, TexCmd("chapter", "Nur erwähnt"))
         table.sort(secondaryEntities, CompareByName)
         for index, entity in pairs(secondaryEntities) do
             Append(out, TexCmd("paragraph", GetShortname(entity)))
@@ -134,10 +135,8 @@ end
 
 function PrintEntityChapter(name, entitiesList, types)
     local primaryEntities = GetEntitiesIf(IsPrimary, entitiesList)
-    local secondaryEntities = GetEntitiesIf(IsSecondary, entitiesList)
-
     local out = {}
-    if IsEmpty(primaryEntities) and IsEmpty(secondaryEntities) then
+    if IsEmpty(primaryEntities) then
         return out
     end
 
@@ -149,6 +148,5 @@ function PrintEntityChapter(name, entitiesList, types)
             Append(out, printEntityChapterSortedByLocation(entitiesOfType))
         end
     end
-    Append(out, PrintOnlyMentionedSection(secondaryEntities))
     return out
 end

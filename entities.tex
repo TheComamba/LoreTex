@@ -72,12 +72,12 @@ dofile(RelativePath .. "/entities.lua")
 
 \newcommand{\spellProperties}[6]{
 	\directlua{
-		SetDescriptor(CurrentEntity(), "Properties", "#1","Level:")
-		SetDescriptor(CurrentEntity(), "Properties", "#2","School:")
-		SetDescriptor(CurrentEntity(), "Properties", "#3","Casting-time:")
-		SetDescriptor(CurrentEntity(), "Properties", "#4","Range:")
-		SetDescriptor(CurrentEntity(), "Properties", "#5","Components:")
-		SetDescriptor(CurrentEntity(), "Properties", "#6","Duration:")
+		SetDescriptor(CurrentEntity(), "Properties", [[\detokenize{#1}]],"Level:")
+		SetDescriptor(CurrentEntity(), "Properties", [[\detokenize{#2}]],"School:")
+		SetDescriptor(CurrentEntity(), "Properties", [[\detokenize{#3}]],"Casting-time:")
+		SetDescriptor(CurrentEntity(), "Properties", [[\detokenize{#4}]],"Range:")
+		SetDescriptor(CurrentEntity(), "Properties", [[\detokenize{#5}]],"Components:")
+		SetDescriptor(CurrentEntity(), "Properties", [[\detokenize{#6}]],"Duration:")
 	}
 }
 

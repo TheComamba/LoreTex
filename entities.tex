@@ -71,8 +71,8 @@ dofile(RelativePath .. "/entities.lua")
 }
 
 \newcommand{\spellProperties}[6]{
+	\setAssociation{level-#1-spells}
 	\directlua{
-		SetDescriptor(CurrentEntity(), "Properties", [[\detokenize{#1}]],"Level:")
 		SetDescriptor(CurrentEntity(), "Properties", [[\detokenize{#2}]],"School:")
 		SetDescriptor(CurrentEntity(), "Properties", [[\detokenize{#3}]],"Casting-time:")
 		SetDescriptor(CurrentEntity(), "Properties", [[\detokenize{#4}]],"Range:")

@@ -221,14 +221,6 @@ function TypeToName(type)
     return typeToNameMap()[type]
 end
 
-local function getTargetCondition(keyword)
-    if keyword == "location" then
-        return IsPlace
-    elseif keyword == "association" then
-        return IsAssociation
-    end
-end
-
 local function entityQualifiersString(srcEntity, targetEntity, role)
     local content = {}
     if IsSecret(srcEntity) then
@@ -292,19 +284,11 @@ local function addEntitiesTo(entityType, keyword)
                     targetLabel = target[1]
                     role = target[2]
                 end
-                local targetCondition = getTargetCondition(keyword)
                 local targetEntity = GetEntity(targetLabel)
                 if targetEntity == nil then
-                    local err = { "Entity \"" }
+                    local err = { "Could not find Entity \"" }
                     Append(err, targetLabel)
-                    Append(err, "\" not found, although it is listed as ")
-                    Append(err, keyword)
-                    Append(err, " of ")
-                    Append(err, label)
-                    Append(err, ".")
                     LogError(err)
-                elseif not targetCondition(targetEntity) then
-                    LogError("Entity \"" .. targetLabel .. "\" is not a " .. keyword .. ".")
                 else
                     addSingleEntity(srcEntity, targetEntity, entityType, role)
                 end

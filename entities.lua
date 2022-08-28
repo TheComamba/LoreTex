@@ -206,6 +206,10 @@ local function typeToNameMap()
     Append(allTypeNames, LandmarkTypeNames)
     Append(allTypes, SpeciesTypes)
     Append(allTypeNames, SpeciesTypeNames)
+    Append(allTypes, SpellTypes)
+    Append(allTypeNames, SpellTypeNames)
+    Append(allTypes, ClassTypes)
+    Append(allTypeNames, ClassTypeNames)
     local out = {}
     for i, key in pairs(allTypes) do
         out[key] = allTypeNames[i]

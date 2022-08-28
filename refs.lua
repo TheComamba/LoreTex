@@ -37,18 +37,23 @@ function AddRefPrimaryOrSecondary(label)
 end
 
 function NamerefString(label)
-    local str = TexCmd("nameref", label)
-    str = str .. " (Ref. "
-    str = str .. TexCmd("speech", label)
-    str = str .. ")"
-    return str
+    return TexCmd("nameref", label)
+end
+
+local function namerefDebugString(label)
+    local out = {}
+    Append(out, TexCmd("nameref", label))
+    Append(out, [[\\ (Ref. ]])
+    Append(out, TexCmd("speech", label))
+    Append(out, ")")
+    return table.concat(out)
 end
 
 function ListAllRefs()
     tex.print(TexCmd("paragraph", "primaryRefs"))
-    tex.print(ListAll(PrimaryRefs, NamerefString))
+    tex.print(ListAll(PrimaryRefs, namerefDebugString))
     tex.print(TexCmd("paragraph", "secondaryRefs"))
-    tex.print(ListAll(SecondaryRefs, NamerefString))
+    tex.print(ListAll(SecondaryRefs, namerefDebugString))
 end
 
 local function scanStringFor(str, cmd)

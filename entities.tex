@@ -66,13 +66,27 @@ dofile(RelativePath .. "/entities.lua")
 	\newEntity{#1}{language}{#2}{#3}
 }
 
+\newcommand{\newClass}[2]{
+	\newEntity{#1}{class}{}{#2}
+}
+
+\newcommand{\newSubclass}[2]{
+	\newEntity{#1}{subclass}{}{#2}
+}
+
 \newcommand{\newSpell}[2]{
 	\newEntity{#1}{spell}{}{#2}
 }
 
+\newcommand{\newSpellproperty}[2]{
+	\newEntity{#1}{spell-property}{}{#2}
+}
+
 \newcommand{\spellProperties}[6]{
 	\setAssociation{level-#1-spells}
+	\setAssociation{#2-spells}
 	\directlua{
+		SetDescriptor(CurrentEntity(), "Properties", [[\detokenize{#1}]],"Level:")
 		SetDescriptor(CurrentEntity(), "Properties", [[\detokenize{#2}]],"School:")
 		SetDescriptor(CurrentEntity(), "Properties", [[\detokenize{#3}]],"Casting-time:")
 		SetDescriptor(CurrentEntity(), "Properties", [[\detokenize{#4}]],"Range:")

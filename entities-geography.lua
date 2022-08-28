@@ -1,4 +1,4 @@
-Append(ProtectedDescriptors, {"location"})
+Append(ProtectedDescriptors, { "location" })
 DefaultLocation = ""
 PlaceTypes = { "place" }
 PlaceTypeNames = { "Orte" }
@@ -17,17 +17,18 @@ function IsLocationUnknown(entity)
         return false
     else
         local location = GetEntity(locationLabel)
-        local err = "Location\""
-        err = err .. locationLabel
-        err = err .. "\" of entity \""
-        err = err .. entity["name"]
+        local err = {}
+        Append(err, "Location\"")
+        Append(err, locationLabel)
+        Append(err, "\" of entity \"")
+        Append(err, entity["name"])
         if IsEmpty(location) then
-            err = err .. "\" not found."
-            LogError(err)
+            Append(err, "\" not found.")
+            LogError(table.concat(err))
             return true
         elseif not IsPlace(location) then
-            err = err .. "\" is not a place."
-            LogError(err)
+            Append(err, "\" is not a place.")
+            LogError(table.concat(err))
             return true
         else
             return false

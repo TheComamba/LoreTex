@@ -12,13 +12,14 @@ function SetDescriptor(entity, descriptor, description, subdescriptor)
             entity[descriptor] = {}
         end
         if type(entity[descriptor]) ~= "table" then
-            local error = "Trying to add subdescriptor \""
-            error = error .. subdescriptor
-            error = error .. "\" to descriptor \""
-            error = error .. descriptor
-            error = error .. "\" of an entity which already contains a string content: "
-            error = error .. DebugPrint(entity)
-            LogError(error)
+            local error = {}
+            Append(error, "Trying to add subdescriptor \"")
+            Append(error, subdescriptor)
+            Append(error, "\" to descriptor \"")
+            Append(error, descriptor)
+            Append(error, "\" of an entity which already contains a string content: ")
+            Append(error, DebugPrint(entity))
+            LogError(table.concat(error))
         end
         entity[descriptor][subdescriptor] = description
     end

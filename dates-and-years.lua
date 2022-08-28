@@ -43,15 +43,20 @@ function AnnoString(yearIn, fmt)
     end
     year = ConvertYearFromVin(year, fmt)
 
-    local str = tostring(year) .. " " .. fmt
+    local out = {}
+    Append(out, tostring(year))
+    Append(out, " ")
+    Append(out, fmt)
     if diff == 0 then
-        str = str .. " (dieses Jahr)"
+        Append(out, " (dieses Jahr)")
     elseif diff == 1 then
-        str = str .. " (letztes Jahr)"
+        Append(out, " (letztes Jahr)")
     else
-        str = str .. " (vor " .. diff .. " Jahren)"
+        Append(out, " (vor ")
+        Append(out, diff)
+        Append(out, " Jahren)")
     end
-    return str
+    return table.concat(out)
 end
 
 function AnnoVin(year)
@@ -64,11 +69,6 @@ end
 
 function AnnoNar(year)
     tex.print(AnnoString(ConvertYearToVin(year, YearFmtNar)))
-end
-
-function AnnoAll(year)
-    LogError("Replace the deprecated tex command annoAll with annoVin.")
-    tex.print(year .. " Vin / " .. (year + 1566) .. [[ \'Et / ]] .. (year + 5077) .. " NM")
 end
 
 DaysPerYear = 364
@@ -136,10 +136,14 @@ function Date(day, fmt)
     if fmt == nil then
         fmt = DateFmt
     end
-    local str = "" .. day
+    local out = {}
+    Append(out, day)
     for key, monthsAndFirstDays in pairs(fmt) do
         local month, dayOfMonth = MonthAndDay(day, monthsAndFirstDays)
-        str = str .. [[ / ]] .. dayOfMonth .. [[.]] .. month
+        Append(out, [[ / ]])
+        Append(out, dayOfMonth)
+        Append(out, [[.]])
+        Append(out, month)
     end
-    return str
+    return table.concat(out)
 end

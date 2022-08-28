@@ -11,7 +11,7 @@ function LogError(error)
 	end
 	error = tostring(error)
 	if error == nil or type(error) ~= "string" then
-		LogError("Something went seriously wrong...")
+		LogError("Something went seriously wrong!")
 		return
 	end
 	local caller = debug.getinfo(2).name
@@ -44,7 +44,9 @@ function PrintErrors()
 	local out = {}
 	if not IsEmpty(errorMessages) then
 		Append(out, TexCmd("chapter", "Error Messages"))
-		Append(out, "DnDTex encountered " .. #errorMessages .. " errors:")
+		Append(out, "DnDTex encountered ")
+		Append(out, #errorMessages)
+		Append(out, " errors:")
 		Append(out, ListAll(cleanedErrors()))
 	end
 	return out
@@ -67,24 +69,28 @@ function TexCmd(cmd, args, options)
 	if type(options) ~= "table" then
 		options = { options }
 	end
-	local out = ""
-	out = out .. [[\]]
-	out = out .. cmd
+	local out = {}
+	Append(out, [[\]])
+	Append(out, cmd)
 
 	if options ~= nil then
 		for key, option in pairs(options) do
-			out = out .. [=[[]=] .. option .. [=[]]=]
+			Append(out, [=[[]=])
+			Append(out, option)
+			Append(out, [=[]]=])
 		end
 	end
 
 	if args ~= nil and #args > 0 then
 		for key, arg in pairs(args) do
-			out = out .. [[{]] .. arg .. [[}]]
+			Append(out, [[{]])
+			Append(out, arg)
+			Append(out, [[}]])
 		end
 	else
-		out = out .. [[{}]]
+		Append(out, [[{}]])
 	end
-	return out
+	return table.concat(out)
 end
 
 function IsIn(elem, list)
@@ -141,13 +147,15 @@ function ListAll(list, processor, additionalProcessorArg)
 		return ""
 	end
 
-	local str = TexCmd("begin", "itemize")
+	local out = {}
+	Append(out, TexCmd("begin", "itemize"))
 	for key, content in pairs(processedList) do
-		str = str .. TexCmd("item") .. " "
-		str = str .. content
+		Append(out, TexCmd("item"))
+		Append(out, " ")
+		Append(out, content)
 	end
-	str = str .. TexCmd("end", "itemize")
-	return str
+	Append(out, TexCmd("end", "itemize"))
+	return table.concat(out)
 end
 
 --TODO: Do I still need this function?

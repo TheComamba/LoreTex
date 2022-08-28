@@ -27,14 +27,15 @@ local function descritptorMapString(map)
         keys[#keys + 1] = key
     end
     table.sort(keys)
-    local str = ""
+    local out = {}
     for index, key in pairs(keys) do
         local content = map[key]
         if not IsEmpty(content) then
-            str = str .. TexCmd("subparagraph", key) .. content
+            Append(out, TexCmd("subparagraph", key))
+            Append(out, content)
         end
     end
-    return str
+    return table.concat(out)
 end
 
 function DescriptorsString(entity)

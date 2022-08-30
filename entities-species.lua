@@ -162,7 +162,7 @@ local function addLifestageHistoryItems(entity)
 			realAge = Round(realAge)
 			local year = birthyear + realAge
 			if deathyear == nil or year <= deathyear then
-				local event = TexCmd("nameref", label) .. " ist " .. lifestage .. "."
+				local event = TexCmd("itef", label) .. " ist " .. lifestage .. "."
 				AddEvent(entity, year, event, 0, false)
 			end
 		end

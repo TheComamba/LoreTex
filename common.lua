@@ -149,6 +149,7 @@ function ListAll(list, processor, additionalProcessorArg)
 
 	local out = {}
 	Append(out, TexCmd("begin", "itemize"))
+	Append(out, TexCmd("footnotesize"))
 	for key, content in pairs(processedList) do
 		Append(out, TexCmd("item"))
 		Append(out, " ")
@@ -164,7 +165,7 @@ function ListAllFromMap(listOfThings)
 	for label, elem in pairs(listOfThings) do
 		allLabels[#allLabels + 1] = label
 	end
-	return ListAll(allLabels, NamerefString)
+	return ListAll(allLabels, ItrefString)
 end
 
 function IsEmpty(obj)

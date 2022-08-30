@@ -44,6 +44,8 @@ local function newHistoryItem(originator, year, event, day, isSecret)
 	Append(concerns, ScanForCmd(event, "concerns"))
 	Append(concerns, ScanForCmd(event, "myref"))
 	Append(concerns, ScanForCmd(event, "nameref"))
+	Append(concerns, ScanForCmd(event, "itref"))
+	Append(concerns, ScanForCmd(event, "ref"))
 	Append(concerns, ScanForCmd(event, "deathof"))
 	Append(concerns, ScanForCmd(event, "birthof"))
 	item["concerns"] = concerns

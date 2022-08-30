@@ -334,7 +334,7 @@ function ComplementRefs()
     AddSpeciesToPrimaryRefs()
     local primaryEntities = GetEntitiesIf(IsPrimary, Entities)
     ScanContentForSecondaryRefs(primaryEntities)
-    Replace([[\myref]], [[\nameref]], primaryEntities)
+    Replace([[\myref]], [[\itref]], primaryEntities)
     checkAllRefs()
 end
 

@@ -110,7 +110,7 @@ function PrintEntityChapterBeginning(name, primaryEntities)
     Append(out, TexCmd("chapter", name))
     if not IsEmpty(primaryEntities) then
         Append(out, TexCmd("section*", "Alle " .. name))
-        Append(out, ListAll(getAllLabels(primaryEntities), NamerefString))
+        Append(out, ListAll(getAllLabels(primaryEntities), ItrefString))
     end
     return out
 end

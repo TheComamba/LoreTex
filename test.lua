@@ -9,26 +9,51 @@ local function resetEnvironment()
     DefaultLocation = ""
 end
 
-local function areEqual(obj1, obj2)
-    if type(obj1) ~= type(obj2) then
+local function areEqual(obj1, obj2, elementNum, currentObj1, currentObj2)
+    if obj1 == nil or obj2 == nil then
+        if obj1 == nil and obj2 == nil then
+            return true
+        else
+            return false
+        end
+    elseif type(obj1) ~= type(obj2) then
         return false
     elseif type(obj1) == "table" then
         if #obj1 ~= #obj2 then
+            elementNum[1] = -1
+            currentObj1[1] = #obj1
+            currentObj2[1] = #obj2
             return false
         end
         for i = 1, #obj1 do
-            if not areEqual(obj1[i], obj2[i]) then
+            if not areEqual(obj1[i], obj2[i], elementNum, currentObj1, currentObj2) then
+                elementNum[1] = i
+                currentObj1[1] = obj1[i]
+                currentObj2[1] = obj2[i]
                 return false
             end
         end
         return true
     else
+        obj1 = Replace(" ", "", obj1)
+        obj2 = Replace(" ", "", obj2)
         return obj1 == obj2
     end
 end
 
+local function printAllChars(str)
+    local out = {}
+    for i = 1, #str do
+        Append(out, "'" .. str:sub(i, i) .. "'")
+    end
+    return out
+end
+
 function Assert(caller, expected, out)
-    if areEqual(expected, out) then
+    local failedIndex = { 0 }
+    local failedItem1 = { "" }
+    local failedItem2 = { "" }
+    if areEqual(expected, out, failedIndex, failedItem1, failedItem2) then
         numSucceeded = numSucceeded + 1
     else
         local message = {}
@@ -47,6 +72,16 @@ function Assert(caller, expected, out)
             Append(message, "Received:")
             Append(message, TexCmd("begin", "verbatim"))
             Append(message, out)
+            Append(message, TexCmd("end", "verbatim"))
+            Append(message, "At Element " .. failedIndex[1] .. ":")
+            Append(message, TexCmd("begin", "verbatim"))
+            Append(message, failedItem1[1])
+            Append(message, "!=")
+            Append(message, failedItem2[1])
+            Append(message, "---")
+            Append(message, printAllChars(failedItem1[1]))
+            Append(message, "!=")
+            Append(message, printAllChars(failedItem2[1]))
             Append(message, TexCmd("end", "verbatim"))
         end
         tex.print(message)

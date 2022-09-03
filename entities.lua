@@ -244,7 +244,7 @@ local function entityQualifiersString(srcEntity, targetEntity, role)
     local location = srcEntity["location"]
     local targetLocation = targetEntity["location"]
     if not IsPlace(targetEntity) and not IsEmpty(location) and location ~= targetLocation then
-        Append(content, "in " .. TexCmd("myref ", location))
+        Append(content, "in " .. TexCmd("myref", location))
     end
     if not IsEmpty(content) then
         return "(" .. table.concat(content, ", ") .. ")"
@@ -260,7 +260,7 @@ local function addSingleEntity(srcEntity, targetEntity, entityType, role)
     end
     local content = {}
     local srcLabel = GetMainLabel(srcEntity)
-    Append(content, TexCmd("myref ", srcLabel))
+    Append(content, TexCmd("myref", srcLabel))
     Append(content, " ")
     Append(content, entityQualifiersString(srcEntity, targetEntity, role))
     targetEntity[name][#targetEntity[name] + 1] = table.concat(content)

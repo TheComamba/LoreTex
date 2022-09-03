@@ -190,12 +190,6 @@ function IsMap(list)
 	return type(list) == "table" and #list == 0
 end
 
-function PrintAllChars(str)
-	for i = 1, #str do
-		tex.print(str:sub(i, i))
-	end
-end
-
 function FirstNonWhitespaceChar(str)
 	local KEYWORD = [[\par]]
 	local out = str:find("%S")
@@ -228,7 +222,7 @@ function Replace(strOld, strNew, content)
 	elseif type(content) == "boolean" or type(content) == "number" then
 		return content
 	else
-		LogError("Tried to replace myref in an object of type " .. type(content) .. "!")
+		LogError("Tried to make replacements in an object of type " .. type(content) .. "!")
 		return content
 	end
 end

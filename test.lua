@@ -1,4 +1,4 @@
-local testFiles = { "common", "refs", "history", "complicated-entities" }
+local testFiles = { "common", "history", "npc-and-species", "refs", "region-and-city" }
 local numSucceeded = 0
 local numFailed = 0
 
@@ -7,6 +7,9 @@ local function resetEnvironment()
     Histories = {}
     CurrentYearVin = 0
     DefaultLocation = ""
+    PrimaryRefs = {}
+    SecondaryRefs = {}
+    UnfoundRefs = {}
 end
 
 local function areEqual(obj1, obj2, elementNum, currentObj1, currentObj2)
@@ -78,10 +81,12 @@ function Assert(caller, expected, out)
             Append(message, failedItem1[1])
             Append(message, "!=")
             Append(message, failedItem2[1])
-            Append(message, "---")
-            Append(message, printAllChars(failedItem1[1]))
-            Append(message, "!=")
-            Append(message, printAllChars(failedItem2[1]))
+            if type(failedItem1[1]) == "string" then
+                Append(message, "---")
+                Append(message, printAllChars(failedItem1[1]))
+                Append(message, "!=")
+                Append(message, printAllChars(failedItem2[1]))
+            end
             Append(message, TexCmd("end", "verbatim"))
         end
         tex.print(message)

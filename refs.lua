@@ -57,23 +57,33 @@ function ListAllRefs()
 end
 
 local function scanStringFor(str, cmd)
-    if IsEmpty(cmd) then
-        LogError("Called with empty command!")
+    if type(str) ~= "string" then
+        LogError("Called with " .. DebugPrint(str))
+        return {}
+    elseif IsEmpty(cmd) or type(cmd) ~= "string" then
+        LogError("Called with " .. DebugPrint(cmd))
         return {}
     end
-    local refs = {}
-    local keyword1 = [[\]] .. cmd .. [[ {]] --TODO: I do not like the space...
-    local keyword2 = [[}]]
-    local pos1 = string.find(str, keyword1)
-    while pos1 ~= nil do
-        local pos2 = string.find(str, keyword2, pos1)
-        local ref = string.sub(str, pos1 + string.len(keyword1), pos2 - 1)
-        if not IsIn(ref, refs) then
-            refs[#refs + 1] = ref
+    local args = {}
+    local cmdStr = [[\]] .. cmd
+    local openStr = [[{]]
+    local closeStr = [[}]]
+    local posCmd = string.find(str, cmdStr)
+    while posCmd ~= nil do
+        local posOpen = string.find(str, openStr, posCmd)
+        local posClose = string.find(str, closeStr, posOpen)
+
+        local between = string.sub(str, posCmd + string.len(cmdStr), posOpen - 1)
+        local arg = string.sub(str, posOpen + string.len(openStr), posClose - 1)
+        if IsEmpty(between) then
+            if not IsIn(arg, args) then
+                args[#args + 1] = arg
+            end
         end
-        pos1 = string.find(str, keyword1, pos2)
+
+        posCmd = string.find(str, cmdStr, posClose)
     end
-    return refs
+    return args
 end
 
 function ScanForCmd(content, cmd)

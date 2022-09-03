@@ -11,23 +11,25 @@ function Assert(caller, expected, out)
     if expected == out then
         numSucceeded = numSucceeded + 1
     else
+        local message = {}
         numFailed = numFailed + 1
-        tex.print([[Error in function "]] .. caller .. [["!\\]])
+        Append(message, [[Error in function "]] .. caller .. [["!\\]])
         if type(expected) ~= type(out) then
-            tex.print("Expected output of type ")
-            tex.print(type(expected) .. ",")
-            tex.print("but received output of type ")
-            tex.print(type(out) .. [[.\\]])
+            Append(message, "Expected output of type ")
+            Append(message, type(expected) .. ",")
+            Append(message, "but received output of type ")
+            Append(message, type(out) .. [[.\\]])
         else
-            tex.print("Expected: ")
-            tex.print(TexCmd("begin", "verbatim"))
-            tex.print(expected)
-            tex.print(TexCmd("end", "verbatim"))
-            tex.print("Received:")
-            tex.print(TexCmd("begin", "verbatim"))
-            tex.print(out)
-            tex.print(TexCmd("end", "verbatim"))
+            Append(message, "Expected: ")
+            Append(message, TexCmd("begin", "verbatim"))
+            Append(message, expected)
+            Append(message, TexCmd("end", "verbatim"))
+            Append(message, "Received:")
+            Append(message, TexCmd("begin", "verbatim"))
+            Append(message, out)
+            Append(message, TexCmd("end", "verbatim"))
         end
+        tex.print(message)
     end
 end
 
@@ -47,5 +49,5 @@ function RunTests()
     Append(out, " tests, ")
     Append(out, numFailed)
     Append(out, " of which failed.")
-    tex.print(table.concat(out))
+    tex.print(out)
 end

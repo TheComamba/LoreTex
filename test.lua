@@ -1,4 +1,4 @@
-local testFiles = { "common", "refs", "history" }
+local testFiles = { "common", "refs", "history", "complicated-entities" }
 local numSucceeded = 0
 local numFailed = 0
 
@@ -6,6 +6,7 @@ local function resetEnvironment()
     Entities = {}
     Histories = {}
     CurrentYearVin = 0
+    DefaultLocation = ""
 end
 
 local function areEqual(obj1, obj2)

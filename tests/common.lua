@@ -31,7 +31,7 @@ for key, args in pairs(ReplaceTestArgs) do
 end
 
 local emptyThings = {
-    nil, {}, "", " \t \n ", [[ 
+    nil, {}, {{},{{{},{}}}}, "", " \t \n ", [[ 
 
 
     ]]

@@ -1,4 +1,4 @@
-local testFiles = { "common", "history", "npc-and-species", "refs", "region-and-city" }
+local testFiles = { "common", "entities-with-history", "history", "npc-and-species", "refs", "region-and-city" }
 local numSucceeded = 0
 local numFailed = 0
 
@@ -40,6 +40,8 @@ local function areEqual(obj1, obj2, elementNum, currentObj1, currentObj2)
     else
         obj1 = Replace(" ", "", obj1)
         obj2 = Replace(" ", "", obj2)
+        obj1 = Replace("\n", "", obj1)
+        obj2 = Replace("\n", "", obj2)
         return obj1 == obj2
     end
 end

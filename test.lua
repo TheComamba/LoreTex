@@ -34,7 +34,6 @@ end
 function RunTests()
     local out = {}
 
-    --TODO: Loop through all files in  folder.
     for key, testfile in pairs(testFiles) do
         resetEnvironment()
         dofile(RelativePath .. "/tests/" .. testfile .. ".lua")

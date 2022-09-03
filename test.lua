@@ -1,4 +1,4 @@
-local testFiles = { "common" }
+local testFiles = { "common", "refs" }
 local numSucceeded = 0
 local numFailed = 0
 
@@ -7,8 +7,26 @@ local function resetEnvironment()
     Histories = {}
 end
 
+local function areEqual(obj1, obj2)
+    if type(obj1) ~= type(obj2) then
+        return false
+    elseif type(obj1) == "table" then
+        if #obj1 ~= #obj2 then
+            return false
+        end
+        for i = 1, #obj1 do
+            if not areEqual(obj1[i], obj2[i]) then
+                return false
+            end
+        end
+        return true
+    else
+        return obj1 == obj2
+    end
+end
+
 function Assert(caller, expected, out)
-    if expected == out then
+    if areEqual(expected, out) then
         numSucceeded = numSucceeded + 1
     else
         local message = {}

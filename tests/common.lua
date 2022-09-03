@@ -1,5 +1,10 @@
 local list = { "a", "b", "c" }
-local expected = [[\begin{itemize}\footnotesize{}\item{} a\item{} b\item{} c\end{itemize}]]
+local expected = { [[\begin{itemize}]],
+    [[\footnotesize{}]],
+    [[\item{} a]],
+    [[\item{} b]],
+    [[\item{} c]],
+    [[\end{itemize}]] }
 Assert("ListAll", expected, ListAll(list))
 
 local FirstNonWhitespaceCharTestArgs = {
@@ -23,7 +28,7 @@ end
 local ReplaceTestArgs = {
     { [[Har]], [[De]], [[Harmonic minor]], [[Demonic minor]] },
     { [[\myref]], [[\ref]], [[Well, \myref{cake} is here.]], [[Well, \ref{cake} is here.]] },
-    { [[e]], [[]], [[Several Occurrences]], [[Svral Occurrncs]]},
+    { [[e]], [[]], [[Several Occurrences]], [[Svral Occurrncs]] },
     { [[poof]], [[bang]], [[No Occurence]], [[No Occurence]] }
 }
 for key, args in pairs(ReplaceTestArgs) do
@@ -31,7 +36,7 @@ for key, args in pairs(ReplaceTestArgs) do
 end
 
 local emptyThings = {
-    nil, {}, {{},{{{},{}}}}, "", " \t \n ", [[ 
+    nil, {}, { {}, { { {}, {} } } }, "", " \t \n ", [[ 
 
 
     ]]

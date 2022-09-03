@@ -92,5 +92,5 @@ function AutomatedChapters()
     Append(output, PrintEntityChapter("Gegenstände", GetEntitiesIf(IsItem), ItemTypes))
     Append(output, PrintOnlyMentionedChapter())
     Append(output, PrintErrors())
-    tex.print(table.concat(output))
+    return output
 end

@@ -44,9 +44,7 @@ function PrintErrors()
 	local out = {}
 	if not IsEmpty(errorMessages) then
 		Append(out, TexCmd("chapter", "Error Messages"))
-		Append(out, "DnDTex encountered ")
-		Append(out, #errorMessages)
-		Append(out, " errors:")
+		Append(out, "DnDTex encountered " .. #errorMessages .. " errors:")
 		Append(out, ListAll(cleanedErrors()))
 	end
 	return out
@@ -151,12 +149,10 @@ function ListAll(list, processor, additionalProcessorArg)
 	Append(out, TexCmd("begin", "itemize"))
 	Append(out, TexCmd("footnotesize"))
 	for key, content in pairs(processedList) do
-		Append(out, TexCmd("item"))
-		Append(out, " ")
-		Append(out, content)
+		Append(out, TexCmd("item") .. " " .. content)
 	end
 	Append(out, TexCmd("end", "itemize"))
-	return table.concat(out)
+	return out
 end
 
 --TODO: Do I still need this function?

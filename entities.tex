@@ -225,10 +225,14 @@ dofile(RelativePath .. "/entities.lua")
 }
 
 \newcommand{\automatedChapters}{
-	\directlua{AutomatedChapters()}
+	\directlua{
+		tex.print(AutomatedChapters())
+	}
 }
 
 \newcommand{\automatedChaptersFUCKINGEVERYTHING}{
-	\directlua{AddAllEntitiesToPrimaryRefs()}
-	\directlua{AutomatedChapters()}
+	\directlua{
+		AddAllEntitiesToPrimaryRefs()
+		tex.print(AutomatedChapters())
+	}
 }

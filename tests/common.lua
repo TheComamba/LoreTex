@@ -44,3 +44,24 @@ local emptyThings = {
 for key, thing in pairs(emptyThings) do
     Assert("IsEmpty", true, IsEmpty(thing))
 end
+
+
+local AppendTestArgs = {
+    { {}, 1, {1} },
+    { {1}, {"str", true, {"in table"}}, {1, "str", true, "in table"}},
+    { {}, {{}}, {}}
+}
+
+for key, args in pairs(AppendTestArgs) do
+    Append(args[1], args[2])
+    Assert("Append", args[3], args[1])
+end
+
+local UniqueAppendTestArgs = AppendTestArgs
+UniqueAppendTestArgs[#UniqueAppendTestArgs+1] = { {3,4,5}, {5,6,7}, {3,4,5,6,7} }
+UniqueAppendTestArgs[#UniqueAppendTestArgs+1] = { {}, {true, {"true", {true, {1}}}}, {true, "true", 1} }
+
+for key, args in pairs(UniqueAppendTestArgs) do
+    UniqueAppend(args[1], args[2])
+    Assert("Append", args[3], args[1])
+end

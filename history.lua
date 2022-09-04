@@ -41,13 +41,13 @@ local function newHistoryItem(originator, year, event, day, isSecret)
 		return {}
 	end
 	item["event"] = event
-	Append(concerns, ScanForCmd(event, "concerns"))
-	Append(concerns, ScanForCmd(event, "myref"))
-	Append(concerns, ScanForCmd(event, "nameref"))
-	Append(concerns, ScanForCmd(event, "itref"))
-	Append(concerns, ScanForCmd(event, "ref"))
-	Append(concerns, ScanForCmd(event, "deathof"))
-	Append(concerns, ScanForCmd(event, "birthof"))
+	UniqueAppend(concerns, ScanForCmd(event, "concerns"))
+	UniqueAppend(concerns, ScanForCmd(event, "myref"))
+	UniqueAppend(concerns, ScanForCmd(event, "nameref"))
+	UniqueAppend(concerns, ScanForCmd(event, "itref"))
+	UniqueAppend(concerns, ScanForCmd(event, "ref"))
+	UniqueAppend(concerns, ScanForCmd(event, "deathof"))
+	UniqueAppend(concerns, ScanForCmd(event, "birthof"))
 	item["concerns"] = concerns
 	if isSecret ~= nil then
 		item["isSecret"] = isSecret

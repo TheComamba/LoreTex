@@ -211,6 +211,18 @@ function Append(dest, src)
 	end
 end
 
+function UniqueAppend(dest, src)
+	if type(src) == "table" then
+		for key, elem in pairs(src) do
+			UniqueAppend(dest, elem)
+		end
+	else
+		if not IsIn(src, dest) then
+			Append(dest, src)
+		end
+	end
+end
+
 function Replace(strOld, strNew, content)
 	if type(content) == "string" then
 		return string.gsub(content, strOld, strNew)

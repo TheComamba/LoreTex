@@ -23,15 +23,14 @@ local expected = {
     [[\paragraph{Histori\"e}]],
     [[\begin{itemize}]],
     [[\footnotesize{}]],
-    [[\item{} -10 Vin (vor 10 Jahren): Event that concnerns \itref{test-
-    1} and \itref{test-2}.]],
+    [[\item{} -10 Vin (vor 10 Jahren): Event that concerns \itref{test-1} and \itref{test-2}.]],
     [[\end{itemize}]],
     [[\subsubsection{Test 2}]],
     [[\label{test-2}]],
     [[\paragraph{Histori\"e}]],
     [[\begin{itemize}]],
     [[\footnotesize{}]],
-    [[\item{} -10 Vin (vor 10 Jahren): Event that concnerns \itref{test-
+    [[\item{} -10 Vin (vor 10 Jahren): Event that concerns \itref{test-
     1} and \itref{test-2}.]],
     [[\end{itemize}]]
 }

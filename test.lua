@@ -104,8 +104,7 @@ function RunTests()
     end
 
     Append(out, TexCmd("section*", "Results"))
-    Append(out, TexCmd("textsc", "Rpg"))
-    Append(out, TexCmd("TeX"))
+    Append(out, TexCmd("RPGTeX"))
     Append(out, " ran ")
     Append(out, numSucceeded + numFailed)
     Append(out, " tests, ")

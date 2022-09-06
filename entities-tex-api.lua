@@ -63,6 +63,9 @@ function NewEntity(label, type, shortname, name)
     SetDescriptor(entity, "type", type)
     SetDescriptor(entity, "shortname", shortname)
     SetDescriptor(entity, "name", name)
+    if not IsEmpty(DefaultLocation) then
+        SetDescriptor(entity, "location", DefaultLocation)
+    end
     Entities[#Entities + 1] = entity
 end
 

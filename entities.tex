@@ -17,7 +17,6 @@ dofile(RelativePath .. "/entities.lua")
 \newcommand{\newEntity}[4]{
 	\directlua{
 		NewEntity("#1","#2", [[\detokenize{#3}]], [[\detokenize{#4}]])
-		SetDescriptor(CurrentEntity(), "location", DefaultLocation)
 	}
 }
 

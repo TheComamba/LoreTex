@@ -27,7 +27,7 @@ end
 
 local ReplaceTestArgs = {
     { [[Har]], [[De]], [[Harmonic minor]], [[Demonic minor]] },
-    { [[\myref]], [[\ref]], [[Well, \myref{cake} is here.]], [[Well, \ref{cake} is here.]] },
+    { [[\reference]], [[\nameref]], [[Well, \reference{cake} is here.]], [[Well, \nameref{cake} is here.]] },
     { [[e]], [[]], [[Several Occurrences]], [[Svral Occurrncs]] },
     { [[poof]], [[bang]], [[No Occurence]], [[No Occurence]] }
 }

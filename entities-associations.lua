@@ -22,7 +22,7 @@ function AddAssociationDescriptors()
                     if IsEmpty(assocationRole) then
                         assocationRole = "Mitglied"
                     end
-                    local description = assocationRole .. " der " .. TexCmd("myref ", associationLabel) .. "."
+                    local description = assocationRole .. " der " .. TexCmd("nameref ", associationLabel) .. "."
                     if IsSecret(association) then
                         description = "(Geheim) " .. description
                     end

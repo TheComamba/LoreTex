@@ -1,6 +1,6 @@
-local str = [[A \myref {pair} of \ref {trousers} is \not {} a \pear     {you guys}.]]
+local str = [[A \nameref {pair} of \ref {trousers} is \not {} a \pear     {you guys}.]]
 local args = {
-    { str, "myref", { "pair" } },
+    { str, "nameref", { "pair" } },
     { str, "ref", { "trousers" } },
     { str, "not", { "" } },
     { str, "pear", { "you guys" } },

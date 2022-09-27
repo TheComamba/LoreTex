@@ -161,7 +161,7 @@ function ListAllFromMap(listOfThings)
 	for label, elem in pairs(listOfThings) do
 		allLabels[#allLabels + 1] = label
 	end
-	return ListAll(allLabels, ItrefString)
+	return ListAll(allLabels, NamerefString)
 end
 
 function IsEmpty(obj)

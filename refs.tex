@@ -2,8 +2,8 @@
     dofile(RelativePath .. "/refs.lua")
 \end{luacode*}
 
+\newcommand{\makeprimary}[1]{\directlua{AddRef("#1", PrimaryRefs)}}
+\newcommand{\mention}[1]{\directlua{AddRef("#1", SecondaryRefs)}}
+\newcommand{\reference}[1]{\makeprimary{#1}\nameref{#1}}
 \newcommand{\itref}[1]{\textit{\nameref{#1}}}
-\newcommand{\myref}[1]{\directlua{AddRefPrimaryOrSecondary("#1")}\itref{#1}}
-\newcommand{\primaryref}[1]{\directlua{AddRef("#1", PrimaryRefs)}\nameref{#1}}
-\newcommand{\secondaryref}[1]{\directlua{AddRef("#1", SecondaryRefs)}\nameref{#1}}
 \newcommand{\listAllRefs}{\directlua{ListAllRefs()}}

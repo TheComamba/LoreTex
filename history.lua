@@ -42,12 +42,11 @@ local function newHistoryItem(originator, year, event, day, isSecret)
 	end
 	item["event"] = event
 	UniqueAppend(concerns, ScanForCmd(event, "concerns"))
-	UniqueAppend(concerns, ScanForCmd(event, "myref"))
-	UniqueAppend(concerns, ScanForCmd(event, "nameref"))
-	UniqueAppend(concerns, ScanForCmd(event, "itref"))
-	UniqueAppend(concerns, ScanForCmd(event, "ref"))
 	UniqueAppend(concerns, ScanForCmd(event, "deathof"))
 	UniqueAppend(concerns, ScanForCmd(event, "birthof"))
+	for key1, refType in pairs(RefTypes) do
+		UniqueAppend(concerns, ScanForCmd(event, refType))
+	end
 	item["concerns"] = concerns
 	if isSecret ~= nil then
 		item["isSecret"] = isSecret

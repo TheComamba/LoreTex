@@ -123,7 +123,7 @@ function SpeciesAndAgeString(entity, year)
 	local parts = {}
 	local speciesRef = getSpeciesRef(entity)
 	if not IsEmpty(speciesRef) then
-		Append(parts, TexCmd("myref ", speciesRef))
+		Append(parts, TexCmd("nameref ", speciesRef))
 	else
 		LogError(GetShortname(entity) .. " has no species defined!")
 	end
@@ -162,7 +162,7 @@ local function addLifestageHistoryItems(entity)
 			realAge = Round(realAge)
 			local year = birthyear + realAge
 			if deathyear == nil or year <= deathyear then
-				local event = TexCmd("itref", label) .. " ist " .. lifestage .. "."
+				local event = TexCmd("nameref", label) .. " ist " .. lifestage .. "."
 				AddEvent(entity, year, event, 0, false)
 			end
 		end

@@ -2,6 +2,7 @@ PrimaryRefs = {}
 SecondaryRefs = {}
 UnfoundRefs = {}
 IsAppendix = false
+RefTypes = { "reference", "nameref", "itref", "ref" }
 
 local function addSingleRef(label, refs)
     if label ~= nil and not IsIn(label, refs) then
@@ -36,13 +37,13 @@ function AddRefPrimaryOrSecondary(label)
     end
 end
 
-function ItrefString(label)
-    return TexCmd("itref", label)
+function NamerefString(label)
+    return TexCmd("nameref", label)
 end
 
-local function itrefDebugString(label)
+local function namerefDebugString(label)
     local out = {}
-    Append(out, TexCmd("itref", label))
+    Append(out, TexCmd("nameref", label))
     Append(out, [[\\ (Ref. ]])
     Append(out, TexCmd("speech", label))
     Append(out, ")")
@@ -51,9 +52,9 @@ end
 
 function ListAllRefs()
     tex.print(TexCmd("paragraph", "primaryRefs"))
-    tex.print(ListAll(PrimaryRefs, itrefDebugString))
+    tex.print(ListAll(PrimaryRefs, namerefDebugString))
     tex.print(TexCmd("paragraph", "secondaryRefs"))
-    tex.print(ListAll(SecondaryRefs, itrefDebugString))
+    tex.print(ListAll(SecondaryRefs, namerefDebugString))
 end
 
 local function scanStringFor(str, cmd)
@@ -104,9 +105,11 @@ function ScanForCmd(content, cmd)
 end
 
 function ScanContentForSecondaryRefs(content)
-    for key, ref in pairs(ScanForCmd(content, "myref")) do
-        if not IsIn(ref, PrimaryRefs) then
-            AddRef(ref, SecondaryRefs)
+    for key1, refType in pairs(RefTypes) do
+        for key2, ref in pairs(ScanForCmd(content, refType)) do
+            if not IsIn(ref, PrimaryRefs) then
+                AddRef(ref, SecondaryRefs)
+            end
         end
     end
 end

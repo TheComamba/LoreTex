@@ -44,7 +44,8 @@ function PrintErrors()
 	local out = {}
 	if not IsEmpty(errorMessages) then
 		Append(out, TexCmd("chapter", "Error Messages"))
-		Append(out, "DnDTex encountered " .. #errorMessages .. " errors:")
+		Append(out, TexCmd("RPGTeX"))
+		Append(out, " encountered " .. #errorMessages .. " errors:")
 		Append(out, ListAll(cleanedErrors()))
 	end
 	return out

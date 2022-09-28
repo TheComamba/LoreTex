@@ -93,6 +93,7 @@ function AutomatedChapters()
     Append(output, PrintEntityChapter("Klassen", GetEntitiesIf(IsClass), ClassTypes))
     Append(output, PrintEntityChapter("Zauber", GetEntitiesIf(IsSpell), SpellTypes))
     Append(output, PrintEntityChapter("Gegenstände", GetEntitiesIf(IsItem), ItemTypes))
+    Append(output, PrintEntityChapter("Andere", GetEntitiesIf(IsOtherEntity), OtherEntityTypes))
     Append(output, PrintOnlyMentionedChapter())
     Append(output, PrintErrors())
     return output

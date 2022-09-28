@@ -1,6 +1,16 @@
 Entities = {}
 IsShowSecrets = false
 ProtectedDescriptors = { "name", "shortname", "type", "isSecret", "isShown", "labels" }
+OtherEntityTypes = { "other" }
+OtherEntityTypeNames = { "Andere" }
+
+function IsOtherEntity(entity)
+    if entity == nil then
+        return false
+    end
+    local type = entity["type"]
+    return type ~= nil and IsIn(entity["type"], OtherEntityTypes)
+end
 
 local function getKeysOfType(tableInput, keyType)
     local out = {}
@@ -210,6 +220,8 @@ local function typeToNameMap()
     Append(allTypeNames, SpellTypeNames)
     Append(allTypes, ClassTypes)
     Append(allTypeNames, ClassTypeNames)
+    Append(allTypes, OtherEntityTypes)
+    Append(allTypeNames, OtherEntityTypeNames)
     local out = {}
     for i, key in pairs(allTypes) do
         out[key] = allTypeNames[i]

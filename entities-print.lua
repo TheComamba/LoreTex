@@ -87,7 +87,7 @@ function PrintOnlyMentionedChapter()
         Append(out, TexCmd("chapter", "Nur erwähnt"))
         table.sort(secondaryEntities, CompareByName)
         for index, entity in pairs(secondaryEntities) do
-            Append(out, TexCmd("paragraph", GetShortname(entity)))
+            Append(out, TexCmd("subparagraph", GetShortname(entity)))
             for key, label in pairs(GetLabels(entity)) do
                 Append(out, TexCmd("label", label))
             end

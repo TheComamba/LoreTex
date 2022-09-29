@@ -239,3 +239,9 @@ function Replace(strOld, strNew, content)
 		return content
 	end
 end
+
+function Bind(func, arg1)
+	return function(...)
+		return func(arg1, ...)
+	end
+end

@@ -134,7 +134,9 @@ local function printEntityChapterSortedByLocation(primaryEntities)
     return out
 end
 
-function PrintEntityChapter(name, entitiesList, types)
+function PrintEntityChapter(name, types)
+    local isOfFittingType = Bind(IsType, types)
+    local entitiesList = GetEntitiesIf(isOfFittingType, Entities)
     local primaryEntities = GetEntitiesIf(IsPrimary, entitiesList)
     local out = {}
     if IsEmpty(primaryEntities) then

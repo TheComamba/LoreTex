@@ -350,6 +350,14 @@ function ComplementRefs()
     checkAllRefs()
 end
 
+function IsType(types, entity)
+    if IsEmpty(entity) then
+        LogError("Called with empty entity!")
+        return false
+    end
+    return IsIn(entity["type"], types)
+end
+
 dofile(RelativePath .. "/entities-geography.lua")
 dofile(RelativePath .. "/entities-landmarks.lua")
 dofile(RelativePath .. "/entities-characters.lua")

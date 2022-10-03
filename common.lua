@@ -148,7 +148,6 @@ function ListAll(list, processor, additionalProcessorArg)
 
 	local out = {}
 	Append(out, TexCmd("begin", "itemize"))
-	Append(out, TexCmd("footnotesize"))
 	for key, content in pairs(processedList) do
 		Append(out, TexCmd("item") .. " " .. content)
 	end

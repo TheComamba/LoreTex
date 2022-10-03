@@ -12,7 +12,6 @@ local expected = {
     [[\chapter{Orte}]],
     [[\section*{Alle Orte}]],
     [[\begin{itemize}]],
-    [[\footnotesize{}]],
     [[\item{} \nameref{test-1}]],
     [[\item{} \nameref{test-2}]],
     [[\end{itemize}]],
@@ -22,14 +21,12 @@ local expected = {
     [[\label{test-1}]],
     [[\paragraph{Histori\"e}]],
     [[\begin{itemize}]],
-    [[\footnotesize{}]],
     [[\item{} -10 Vin (vor 10 Jahren): Event that concerns \nameref{test-1} and \itref{test-2}.]],
     [[\end{itemize}]],
     [[\subsubsection{Test 2}]],
     [[\label{test-2}]],
     [[\paragraph{Histori\"e}]],
     [[\begin{itemize}]],
-    [[\footnotesize{}]],
     [[\item{} -10 Vin (vor 10 Jahren): Event that concerns \nameref{test-1} and \itref{test-2}.]],
     [[\end{itemize}]]
 }

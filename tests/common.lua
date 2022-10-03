@@ -1,6 +1,5 @@
 local list = { "a", "b", "c" }
 local expected = { [[\begin{itemize}]],
-    [[\footnotesize{}]],
     [[\item{} a]],
     [[\item{} b]],
     [[\item{} c]],

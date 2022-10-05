@@ -5,6 +5,6 @@
 \newcommand{\makePrimary}[1]{\directlua{AddRef("#1", PrimaryRefs)}}
 \newcommand{\makeTypePrimary}[1]{\directlua{MakePrimaryIf(Bind(IsType, #1))}}
 \newcommand{\mention}[1]{\directlua{AddRef("#1", SecondaryRefs)}}
-\newcommand{\reference}[1]{\makeprimary{#1}\nameref{#1}}
+\newcommand{\reference}[1]{\makePrimary{#1}\nameref{#1}}
 \newcommand{\itref}[1]{\textit{\nameref{#1}}}
 \newcommand{\listAllRefs}{\directlua{ListAllRefs()}}

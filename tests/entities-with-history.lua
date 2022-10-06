@@ -5,7 +5,6 @@ AddEvent(CurrentEntity(), -10, [[Event that concerns \reference{test-1} and \itr
 AddEvent(CurrentEntity(), 10, [[Event in the future.]])
 
 AddAllEntitiesToPrimaryRefs()
-
 local out = AutomatedChapters()
 
 local expected = {

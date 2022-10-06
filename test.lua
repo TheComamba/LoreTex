@@ -7,6 +7,8 @@ local function resetEnvironment()
     Entities = {}
     Histories = {}
     CurrentYearVin = 0
+    PrintHistoryYear = 0
+    PrintHistoryDay = 0
     DefaultLocation = ""
     PrimaryRefs = {}
     SecondaryRefs = {}

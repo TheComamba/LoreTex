@@ -1,5 +1,7 @@
 Histories = {}
 HistoryCaption = "Histori\\\"e"
+PrintHistoryYear = 0
+PrintHistoryDay = 0
 
 function AddHistoryItemToHistory(historyItem, history)
 	local year = historyItem["year"]

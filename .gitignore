@@ -1,2 +1,6 @@
 .vscode
 issues.txt
+*.aux
+*.log
+*.pdf
+*.synctex.gz

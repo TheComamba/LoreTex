@@ -13,6 +13,7 @@ local function resetEnvironment()
     PrimaryRefs = {}
     SecondaryRefs = {}
     UnfoundRefs = {}
+    IsShowFuture = true
 end
 
 local function areEqual(obj1, obj2, elementNum, currentObj1, currentObj2)
@@ -113,5 +114,6 @@ function RunTests()
     Append(out, " tests, ")
     Append(out, numFailed)
     Append(out, " of which failed.")
+    Append(out, PrintErrors())
     tex.print(out)
 end

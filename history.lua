@@ -1,7 +1,5 @@
 Histories = {}
 HistoryCaption = "Histori\\\"e"
-PrintHistoryYear = 0
-PrintHistoryDay = 0
 
 function AddHistoryItemToHistory(historyItem, history)
 	local year = historyItem["year"]
@@ -70,9 +68,7 @@ function AddEvent(originator, year, event, day, isSecret)
 	if IsEmpty(day) then
 		day = 0
 	end
-	if year <= CurrentYearVin then
-		Histories[#Histories + 1] = newHistoryItem(originator, year, event, day, isSecret)
-	end
+	Histories[#Histories + 1] = newHistoryItem(originator, year, event, day, isSecret)
 end
 
 function HistoryEventString(yearAndDay, history)
@@ -88,7 +84,7 @@ end
 function ListHistory(history)
 	local years = {}
 	for year, daysAndEvents in pairs(history) do
-		if year <= CurrentYearVin then
+		if year <= CurrentYearVin or IsShowFuture then
 			years[#years + 1] = year
 		end
 	end

@@ -6,6 +6,7 @@ SetDescriptor(CurrentEntity(), "born", -20)
 
 AddAllEntitiesToPrimaryRefs()
 
+IsShowFuture = false
 local out = AutomatedChapters()
 
 local expected = {

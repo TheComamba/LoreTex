@@ -1,4 +1,7 @@
 CurrentYearVin = 0
+PrintHistoryYear = 0
+PrintHistoryDay = 0
+IsShowFuture = true
 
 YearFmtVin = "Vin"
 YearFmtDjo = [[\'Et]]
@@ -51,10 +54,12 @@ function AnnoString(yearIn, fmt)
         Append(out, " (dieses Jahr)")
     elseif diff == 1 then
         Append(out, " (letztes Jahr)")
-    else
-        Append(out, " (vor ")
-        Append(out, diff)
-        Append(out, " Jahren)")
+    elseif diff == -1 then
+        Append(out, " (nächstes Jahr)")
+    elseif diff > 0 then
+        Append(out, " (vor " .. diff .. " Jahren)")
+    elseif diff < 0 then
+        Append(out, " (in " .. math.abs(diff) .. " Jahren)")
     end
     return table.concat(out)
 end

@@ -169,8 +169,8 @@ local function addLifestageHistoryItems(entity)
 	end
 end
 
-function AddLifestageHistoryItemsForNPCs()
-	local npcs = GetEntitiesIf(IsChar, AllEntities)
+function AddLifestageHistoryItemsForNPCs(entities)
+	local npcs = GetEntitiesIf(IsChar, entities)
 	for key, char in pairs(npcs) do
 		addLifestageHistoryItems(char)
 	end
@@ -214,8 +214,8 @@ local function lifestagesDescription(species)
 	return table.concat(out)
 end
 
-function AddLifeStagesToSpecies()
-	local allSpecies = GetEntitiesIf(IsSpecies, AllEntities)
+function AddLifeStagesToSpecies(entities)
+	local allSpecies = GetEntitiesIf(IsSpecies, entities)
 	for key, species in pairs(allSpecies) do
 		if isAges(species) then
 			local lifestages = lifestagesDescription(species)

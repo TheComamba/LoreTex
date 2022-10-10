@@ -67,7 +67,7 @@ local function getHistory(entity)
     end
 end
 
-local function addHistoryToEntities(historyItem)
+local function addHistoryToEntities(historyItem, entities)
     local originator = {}
     local originatorLabel = historyItem["originator"]
     if not IsEmpty(originatorLabel) then
@@ -75,7 +75,7 @@ local function addHistoryToEntities(historyItem)
     end
     local concerns = historyItem["concerns"]
     for key, label in pairs(concerns) do
-        local concernedEntity = GetEntity(label)
+        local concernedEntity = GetEntity(label, entities)
         if isAcceptsHistoryFrom(concernedEntity, originator) then
             local history = getHistory(concernedEntity)
             AddHistoryItemToHistory(historyItem, history)
@@ -84,32 +84,32 @@ local function addHistoryToEntities(historyItem)
     end
 end
 
-local function addHistoryDescriptors()
+local function addHistoryDescriptors(entities)
     for key, historyItem in pairs(Histories) do
         setSecrecy(historyItem)
         setShown(historyItem)
         if IsShown(historyItem) then
-            addHistoryToEntities(historyItem)
+            addHistoryToEntities(historyItem, entities)
         end
     end
 end
 
-local function scanHistoryItemsForSpecialEvents()
+local function scanHistoryItemsForSpecialEvents(entities)
     for key1, historyItem in pairs(Histories) do
         local year = historyItem["year"]
         for key2, label in pairs(historyItem["birthof"]) do
-            local entity = GetEntity(label)
+            local entity = GetEntity(label, entities)
             SetDescriptor(entity, "born", year)
         end
         for key2, label in pairs(historyItem["deathof"]) do
-            local entity = GetEntity(label)
+            local entity = GetEntity(label, entities)
             SetDescriptor(entity, "died", year)
         end
     end
 end
 
-function ProcessHistory()
-    scanHistoryItemsForSpecialEvents()
-    AddLifestageHistoryItemsForNPCs()
-    addHistoryDescriptors()
+function ProcessHistory(entities)
+    scanHistoryItemsForSpecialEvents(entities)
+    AddLifestageHistoryItemsForNPCs(entities)
+    addHistoryDescriptors(entities)
 end

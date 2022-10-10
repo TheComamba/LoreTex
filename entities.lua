@@ -136,15 +136,18 @@ function GetEntitiesOfType(type, list)
     return out
 end
 
-function GetEntity(label)
+function GetEntity(label, entityList)
     if IsEmpty(label) then
         LogError("Called with empty label!")
         return {}
     elseif type(label) ~= "string" then
         LogError("Called with non-string type!")
         return {}
+    elseif IsEmpty(entityList) or type(entityList) ~= "table" then
+        LogError("Called with " .. DebugPrint(entityList))
+        return {}
     end
-    for key, entity in pairs(AllEntities) do
+    for key, entity in pairs(entityList) do
         if IsIn(label, GetLabels(entity)) then
             return entity
         end
@@ -327,20 +330,20 @@ local function checkAllRefs()
     end
 end
 
-function ScanEntitiesForLabels()
-    for key, entity in pairs(AllEntities) do
+function ScanEntitiesForLabels(entities)
+    for key, entity in pairs(entities) do
         local labels = GetLabels(entity)
         local additionalLabels = ScanForCmd(entity, "label")
         Append(labels, additionalLabels)
     end
 end
 
-function AddAutomatedDescriptors()
-    ProcessHistory()
-    addAllEntitiesTo()
-    AddSpeciesAndAgeStringToNPCs()
-    AddAssociationDescriptors()
-    AddLifeStagesToSpecies()
+function AddAutomatedDescriptors(entities)
+    ProcessHistory(entities)
+    addAllEntitiesTo(entities)
+    AddSpeciesAndAgeStringToNPCs(entities)
+    AddAssociationDescriptors(entities)
+    AddLifeStagesToSpecies(entities)
 end
 
 function ComplementRefs()
@@ -360,12 +363,12 @@ function IsType(types, entity)
 end
 
 function ProcessEntities(entities)
-    local entities = GetEntitiesIf(IsPrimary, AllEntities)
-    ScanEntitiesForLabels()
-    AddAutomatedDescriptors()
+    local entities = DeepCopy(GetEntitiesIf(IsPrimary, AllEntities))
+    ScanEntitiesForLabels(entities)
+    AddAutomatedDescriptors(entities)
     ComplementRefs()
-    MarkDead()
-    MarkSecret()
+    MarkDead(entities)
+    MarkSecret(entities)
     return entities
 end
 

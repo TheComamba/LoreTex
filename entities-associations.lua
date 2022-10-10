@@ -10,8 +10,8 @@ function IsAssociation(entity)
     return type ~= nil and IsIn(entity["type"], AssociationTypes)
 end
 
-function AddAssociationDescriptors()
-    for key, entity in pairs(AllEntities) do
+function AddAssociationDescriptors(entities)
+    for key, entity in pairs(entities) do
         local associationList = {}
         if entity["association"] ~= nil then
             for key, associationAndRole in pairs(entity["association"]) do
@@ -34,9 +34,8 @@ function AddAssociationDescriptors()
     end
 end
 
-function MarkSecret()
-    local primaryEntities = GetEntitiesIf(IsPrimary, AllEntities)
-    for key, entity in pairs(primaryEntities) do
+function MarkSecret(entities)
+    for key, entity in pairs(entities) do
         if IsEmpty(entity["name"]) then
             LogError("Entity at position " .. key .. " has no name!")
         elseif IsSecret(entity) then

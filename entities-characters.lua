@@ -10,8 +10,8 @@ function IsChar(entity)
     return type ~= nil and IsIn(entity["type"], CharacterTypes)
 end
 
-function AddSpeciesAndAgeStringToNPCs()
-    local npcs = GetEntitiesIf(IsChar, AllEntities)
+function AddSpeciesAndAgeStringToNPCs(entities)
+    local npcs = GetEntitiesIf(IsChar, entities)
     for key, char in pairs(npcs) do
         SetDescriptor(char, "Erscheinung", SpeciesAndAgeString(char, CurrentYearVin), "Spezies und Alter:")
     end
@@ -46,9 +46,8 @@ function IsDead(entity)
     return isHasHappened(entity, "died", false)
 end
 
-function MarkDead()
-    local primaryEntites = GetEntitiesIf(IsPrimary, AllEntities)
-    for key, entity in pairs(primaryEntites) do
+function MarkDead(entities)
+    for key, entity in pairs(entities) do
         if IsEmpty(entity["name"]) then
             LogError("Entity at position " .. key .. " has no name!")
         elseif IsDead(entity) then

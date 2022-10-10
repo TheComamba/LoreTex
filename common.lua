@@ -244,3 +244,13 @@ function Bind(func, arg1)
 		return func(arg1, ...)
 	end
 end
+
+function DeepCopy(inp)
+	local out = {}
+	if type(inp) == "table" then
+		for k, v in pairs(inp) do out[k] = DeepCopy(v) end
+	else
+		out = inp
+	end
+	return out
+end

@@ -46,9 +46,9 @@ end
 
 
 local AppendTestArgs = {
-    { {}, 1, {1} },
-    { {1}, {"str", true, {"in table"}}, {1, "str", true, "in table"}},
-    { {}, {{}}, {}}
+    { {}, 1, { 1 } },
+    { { 1 }, { "str", true, { "in table" } }, { 1, "str", true, "in table" } },
+    { {}, { {} }, {} }
 }
 
 for key, args in pairs(AppendTestArgs) do
@@ -57,10 +57,17 @@ for key, args in pairs(AppendTestArgs) do
 end
 
 local UniqueAppendTestArgs = AppendTestArgs
-UniqueAppendTestArgs[#UniqueAppendTestArgs+1] = { {3,4,5}, {5,6,7}, {3,4,5,6,7} }
-UniqueAppendTestArgs[#UniqueAppendTestArgs+1] = { {}, {true, {"true", {true, {1}}}}, {true, "true", 1} }
+UniqueAppendTestArgs[#UniqueAppendTestArgs + 1] = { { 3, 4, 5 }, { 5, 6, 7 }, { 3, 4, 5, 6, 7 } }
+UniqueAppendTestArgs[#UniqueAppendTestArgs + 1] = { {}, { true, { "true", { true, { 1 } } } }, { true, "true", 1 } }
 
 for key, args in pairs(UniqueAppendTestArgs) do
     UniqueAppend(args[1], args[2])
     Assert("Append", args[3], args[1])
 end
+
+local aTable = { "value1", { "value2" } }
+local shallowCopy = aTable
+local deepCopy = DeepCopy(aTable)
+aTable[2][1] = "new value"
+Assert("ShallowCopy", { "value1", { "new value" } }, shallowCopy)
+Assert("DeepCopy", { "value1", { "value2" } }, deepCopy)

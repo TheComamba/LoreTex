@@ -170,14 +170,14 @@ local function addLifestageHistoryItems(entity)
 end
 
 function AddLifestageHistoryItemsForNPCs()
-	local npcs = GetEntitiesIf(IsChar)
+	local npcs = GetEntitiesIf(IsChar, AllEntities)
 	for key, char in pairs(npcs) do
 		addLifestageHistoryItems(char)
 	end
 end
 
 function AddSpeciesToPrimaryRefs()
-	local primaryEntities = GetEntitiesIf(IsPrimary)
+	local primaryEntities = GetEntitiesIf(IsPrimary, AllEntities)
 	for key, entity in pairs(primaryEntities) do
 		local speciesRef = getSpeciesRef(entity)
 		if not IsEmpty(speciesRef) then
@@ -215,7 +215,7 @@ local function lifestagesDescription(species)
 end
 
 function AddLifeStagesToSpecies()
-	local allSpecies = GetEntitiesIf(IsSpecies)
+	local allSpecies = GetEntitiesIf(IsSpecies, AllEntities)
 	for key, species in pairs(allSpecies) do
 		if isAges(species) then
 			local lifestages = lifestagesDescription(species)

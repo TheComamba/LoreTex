@@ -82,7 +82,7 @@ end
 
 function PrintOnlyMentionedChapter()
     local out = {}
-    local secondaryEntities = GetEntitiesIf(IsSecondary)
+    local secondaryEntities = GetEntitiesIf(IsSecondary, AllEntities)
     if #secondaryEntities > 0 then
         Append(out, TexCmd("chapter", "Nur erwähnt"))
         table.sort(secondaryEntities, CompareByName)

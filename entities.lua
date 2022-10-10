@@ -111,7 +111,7 @@ end
 
 function GetEntitiesIf(condition, list)
     local out = {}
-    if IsEmpty(list) or type(list) ~= "table" then
+    if list == nil or type(list) ~= "table" then
         LogError("Called with " .. DebugPrint(list))
         return out
     end

@@ -134,18 +134,17 @@ local function printEntityChapterSortedByLocation(primaryEntities)
     return out
 end
 
-function PrintEntityChapter(name, types)
+function PrintEntityChapter(primaryEntities, name, types)
     local isOfFittingType = Bind(IsType, types)
-    local entitiesList = GetEntitiesIf(isOfFittingType, Entities)
-    local primaryEntities = GetEntitiesIf(IsPrimary, entitiesList)
+    local fittingEntities = GetEntitiesIf(isOfFittingType, primaryEntities)
     local out = {}
-    if IsEmpty(primaryEntities) then
+    if IsEmpty(fittingEntities) then
         return out
     end
 
-    Append(out, PrintEntityChapterBeginning(name, primaryEntities))
+    Append(out, PrintEntityChapterBeginning(name, fittingEntities))
     for i, type in pairs(types) do
-        local entitiesOfType = GetEntitiesOfType(type, primaryEntities)
+        local entitiesOfType = GetEntitiesOfType(type, fittingEntities)
         if not IsEmpty(entitiesOfType) then
             Append(out, TexCmd("section", TypeToName(type)))
             Append(out, printEntityChapterSortedByLocation(entitiesOfType))

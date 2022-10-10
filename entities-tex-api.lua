@@ -48,7 +48,7 @@ function SetAgeModifierMixing(entity, species1, species2)
 end
 
 function MakePrimaryIf(condition)
-    for key, entity in pairs(Entities) do
+    for key, entity in pairs(AllEntities) do
         if (condition(entity)) then
             local label = GetMainLabel(entity)
             AddRef(label, PrimaryRefs)
@@ -75,7 +75,7 @@ function NewEntity(label, type, shortname, name)
     if not IsEmpty(DefaultLocation) then
         SetDescriptor(entity, "location", DefaultLocation)
     end
-    Entities[#Entities + 1] = entity
+    AllEntities[#AllEntities + 1] = entity
 end
 
 function NewCharacter(label, shortname, name)
@@ -87,22 +87,18 @@ function NewCharacter(label, shortname, name)
 end
 
 function AutomatedChapters()
-    ScanEntitiesForLabels()
-    AddAutomatedDescriptors()
-    ComplementRefs()
-    MarkDead()
-    MarkSecret()
+    local processedEntities = ProcessEntities(AllEntities)
     local output = {}
-    Append(output, PrintEntityChapter("Orte", PlaceTypes))
-    Append(output, PrintEntityChapter("Landmarken", LandmarkTypes))
-    Append(output, PrintEntityChapter("Charaktere", CharacterTypes))
-    Append(output, PrintEntityChapter("Zusammenschlüsse", AssociationTypes))
-    Append(output, PrintEntityChapter("Spezies", SpeciesTypes))
-    Append(output, PrintEntityChapter("Sprachen", LanguageTypes))
-    Append(output, PrintEntityChapter("Klassen", ClassTypes))
-    Append(output, PrintEntityChapter("Zauber", SpellTypes))
-    Append(output, PrintEntityChapter("Gegenstände", ItemTypes))
-    Append(output, PrintEntityChapter("Andere", OtherEntityTypes))
+    Append(output, PrintEntityChapter(processedEntities, "Orte", PlaceTypes))
+    Append(output, PrintEntityChapter(processedEntities, "Landmarken", LandmarkTypes))
+    Append(output, PrintEntityChapter(processedEntities, "Charaktere", CharacterTypes))
+    Append(output, PrintEntityChapter(processedEntities, "Zusammenschlüsse", AssociationTypes))
+    Append(output, PrintEntityChapter(processedEntities, "Spezies", SpeciesTypes))
+    Append(output, PrintEntityChapter(processedEntities, "Sprachen", LanguageTypes))
+    Append(output, PrintEntityChapter(processedEntities, "Klassen", ClassTypes))
+    Append(output, PrintEntityChapter(processedEntities, "Zauber", SpellTypes))
+    Append(output, PrintEntityChapter(processedEntities, "Gegenstände", ItemTypes))
+    Append(output, PrintEntityChapter(processedEntities, "Andere", OtherEntityTypes))
     Append(output, PrintOnlyMentionedChapter())
     Append(output, PrintErrors())
     return output

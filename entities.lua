@@ -1,4 +1,4 @@
-Entities = {}
+AllEntities = {}
 IsShowSecrets = false
 ProtectedDescriptors = { "name", "shortname", "type", "isSecret", "isShown", "labels" }
 OtherEntityTypes = { "other" }
@@ -57,7 +57,7 @@ function DebugPrint(entity)
 end
 
 function CurrentEntity()
-    return Entities[#Entities]
+    return AllEntities[#AllEntities]
 end
 
 function GetLabels(entity)
@@ -111,8 +111,9 @@ end
 
 function GetEntitiesIf(condition, list)
     local out = {}
-    if list == nil then
-        list = Entities
+    if IsEmpty(list) or type(list) ~= "table" then
+        LogError("Called with " .. DebugPrint(list))
+        return out
     end
     for key, entity in pairs(list) do
         if condition(entity) then
@@ -125,7 +126,7 @@ end
 function GetEntitiesOfType(type, list)
     local out = {}
     if list == nil then
-        list = Entities
+        list = AllEntities
     end
     for key, entity in pairs(list) do
         if entity["type"] == type then
@@ -143,7 +144,7 @@ function GetEntity(label)
         LogError("Called with non-string type!")
         return {}
     end
-    for key, entity in pairs(Entities) do
+    for key, entity in pairs(AllEntities) do
         if IsIn(label, GetLabels(entity)) then
             return entity
         end
@@ -327,7 +328,7 @@ local function checkAllRefs()
 end
 
 function ScanEntitiesForLabels()
-    for key, entity in pairs(Entities) do
+    for key, entity in pairs(AllEntities) do
         local labels = GetLabels(entity)
         local additionalLabels = ScanForCmd(entity, "label")
         Append(labels, additionalLabels)
@@ -344,7 +345,7 @@ end
 
 function ComplementRefs()
     AddSpeciesToPrimaryRefs()
-    local primaryEntities = GetEntitiesIf(IsPrimary, Entities)
+    local primaryEntities = GetEntitiesIf(IsPrimary, AllEntities)
     ScanContentForSecondaryRefs(primaryEntities)
     Replace([[\reference]], [[\nameref]], primaryEntities)
     checkAllRefs()
@@ -356,6 +357,16 @@ function IsType(types, entity)
         return false
     end
     return IsIn(entity["type"], types)
+end
+
+function ProcessEntities(entities)
+    local entities = GetEntitiesIf(IsPrimary, AllEntities)
+    ScanEntitiesForLabels()
+    AddAutomatedDescriptors()
+    ComplementRefs()
+    MarkDead()
+    MarkSecret()
+    return entities
 end
 
 dofile(RelativePath .. "/entities-geography.lua")

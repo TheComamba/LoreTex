@@ -11,7 +11,7 @@ function IsAssociation(entity)
 end
 
 function AddAssociationDescriptors()
-    for key, entity in pairs(Entities) do
+    for key, entity in pairs(AllEntities) do
         local associationList = {}
         if entity["association"] ~= nil then
             for key, associationAndRole in pairs(entity["association"]) do
@@ -35,7 +35,7 @@ function AddAssociationDescriptors()
 end
 
 function MarkSecret()
-    local primaryEntities = GetEntitiesIf(IsPrimary, Entities)
+    local primaryEntities = GetEntitiesIf(IsPrimary, AllEntities)
     for key, entity in pairs(primaryEntities) do
         if IsEmpty(entity["name"]) then
             LogError("Entity at position " .. key .. " has no name!")

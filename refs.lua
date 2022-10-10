@@ -115,7 +115,7 @@ function ScanContentForSecondaryRefs(content)
 end
 
 function AddAllEntitiesToPrimaryRefs()
-    for key, entity in pairs(Entities) do
+    for key, entity in pairs(AllEntities) do
         AddRef(GetLabels(entity), PrimaryRefs)
     end
 end

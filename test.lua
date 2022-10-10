@@ -4,7 +4,7 @@ local numSucceeded = 0
 local numFailed = 0
 
 local function resetEnvironment()
-    Entities = {}
+    AllEntities = {}
     Histories = {}
     CurrentYearVin = 0
     PrintHistoryYear = 0

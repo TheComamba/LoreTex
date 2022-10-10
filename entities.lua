@@ -346,11 +346,10 @@ function AddAutomatedDescriptors(entities)
     AddLifeStagesToSpecies(entities)
 end
 
-function ComplementRefs()
+local function complementRefs(entities)
     AddSpeciesToPrimaryRefs()
-    local primaryEntities = GetEntitiesIf(IsPrimary, AllEntities)
-    ScanContentForSecondaryRefs(primaryEntities)
-    Replace([[\reference]], [[\nameref]], primaryEntities)
+    ScanContentForSecondaryRefs(entities)
+    Replace([[\reference]], [[\nameref]], entities)
     checkAllRefs()
 end
 
@@ -362,11 +361,11 @@ function IsType(types, entity)
     return IsIn(entity["type"], types)
 end
 
-function ProcessEntities(entities)
-    local entities = DeepCopy(GetEntitiesIf(IsPrimary, AllEntities))
+function ProcessEntities(entitiesIn)
+    local entities = DeepCopy(GetEntitiesIf(IsPrimary, entitiesIn))
     ScanEntitiesForLabels(entities)
     AddAutomatedDescriptors(entities)
-    ComplementRefs()
+    complementRefs(entities)
     MarkDead(entities)
     MarkSecret(entities)
     return entities

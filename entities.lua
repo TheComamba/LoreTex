@@ -300,7 +300,7 @@ local function addEntitiesTo(entityType, keyword)
                     targetLabel = target[1]
                     role = target[2]
                 end
-                local targetEntity = GetEntity(targetLabel)
+                local targetEntity = GetEntity(targetLabel, AllEntities)
                 if targetEntity == nil then
                     local err = { "Could not find Entity \"" }
                     Append(err, targetLabel)
@@ -321,12 +321,12 @@ local function addAllEntitiesTo()
     end
 end
 
-local function checkAllRefs()
+local function checkAllRefs(entities)
     for key, label in pairs(PrimaryRefs) do
-        GetEntity(label)
+        GetEntity(label, entities)
     end
     for key, label in pairs(SecondaryRefs) do
-        GetEntity(label)
+        GetEntity(label, entities)
     end
 end
 
@@ -339,8 +339,8 @@ function ScanEntitiesForLabels(entities)
 end
 
 function AddAutomatedDescriptors(entities)
+    addAllEntitiesTo()
     ProcessHistory(entities)
-    addAllEntitiesTo(entities)
     AddSpeciesAndAgeStringToNPCs(entities)
     AddAssociationDescriptors(entities)
     AddLifeStagesToSpecies(entities)
@@ -350,7 +350,7 @@ local function complementRefs(entities)
     AddSpeciesToPrimaryRefs()
     ScanContentForSecondaryRefs(entities)
     Replace([[\reference]], [[\nameref]], entities)
-    checkAllRefs()
+    checkAllRefs(entities)
 end
 
 function IsType(types, entity)

@@ -17,7 +17,7 @@ function AddAssociationDescriptors(entities)
             for key, associationAndRole in pairs(entity["association"]) do
                 local associationLabel = associationAndRole[1]
                 local assocationRole = associationAndRole[2]
-                local association = GetEntity(associationLabel)
+                local association = GetEntity(associationLabel, AllEntities)
                 if not IsEmpty(association) and IsShown(association) then
                     if IsEmpty(assocationRole) then
                         assocationRole = "Mitglied"

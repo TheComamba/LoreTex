@@ -1,5 +1,5 @@
-local testFiles = { "common", "dictionary", "default-location", "entities-with-history", "history", "npc-and-species",
-    "refs", "region-and-city" }
+local testFiles = { "common", "dictionary", "default-location", "entities-with-associations", "entities-with-history",
+    "history", "npc-and-species", "refs", "region-and-city" }
 local numSucceeded = 0
 local numFailed = 0
 

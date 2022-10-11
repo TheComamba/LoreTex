@@ -279,13 +279,13 @@ local function addSingleEntity(srcEntity, targetEntity, entityType, role)
     Append(content, TexCmd("nameref", srcLabel))
     Append(content, " ")
     Append(content, entityQualifiersString(srcEntity, targetEntity, role))
-    targetEntity[name][#targetEntity[name] + 1] = table.concat(content)
+    UniqueAppend(targetEntity[name], table.concat(content))
 end
 
 local function addEntitiesTo(entityType, keyword)
-    local entityMap = GetEntitiesOfType(entityType)
-    entityMap = GetEntitiesIf(IsShown, entityMap)
-    for label, srcEntity in pairs(entityMap) do
+    local entities = GetEntitiesOfType(entityType)
+    entities = GetEntitiesIf(IsShown, entities)
+    for label, srcEntity in pairs(entities) do
         local targets = srcEntity[keyword]
         if targets ~= nil then
             if type(targets) ~= "table" then

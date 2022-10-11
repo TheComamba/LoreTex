@@ -121,7 +121,7 @@ local function printEntityChapterSortedByLocation(primaryEntities)
     local out = printEntities(sectionname, entitiesWorldwide)
 
     for index, locationLabel in pairs(AllLocationLabelsSorted()) do
-        local location = GetEntity(locationLabel)
+        local location = GetEntity(locationLabel, AllEntities)
         local sectionname = "In " .. PlaceToName(location)
         local entitiesHere = extractEntitiesAtLocation(primaryEntities, locationLabel)
         Append(out, printEntities(sectionname, entitiesHere))

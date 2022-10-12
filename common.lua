@@ -21,6 +21,10 @@ function LogError(error)
 	errorMessages[#errorMessages + 1] = error
 end
 
+function HasError()
+	return #errorMessages > 0
+end
+
 local function cleanedErrors()
 	table.sort(errorMessages)
 	local out = {}

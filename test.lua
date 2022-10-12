@@ -105,6 +105,9 @@ function RunTests()
     for key, testfile in pairs(testFiles) do
         resetEnvironment()
         dofile(RelativePath .. "/tests/" .. testfile .. ".lua")
+        if HasError() then
+            break
+        end
     end
 
     Append(out, TexCmd("section*", "Results"))

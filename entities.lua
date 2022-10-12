@@ -92,7 +92,7 @@ function GetEntitiesOfType(type, list)
     return out
 end
 
-function GetEntity(label, entityList)
+local function getEntityRaw(label, entityList)
     if IsEmpty(label) then
         LogError("Called with empty label!")
         return {}
@@ -105,7 +105,7 @@ function GetEntity(label, entityList)
     end
     for key, entity in pairs(entityList) do
         if IsIn(label, GetLabels(entity)) then
-            return ReadonlyTable(entity)
+            return entity
         end
     end
     if not IsIn(label, UnfoundRefs) then
@@ -113,6 +113,18 @@ function GetEntity(label, entityList)
         AddRef(label, UnfoundRefs)
     end
     return {}
+end
+
+function GetEntity(label, entityList)
+    return ReadonlyTable(getEntityRaw(label, entityList))
+end
+
+function GetMutableEntity(label, entityList)
+    if entityList == AllEntities then
+        LogError("Trying to get mutable reference to member of AllEntities.")
+        return {}
+    end
+    return getEntityRaw(label, entityList)
 end
 
 function IsSecret(entity)
@@ -256,7 +268,7 @@ local function addEntitiesTo(entityType, keyword, entities)
                     targetLabel = target[1]
                     role = target[2]
                 end
-                local targetEntity = GetEntity(targetLabel, entities)
+                local targetEntity = GetMutableEntity(targetLabel, entities)
                 if targetEntity ~= nil then
                     addSingleEntity(srcEntity, targetEntity, entityType, role)
                 end

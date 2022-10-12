@@ -75,7 +75,7 @@ local function addHistoryToEntities(historyItem, entities)
     end
     local concerns = historyItem["concerns"]
     for key, label in pairs(concerns) do
-        local concernedEntity = GetEntity(label, entities)
+        local concernedEntity = GetMutableEntity(label, entities)
         if not IsEmpty(concernedEntity) then
             if isAcceptsHistoryFrom(concernedEntity, originator) then
                 local history = getHistory(concernedEntity)
@@ -100,11 +100,11 @@ local function scanHistoryItemsForSpecialEvents(entities)
     for key1, historyItem in pairs(Histories) do
         local year = historyItem["year"]
         for key2, label in pairs(historyItem["birthof"]) do
-            local entity = GetEntity(label, entities)
+            local entity = GetMutableEntity(label, entities)
             SetDescriptor(entity, "born", year)
         end
         for key2, label in pairs(historyItem["deathof"]) do
-            local entity = GetEntity(label, entities)
+            local entity = GetMutableEntity(label, entities)
             SetDescriptor(entity, "died", year)
         end
     end

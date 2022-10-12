@@ -282,10 +282,10 @@ local function addSingleEntity(srcEntity, targetEntity, entityType, role)
     UniqueAppend(targetEntity[name], table.concat(content))
 end
 
-local function addEntitiesTo(entityType, keyword)
-    local entities = GetEntitiesOfType(entityType)
-    entities = GetEntitiesIf(IsShown, entities)
-    for label, srcEntity in pairs(entities) do
+local function addEntitiesTo(entityType, keyword, entities)
+    local srcEntities = GetEntitiesOfType(entityType)
+    srcEntities = GetEntitiesIf(IsShown, srcEntities)
+    for label, srcEntity in pairs(srcEntities) do
         local targets = srcEntity[keyword]
         if targets ~= nil then
             if type(targets) ~= "table" then
@@ -300,12 +300,8 @@ local function addEntitiesTo(entityType, keyword)
                     targetLabel = target[1]
                     role = target[2]
                 end
-                local targetEntity = GetEntity(targetLabel, AllEntities)
-                if targetEntity == nil then
-                    local err = { "Could not find Entity \"" }
-                    Append(err, targetLabel)
-                    LogError(err)
-                else
+                local targetEntity = GetEntity(targetLabel, entities)
+                if targetEntity ~= nil then
                     addSingleEntity(srcEntity, targetEntity, entityType, role)
                 end
             end
@@ -313,10 +309,10 @@ local function addEntitiesTo(entityType, keyword)
     end
 end
 
-local function addAllEntitiesTo()
+local function addAllEntitiesTo(entities)
     for type, name in pairs(typeToNameMap()) do
         for key2, keyword in pairs({ "location", "association" }) do
-            addEntitiesTo(type, keyword)
+            addEntitiesTo(type, keyword, entities)
         end
     end
 end
@@ -339,7 +335,7 @@ function ScanEntitiesForLabels(entities)
 end
 
 function AddAutomatedDescriptors(entities)
-    addAllEntitiesTo()
+    addAllEntitiesTo(entities)
     ProcessHistory(entities)
     AddSpeciesAndAgeStringToNPCs(entities)
     AddAssociationDescriptors(entities)

@@ -12,50 +12,6 @@ function IsOtherEntity(entity)
     return type ~= nil and IsIn(entity["type"], OtherEntityTypes)
 end
 
-local function getKeysOfType(tableInput, keyType)
-    local out = {}
-    for key, elem in pairs(tableInput) do
-        if type(key) == keyType then
-            Append(out, key)
-        end
-    end
-    table.sort(out)
-    return out
-end
-
-local function getSortedKeys(tableInput)
-    local out = {}
-    Append(out, getKeysOfType(tableInput, "number"))
-    Append(out, getKeysOfType(tableInput, "string"))
-    return out
-end
-
-function DebugPrint(entity)
-    if entity == nil then
-        return "nil"
-    elseif type(entity) == "string" then
-        return " \"" .. entity .. "\" "
-    elseif type(entity) ~= "table" then
-        return tostring(entity)
-    end
-    local out = {}
-    local keys = getSortedKeys(entity)
-    for i, key in pairs(keys) do
-        if i == 1 then
-            Append(out, [[\{]])
-        else
-            Append(out, ", ")
-        end
-        Append(out, key)
-        Append(out, " = ")
-        Append(out, DebugPrint(entity[key]))
-        if i == #keys then
-            Append(out, [[\}]])
-        end
-    end
-    return table.concat(out)
-end
-
 function CurrentEntity()
     return AllEntities[#AllEntities]
 end

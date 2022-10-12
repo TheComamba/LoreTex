@@ -149,7 +149,7 @@ function GetEntity(label, entityList)
     end
     for key, entity in pairs(entityList) do
         if IsIn(label, GetLabels(entity)) then
-            return entity
+            return ReadonlyTable(entity)
         end
     end
     if not IsIn(label, UnfoundRefs) then

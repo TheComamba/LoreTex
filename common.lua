@@ -16,6 +16,7 @@ function LogError(error)
 	end
 	local caller = debug.getinfo(2).name
 	if caller ~= nil and type(caller) == "string" then
+		caller = string.gsub(caller, [[_]], [[\_]])
 		error = "In function \"" .. caller .. "\": " .. error
 	end
 	errorMessages[#errorMessages + 1] = error
@@ -206,6 +207,11 @@ function FirstNonWhitespaceChar(str)
 end
 
 function Append(dest, src)
+	if dest == nil then
+		LogError("Called with nil as first argument.")
+		return
+	end
+
 	if type(src) == "table" then
 		for key, elem in pairs(src) do
 			Append(dest, elem)
@@ -257,4 +263,14 @@ function DeepCopy(inp)
 		out = inp
 	end
 	return out
+end
+
+function ReadonlyTable(table)
+	return setmetatable({}, {
+		__index = table,
+		__newindex = function(table, key, value)
+			LogError("Attempted to modify read-only table.")
+		end,
+		__metatable = false
+	});
 end

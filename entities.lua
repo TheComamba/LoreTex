@@ -295,14 +295,6 @@ local function checkAllRefs(entities)
     end
 end
 
-function ScanEntitiesForLabels(entities)
-    for key, entity in pairs(entities) do
-        local labels = GetLabels(entity)
-        local additionalLabels = ScanForCmd(entity, "label")
-        Append(labels, additionalLabels)
-    end
-end
-
 function AddAutomatedDescriptors(entities)
     addAllEntitiesTo(entities)
     ProcessHistory(entities)
@@ -328,7 +320,6 @@ end
 
 function ProcessEntities(entitiesIn)
     local entities = DeepCopy(GetEntitiesIf(IsPrimary, entitiesIn))
-    ScanEntitiesForLabels(entities)
     AddAutomatedDescriptors(entities)
     complementRefs(entities)
     MarkDead(entities)

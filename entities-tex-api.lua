@@ -23,6 +23,9 @@ function SetDescriptor(entity, descriptor, description, subdescriptor)
         end
         entity[descriptor][subdescriptor] = description
     end
+    local labels = GetLabels(entity)
+    local additionalLabels = ScanForCmd(description, "label")
+    UniqueAppend(labels, additionalLabels)
 end
 
 function SetSecret(entity)

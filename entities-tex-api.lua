@@ -102,7 +102,7 @@ function AutomatedChapters()
     Append(output, PrintOnlyMentionedChapter())
     if HasError() then
         Append(output, TexCmd("chapter", "Error Messages"))
-        Append(output, TexCmd("RPGTeX"))
+        Append(output, TexCmd("RpgTex"))
         Append(output, " encountered errors. Call \\\\PrintRpgTexErrors to show them.")
     end
     return output

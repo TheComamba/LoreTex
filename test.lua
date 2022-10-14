@@ -119,7 +119,7 @@ function RunTests(testFiles)
     end
 
     Append(out, TexCmd("section*", "Results"))
-    Append(out, TexCmd("RPGTeX"))
+    Append(out, TexCmd("RpgTex"))
     Append(out, " ran ")
     Append(out, numSucceeded + numFailed)
     Append(out, " tests, ")

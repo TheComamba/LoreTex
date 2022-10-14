@@ -2,4 +2,5 @@
 dofile(RelativePath .. "test.lua")
 \end{luacode*}
 
+\newcommand{\RpgTexTest}[1]{\directlua{RunTests({"#1"})}}
 \newcommand{\RpgTexTests}{\directlua{RunTests()}}

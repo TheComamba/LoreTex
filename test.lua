@@ -1,4 +1,4 @@
-local testFiles = { "common", "dictionary", "default-location", "entities-with-associations", "entities-with-history",
+local allTestFiles = { "common", "dictionary", "default-location", "entities-with-associations", "entities-with-history",
     "history", "npc-and-species", "refs", "region-and-city" }
 local numSucceeded = 0
 local numFailed = 0
@@ -99,10 +99,14 @@ function Assert(caller, expected, out)
     end
 end
 
-function RunTests()
+function RunTests(testFiles)
+    if IsEmpty(testFiles) then
+        testFiles = allTestFiles
+    end
     local out = {}
 
     for key, testfile in pairs(testFiles) do
+
         resetEnvironment()
         dofile(RelativePath .. "/tests/" .. testfile .. ".lua")
         if HasError() then

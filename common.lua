@@ -279,42 +279,52 @@ function ReadonlyTable(table)
 end
 
 local function getKeysOfType(tableInput, keyType)
-    local out = {}
-    for key, elem in pairs(tableInput) do
-        if type(key) == keyType then
-            Append(out, key)
-        end
-    end
-    table.sort(out)
-    return out
+	local out = {}
+	for key, elem in pairs(tableInput) do
+		if type(key) == keyType then
+			Append(out, key)
+		end
+	end
+	table.sort(out)
+	return out
 end
 
 local function getSortedKeys(tableInput)
-    local out = {}
-    Append(out, getKeysOfType(tableInput, "number"))
-    Append(out, getKeysOfType(tableInput, "string"))
-    return out
+	local out = {}
+	Append(out, getKeysOfType(tableInput, "number"))
+	Append(out, getKeysOfType(tableInput, "string"))
+	return out
+end
+
+local function debugPrintRaw(entity)
+	if entity == nil then
+		return "nil"
+	elseif type(entity) == "number" then
+		return tostring(entity)
+	elseif type(entity) == "string" then
+		return " \"" .. entity .. "\" "
+	elseif type(entity) ~= "table" then
+		return tostring(entity)
+	end
+	local out = {}
+	local keys = getSortedKeys(entity)
+	Append(out, [[{	]])
+	for i, key in pairs(keys) do
+		if i > 1 then
+			Append(out, ",	")
+		end
+		Append(out, debugPrintRaw(key))
+		Append(out, "=")
+		Append(out, debugPrintRaw(entity[key]))
+	end
+	Append(out, [[}	]])
+	return table.concat(out)
 end
 
 function DebugPrint(entity)
-    if entity == nil then
-        return "nil"
-    elseif type(entity) == "string" then
-        return " \"" .. entity .. "\" "
-    elseif type(entity) ~= "table" then
-        return tostring(entity)
-    end
-    local out = {}
-    local keys = getSortedKeys(entity)
-    Append(out, [[\{]])
-    for i, key in pairs(keys) do
-        if i > 1 then
-            Append(out, ", ")
-        end
-        Append(out, key)
-        Append(out, " = ")
-        Append(out, DebugPrint(entity[key]))
-    end
-    Append(out, [[\}]])
-    return table.concat(out)
+	local out = {}
+	Append(out, TexCmd("begin", "verbatim"))
+	Append(out, debugPrintRaw(entity))
+	Append(out, TexCmd("end", "verbatim"))
+	return out
 end

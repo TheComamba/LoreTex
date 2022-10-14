@@ -115,8 +115,8 @@ local function getEntityRaw(label, entityList)
     return {}
 end
 
-function GetEntity(label, entityList)
-    return ReadonlyTable(getEntityRaw(label, entityList))
+function GetEntity(label)
+    return ReadonlyTable(getEntityRaw(label, AllEntities))
 end
 
 function GetMutableEntity(label, entityList)
@@ -287,10 +287,10 @@ end
 
 local function checkAllRefs(entities)
     for key, label in pairs(PrimaryRefs) do
-        GetEntity(label, entities)
+        GetEntity(label)
     end
     for key, label in pairs(SecondaryRefs) do
-        GetEntity(label, entities)
+        GetEntity(label)
     end
 end
 

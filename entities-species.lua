@@ -54,8 +54,8 @@ local function getMixedAgeFactorAndExponent(speciesMixing)
 		LogError("Called with " .. DebugPrint(speciesMixing))
 		return 1, 1
 	end
-	local species1 = GetEntity(speciesMixing[1], AllEntities)
-	local species2 = GetEntity(speciesMixing[2], AllEntities)
+	local species1 = GetEntity(speciesMixing[1])
+	local species2 = GetEntity(speciesMixing[2])
 	if IsEmpty(species1) or IsEmpty(species2) then
 		LogError("One of " .. DebugPrint(speciesMixing) .. " not found!")
 		return 1, 1
@@ -93,7 +93,7 @@ local function specificAgeString(entity, age)
 	if IsEmpty(speciesRef) then
 		return ""
 	end
-	local species = GetEntity(speciesRef, AllEntities)
+	local species = GetEntity(speciesRef)
 	if IsEmpty(species) then
 		return ""
 	end
@@ -151,7 +151,7 @@ local function addLifestageHistoryItems(entity)
 	local label = GetMainLabel(entity)
 	local birthyear = tonumber(entity["born"])
 	local speciesRef = getSpeciesRef(entity)
-	local species = GetEntity(speciesRef, AllEntities)
+	local species = GetEntity(speciesRef)
 	if not IsEmpty(label) and not IsEmpty(birthyear) and not IsEmpty(species) then
 		local deathyear = tonumber(entity["died"])
 		local factor, exponent = GetAgeFactorAndExponent(species)

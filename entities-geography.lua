@@ -16,7 +16,7 @@ function IsLocationUnknown(entity)
     if IsEmpty(locationLabel) then
         return false
     else
-        local location = GetEntity(locationLabel, AllEntities)
+        local location = GetEntity(locationLabel)
         local err = {}
         Append(err, "Location\"")
         Append(err, locationLabel)
@@ -44,13 +44,13 @@ local function getLocation(entity)
         LogError(locationLabel .. " is listed as location of " .. GetMainLabel(entity) .. " itself!")
         return {}
     else
-        return GetEntity(locationLabel, AllEntities)
+        return GetEntity(locationLabel)
     end
 end
 
 local function compareLocationLabelsByName(label1, label2)
-    local entity1 = GetEntity(label1, AllEntities)
-    local entity2 = GetEntity(label2, AllEntities)
+    local entity1 = GetEntity(label1)
+    local entity2 = GetEntity(label2)
     local name1 = PlaceToName(entity1)
     local name2 = PlaceToName(entity2)
     return name1 < name2

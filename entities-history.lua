@@ -21,7 +21,7 @@ local function isConcernsSecret(historyItem)
         return false
     end
     for key, label in pairs(concerns) do
-        if IsSecret(GetEntity(label, AllEntities)) then
+        if IsSecret(GetEntity(label)) then
             return true
         end
     end
@@ -45,7 +45,7 @@ local function isAllConcnernsShown(historyItem)
         return false
     end
     for key, label in pairs(concerns) do
-        if not IsShown(GetEntity(label, AllEntities)) then
+        if not IsShown(GetEntity(label)) then
             return false
         end
     end
@@ -71,7 +71,7 @@ local function addHistoryToEntities(historyItem, entities)
     local originator = {}
     local originatorLabel = historyItem["originator"]
     if not IsEmpty(originatorLabel) then
-        originator = GetEntity(originatorLabel, AllEntities)
+        originator = GetEntity(originatorLabel)
     end
     local concerns = historyItem["concerns"]
     for key, label in pairs(concerns) do

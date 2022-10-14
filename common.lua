@@ -1,6 +1,19 @@
 RelativePath = ""
 local errorMessages = {}
 
+local function logErrorOnModify(table, key, value)
+	LogError("Attempted to set key " .. key .. " to value " .. value .. " in read-only table " .. DebugPrint(table))
+end
+
+function ReadonlyTable(table)
+	local proxy = {}
+	local metaTable = {}
+	metaTable.__index = table
+	metaTable.__newindex = logErrorOnModify
+	setmetatable(proxy, metaTable)
+	return proxy
+end
+
 function Round(num)
 	return math.floor(num + 0.5)
 end
@@ -177,6 +190,10 @@ function IsEmpty(obj)
 		return true
 	elseif type(obj) == "table" then
 		local out = true
+		local mTable = getmetatable(obj)
+		if mTable ~= nil and mTable.__newindex == logErrorOnModify then
+			obj = mTable.__index
+		end
 		for key, val in pairs(obj) do
 			if not IsEmpty(val) then
 				return false
@@ -266,17 +283,6 @@ function DeepCopy(inp)
 		out = inp
 	end
 	return out
-end
-
-function ReadonlyTable(table)
-	local proxy = {}
-	local metaTable = {}
-	metaTable.__index = table
-	metaTable.__newindex = function(table, key, value)
-		LogError("Attempted to set key " .. key .. " to value " .. value .. " in read-only table " .. DebugPrint(table))
-	end
-	setmetatable(proxy, metaTable)
-	return proxy
 end
 
 local function getKeysOfType(tableInput, keyType)

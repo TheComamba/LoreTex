@@ -108,15 +108,16 @@ local function getEntityRaw(label, entityList)
             return entity
         end
     end
-    if not IsIn(label, UnfoundRefs) then
-        LogError("Entity with label \"" .. label .. "\" not found.")
-        AddRef(label, UnfoundRefs)
-    end
     return {}
 end
 
 function GetEntity(label)
-    return ReadonlyTable(getEntityRaw(label, AllEntities))
+    local entity = getEntityRaw(label, AllEntities)
+    if IsEmpty(entity) and not IsIn(label, UnfoundRefs) then
+        LogError("Entity with label \"" .. label .. "\" not found.")
+        AddRef(label, UnfoundRefs)
+    end
+    return ReadonlyTable(entity)
 end
 
 function GetMutableEntity(label, entityList)

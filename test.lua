@@ -1,4 +1,4 @@
-local allTestFiles = { "common", "dictionary", "default-location", "entities-with-associations", "entities-with-history",
+local allTestFiles = { "common", "default-location", "dictionary", "entities-with-associations", "entities-with-history",
     "history", "npc-and-species", "refs", "region-and-city" }
 local numSucceeded = 0
 local numFailed = 0
@@ -114,12 +114,8 @@ function RunTests(testFiles)
     local out = {}
 
     for key, testfile in pairs(testFiles) do
-
         resetEnvironment()
         dofile(RelativePath .. "/tests/" .. testfile .. ".lua")
-        if HasError() then
-            break
-        end
     end
 
     Append(out, TexCmd("section*", "Results"))

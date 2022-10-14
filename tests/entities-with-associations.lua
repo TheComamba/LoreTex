@@ -1,7 +1,9 @@
 NewEntity("orga", "organisation", nil, "Orga")
+local orga = CurrentEntity()
 NewEntity("place-1", "place", nil, "Place 1")
 AddAssociation(CurrentEntity(), "orga")
 NewEntity("place-2", "place", nil, "Place 2")
+local place2 = CurrentEntity()
 AddAssociation(CurrentEntity(), "orga", "Hometown")
 
 AddAllEntitiesToPrimaryRefs()
@@ -20,23 +22,24 @@ local expected = {
     [[\label{place-1}]],
     [[\paragraph{Zusammenschlüsse}]],
     [[\begin{itemize}]],
-    [[\item{} Mitglied der \nameref{orga}]],
+    [[\item{} Mitglied der \nameref{orga}.]],
     [[\end{itemize}]],
     [[\subsubsection{Place 2}]],
     [[\label{place-2}]],
     [[\paragraph{Zusammenschlüsse}]],
     [[\begin{itemize}]],
-    [[\item{} Hometown der \nameref{orga}]],
+    [[\item{} Hometown der \nameref{orga}.]],
     [[\end{itemize}]],
     [[\chapter{Zusammenschlüsse}]],
-    [[\section*{Alle Organisationen}]],
+    [[\section*{Alle Zusammenschlüsse}]],
     [[\begin{itemize}]],
     [[\item{} \nameref{orga}]],
     [[\end{itemize}]],
     [[\section{Organisationen}]],
     [[\subsection{In der ganzen Welt}]],
     [[\subsubsection{Orga}]],
-    [[\paragraph{Mitglieder}]],
+    [[\label{orga}]],
+    [[\paragraph{Orte}]],
     [[\begin{itemize}]],
     [[\item{} \nameref{place-1}]],
     [[\item{} \nameref{place-2} (Hometown)]],
@@ -47,10 +50,10 @@ Assert("entities-with-associations", expected, out)
 
 NewEntity("place-3", "place", nil, "Place 3")
 NewEntity("place-4", "place", nil, "Place 4")
--- SetDescriptor(GetEntity("orga", AllEntities), "location", "place-3")
--- SetDescriptor(GetEntity("place-2", AllEntities), "location", "place-4")
+SetDescriptor(orga, "location", "place-3")
+SetDescriptor(place2, "location", "place-4")
 
 
---out = AutomatedChapters()
+out = AutomatedChapters()
 
---Assert("entities-with-associations-and-locations", expected, out)
+Assert("entities-with-associations-and-locations", expected, out)

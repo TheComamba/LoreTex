@@ -269,13 +269,14 @@ function DeepCopy(inp)
 end
 
 function ReadonlyTable(table)
-	return setmetatable({}, {
-		__index = table,
-		__newindex = function(table, key, value)
-			LogError("Attempted to modify read-only table " .. DebugPrint(table))
-		end,
-		__metatable = false
-	});
+	local proxy = {}
+	local metaTable = {}
+	metaTable.__index = table
+	metaTable.__newindex = function(table, key, value)
+		LogError("Attempted to set key " .. key .. " to value " .. value .. " in read-only table " .. DebugPrint(table))
+	end
+	setmetatable(proxy, metaTable)
+	return proxy
 end
 
 local function getKeysOfType(tableInput, keyType)

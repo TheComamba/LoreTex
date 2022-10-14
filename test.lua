@@ -62,12 +62,20 @@ function Assert(caller, expected, out)
     local failedIndex = { 0 }
     local failedItem1 = { "" }
     local failedItem2 = { "" }
-    if areEqual(expected, out, failedIndex, failedItem1, failedItem2) then
-        numSucceeded = numSucceeded + 1
-    else
+
+    if HasError() then
         local message = {}
         numFailed = numFailed + 1
         Append(message, [[Error in function "]] .. caller .. [["!\\]])
+        Append(message, PrintErrors())
+        tex.print(message)
+    elseif areEqual(expected, out, failedIndex, failedItem1, failedItem2) then
+        numSucceeded = numSucceeded + 1
+        ResetErrors()
+    else
+        local message = {}
+        numFailed = numFailed + 1
+        Append(message, [[Assert failed in function "]] .. caller .. [["!\\]])
         if type(expected) ~= type(out) then
             Append(message, "Expected output of type ")
             Append(message, type(expected) .. ",")
@@ -121,6 +129,5 @@ function RunTests(testFiles)
     Append(out, " tests, ")
     Append(out, numFailed)
     Append(out, " of which failed.")
-    Append(out, PrintErrors())
     tex.print(out)
 end

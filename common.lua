@@ -26,6 +26,10 @@ function HasError()
 	return #errorMessages > 0
 end
 
+function ResetErrors()
+	errorMessages = {}
+end
+
 local function cleanedErrors()
 	table.sort(errorMessages)
 	local out = {}
@@ -48,7 +52,6 @@ end
 function PrintErrors()
 	local out = {}
 	if not IsEmpty(errorMessages) then
-		Append(out, TexCmd("chapter", "Error Messages"))
 		Append(out, TexCmd("RPGTeX"))
 		Append(out, " encountered " .. #errorMessages .. " errors:")
 		Append(out, ListAll(cleanedErrors()))

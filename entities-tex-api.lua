@@ -100,6 +100,10 @@ function AutomatedChapters()
     Append(output, PrintEntityChapter(processedEntities, "Gegenstände", ItemTypes))
     Append(output, PrintEntityChapter(processedEntities, "Andere", OtherEntityTypes))
     Append(output, PrintOnlyMentionedChapter())
-    Append(output, PrintErrors())
+    if HasError() then
+        Append(output, TexCmd("chapter", "Error Messages"))
+        Append(output, TexCmd("RPGTeX"))
+        Append(output, " encountered errors. Call \\\\PrintRpgTexErrors to show them.")
+    end
     return output
 end

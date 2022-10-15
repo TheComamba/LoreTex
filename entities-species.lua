@@ -214,13 +214,12 @@ local function lifestagesDescription(species)
 	return table.concat(out)
 end
 
-function AddLifeStagesToSpecies(entities)
-	local allSpecies = GetEntitiesIf(IsSpecies, entities)
-	for key, species in pairs(allSpecies) do
-		if isAges(species) then
-			local lifestages = lifestagesDescription(species)
+function AddLifeStagesToSpecies(entity)
+	if IsSpecies(entity) then
+		if isAges(entity) then
+			local lifestages = lifestagesDescription(entity)
 			if not IsEmpty(lifestages) then
-				SetDescriptor(species, "Lebensabschnitte", lifestages)
+				SetDescriptor(entity, "Lebensabschnitte", lifestages)
 			end
 		end
 	end

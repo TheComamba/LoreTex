@@ -290,9 +290,9 @@ function AddAutomatedDescriptors(entities)
     addAllEntitiesTo(entities)
     ProcessHistory(entities)
     AddAssociationDescriptors(entities)
-    AddLifeStagesToSpecies(entities)
     for key, entity in pairs(entities) do
         AddSpeciesAndAgeStringToNPC(entity)
+        AddLifeStagesToSpecies(entity)
     end
 end
 

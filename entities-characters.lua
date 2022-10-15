@@ -10,10 +10,9 @@ function IsChar(entity)
     return type ~= nil and IsIn(entity["type"], CharacterTypes)
 end
 
-function AddSpeciesAndAgeStringToNPCs(entities)
-    local npcs = GetEntitiesIf(IsChar, entities)
-    for key, char in pairs(npcs) do
-        SetDescriptor(char, "Erscheinung", SpeciesAndAgeString(char, CurrentYearVin), "Spezies und Alter:")
+function AddSpeciesAndAgeStringToNPC(entity)
+    if IsChar(entity) then
+        SetDescriptor(entity, "Erscheinung", SpeciesAndAgeString(entity, CurrentYearVin), "Spezies und Alter:")
     end
 end
 

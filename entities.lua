@@ -289,9 +289,11 @@ end
 function AddAutomatedDescriptors(entities)
     addAllEntitiesTo(entities)
     ProcessHistory(entities)
-    AddSpeciesAndAgeStringToNPCs(entities)
     AddAssociationDescriptors(entities)
     AddLifeStagesToSpecies(entities)
+    for key, entity in pairs(entities) do
+        AddSpeciesAndAgeStringToNPC(entity)
+    end
 end
 
 function IsType(types, entity)

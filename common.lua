@@ -181,15 +181,6 @@ function ListAll(list, processor, additionalProcessorArg)
 	return out
 end
 
---TODO: Do I still need this function?
-function ListAllFromMap(listOfThings)
-	local allLabels = {}
-	for label, elem in pairs(listOfThings) do
-		allLabels[#allLabels + 1] = label
-	end
-	return ListAll(allLabels, NamerefString)
-end
-
 function IsEmpty(obj)
 	if obj == nil then
 		return true

@@ -1,4 +1,5 @@
 RelativePath = ""
+IsErrorThrown = false
 local errorMessages = {}
 
 local function logErrorOnModify(table, key, value)
@@ -18,21 +19,25 @@ function Round(num)
 	return math.floor(num + 0.5)
 end
 
-function LogError(error)
-	if type(error) == "table" then
-		error = table.concat(error)
+function LogError(errorMessage)
+	if type(errorMessage) == "table" then
+		errorMessage = table.concat(errorMessage)
 	end
-	error = tostring(error)
-	if error == nil or type(error) ~= "string" then
+	errorMessage = tostring(errorMessage)
+	if errorMessage == nil or type(errorMessage) ~= "string" then
 		LogError("Something went seriously wrong!")
 		return
 	end
 	local caller = debug.getinfo(2).name
 	if caller ~= nil and type(caller) == "string" then
 		caller = string.gsub(caller, [[_]], [[\_]])
-		error = "In function \"" .. caller .. "\": " .. error
+		errorMessage = "In function \"" .. caller .. "\": " .. errorMessage
 	end
-	errorMessages[#errorMessages + 1] = error
+	if IsErrorThrown then
+		error(errorMessage)
+	else
+		errorMessages[#errorMessages + 1] = errorMessage
+	end
 end
 
 function HasError()
@@ -333,5 +338,5 @@ function DebugPrint(entity)
 	Append(out, TexCmd("begin", "verbatim"))
 	Append(out, debugPrintRaw(entity))
 	Append(out, TexCmd("end", "verbatim"))
-	return out
+	return table.concat(out)
 end

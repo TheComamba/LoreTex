@@ -100,7 +100,7 @@ local function getEntityRaw(label, entityList)
         LogError("Called with non-string type!")
         return {}
     elseif IsEmpty(entityList) or type(entityList) ~= "table" then
-        LogError("Called with " .. DebugPrint(entityList))
+        LogError("getEntityRaw called with " .. DebugPrint(entityList))
         return {}
     end
     for key, entity in pairs(entityList) do
@@ -286,28 +286,12 @@ local function addAllEntitiesTo(entities)
     end
 end
 
-local function checkAllRefs(entities)
-    for key, label in pairs(PrimaryRefs) do
-        GetEntity(label)
-    end
-    for key, label in pairs(SecondaryRefs) do
-        GetEntity(label)
-    end
-end
-
 function AddAutomatedDescriptors(entities)
     addAllEntitiesTo(entities)
     ProcessHistory(entities)
     AddSpeciesAndAgeStringToNPCs(entities)
     AddAssociationDescriptors(entities)
     AddLifeStagesToSpecies(entities)
-end
-
-local function complementRefs(entities)
-    AddSpeciesToPrimaryRefs()
-    ScanContentForSecondaryRefs(entities)
-    Replace([[\reference]], [[\nameref]], entities)
-    checkAllRefs(entities)
 end
 
 function IsType(types, entity)
@@ -318,13 +302,34 @@ function IsType(types, entity)
     return IsIn(entity["type"], types)
 end
 
+local function isEntityIn(entity, entities)
+    if IsEmpty(entities) then
+        return false
+    end
+    local label = GetMainLabel(entity)
+    local testEntity = GetMutableEntity(label, entities)
+    return not IsEmpty(testEntity)
+end
+
+local function addProcessedEntity(entities, entity)
+    if not isEntityIn(entity, entities) then
+        local newEntity = DeepCopy(entity)
+        MarkDead(entity)
+        MarkSecret(entity)
+        entities[#entities + 1] = newEntity
+    end
+end
+
 function ProcessEntities(entitiesIn)
-    local entities = DeepCopy(GetEntitiesIf(IsPrimary, entitiesIn))
-    AddAutomatedDescriptors(entities)
-    complementRefs(entities)
-    MarkDead(entities)
-    MarkSecret(entities)
-    return entities
+    local entitiesOut = {}
+    for key, entity in pairs(GetEntitiesIf(IsPrimary, entitiesIn)) do
+        addProcessedEntity(entitiesOut, entity)
+    end
+
+    --TODO: Funktionen für nur eine entity
+    AddAutomatedDescriptors(entitiesOut)
+    ScanContentForSecondaryRefs(entitiesOut)
+    return entitiesOut
 end
 
 dofile(RelativePath .. "/entities-geography.lua")

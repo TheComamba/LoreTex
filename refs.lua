@@ -1,6 +1,7 @@
 PrimaryRefs = {}
 SecondaryRefs = {}
 UnfoundRefs = {}
+PrimaryRefTypes = {}
 IsAppendix = false
 RefTypes = { "reference", "nameref", "itref", "ref" }
 
@@ -118,4 +119,8 @@ function AddAllEntitiesToPrimaryRefs()
     for key, entity in pairs(AllEntities) do
         AddRef(GetLabels(entity), PrimaryRefs)
     end
+end
+
+function MakeTypePrimary(type)
+    UniqueAppend(PrimaryRefTypes, type)
 end

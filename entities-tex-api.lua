@@ -5,6 +5,8 @@ function SetDescriptor(entity, descriptor, description, subdescriptor)
         return
     end
 
+    Replace([[\reference]], [[\nameref]], description)
+
     if IsEmpty(subdescriptor) then
         entity[descriptor] = description
     else

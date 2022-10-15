@@ -1,4 +1,4 @@
-Append(ProtectedDescriptors, {"association"})
+Append(ProtectedDescriptors, { "association" })
 AssociationTypes = { "organisation", "family", "ship" }
 AssociationTypeNames = { "Organisationen", "Familien", "Schiffe" }
 
@@ -34,15 +34,13 @@ function AddAssociationDescriptors(entities)
     end
 end
 
-function MarkSecret(entities)
-    for key, entity in pairs(entities) do
-        if IsEmpty(entity["name"]) then
-            LogError("Entity at position " .. key .. " has no name!")
-        elseif IsSecret(entity) then
-            if entity["shortname"] == nil then
-                entity["shortname"] = entity["name"]
-            end
-            entity["name"] = "(Geheim) " .. entity["name"]
+function MarkSecret(entity)
+    if IsEmpty(entity["name"]) then
+        LogError("Entity has no name: " .. DebugPrint(entity))
+    elseif IsSecret(entity) then
+        if entity["shortname"] == nil then
+            entity["shortname"] = entity["name"]
         end
+        entity["name"] = "(Geheim) " .. entity["name"]
     end
 end

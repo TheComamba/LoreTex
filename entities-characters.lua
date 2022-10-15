@@ -46,16 +46,14 @@ function IsDead(entity)
     return isHasHappened(entity, "died", false)
 end
 
-function MarkDead(entities)
-    for key, entity in pairs(entities) do
-        if IsEmpty(entity["name"]) then
-            LogError("Entity at position " .. key .. " has no name!")
-        elseif IsDead(entity) then
-            if entity["shortname"] == nil then
-                entity["shortname"] = entity["name"]
-            end
-            entity["name"] = entity["name"] .. " " .. TexCmd("textdied")
+function MarkDead(entity)
+    if IsEmpty(entity["name"]) then
+        LogError("Entity has no name: " .. DebugPrint(entity))
+    elseif IsDead(entity) then
+        if entity["shortname"] == nil then
+            entity["shortname"] = entity["name"]
         end
+        entity["name"] = entity["name"] .. " " .. TexCmd("textdied")
     end
 end
 

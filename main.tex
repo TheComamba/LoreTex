@@ -7,13 +7,13 @@
         dofile([[#1]] .. "/common.lua")
         RelativePath = [[#1]]
     }
-    \newcommand{\PrintRpgTexErrors}{\directlua{tex.print(PrintErrors())}}
-    \input{#1/refs.tex}
-    \input{#1/units.tex}
     \input{#1/dates-and-years.tex}
-    \input{#1/history.tex}
     \input{#1/dictionary.tex}
     \input{#1/entities.tex}
+    \input{#1/history.tex}
+    \input{#1/logging.tex}
+    \input{#1/refs.tex}
     \input{#1/test.tex}
+    \input{#1/units.tex}
 }
 

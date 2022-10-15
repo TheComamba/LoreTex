@@ -1,4 +1,4 @@
-IsErrorThrown = false
+IsThrowOnError = false
 local errorMessages = {}
 
 function LogError(errorMessage)
@@ -15,7 +15,7 @@ function LogError(errorMessage)
         caller = string.gsub(caller, [[_]], [[\_]])
         errorMessage = "In function \"" .. caller .. "\": " .. errorMessage
     end
-    if IsErrorThrown then
+    if IsThrowOnError then
         error(errorMessage)
     else
         errorMessages[#errorMessages + 1] = errorMessage
@@ -55,6 +55,7 @@ function PrintErrors()
         Append(out, TexCmd("RpgTex"))
         Append(out, " encountered " .. #errorMessages .. " errors:")
         Append(out, ListAll(cleanedErrors()))
+        Append(out, "For a traceback, use the \\ThrowOnError command, rerun, and search the logfile for \"traceback\".")
     end
     return out
 end

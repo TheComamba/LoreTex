@@ -5,6 +5,7 @@ function SetDescriptor(entity, descriptor, description, subdescriptor)
         return
     end
 
+    StartBenchmarking("SetDescriptor")
     Replace([[\reference]], [[\nameref]], description)
 
     if IsEmpty(subdescriptor) then
@@ -28,6 +29,7 @@ function SetDescriptor(entity, descriptor, description, subdescriptor)
     local labels = GetLabels(entity)
     local additionalLabels = ScanForCmd(description, "label")
     UniqueAppend(labels, additionalLabels)
+    StopBenchmarking("SetDescriptor")
 end
 
 function SetSecret(entity)
@@ -53,15 +55,18 @@ function SetAgeModifierMixing(entity, species1, species2)
 end
 
 function MakePrimaryIf(condition)
+    StartBenchmarking("MakePrimaryIf")
     for key, entity in pairs(AllEntities) do
         if (condition(entity)) then
             local label = GetMainLabel(entity)
             AddRef(label, PrimaryRefs)
         end
     end
+    StopBenchmarking("MakePrimaryIf")
 end
 
 function NewEntity(label, type, shortname, name)
+    StartBenchmarking("NewEntity")
     if IsEmpty(label) then
         LogError("Called with no label!")
         return
@@ -81,6 +86,7 @@ function NewEntity(label, type, shortname, name)
         SetDescriptor(entity, "location", DefaultLocation)
     end
     AllEntities[#AllEntities + 1] = entity
+    StopBenchmarking("NewEntity")
 end
 
 function NewCharacter(label, shortname, name)
@@ -92,6 +98,7 @@ function NewCharacter(label, shortname, name)
 end
 
 function AutomatedChapters()
+    StartBenchmarking("AutomatedChapters")
     local processedEntities = ProcessEntities(AllEntities)
     local output = {}
     Append(output, PrintEntityChapter(processedEntities, "Orte", PlaceTypes))
@@ -106,9 +113,10 @@ function AutomatedChapters()
     Append(output, PrintEntityChapter(processedEntities, "Andere", OtherEntityTypes))
     Append(output, PrintOnlyMentionedChapter())
     if HasError() then
-        Append(output, TexCmd("chapter", "Error Messages"))
+        Append(output, TexCmd("chapter", "Logging Messages"))
         Append(output, TexCmd("RpgTex"))
-        Append(output, " encountered errors. Call \\\\PrintRpgTexErrors to show them.")
+        Append(output, [[ encountered errors. Call \\PrintRpgTexErrors to show them.]])
     end
+    StopBenchmarking("AutomatedChapters")
     return output
 end

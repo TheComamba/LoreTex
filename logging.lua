@@ -1,5 +1,7 @@
 IsThrowOnError = false
 local errorMessages = {}
+local benchmarkingStartTimes = {}
+local benchmarkingResults = {}
 
 function LogError(errorMessage)
     if type(errorMessage) == "table" then
@@ -52,6 +54,7 @@ end
 function PrintErrors()
     local out = {}
     if not IsEmpty(errorMessages) then
+        Append(out, TexCmd("section", "Errors"))
         Append(out, TexCmd("RpgTex"))
         Append(out, " encountered " .. #errorMessages .. " errors:")
         Append(out, ListAll(cleanedErrors()))
@@ -109,4 +112,63 @@ function DebugPrint(entity)
     Append(out, debugPrintRaw(entity))
     Append(out, TexCmd("end", "verbatim"))
     return table.concat(out)
+end
+
+function StartBenchmarking(identifier)
+    if benchmarkingStartTimes[identifier] ~= nil then
+        local mess = {}
+        Append(mess, "Benchmarking for identifier \"")
+        Append(mess, identifier)
+        Append(mess, "\" has already begun. ")
+        Append(mess, "Benchmarking is not implemented for recursive functions!")
+        LogError(mess)
+        return
+    end
+    benchmarkingStartTimes[identifier] = os.clock()
+end
+
+function StopBenchmarking(identifier)
+    if benchmarkingStartTimes[identifier] == nil then
+        local mess = {}
+        Append(mess, "Benchmarking for identifier \"")
+        Append(mess, identifier)
+        Append(mess, "\" has never been started.")
+        LogError(mess)
+        return
+    end
+    local time = os.clock() - benchmarkingStartTimes[identifier]
+    benchmarkingStartTimes[identifier] = nil
+    if benchmarkingResults[identifier] == nil then
+        benchmarkingResults[identifier] = {}
+        benchmarkingResults[identifier]["calls"] = 0
+        benchmarkingResults[identifier]["time"] = 0
+    end
+    benchmarkingResults[identifier]["calls"] = benchmarkingResults[identifier]["calls"] + 1
+    benchmarkingResults[identifier]["time"] = benchmarkingResults[identifier]["time"] + time
+end
+
+function PrintBenchmarking()
+    local benchmarkStrings = {}
+    for identifier, timeAndCalls in pairs(benchmarkingResults) do
+        local time = timeAndCalls["time"]
+        local calls = timeAndCalls["calls"]
+        local str = {}
+        Append(str, identifier)
+        Append(str, ": ")
+        Append(str, RoundedNumString(time, 3))
+        Append(str, "s, called ")
+        Append(str, calls)
+        Append(str, " times (")
+        Append(str, RoundedNumString(time / calls, 5))
+        Append(str, "s on avg.)")
+        Append(benchmarkStrings, table.concat(str))
+    end
+    local out = {}
+    if not IsEmpty(benchmarkStrings) then
+        Append(out, TexCmd("section", "Benchmarking"))
+        Append(out, TexCmd("RpgTex"))
+        Append(out, " benchmarked the following functions:")
+        Append(out, ListAll(benchmarkStrings))
+    end
+    return out
 end

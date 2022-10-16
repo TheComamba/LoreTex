@@ -163,11 +163,6 @@ function FirstNonWhitespaceChar(str)
 end
 
 function Append(dest, src)
-	if dest == nil then
-		LogError("Called with nil as first argument.")
-		return
-	end
-
 	if type(src) == "table" then
 		for key, elem in pairs(src) do
 			Append(dest, elem)

@@ -155,12 +155,16 @@ function PrintBenchmarking()
         local str = {}
         Append(str, identifier)
         Append(str, ": ")
-        Append(str, RoundedNumString(time, 3))
+        Append(str, RoundedNumString(time, 1))
         Append(str, "s, called ")
-        Append(str, calls)
-        Append(str, " times (")
-        Append(str, RoundedNumString(time / calls, 5))
-        Append(str, "s on avg.)")
+        if calls == 1 then
+            Append(str, "once")
+        else
+            Append(str, calls)
+            Append(str, " times (")
+            Append(str, RoundedNumString(time / calls, 3))
+            Append(str, "s on avg.)")
+        end
         Append(benchmarkStrings, table.concat(str))
     end
     local out = {}

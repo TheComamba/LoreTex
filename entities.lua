@@ -66,9 +66,11 @@ function IsSecondary(entity)
 end
 
 function GetEntitiesIf(condition, list)
+    StartBenchmarking("GetEntitiesIf")
     local out = {}
     if list == nil or type(list) ~= "table" then
         LogError("Called with " .. DebugPrint(list))
+        StopBenchmarking("GetEntitiesIf")
         return out
     end
     for key, entity in pairs(list) do
@@ -76,10 +78,12 @@ function GetEntitiesIf(condition, list)
             out[#out + 1] = entity
         end
     end
+    StopBenchmarking("GetEntitiesIf")
     return out
 end
 
 function GetEntitiesOfType(type, list)
+    StartBenchmarking("GetEntitiesOfType")
     local out = {}
     if list == nil then
         list = AllEntities
@@ -89,6 +93,7 @@ function GetEntitiesOfType(type, list)
             out[#out + 1] = entity
         end
     end
+    StopBenchmarking("GetEntitiesOfType")
     return out
 end
 
@@ -112,12 +117,15 @@ local function getEntityRaw(label, entityList)
 end
 
 function GetEntity(label)
+    StartBenchmarking("GetEntity")
     local entity = getEntityRaw(label, AllEntities)
     if IsEmpty(entity) and not IsIn(label, UnfoundRefs) then
         LogError("Entity with label \"" .. label .. "\" not found.")
         AddRef(label, UnfoundRefs)
     end
-    return ReadonlyTable(entity)
+    local out = ReadonlyTable(entity)
+    StopBenchmarking("GetEntity")
+    return out
 end
 
 function GetMutableEntity(label, entityList)
@@ -323,6 +331,7 @@ local function addProcessedEntity(entities, entity)
 end
 
 function ProcessEntities(entitiesIn)
+    StartBenchmarking("ProcessEntities")
     local entitiesOut = {}
     for key, entity in pairs(GetEntitiesIf(IsPrimary, entitiesIn)) do
         addProcessedEntity(entitiesOut, entity)
@@ -331,6 +340,7 @@ function ProcessEntities(entitiesIn)
     --TODO: Funktionen für nur eine entity
     AddAutomatedDescriptors(entitiesOut)
     ScanContentForSecondaryRefs(entitiesOut)
+    StopBenchmarking("ProcessEntities")
     return entitiesOut
 end
 

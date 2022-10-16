@@ -57,18 +57,21 @@ local function newHistoryItem(originator, year, event, day, isSecret)
 end
 
 function AddEvent(originator, year, event, day, isSecret)
+    StartBenchmarking("AddEvent")
 	if originator ~= nil and type(originator) ~= "table" then
 		LogError("Called with " .. DebugPrint(originator))
+		StopBenchmarking("AddEvent")
 		return
-	end
-	if IsEmpty(year) then
+	elseif IsEmpty(year) then
 		LogError(originator .. " has a history item without a year!")
+		StopBenchmarking("AddEvent")
 		return
 	end
 	if IsEmpty(day) then
 		day = 0
 	end
 	Histories[#Histories + 1] = newHistoryItem(originator, year, event, day, isSecret)
+    StopBenchmarking("AddEvent")
 end
 
 function HistoryEventString(yearAndDay, history)

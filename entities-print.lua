@@ -1,10 +1,12 @@
 local function extractEntitiesAtLocation(list, location)
+    StartBenchmarking("extractEntitiesAtLocation")
     local out = {}
     for key, entity in pairs(list) do
         if entity["location"] == location or (IsEmpty(entity["location"]) and IsEmpty(location)) then
             out[#out + 1] = entity
         end
     end
+    StopBenchmarking("extractEntitiesAtLocation")
     return out
 end
 
@@ -39,6 +41,7 @@ local function descritptorMapString(map)
 end
 
 function DescriptorsString(entity)
+    StartBenchmarking("DescriptorsString")
     local out = {}
 
     local descriptorsList = {}
@@ -62,12 +65,15 @@ function DescriptorsString(entity)
             Append(out, descritptorMapString(entity[descriptor]))
         end
     end
+    StopBenchmarking("DescriptorsString")
     return out
 end
 
 local function printEntities(sectionname, entitiesList)
+    StartBenchmarking("printEntities")
     local out = {}
     if IsEmpty(entitiesList) then
+        StopBenchmarking("printEntities")
         return out
     end
     Append(out, TexCmd("subsection", sectionname))
@@ -77,6 +83,7 @@ local function printEntities(sectionname, entitiesList)
         Append(out, TexCmd("label", GetMainLabel(entity)))
         Append(out, DescriptorsString(entity))
     end
+    StopBenchmarking("printEntities")
     return out
 end
 
@@ -116,6 +123,7 @@ function PrintEntityChapterBeginning(name, primaryEntities)
 end
 
 local function printEntityChapterSortedByLocation(primaryEntities)
+    StartBenchmarking("printEntityChapterSortedByLocation")
     local sectionname = "In der ganzen Welt"
     local entitiesWorldwide = extractEntitiesAtLocation(primaryEntities, nil)
     local out = printEntities(sectionname, entitiesWorldwide)
@@ -131,14 +139,17 @@ local function printEntityChapterSortedByLocation(primaryEntities)
     local entitiesSomewhere = GetEntitiesIf(IsLocationUnknown, primaryEntities)
     Append(out, printEntities(sectionname, entitiesSomewhere))
 
+    StopBenchmarking("printEntityChapterSortedByLocation")
     return out
 end
 
 function PrintEntityChapter(primaryEntities, name, types)
+    StartBenchmarking("PrintEntityChapter")
     local isOfFittingType = Bind(IsType, types)
     local fittingEntities = GetEntitiesIf(isOfFittingType, primaryEntities)
     local out = {}
     if IsEmpty(fittingEntities) then
+        StopBenchmarking("PrintEntityChapter")
         return out
     end
 
@@ -150,5 +161,6 @@ function PrintEntityChapter(primaryEntities, name, types)
             Append(out, printEntityChapterSortedByLocation(entitiesOfType))
         end
     end
+    StopBenchmarking("PrintEntityChapter")
     return out
 end

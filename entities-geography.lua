@@ -70,11 +70,13 @@ function PlaceToName(place)
 end
 
 function AllLocationLabelsSorted()
+    StartBenchmarking("AllLocationLabelsSorted")
     local places = GetEntitiesIf(IsPlace, AllEntities)
     local labels = {}
     for key, place in pairs(places) do
         labels[#labels + 1] = GetMainLabel(place)
     end
     table.sort(labels, compareLocationLabelsByName)
+    StopBenchmarking("AllLocationLabelsSorted")
     return labels
 end

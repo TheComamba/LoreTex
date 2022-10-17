@@ -164,8 +164,10 @@ function IsShown(entity)
     elseif not IsBorn(entity) and not IsShowFuture then
         return false
     elseif IsSecret(entity) then
-        if not isRevealed(entity) and not IsShowSecrets then
-            return false
+        if isRevealed(entity) or IsShowSecrets then
+            return true
+        else
+            return
         end
     else
         return true

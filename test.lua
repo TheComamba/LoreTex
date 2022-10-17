@@ -53,7 +53,7 @@ end
 local function printAllChars(str)
     local out = {}
     for i = 1, #str do
-        Append(out, "'" .. str:sub(i, i) .. "'")
+        Append(out, str:sub(i, i))
     end
     return out
 end
@@ -61,7 +61,9 @@ end
 local function printMinipage(caption, rows, i0, chunksize)
     local out = {}
     Append(out, [[\begin{minipage}[t]{.5\textwidth}]])
-    Append(out, caption .. ":")
+    if i0 == 1 then
+        Append(out, caption .. ":")
+    end
     Append(out, TexCmd("begin", "verbatim"))
     for i = i0, (i0 + chunksize) do
         if i <= #rows then
@@ -73,7 +75,7 @@ local function printMinipage(caption, rows, i0, chunksize)
     return out
 end
 
-local function printProblem(expected, received)
+local function printComparison(expected, received)
     local out = {}
     local chunksize = 40
     local startIndex = 1
@@ -110,19 +112,11 @@ function Assert(caller, expected, received)
             Append(out, "but received output of type ")
             Append(out, type(received) .. [[.\\]])
         else
-            Append(out, printProblem(expected, received))
-            Append(out, "At Element " .. failedIndex[1] .. ":")
-            Append(out, TexCmd("begin", "verbatim"))
-            Append(out, failedItem1[1])
-            Append(out, "!=")
-            Append(out, failedItem2[1])
+            Append(out, printComparison(expected, received))
             if type(failedItem1[1]) == "string" then
-                Append(out, "---")
-                Append(out, printAllChars(failedItem1[1]))
-                Append(out, "!=")
-                Append(out, printAllChars(failedItem2[1]))
+                Append(out, "At Element " .. failedIndex[1] .. [[:\\]])
+                Append(out, printComparison(printAllChars(failedItem1[1]), printAllChars(failedItem2[1])))
             end
-            Append(out, TexCmd("end", "verbatim"))
         end
         tex.print(out)
     end

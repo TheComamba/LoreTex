@@ -29,6 +29,7 @@ function SetDescriptor(entity, descriptor, description, subdescriptor)
     local labels = GetLabels(entity)
     local additionalLabels = ScanForCmd(description, "label")
     UniqueAppend(labels, additionalLabels)
+    AddSpecialFieldsToPreviouslyUnfoundEntity(entity)
     StopBenchmarking("SetDescriptor")
 end
 

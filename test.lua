@@ -58,52 +58,73 @@ local function printAllChars(str)
     return out
 end
 
-function Assert(caller, expected, out)
+local function printMinipage(caption, rows, i0, chunksize)
+    local out = {}
+    Append(out, [[\begin{minipage}[t]{.5\textwidth}]])
+    Append(out, caption .. ":")
+    Append(out, TexCmd("begin", "verbatim"))
+    for i = i0, (i0 + chunksize) do
+        if i <= #rows then
+            Append(out, rows[i])
+        end
+    end
+    Append(out, TexCmd("end", "verbatim"))
+    Append(out, [[\end{minipage}]])
+    return out
+end
+
+local function printProblem(expected, received)
+    local out = {}
+    local chunksize = 40
+    local startIndex = 1
+    while startIndex <= math.max(#expected, #received) do
+        Append(out, printMinipage("Expected", expected, startIndex, chunksize))
+        Append(out, printMinipage("Received", received, startIndex, chunksize))
+        Append(out, [[\newpage]])
+        startIndex = startIndex + chunksize
+    end
+    return out
+end
+
+function Assert(caller, expected, received)
     local failedIndex = { 0 }
     local failedItem1 = { "" }
     local failedItem2 = { "" }
 
     if HasError() then
-        local message = {}
+        local out = {}
         numFailed = numFailed + 1
-        Append(message, [[Error in function "]] .. caller .. [["!\\]])
-        Append(message, PrintErrors())
-        tex.print(message)
-    elseif areEqual(expected, out, failedIndex, failedItem1, failedItem2) then
+        Append(out, [[Error in function "]] .. caller .. [["!\\]])
+        Append(out, PrintErrors())
+        tex.print(out)
+    elseif areEqual(expected, received, failedIndex, failedItem1, failedItem2) then
         numSucceeded = numSucceeded + 1
         ResetErrors()
     else
-        local message = {}
+        local out = {}
         numFailed = numFailed + 1
-        Append(message, [[Assert failed in function "]] .. caller .. [["!\\]])
-        if type(expected) ~= type(out) then
-            Append(message, "Expected output of type ")
-            Append(message, type(expected) .. ",")
-            Append(message, "but received output of type ")
-            Append(message, type(out) .. [[.\\]])
+        Append(out, [[Assert failed in function "]] .. caller .. [["!\\]])
+        if type(expected) ~= type(received) then
+            Append(out, "Expected output of type ")
+            Append(out, type(expected) .. ",")
+            Append(out, "but received output of type ")
+            Append(out, type(received) .. [[.\\]])
         else
-            Append(message, "Expected: ")
-            Append(message, TexCmd("begin", "verbatim"))
-            Append(message, expected)
-            Append(message, TexCmd("end", "verbatim"))
-            Append(message, "Received:")
-            Append(message, TexCmd("begin", "verbatim"))
-            Append(message, out)
-            Append(message, TexCmd("end", "verbatim"))
-            Append(message, "At Element " .. failedIndex[1] .. ":")
-            Append(message, TexCmd("begin", "verbatim"))
-            Append(message, failedItem1[1])
-            Append(message, "!=")
-            Append(message, failedItem2[1])
+            Append(out, printProblem(expected, received))
+            Append(out, "At Element " .. failedIndex[1] .. ":")
+            Append(out, TexCmd("begin", "verbatim"))
+            Append(out, failedItem1[1])
+            Append(out, "!=")
+            Append(out, failedItem2[1])
             if type(failedItem1[1]) == "string" then
-                Append(message, "---")
-                Append(message, printAllChars(failedItem1[1]))
-                Append(message, "!=")
-                Append(message, printAllChars(failedItem2[1]))
+                Append(out, "---")
+                Append(out, printAllChars(failedItem1[1]))
+                Append(out, "!=")
+                Append(out, printAllChars(failedItem2[1]))
             end
-            Append(message, TexCmd("end", "verbatim"))
+            Append(out, TexCmd("end", "verbatim"))
         end
-        tex.print(message)
+        tex.print(out)
     end
 end
 

@@ -1,5 +1,5 @@
 local allTestFiles = { "common", "default-location", "dictionary", "entities-with-associations", "entities-with-history",
-    "history", "npc-and-species", "primary-type", "refs", "region-and-city", "sub-label" }
+    "entity-visibility", "history", "npc-and-species", "primary-type", "refs", "region-and-city", "sub-label" }
 local numSucceeded = 0
 local numFailed = 0
 

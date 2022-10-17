@@ -3,6 +3,7 @@ IsShowSecrets = false
 ProtectedDescriptors = { "name", "shortname", "type", "isSecret", "isShown", "labels" }
 OtherEntityTypes = { "other" }
 OtherEntityTypeNames = { "Andere" }
+RevealedLabels = {}
 
 function IsOtherEntity(entity)
     if entity == nil then
@@ -153,14 +154,17 @@ function IsSecret(entity)
     return isSecret
 end
 
+local function isRevealed(entity)
+    return IsAnyElemIn(GetLabels(entity), RevealedLabels)
+end
+
 function IsShown(entity)
     if IsEmpty(entity) then
         return false
     elseif not IsBorn(entity) and not IsShowFuture then
         return false
     elseif IsSecret(entity) then
-        local isRevealed = IsAnyElemIn(GetLabels(entity), PrimaryRefs)
-        if not isRevealed and not IsShowSecrets then
+        if not isRevealed(entity) and not IsShowSecrets then
             return false
         end
     else

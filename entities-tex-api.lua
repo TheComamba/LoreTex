@@ -37,6 +37,11 @@ function SetSecret(entity)
     SetDescriptor(entity, "isSecret", true)
 end
 
+function Reveal(label)
+    AddRef(label, RevealedLabels)
+    AddRef(label, PrimaryRefs)
+end
+
 function AddAssociation(entity, association, role)
     if entity ~= nil then
         if entity["association"] == nil then

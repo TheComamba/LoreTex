@@ -219,6 +219,10 @@ dofile(RelativePath .. "/entities.lua")
 	\directlua{SetSecret(CurrentEntity())}
 }
 
+\newcommand{\reveal}[1]{
+	\directlua{Reveal("#1")}
+}
+
 \newcommand{\showSecrets}{
 	\directlua{IsShowSecrets = true}
 }

@@ -19,11 +19,9 @@ end
 function GetLabels(entity)
     local labels = entity["labels"]
     if labels == nil then
-        LogError("This entity has no labels field: " .. DebugPrint(entity))
         return {}
-    elseif type(labels) ~= "table" then
-        LogError("This entities' labels field is not a list: " .. DebugPrint(entity))
-        return {}
+    elseif type(labels) == "string" then
+        return { labels }
     else
         return labels
     end
@@ -136,6 +134,10 @@ function GetMutableEntity(label, entityList)
     return getEntityRaw(label, entityList)
 end
 
+function GetMutableEntityFromAll(label)
+    return getEntityRaw(label, AllEntities)
+end
+
 function IsSecret(entity)
     if entity == nil then
         return false
@@ -154,23 +156,15 @@ end
 function IsShown(entity)
     if IsEmpty(entity) then
         return false
-    elseif not IsBorn(entity) then
+    elseif not IsBorn(entity) and not IsShowFuture then
         return false
-    elseif IsShowSecrets then
-        return true
-    elseif not IsSecret(entity) then
-        return true
-    elseif entity["isShown"] ~= nil then
-        return entity["isShown"]
-    else
-        local labels = GetLabels(entity)
-        for key, label in pairs(labels) do
-            if IsIn(label, PrimaryRefs) then
-                entity["isShown"] = true
-                return true
-            end
+    elseif IsSecret(entity) then
+        local isRevealed = IsAnyElemIn(GetLabels(entity), PrimaryRefs)
+        if not isRevealed and not IsShowSecrets then
+            return false
         end
-        return false
+    else
+        return true
     end
 end
 
@@ -333,7 +327,9 @@ end
 function ProcessEntities(entitiesIn)
     StartBenchmarking("ProcessEntities")
     local entitiesOut = {}
-    for key, entity in pairs(GetEntitiesIf(IsPrimary, entitiesIn)) do
+    local primaryEntities = GetEntitiesIf(IsPrimary, entitiesIn)
+    local visibleEntities = GetEntitiesIf(IsShown, primaryEntities)
+    for key, entity in pairs(visibleEntities) do
         addProcessedEntity(entitiesOut, entity)
     end
 

@@ -1,5 +1,6 @@
 Histories = {}
 HistoryCaption = "Histori\\\"e"
+local unfoundLabelFields = {}
 
 function AddHistoryItemToHistory(historyItem, history)
 	local year = historyItem["year"]
@@ -56,8 +57,33 @@ local function newHistoryItem(originator, year, event, day, isSecret)
 	return item
 end
 
+local function addSpecialFieldsToEntities(field, value, labels)
+	for key, label in pairs(labels) do
+		local entity = GetMutableEntityFromAll(label)
+		if IsEmpty(entity) then
+			if unfoundLabelFields[label] == nil then
+				unfoundLabelFields[label] = {}
+			end
+			unfoundLabelFields[label][field] = value
+		else
+			entity[field] = value
+		end
+	end
+end
+
+function AddSpecialFieldsToPreviouslyUnfoundEntity(entity)
+	for label, fieldsAndValues in pairs(unfoundLabelFields) do
+		if IsIn(label, GetLabels(entity)) then
+			for field, value in pairs(fieldsAndValues) do
+				entity[field] = value
+			end
+			unfoundLabelFields[label] = nil
+		end
+	end
+end
+
 function AddEvent(originator, year, event, day, isSecret)
-    StartBenchmarking("AddEvent")
+	StartBenchmarking("AddEvent")
 	if originator ~= nil and type(originator) ~= "table" then
 		LogError("Called with " .. DebugPrint(originator))
 		StopBenchmarking("AddEvent")
@@ -70,8 +96,11 @@ function AddEvent(originator, year, event, day, isSecret)
 	if IsEmpty(day) then
 		day = 0
 	end
-	Histories[#Histories + 1] = newHistoryItem(originator, year, event, day, isSecret)
-    StopBenchmarking("AddEvent")
+	local historyItem = newHistoryItem(originator, year, event, day, isSecret)
+	Histories[#Histories + 1] = historyItem
+	addSpecialFieldsToEntities("born", historyItem["year"], historyItem["birthof"])
+	addSpecialFieldsToEntities("died", historyItem["year"], historyItem["deathof"])
+	StopBenchmarking("AddEvent")
 end
 
 function HistoryEventString(yearAndDay, history)

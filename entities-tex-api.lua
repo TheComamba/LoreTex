@@ -85,6 +85,7 @@ function NewEntity(label, type, shortname, name)
     if not IsEmpty(DefaultLocation) then
         SetDescriptor(entity, "location", DefaultLocation)
     end
+    AddSpecialFieldsToPreviouslyUnfoundEntity(entity)
     AllEntities[#AllEntities + 1] = entity
     StopBenchmarking("NewEntity")
 end

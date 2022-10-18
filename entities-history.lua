@@ -96,22 +96,7 @@ local function addHistoryDescriptors(entities)
     end
 end
 
-local function scanHistoryItemsForSpecialEvents(entities)
-    for key1, historyItem in pairs(Histories) do
-        local year = historyItem["year"]
-        for key2, label in pairs(historyItem["birthof"]) do
-            local entity = GetMutableEntity(label, entities)
-            SetDescriptor(entity, "born", year)
-        end
-        for key2, label in pairs(historyItem["deathof"]) do
-            local entity = GetMutableEntity(label, entities)
-            SetDescriptor(entity, "died", year)
-        end
-    end
-end
-
 function ProcessHistory(entities)
-    scanHistoryItemsForSpecialEvents(entities)
     AddLifestageHistoryItemsForNPCs(entities)
     addHistoryDescriptors(entities)
 end

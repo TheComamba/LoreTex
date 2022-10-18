@@ -61,9 +61,12 @@ local function itemsParagraph()
     local out = {}
     Append(out, [[\paragraph{Gegenstände}]])
     Append(out, [[\begin{itemize}]])
-    Append(out, [[\item{} \nameref{at-secret-location}]])
+    Append(out, [[\item{} \nameref{at-secret-location} (an unbekanntem Ort)]])
     Append(out, [[\item{} \nameref{normal}]])
     Append(out, [[\item{} \nameref{revealed} (Geheim)]])
+    if IsShowSecrets then
+        Append(out, [[\item{} \nameref{secret} (Geheim)]])
+    end
     if IsShowFuture then
         Append(out, [[\item{} \nameref{unborn}]])
     end
@@ -75,13 +78,13 @@ local function associationParagraph()
     local out = {}
     Append(out, [[\paragraph{Zusammenschlüsse}]])
     Append(out, [[\begin{itemize}]])
+    Append(out, [[\item{} (Geheim) Mitglied der \nameref{revealed-orga}.]])
     if IsShowSecrets then
-        Append(out, [[(Geheim) Mitglied der \nameref{secret-orga}]])
+        Append(out, [[\item{} (Geheim) Mitglied der \nameref{secret-orga}.]])
     end
-    Append(out, [[(Geheim) Mitglied der \nameref{revealed-orga}]])
-    Append(out, [[Mitglied der \nameref{normal-orga}]])
+    Append(out, [[\item{} Mitglied der \nameref{normal-orga}.]])
     if IsShowFuture then
-        Append(out, [[Mitglied der \nameref{unborn-orga}]])
+        Append(out, [[\item{} Mitglied der \nameref{unborn-orga}.]])
     end
     Append(out, [[\end{itemize}]])
     return out
@@ -104,7 +107,7 @@ local function generateExpected()
     Append(out, [[\subsubsection{Normal Organisation}]])
     Append(out, [[\label{normal-orga}]])
     Append(out, itemsParagraph())
-    Append(out, [[\subsubsection{Revealed Organisation}]])
+    Append(out, [[\subsubsection[Revealed Organisation]{(Geheim) Revealed Organisation}]])
     Append(out, [[\label{revealed-orga}]])
     Append(out, itemsParagraph())
     if IsShowFuture then
@@ -142,8 +145,8 @@ local function generateExpected()
     Append(out, [[\end{itemize}]])
     Append(out, associationParagraph())
 
-    Append(out, [[\subsubsection{Revealed}]])
-    Append(out, [[\label{Revealed}]])
+    Append(out, [[\subsubsection[Revealed]{(Geheim) Revealed}]])
+    Append(out, [[\label{revealed}]])
     Append(out, [[\paragraph{Histori\"e}]])
     Append(out, [[\begin{itemize}]])
     Append(out, [[\item{} -8 Vin (vor 8 Jahren): (Geheim) Concerns \nameref{revealed}]])

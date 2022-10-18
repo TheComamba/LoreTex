@@ -14,6 +14,7 @@ local function resetEnvironment()
     SecondaryRefs = {}
     UnfoundRefs = {}
     IsShowFuture = true
+    SelectLanguage("english")
 end
 
 local function areEqual(obj1, obj2, elementNum, currentObj1, currentObj2)

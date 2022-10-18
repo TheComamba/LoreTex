@@ -97,6 +97,8 @@ local function addHistoryDescriptors(entities)
 end
 
 function ProcessHistory(entities)
-    AddLifestageHistoryItemsForNPCs(entities)
+    for key, entity in pairs(entities) do
+        AddLifestageHistoryItemsToNPC(entity)
+    end
     addHistoryDescriptors(entities)
 end

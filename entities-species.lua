@@ -169,12 +169,12 @@ local function addLifestageHistoryItems(entity)
 	end
 end
 
-function AddLifestageHistoryItemsForNPCs(entities)
-	local npcs = GetEntitiesIf(IsChar, entities)
-	for key, char in pairs(npcs) do
-		addLifestageHistoryItems(char)
+function AddLifestageHistoryItemsToNPC(entity)
+	if IsChar(entity) then
+		addLifestageHistoryItems(entity)
 	end
 end
+
 
 function AddSpeciesToPrimaryRefs()
 	local primaryEntities = GetEntitiesIf(IsPrimary, AllEntities)

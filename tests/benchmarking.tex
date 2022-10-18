@@ -1,0 +1,19 @@
+\documentclass[oneside]{memoir}
+\usepackage{nameref}
+\input{../main.tex}
+\loadLuacode{../}
+\begin{document}
+\pagestyle{empty}
+
+\begin{luacode*}
+	dofile(RelativePath .. "tests/benchmarking.lua")
+	local benchout = CreateBenchmarkingTest(500)
+	--tex.print(benchout)
+\end{luacode*}
+
+\chapter{Results}
+
+\PrintRpgTexErrors
+
+\PrintRpgTexBenchmarking
+\end{document}

@@ -197,27 +197,29 @@ local function generateExpected()
 end
 
 CurrentYearVin = 0
+local out = {}
+local expected = {}
 
 IsShowSecrets = false
 IsShowFuture = false
-local out = AutomatedChapters()
-local expected = generateExpected()
+out = AutomatedChapters()
+expected = generateExpected()
 Assert("entity-visibility-no-secrets-no-future", expected, out)
 
 IsShowSecrets = true
 IsShowFuture = false
-local out = AutomatedChapters()
-local expected = generateExpected()
+out = AutomatedChapters()
+expected = generateExpected()
 Assert("entity-visibility-with-secrets-no-future", expected, out)
 
 IsShowSecrets = false
 IsShowFuture = true
-local out = AutomatedChapters()
-local expected = generateExpected()
+out = AutomatedChapters()
+expected = generateExpected()
 Assert("entity-visibility-no-secrets-with-future", expected, out)
 
 IsShowSecrets = true
 IsShowFuture = true
-local out = AutomatedChapters()
-local expected = generateExpected()
+out = AutomatedChapters()
+expected = generateExpected()
 Assert("entity-visibility-with-secrets-with-future", expected, out)

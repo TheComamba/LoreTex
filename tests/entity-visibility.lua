@@ -5,6 +5,7 @@ AddAssociation(CurrentEntity(), "revealed-orga")
 AddAssociation(CurrentEntity(), "unborn-orga")
 AddEvent(CurrentEntity(), -9, [[Concerns \reference{secret}]])
 AddEvent(CurrentEntity(), -8, [[Concerns \reference{revealed}]])
+AddEvent(CurrentEntity(), -5, [[Secret event.]], 0, true)
 AddRef("normal", PrimaryRefs)
 
 NewEntity("secret", "item", nil, "Secret")
@@ -142,6 +143,9 @@ local function generateExpected()
         Append(out, [[\item{} -7 Vin (vor 7 Jahren): (Geheim) Concerns \nameref{normal}]])
     end
     Append(out, [[\item{} -6 Vin (vor 6 Jahren): (Geheim) Concerns \nameref{normal}]])
+    if IsShowSecrets then
+        Append(out, [[\item{} -5 Vin (vor 5 Jahren): (Geheim) Secret Event]])
+    end
     Append(out, [[\end{itemize}]])
     Append(out, associationParagraph())
 

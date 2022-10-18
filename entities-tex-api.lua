@@ -29,6 +29,7 @@ function SetDescriptor(entity, descriptor, description, subdescriptor)
     local labels = GetLabels(entity)
     local additionalLabels = ScanForCmd(description, "label")
     UniqueAppend(labels, additionalLabels)
+    RegisterEntityLabel(additionalLabels, entity)
     AddSpecialFieldsToPreviouslyUnfoundEntity(entity)
     StopBenchmarking("SetDescriptor")
 end
@@ -91,6 +92,7 @@ function NewEntity(label, type, shortname, name)
     if not IsEmpty(DefaultLocation) then
         SetDescriptor(entity, "location", DefaultLocation)
     end
+    RegisterEntityLabel(label, entity)
     AddSpecialFieldsToPreviouslyUnfoundEntity(entity)
     AllEntities[#AllEntities + 1] = entity
     StopBenchmarking("NewEntity")

@@ -1,4 +1,5 @@
 AllEntities = {}
+local labelToEntity = {}
 IsShowSecrets = false
 ProtectedDescriptors = { "name", "shortname", "type", "isSecret", "isShown", "labels" }
 OtherEntityTypes = { "other" }
@@ -96,15 +97,18 @@ function GetEntitiesOfType(type, list)
     return out
 end
 
-local function getEntityRaw(label, entityList)
-    if IsEmpty(label) then
-        LogError("Called with empty label!")
-        return {}
-    elseif type(label) ~= "string" then
-        LogError("Called with non-string type!")
-        return {}
-    elseif IsEmpty(entityList) or type(entityList) ~= "table" then
-        LogError("getEntityRaw called with " .. DebugPrint(entityList))
+function RegisterEntityLabel(labels, entity)
+    if type(labels) ~= "table" then
+        labels = { labels }
+    end
+    for key, label in pairs(labels) do
+        labelToEntity[label] = entity
+    end
+end
+
+function GetMutableEntity(label, entityList)
+    if entityList == AllEntities then
+        LogError("Trying to get mutable reference to member of AllEntities.")
         return {}
     end
     for key, entity in pairs(entityList) do
@@ -115,28 +119,24 @@ local function getEntityRaw(label, entityList)
     return {}
 end
 
+function GetMutableEntityFromAll(label)
+    local entity = labelToEntity[label]
+    if IsEmpty(entity) then
+        entity = {}
+    end
+    return entity
+end
+
 function GetEntity(label)
     StartBenchmarking("GetEntity")
-    local entity = getEntityRaw(label, AllEntities)
+    local entity = ReadonlyTable(GetMutableEntityFromAll(label))
     if IsEmpty(entity) and not IsIn(label, UnfoundRefs) then
         LogError("Entity with label \"" .. label .. "\" not found.")
         AddRef(label, UnfoundRefs)
+        entity = {}
     end
-    local out = ReadonlyTable(entity)
     StopBenchmarking("GetEntity")
-    return out
-end
-
-function GetMutableEntity(label, entityList)
-    if entityList == AllEntities then
-        LogError("Trying to get mutable reference to member of AllEntities.")
-        return {}
-    end
-    return getEntityRaw(label, entityList)
-end
-
-function GetMutableEntityFromAll(label)
-    return getEntityRaw(label, AllEntities)
+    return entity
 end
 
 function IsSecret(entity)

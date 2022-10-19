@@ -53,7 +53,7 @@ function DescriptorsString(entity)
     table.sort(descriptorsList)
     for key, descriptor in pairs(descriptorsList) do
         Append(out, TexCmd("paragraph", descriptor))
-        if descriptor == HistoryCaption then
+        if descriptor == Tr("history") then
             Append(out, ListHistory(entity[descriptor]))
         elseif descriptor == HeightCaption then
             Append(out, HeightDescriptor(entity[descriptor]))
@@ -91,7 +91,7 @@ function PrintOnlyMentionedChapter()
     local out = {}
     local secondaryEntities = GetEntitiesIf(IsSecondary, AllEntities)
     if #secondaryEntities > 0 then
-        Append(out, TexCmd("chapter", "Nur erwähnt"))
+        Append(out, TexCmd("chapter", Tr("only-mentioned")))
         table.sort(secondaryEntities, CompareByName)
         for index, entity in pairs(secondaryEntities) do
             Append(out, TexCmd("subparagraph", GetShortname(entity)))
@@ -116,7 +116,7 @@ function PrintEntityChapterBeginning(name, primaryEntities)
     local out = {}
     Append(out, TexCmd("chapter", name))
     if not IsEmpty(primaryEntities) then
-        Append(out, TexCmd("section*", "Alle " .. name))
+        Append(out, TexCmd("section*", Tr("all") .. " " .. name))
         Append(out, ListAll(getAllLabels(primaryEntities), NamerefString))
     end
     return out
@@ -124,7 +124,7 @@ end
 
 local function printEntityChapterSortedByLocation(primaryEntities)
     StartBenchmarking("printEntityChapterSortedByLocation")
-    local sectionname = "In der ganzen Welt"
+    local sectionname = Tr("in-whole-world")
     local entitiesWorldwide = extractEntitiesAtLocation(primaryEntities, nil)
     local out = printEntities(sectionname, entitiesWorldwide)
 
@@ -135,7 +135,7 @@ local function printEntityChapterSortedByLocation(primaryEntities)
         Append(out, printEntities(sectionname, entitiesHere))
     end
 
-    local sectionname = "An mysteriösen Orten"
+    local sectionname = Tr("at-unknown-locations")
     local entitiesSomewhere = GetEntitiesIf(IsLocationUnknown, primaryEntities)
     Append(out, printEntities(sectionname, entitiesSomewhere))
 
@@ -157,7 +157,7 @@ function PrintEntityChapter(primaryEntities, name, types)
     for i, type in pairs(types) do
         local entitiesOfType = GetEntitiesOfType(type, fittingEntities)
         if not IsEmpty(entitiesOfType) then
-            Append(out, TexCmd("section", TypeToName(type)))
+            Append(out, TexCmd("section", Tr(type)))
             Append(out, printEntityChapterSortedByLocation(entitiesOfType))
         end
     end

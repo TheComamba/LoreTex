@@ -1,5 +1,5 @@
 HeightCaption = "Höhe"
-LandmarkTypes = { "forest", "grassland", "range", "mountain", "river", "glacier", "lake" }
+LandmarkTypes = { "forests", "grasslands", "mountainranges", "mountains", "rivers", "glaciers", "lakes" }
 LandmarkTypeNames = { "Wälder", "Grasländer", "Gebirge", "Berge", "Flüsse", "Gletscher", "Seen" }
 local planetRadiusInKM = 6371
 
@@ -28,6 +28,8 @@ function HeightDescriptor(inputInM)
     Append(out, heightInM)
     Append(out, "m (")
     Append(out, toHorizonString)
-    Append(out, "km Sichtweite bis zum Horizont auf Meereshöhe).")
+    Append(out, "km ")
+    Append(out, Tr("visual-range-to-horizon"))
+    Append(out, ").")
     return out
 end

@@ -100,9 +100,9 @@ function Assert(caller, expected, received)
         Append(out, [[Error in function "]] .. caller .. [["!\\]])
         Append(out, PrintErrors())
         tex.print(out)
+        ResetErrors()
     elseif areEqual(expected, received, failedIndex, failedItem1, failedItem2) then
         numSucceeded = numSucceeded + 1
-        ResetErrors()
     else
         local out = {}
         numFailed = numFailed + 1

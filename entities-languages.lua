@@ -1,4 +1,4 @@
-LanguageTypes = { "language" }
+LanguageTypes = { "languages" }
 LanguageTypeNames = { "Sprachen" }
 
 function IsLanguage(entity)

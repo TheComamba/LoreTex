@@ -1,6 +1,6 @@
 NewEntity("test-species", "species", nil, "Test Species")
 
-NewEntity("test-npc", "npc", nil, "Test NPC")
+NewEntity("test-npc", "npcs", nil, "Test NPC")
 SetDescriptor(CurrentEntity(), "species", "test-species")
 SetDescriptor(CurrentEntity(), "born", -20)
 
@@ -10,38 +10,38 @@ IsShowFuture = false
 local out = AutomatedChapters()
 
 local expected = {
-    [[\chapter{Charaktere}]],
-    [[\section*{Alle Charaktere}]],
+    [[\chapter{Characters}]],
+    [[\section*{All Characters}]],
     [[\begin{itemize}]],
     [[\item{} \nameref{test-npc}]],
     [[\end{itemize}]],
     [[\section{NPCs}]],
-    [[\subsection{In der ganzen Welt}]],
+    [[\subsection{In the whole World}]],
     [[\subsubsection{Test NPC}]],
     [[\label{test-npc}]],
-    [[\paragraph{Erscheinung}]],
-    [[\subparagraph{Spezies und Alter:}\nameref {test-species}, 20 Jahre alt.]],
-    [[\paragraph{Histori\"e}]],
+    [[\paragraph{Appearance}]],
+    [[\subparagraph{Species and Age:}\nameref {test-species}, 20 years old.]],
+    [[\paragraph{History}]],
     [[\begin{itemize}]],
-    [[\item{} -8 Vin (vor 8 Jahren): \nameref{test-npc} ist Jugendlich.]],
-    [[\item{} 0 Vin (dieses Jahr): \nameref{test-npc} ist Jung.]],
+    [[\item{} -8 Vin (8 years ago): \nameref{test-npc} is Juvenile.]],
+    [[\item{} 0 Vin (this year): \nameref{test-npc} is Young.]],
     [[\end{itemize}]],
-    [[\chapter{Spezies}]],
-    [[\section*{Alle Spezies}]],
+    [[\chapter{Species}]],
+    [[\section*{All Species}]],
     [[\begin{itemize}]],
     [[\item{} \nameref{test-species}]],
     [[\end{itemize}]],
     [[\section{Spezies}]],
-    [[\subsection{In der ganzen Welt}]],
+    [[\subsection{In the whole World}]],
     [[\subsubsection{Test Species}]],
     [[\label{test-species}]],
-    [[\paragraph{Lebensabschnitte}]],
-    [[\subparagraph{Kind} 0-12 Jahre
-    \subparagraph{Jugendlich} 12-20 Jahre
-    \subparagraph{Jung} 20-30 Jahre
-    \subparagraph{Erwachsen} 30-60 Jahre
-    \subparagraph{Alt} 60-90 Jahre
-    \subparagraph{Uralt} 90+ Jahre]]
+    [[\paragraph{Stages of Life}]],
+    [[\subparagraph{Child} 0-12 Years
+    \subparagraph{Juvenile} 12-20 Years
+    \subparagraph{Young} 20-30 Years
+    \subparagraph{Adult} 30-60 Years
+    \subparagraph{Old} 60-90 Years
+    \subparagraph{Ancient} 90+ Years]]
 }
 
 Assert("npc-and-species", expected, out)

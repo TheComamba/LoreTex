@@ -1,5 +1,4 @@
 Histories = {}
-HistoryCaption = "Histori\\\"e"
 local unfoundLabelFields = {}
 
 function AddHistoryItemToHistory(historyItem, history)
@@ -7,7 +6,7 @@ function AddHistoryItemToHistory(historyItem, history)
 	local day = historyItem["day"]
 	local event = historyItem["event"]
 	if IsSecret(historyItem) then
-		event = "(Geheim) " .. event
+		event = "(" .. Tr("secret") .. ") " .. event
 	end
 	if history[year] == nil then
 		history[year] = {}
@@ -108,7 +107,7 @@ function HistoryEventString(yearAndDay, history)
 	local day = yearAndDay[2]
 	local out = AnnoString(year)
 	if day > 0 then
-		out = out .. ", Tag " .. Date(day, {})
+		out = out .. ", " .. Tr("day") .. " " .. Date(day, {})
 	end
 	return out .. ": " .. history[year][day]
 end

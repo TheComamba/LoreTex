@@ -59,7 +59,7 @@ local function setShown(historyItem)
 end
 
 local function getHistory(entity)
-    local history = entity[HistoryCaption]
+    local history = entity[Tr("history")]
     if IsEmpty(history) then
         return {}
     else
@@ -80,7 +80,7 @@ local function addHistoryToEntities(historyItem, entities)
             if isAcceptsHistoryFrom(concernedEntity, originator) then
                 local history = getHistory(concernedEntity)
                 AddHistoryItemToHistory(historyItem, history)
-                SetDescriptor(concernedEntity, HistoryCaption, history)
+                SetDescriptor(concernedEntity, Tr("history"), history)
             end
         end
     end

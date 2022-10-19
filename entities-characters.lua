@@ -1,4 +1,4 @@
-CharacterTypes = { "pc", "npc", "god" }
+CharacterTypes = { "pcs", "npcs", "gods" }
 CharacterTypeNames = { "Spielercharaktere", "NPCs", "Götter" }
 PCs = {}
 
@@ -12,7 +12,7 @@ end
 
 function AddSpeciesAndAgeStringToNPC(entity)
     if IsChar(entity) then
-        SetDescriptor(entity, "Erscheinung", SpeciesAndAgeString(entity, CurrentYearVin), "Spezies und Alter:")
+        SetDescriptor(entity, Tr("appearance"), SpeciesAndAgeString(entity, CurrentYearVin), Tr("species-and-age") .. ":")
     end
 end
 

@@ -1,4 +1,4 @@
-ClassTypes = { "class", "subclass" }
+ClassTypes = { "classes", "subclasses" }
 ClassTypeNames = { "Klassen", "Subklassen" }
 
 function IsClass(entity)

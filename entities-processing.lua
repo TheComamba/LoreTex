@@ -1,7 +1,7 @@
 local function entityQualifiersString(srcEntity, targetEntity, role)
     local content = {}
     if IsSecret(srcEntity) then
-        Append(content, "Geheim")
+        Append(content, Tr("secret"))
     end
     if not IsEmpty(role) then
         Append(content, role)
@@ -21,7 +21,7 @@ local function entityQualifiersString(srcEntity, targetEntity, role)
     local location = srcEntity["location"]
     local targetLocation = targetEntity["location"]
     if not IsPlace(targetEntity) and not IsEmpty(location) and location ~= targetLocation then
-        Append(content, "in " .. TexCmd("nameref", location))
+        Append(content, Tr("in") .. " " .. TexCmd("nameref", location))
     end
     if not IsEmpty(content) then
         return "(" .. table.concat(content, ", ") .. ")"
@@ -31,7 +31,7 @@ local function entityQualifiersString(srcEntity, targetEntity, role)
 end
 
 local function addSingleEntity(srcEntity, targetEntity, entityType, role)
-    local name = TypeToName(entityType)
+    local name = Tr(entityType)
     if targetEntity[name] == nil then
         targetEntity[name] = {}
     end

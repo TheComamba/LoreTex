@@ -1,5 +1,5 @@
-Append(ProtectedDescriptors, { "association" })
-AssociationTypes = { "organisation", "family", "ship" }
+Append(ProtectedDescriptors, { "associations" })
+AssociationTypes = { "organisations", "families", "ships" }
 AssociationTypeNames = { "Organisationen", "Familien", "Schiffe" }
 
 function IsAssociation(entity)
@@ -19,16 +19,17 @@ function AddAssociationDescriptors(entity)
             local association = GetEntity(associationLabel)
             if not IsEmpty(association) and IsShown(association) then
                 if IsEmpty(assocationRole) then
-                    assocationRole = "Mitglied"
+                    assocationRole = Tr("member")
                 end
-                local description = assocationRole .. " der " .. TexCmd("nameref ", associationLabel) .. "."
+                local description = assocationRole ..
+                    " " .. Tr("of") .. " " .. TexCmd("nameref ", associationLabel) .. "."
                 if IsSecret(association) then
-                    description = "(Geheim) " .. description
+                    description = "(" .. Tr("secret") .. ") " .. description
                 end
                 Append(associationList, description)
             end
         end
-        SetDescriptor(entity, "Zusammenschlüsse", associationList)
+        SetDescriptor(entity, Tr("associations"), associationList)
     end
 end
 
@@ -39,6 +40,6 @@ function MarkSecret(entity)
         if entity["shortname"] == nil then
             entity["shortname"] = entity["name"]
         end
-        entity["name"] = "(Geheim) " .. entity["name"]
+        entity["name"] = "(" .. Tr("secret") .. ") " .. entity["name"]
     end
 end

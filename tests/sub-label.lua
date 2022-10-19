@@ -1,10 +1,10 @@
-NewEntity("npc", "npc", nil, "NPC")
+NewEntity("npc", "npcs", nil, "NPC")
 SetDescriptor(CurrentEntity(), "species", "subspecies")
 SetDescriptor(CurrentEntity(), "location", "subplace-1")
 SetDescriptor(CurrentEntity(), "Some Info", [[Refers to \nameref{subplace-2}.]])
-NewEntity("place-1", "place", nil, "Place 1")
+NewEntity("place-1", "places", nil, "Place 1")
 SetDescriptor(CurrentEntity(), "Subplace 1", [[\label{subplace-1}]])
-NewEntity("place-2", "place", nil, "Place 2")
+NewEntity("place-2", "places", nil, "Place 2")
 SetDescriptor(CurrentEntity(), "Subplace 2", [[\label{subplace-2}]])
 NewEntity("species", "species", nil, "Species")
 SetDescriptor(CurrentEntity(), "Subspecies", [[\label{subspecies}]])
@@ -14,8 +14,8 @@ AddRef("npc", PrimaryRefs)
 local out = AutomatedChapters()
 
 local expected = {
-    [[\chapter{Charaktere}]],
-    [[\section*{Alle Charaktere}]],
+    [[\chapter{Characters}]],
+    [[\section*{All Characters}]],
     [[\begin{itemize}]],
     [[\item{} \nameref{npc}]],
     [[\end{itemize}]],
@@ -23,11 +23,11 @@ local expected = {
     [[\subsection{In Subplace 1}]],
     [[\subsubsection{NPC}]],
     [[\label{npc}]],
-    [[\paragraph{Erscheinung}]],
-    [[\subparagraph{Spezies und Alter:}\nameref {subspecies}.]],
+    [[\paragraph{Appearance}]],
+    [[\subparagraph{Species and Age:}\nameref {subspecies}.]],
     [[\paragraph{Some Info}]],
     [[Refers to \nameref{subplace-2}.]],
-    [[\chapter{Nur erwähnt}]],
+    [[\chapter{Only mentioned}]],
     [[\subparagraph{Subplace 2}]],
     [[\label{subplace-2}]],
     [[\hspace{1cm}]],

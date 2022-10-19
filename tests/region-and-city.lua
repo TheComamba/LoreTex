@@ -1,6 +1,6 @@
-NewEntity("test-region", "place", nil, "Test Region")
+NewEntity("test-region", "places", nil, "Test Region")
 
-NewEntity("test-city", "place", nil, "Test City")
+NewEntity("test-city", "places", nil, "Test City")
 SetDescriptor(CurrentEntity(), "location", "test-region")
 
 AddAllEntitiesToPrimaryRefs()
@@ -8,17 +8,17 @@ AddAllEntitiesToPrimaryRefs()
 local out = AutomatedChapters()
 
 local expected = {
-    [[\chapter{Orte}]],
-    [[\section*{Alle Orte}]],
+    [[\chapter{Places}]],
+    [[\section*{All Places}]],
     [[\begin{itemize}]],
     [[\item{} \nameref{test-city}]],
     [[\item{} \nameref{test-region}]],
     [[\end{itemize}]],
-    [[\section{Orte}]],
-    [[\subsection{In der ganzen Welt}]],
+    [[\section{Places}]],
+    [[\subsection{In the whole World}]],
     [[\subsubsection{Test Region}]],
     [[\label{test-region}]],
-    [[\paragraph{Orte}]],
+    [[\paragraph{Places}]],
     [[\begin{itemize}]],
     [[\item{} \nameref {test-city}]],
     [[\end{itemize}]],

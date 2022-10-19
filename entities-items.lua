@@ -1,4 +1,4 @@
-ItemTypes = { "item" }
+ItemTypes = { "items" }
 ItemTypeNames = { "Gegenstände" }
 
 function IsItem(entity)

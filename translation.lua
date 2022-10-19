@@ -6,7 +6,7 @@ end
 
 function Tr(keyword)
     local translation = Dictionary[keyword]
-    if keyword == nil then
+    if translation == nil then
         LogError("Could not find translation for keyword " .. DebugPrint(keyword))
         translation = ""
     end

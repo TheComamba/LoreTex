@@ -114,7 +114,8 @@ local function ageString(entity, year)
 		return ""
 	end
 	Append(out, tostring(age))
-	Append(out, " Jahre alt")
+	Append(out, " ")
+	Append(out, Tr("years-old"))
 	Append(out, specificAgeString(entity, age))
 	return table.concat(out)
 end

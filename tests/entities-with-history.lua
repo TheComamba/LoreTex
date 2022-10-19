@@ -1,6 +1,6 @@
-NewEntity("test-1", "place", nil, "Test 1")
+NewEntity("test-1", "places", nil, "Test 1")
 
-NewEntity("test-2", "place", nil, "Test 2")
+NewEntity("test-2", "places", nil, "Test 2")
 AddEvent(CurrentEntity(), -10, [[Event that concerns \reference{test-1} and \itref{test-2}.]])
 AddEvent(CurrentEntity(), 10, [[Event in the future.]])
 
@@ -11,20 +11,20 @@ IsShowFuture = false
 local out = AutomatedChapters()
 
 local expected = {
-    [[\chapter{Orte}]],
-    [[\section*{Alle Orte}]],
+    [[\chapter{Places}]],
+    [[\section*{All Places}]],
     [[\begin{itemize}]],
     [[\item{} \nameref{test-1}]],
     [[\end{itemize}]],
-    [[\section{Orte}]],
-    [[\subsection{In der ganzen Welt}]],
+    [[\section{Places}]],
+    [[\subsection{In the whole World}]],
     [[\subsubsection{Test 1}]],
     [[\label{test-1}]],
-    [[\paragraph{Histori\"e}]],
+    [[\paragraph{History}]],
     [[\begin{itemize}]],
-    [[\item{} -10 Vin (vor 10 Jahren): Event that concerns \nameref{test-1} and \itref{test-2}.]],
+    [[\item{} -10 Vin (10 years ago): Event that concerns \nameref{test-1} and \itref{test-2}.]],
     [[\end{itemize}]],
-    [[\chapter{Nur erwähnt}]],
+    [[\chapter{Only mentioned}]],
     [[\subparagraph{Test 2}]],
     [[\label{test-2}]],
     [[\hspace{1cm}]]
@@ -37,25 +37,25 @@ AddRef("test-2", PrimaryRefs)
 out = AutomatedChapters()
 
 expected = {
-    [[\chapter{Orte}]],
-    [[\section*{Alle Orte}]],
+    [[\chapter{Places}]],
+    [[\section*{All Places}]],
     [[\begin{itemize}]],
     [[\item{} \nameref{test-1}]],
     [[\item{} \nameref{test-2}]],
     [[\end{itemize}]],
-    [[\section{Orte}]],
-    [[\subsection{In der ganzen Welt}]],
+    [[\section{Places}]],
+    [[\subsection{In the whole World}]],
     [[\subsubsection{Test 1}]],
     [[\label{test-1}]],
-    [[\paragraph{Histori\"e}]],
+    [[\paragraph{History}]],
     [[\begin{itemize}]],
-    [[\item{} -10 Vin (vor 10 Jahren): Event that concerns \nameref{test-1} and \itref{test-2}.]],
+    [[\item{} -10 Vin (10 years ago): Event that concerns \nameref{test-1} and \itref{test-2}.]],
     [[\end{itemize}]],
     [[\subsubsection{Test 2}]],
     [[\label{test-2}]],
-    [[\paragraph{Histori\"e}]],
+    [[\paragraph{History}]],
     [[\begin{itemize}]],
-    [[\item{} -10 Vin (vor 10 Jahren): Event that concerns \nameref{test-1} and \itref{test-2}.]],
+    [[\item{} -10 Vin (10 years ago): Event that concerns \nameref{test-1} and \itref{test-2}.]],
     [[\end{itemize}]]
 }
 

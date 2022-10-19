@@ -28,10 +28,6 @@ function TypeToNameMap()
     return out
 end
 
-function TypeToName(type)
-    return TypeToNameMap()[type]
-end
-
 function IsType(types, entity)
     if IsEmpty(entity) then
         LogError("Called with empty entity!")

@@ -1,4 +1,4 @@
-SpellTypes = { "spell", "spell-property" }
+SpellTypes = { "spells", "spell-properties" }
 SpellTypeNames = { "Zauber", "Zauber-Eigenschaften" }
 
 function IsSpell(entity)

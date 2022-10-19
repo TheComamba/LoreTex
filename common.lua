@@ -115,7 +115,11 @@ function ListAll(list, processor, additionalProcessorArg)
 	local out = {}
 	Append(out, TexCmd("begin", "itemize"))
 	for key, content in pairs(processedList) do
-		Append(out, TexCmd("item") .. " " .. content)
+		if type(content) ~= "string" then
+			LogError("Trying to concat " .. DebugPrint(content))
+		else
+			Append(out, TexCmd("item") .. " " .. content)
+		end
 	end
 	Append(out, TexCmd("end", "itemize"))
 	return out

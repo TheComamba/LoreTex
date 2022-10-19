@@ -1,6 +1,6 @@
 Append(ProtectedDescriptors, { "location" })
 DefaultLocation = ""
-PlaceTypes = { "place" }
+PlaceTypes = { "places" }
 PlaceTypeNames = { "Orte" }
 
 function IsPlace(entity)

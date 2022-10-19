@@ -6,29 +6,49 @@ AddEvent(CurrentEntity(), 10, [[Event in the future.]])
 
 AddRef("test-1", PrimaryRefs)
 
+local function generateExpected(isSecondAdded)
+    local out = {}
+    Append(out, [[\chapter{]] .. Tr("places") .. [[}]])
+    Append(out, [[\section*{]] .. Tr("all") .. [[ ]] .. Tr("places") .. [[}]])
+    Append(out, [[\begin{itemize}]])
+    Append(out, [[\item{} \nameref{test-1}]])
+    if isSecondAdded then
+        Append(out, [[\item{} \nameref{test-2}]])
+    end
+    Append(out, [[\end{itemize}]])
+    Append(out, [[\section{]] .. Tr("places") .. [[}]])
+    Append(out, [[\subsection{]] .. Tr("in-whole-world") .. [[}]])
+    Append(out, [[\subsubsection{Test 1}]])
+    Append(out, [[\label{test-1}]])
+    Append(out, [[\paragraph{]] .. Tr("history") .. [[}]])
+    Append(out, [[\begin{itemize}]])
+    Append(out,
+        [[\item{} -10 Vin (]] .. Tr("years-ago", { 10 }) ..
+        [[): Event that concerns \nameref{test-1} and \itref{test-2}.]])
+    Append(out, [[\end{itemize}]])
+    if isSecondAdded then
+        Append(out, [[\subsubsection{Test 2}]])
+        Append(out, [[\label{test-2}]])
+        Append(out, [[\paragraph{]] .. Tr("history") .. [[}]])
+        Append(out, [[\begin{itemize}]])
+        Append(out,
+            [[\item{} -10 Vin (]] ..
+            Tr("years-ago", { 10 }) .. [[): Event that concerns \nameref{test-1} and \itref{test-2}.]])
+        Append(out, [[\end{itemize}]])
+    else
+        Append(out, [[\chapter{]] .. Tr("only-mentioned") .. [[}]])
+        Append(out, [[\subparagraph{Test 2}]])
+        Append(out, [[\label{test-2}]])
+        Append(out, [[\hspace{1cm}]])
+    end
+    return out
+end
+
 IsShowFuture = false
 
 local out = AutomatedChapters()
 
-local expected = {
-    [[\chapter{Places}]],
-    [[\section*{All Places}]],
-    [[\begin{itemize}]],
-    [[\item{} \nameref{test-1}]],
-    [[\end{itemize}]],
-    [[\section{Places}]],
-    [[\subsection{In the whole World}]],
-    [[\subsubsection{Test 1}]],
-    [[\label{test-1}]],
-    [[\paragraph{History}]],
-    [[\begin{itemize}]],
-    [[\item{} -10 Vin (10 years ago): Event that concerns \nameref{test-1} and \itref{test-2}.]],
-    [[\end{itemize}]],
-    [[\chapter{Only mentioned}]],
-    [[\subparagraph{Test 2}]],
-    [[\label{test-2}]],
-    [[\hspace{1cm}]]
-}
+local expected = generateExpected(false)
 
 Assert("one-entity-with-history", expected, out)
 
@@ -36,27 +56,6 @@ AddRef("test-2", PrimaryRefs)
 
 out = AutomatedChapters()
 
-expected = {
-    [[\chapter{Places}]],
-    [[\section*{All Places}]],
-    [[\begin{itemize}]],
-    [[\item{} \nameref{test-1}]],
-    [[\item{} \nameref{test-2}]],
-    [[\end{itemize}]],
-    [[\section{Places}]],
-    [[\subsection{In the whole World}]],
-    [[\subsubsection{Test 1}]],
-    [[\label{test-1}]],
-    [[\paragraph{History}]],
-    [[\begin{itemize}]],
-    [[\item{} -10 Vin (10 years ago): Event that concerns \nameref{test-1} and \itref{test-2}.]],
-    [[\end{itemize}]],
-    [[\subsubsection{Test 2}]],
-    [[\label{test-2}]],
-    [[\paragraph{History}]],
-    [[\begin{itemize}]],
-    [[\item{} -10 Vin (10 years ago): Event that concerns \nameref{test-1} and \itref{test-2}.]],
-    [[\end{itemize}]]
-}
+expected = generateExpected(true)
 
 Assert("two-entities-with-history", expected, out)

@@ -45,10 +45,10 @@ end
 
 function AddAssociation(entity, association, role)
     if entity ~= nil then
-        if entity["association"] == nil then
-            entity["association"] = {}
+        if entity["associations"] == nil then
+            entity["associations"] = {}
         end
-        entity["association"][#entity["association"] + 1] = { association, role }
+        entity["associations"][#entity["associations"] + 1] = { association, role }
     end
 end
 

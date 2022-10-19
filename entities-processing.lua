@@ -72,7 +72,7 @@ end
 
 local function addAllEntitiesTo(entities)
     for type, name in pairs(TypeToNameMap()) do
-        for key2, keyword in pairs({ "location", "association" }) do
+        for key2, keyword in pairs({ "location", "associations" }) do
             addEntitiesTo(type, keyword, entities)
         end
     end

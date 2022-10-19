@@ -51,15 +51,15 @@ function AnnoString(yearIn, fmt)
     Append(out, " ")
     Append(out, fmt)
     if diff == 0 then
-        Append(out, " (dieses Jahr)")
+        Append(out, " (" .. Tr("this-year") .. ")")
     elseif diff == 1 then
-        Append(out, " (letztes Jahr)")
+        Append(out, " (" .. Tr("last-year") .. ")")
     elseif diff == -1 then
-        Append(out, " (nächstes Jahr)")
+        Append(out, " (" .. Tr("next-year") .. ")")
     elseif diff > 0 then
-        Append(out, " (vor " .. diff .. " Jahren)")
+        Append(out, " (" .. Tr("years-ago", { diff }) .. ")")
     elseif diff < 0 then
-        Append(out, " (in " .. math.abs(diff) .. " Jahren)")
+        Append(out, " (" .. Tr("in-years", { math.abs(diff) }) .. ")")
     end
     return table.concat(out)
 end

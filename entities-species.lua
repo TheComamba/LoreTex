@@ -2,12 +2,12 @@ Append(ProtectedDescriptors, { "born", "died", "species", "gender", "ageFactor",
 SpeciesTypes = { "species" }
 SpeciesTypeNames = { "Spezies" }
 local lifestagesAndAges = {}
-lifestagesAndAges[#lifestagesAndAges + 1] = { "Kind", 0 }
-lifestagesAndAges[#lifestagesAndAges + 1] = { "Jugendlich", 12 }
-lifestagesAndAges[#lifestagesAndAges + 1] = { "Jung", 20 }
-lifestagesAndAges[#lifestagesAndAges + 1] = { "Erwachsen", 30 }
-lifestagesAndAges[#lifestagesAndAges + 1] = { "Alt", 60 }
-lifestagesAndAges[#lifestagesAndAges + 1] = { "Uralt", 90 }
+lifestagesAndAges[#lifestagesAndAges + 1] = { "child", 0 }
+lifestagesAndAges[#lifestagesAndAges + 1] = { "juvenile", 12 }
+lifestagesAndAges[#lifestagesAndAges + 1] = { "young", 20 }
+lifestagesAndAges[#lifestagesAndAges + 1] = { "adult", 30 }
+lifestagesAndAges[#lifestagesAndAges + 1] = { "old", 60 }
+lifestagesAndAges[#lifestagesAndAges + 1] = { "ancient", 90 }
 
 
 function IsSpecies(entity)
@@ -79,11 +79,15 @@ local function correspondingHumanAgeString(species, age)
 	local factor, exponent = GetAgeFactorAndExponent(species)
 	local out = {}
 	if factor ~= 1 or exponent ~= 1 then
-		Append(out, " (entspricht einem Menschenalter von ")
 		local specificAge = yearsToAge(age, factor, exponent)
 		local specificAgeString = RoundedNumString(specificAge, 0)
+		Append(out, " (")
+		Append(out, Tr("corresponding-human-age"))
+		Append(out, " ")
 		Append(out, specificAgeString)
-		Append(out, " Jahren)")
+		Append(out, " ")
+		Append(out, Tr("years"))
+		Append(out, ")")
 	end
 	return table.concat(out)
 end
@@ -100,14 +104,15 @@ local function specificAgeString(entity, age)
 	if isAges(species) then
 		return correspondingHumanAgeString(species, age)
 	else
-		return " (altert nicht)"
+		return " (" .. Tr("does-not-age") .. ")"
 	end
 end
 
 local function ageString(entity, year)
 	local out = {}
 	if IsDead(entity) then
-		Append(out, "Wurde ")
+		Append(out, Tr("aged"))
+		Append(out, " ")
 	end
 	local age = GetAgeInYears(entity, year)
 	if IsEmpty(age) or age < 0 then
@@ -163,8 +168,14 @@ local function addLifestageHistoryItems(entity)
 			realAge = Round(realAge)
 			local year = birthyear + realAge
 			if deathyear == nil or year <= deathyear then
-				local event = TexCmd("nameref", label) .. " ist " .. lifestage .. "."
-				AddEvent(entity, year, event, 0, false)
+				local event = {}
+				Append(event, TexCmd("nameref", label))
+				Append(event, " ")
+				Append(event, Tr("is"))
+				Append(event, " ")
+				Append(event, Tr(lifestage))
+				Append(event, ".")
+				AddEvent(entity, year, table.concat(event), 0, false)
 			end
 		end
 	end
@@ -175,7 +186,6 @@ function AddLifestageHistoryItemsToNPC(entity)
 		addLifestageHistoryItems(entity)
 	end
 end
-
 
 function AddSpeciesToPrimaryRefs()
 	local primaryEntities = GetEntitiesIf(IsPrimary, AllEntities)
@@ -199,7 +209,7 @@ local function lifestagesDescription(species)
 		local begins = stageAndAge[2]
 		begins = ageToYears(begins, factor, exponent)
 		local beginsString = RoundedNumString(begins, 0)
-		Append(out, TexCmd("subparagraph", stage))
+		Append(out, TexCmd("subparagraph", Tr(stage)))
 		Append(out, beginsString)
 		if i < #lifestagesAndAges then
 			local ends = lifestagesAndAges[i + 1][2]
@@ -210,7 +220,8 @@ local function lifestagesDescription(species)
 		else
 			Append(out, "+")
 		end
-		Append(out, " Jahre")
+		Append(out, " ")
+		Append(out, Tr("years"))
 	end
 	return table.concat(out)
 end
@@ -220,7 +231,7 @@ function AddLifeStagesToSpecies(entity)
 		if isAges(entity) then
 			local lifestages = lifestagesDescription(entity)
 			if not IsEmpty(lifestages) then
-				SetDescriptor(entity, "Lebensabschnitte", lifestages)
+				SetDescriptor(entity, Tr("lifestages"), lifestages)
 			end
 		end
 	end

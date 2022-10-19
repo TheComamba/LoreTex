@@ -31,7 +31,7 @@ local expected = {
     [[\begin{itemize}]],
     [[\item{} \nameref{test-species}]],
     [[\end{itemize}]],
-    [[\section{Spezies}]],
+    [[\section{Species}]],
     [[\subsection{In the whole World}]],
     [[\subsubsection{Test Species}]],
     [[\label{test-species}]],

@@ -8,21 +8,21 @@ AddAllEntitiesToPrimaryRefs()
 local out = AutomatedChapters()
 
 local expected = {
-    [[\chapter{]] .. Tr("places") .. [[}]],
-    [[\section*{]] .. Tr("all") .. [[ ]] .. Tr("places") .. [[}]],
+    [[\chapter{]] .. CapFirst(Tr("places")) .. [[}]],
+    [[\section*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("places")) .. [[}]],
     [[\begin{itemize}]],
     [[\item{} \nameref{test-city}]],
     [[\item{} \nameref{test-region}]],
     [[\end{itemize}]],
-    [[\section{]] .. Tr("places") .. [[}]],
+    [[\section{]] .. CapFirst(Tr("places")) .. [[}]],
     [[\subsection{]] .. Tr("in-whole-world") .. [[}]],
     [[\subsubsection{Test Region}]],
     [[\label{test-region}]],
-    [[\paragraph{]] .. Tr("places") .. [[}]],
+    [[\paragraph{]] .. CapFirst(Tr("places")) .. [[}]],
     [[\begin{itemize}]],
     [[\item{} \nameref {test-city}]],
     [[\end{itemize}]],
-    [[\subsection{In Test Region}]],
+    [[\subsection{]] .. CapFirst(Tr("in")) .. [[ Test Region}]],
     [[\subsubsection{Test City}]],
     [[\label{test-city}]]
 }

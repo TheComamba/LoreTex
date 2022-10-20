@@ -19,6 +19,10 @@ function Tr(keyword, additionalArguments)
     return translation
 end
 
+function CapFirst(str)
+    return (str:gsub("^%l", string.upper))
+end
+
 local function randomWord(length)
     local out = {}
     for i = 1,length do

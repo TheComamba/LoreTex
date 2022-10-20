@@ -60,7 +60,7 @@ AddRef("unborn-orga", PrimaryRefs)
 
 local function itemsParagraph()
     local out = {}
-    Append(out, [[\paragraph{]] .. Tr("items") .. [[}]])
+    Append(out, [[\paragraph{]] .. CapFirst(Tr("items")) .. [[}]])
     Append(out, [[\begin{itemize}]])
     if IsShowSecrets then
         Append(out, [[\item{} \nameref{at-secret-location} (]] .. Tr("in") .. [[ \nameref{eldorado})]])
@@ -84,14 +84,16 @@ local function associationParagraph()
     Append(out, [[\paragraph{]] .. Tr("associations") .. [[}]])
     Append(out, [[\begin{itemize}]])
     Append(out,
-        [[\item{} (]] .. Tr("secret") .. [[) ]] .. Tr("member") .. [[ ]] .. Tr("of") .. [[ \nameref{revealed-orga}.]])
+        [[\item{} (]] ..
+        Tr("secret") .. [[) ]] .. CapFirst(Tr("member")) .. [[ ]] .. Tr("of") .. [[ \nameref{revealed-orga}.]])
     if IsShowSecrets then
         Append(out,
-            [[\item{} (]] .. Tr("secret") .. [[) ]] .. Tr("member") .. [[ ]] .. Tr("of") .. [[ \nameref{secret-orga}.]])
+            [[\item{} (]] ..
+            Tr("secret") .. [[) ]] .. CapFirst(Tr("member")) .. [[ ]] .. Tr("of") .. [[ \nameref{secret-orga}.]])
     end
-    Append(out, [[\item{} ]] .. Tr("member") .. [[ ]] .. Tr("of") .. [[ \nameref{normal-orga}.]])
+    Append(out, [[\item{} ]] .. CapFirst(Tr("member")) .. [[ ]] .. Tr("of") .. [[ \nameref{normal-orga}.]])
     if IsShowFuture then
-        Append(out, [[\item{} ]] .. Tr("member") .. [[ ]] .. Tr("of") .. [[ \nameref{unborn-orga}.]])
+        Append(out, [[\item{} ]] .. CapFirst(Tr("member")) .. [[ ]] .. Tr("of") .. [[ \nameref{unborn-orga}.]])
     end
     Append(out, [[\end{itemize}]])
     return out
@@ -99,8 +101,8 @@ end
 
 local function generateExpected()
     local out = {}
-    Append(out, [[\chapter{]] .. Tr("associations") .. [[}]])
-    Append(out, [[\section*{]] .. Tr("all") .. [[ ]] .. Tr("associations") .. [[}]])
+    Append(out, [[\chapter{]] .. CapFirst(Tr("associations")) .. [[}]])
+    Append(out, [[\section*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("associations")) .. [[}]])
     Append(out, [[\begin{itemize}]])
     Append(out, [[\item{} \nameref{normal-orga}]])
     Append(out, [[\item{} \nameref{revealed-orga}]])
@@ -109,12 +111,12 @@ local function generateExpected()
     end
     Append(out, [[\end{itemize}]])
 
-    Append(out, [[\section{]] .. Tr("organisations") .. [[}]])
+    Append(out, [[\section{]] .. CapFirst(Tr("organisations")) .. [[}]])
     Append(out, [[\subsection{]] .. Tr("in-whole-world") .. [[}]])
     Append(out, [[\subsubsection{Normal Organisation}]])
     Append(out, [[\label{normal-orga}]])
     Append(out, itemsParagraph())
-    Append(out, [[\subsubsection[Revealed Organisation]{(]] .. Tr("secret") .. [[) Revealed Organisation}]])
+    Append(out, [[\subsubsection[Revealed Organisation]{(]] .. CapFirst(Tr("secret")) .. [[) Revealed Organisation}]])
     Append(out, [[\label{revealed-orga}]])
     Append(out, itemsParagraph())
     if IsShowFuture then
@@ -123,8 +125,8 @@ local function generateExpected()
         Append(out, itemsParagraph())
     end
 
-    Append(out, [[\chapter{]] .. Tr("items") .. [[}]])
-    Append(out, [[\section*{]] .. Tr("all") .. [[ ]] .. Tr("items") .. [[}]])
+    Append(out, [[\chapter{]] .. CapFirst(Tr("items")) .. [[}]])
+    Append(out, [[\section*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("items")) .. [[}]])
     Append(out, [[\begin{itemize}]])
     Append(out, [[\item{} \nameref{at-secret-location}]])
     Append(out, [[\item{} \nameref{normal}]])
@@ -134,12 +136,12 @@ local function generateExpected()
     end
     Append(out, [[\end{itemize}]])
 
-    Append(out, [[\section{]] .. Tr("items") .. [[}]])
+    Append(out, [[\section{]] .. CapFirst(Tr("items")) .. [[}]])
     Append(out, [[\subsection{]] .. Tr("in-whole-world") .. [[}]])
 
     Append(out, [[\subsubsection{Normal}]])
     Append(out, [[\label{normal}]])
-    Append(out, [[\paragraph{]] .. Tr("history") .. [[}]])
+    Append(out, [[\paragraph{]] .. CapFirst(Tr("history")) .. [[}]])
     Append(out, [[\begin{itemize}]])
     if IsShowSecrets then
         Append(out,
@@ -159,9 +161,9 @@ local function generateExpected()
     Append(out, [[\end{itemize}]])
     Append(out, associationParagraph())
 
-    Append(out, [[\subsubsection[Revealed]{(]] .. Tr("secret") .. [[) Revealed}]])
+    Append(out, [[\subsubsection[Revealed]{(]] .. CapFirst(Tr("secret")) .. [[) Revealed}]])
     Append(out, [[\label{revealed}]])
-    Append(out, [[\paragraph{]] .. Tr("history") .. [[}]])
+    Append(out, [[\paragraph{]] .. CapFirst(Tr("history")) .. [[}]])
     Append(out, [[\begin{itemize}]])
     Append(out,
         [[\item{} -8 Vin (]] .. Tr("years-ago", { 8 }) .. [[): (]] .. Tr("secret") .. [[) Concerns \nameref{revealed}]])
@@ -173,7 +175,7 @@ local function generateExpected()
     if IsShowFuture then
         Append(out, [[\subsubsection{Unborn}]])
         Append(out, [[\label{unborn}]])
-        Append(out, [[\paragraph{]] .. Tr("history") .. [[}]])
+        Append(out, [[\paragraph{]] .. CapFirst(Tr("history")) .. [[}]])
         Append(out, [[\begin{itemize}]])
         Append(out,
             [[\item{} -7 Vin (]] .. Tr("years-ago", { 7 }) .. [[): (]] .. Tr("secret") .. [[) Concerns \nameref{normal}]])
@@ -182,7 +184,7 @@ local function generateExpected()
     end
 
     if IsShowSecrets then
-        Append(out, [[\subsection{In Eldorado}]])
+        Append(out, [[\subsection{]] .. CapFirst(Tr("in")) .. [[ Eldorado}]])
     else
         Append(out, [[\subsection{]] .. Tr("at-secret-location") .. [[}]])
     end
@@ -190,7 +192,7 @@ local function generateExpected()
     Append(out, [[\label{at-secret-location}]])
     Append(out, associationParagraph())
     if IsShowSecrets then
-        Append(out, [[\chapter{]] .. Tr("only-mentioned") .. [[}]])
+        Append(out, [[\chapter{]] .. CapFirst(Tr("only-mentioned")) .. [[}]])
         Append(out, [[\subparagraph{Eldorado}]])
         Append(out, [[\label{eldorado}]])
         Append(out, [[\hspace{1cm}]])

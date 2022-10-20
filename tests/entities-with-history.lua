@@ -8,19 +8,19 @@ AddRef("test-1", PrimaryRefs)
 
 local function generateExpected(isSecondAdded)
     local out = {}
-    Append(out, [[\chapter{]] .. Tr("places") .. [[}]])
-    Append(out, [[\section*{]] .. Tr("all") .. [[ ]] .. Tr("places") .. [[}]])
+    Append(out, [[\chapter{]] .. CapFirst(Tr("places")) .. [[}]])
+    Append(out, [[\section*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("places")) .. [[}]])
     Append(out, [[\begin{itemize}]])
     Append(out, [[\item{} \nameref{test-1}]])
     if isSecondAdded then
         Append(out, [[\item{} \nameref{test-2}]])
     end
     Append(out, [[\end{itemize}]])
-    Append(out, [[\section{]] .. Tr("places") .. [[}]])
+    Append(out, [[\section{]] .. CapFirst(Tr("places")) .. [[}]])
     Append(out, [[\subsection{]] .. Tr("in-whole-world") .. [[}]])
     Append(out, [[\subsubsection{Test 1}]])
     Append(out, [[\label{test-1}]])
-    Append(out, [[\paragraph{]] .. Tr("history") .. [[}]])
+    Append(out, [[\paragraph{]] .. CapFirst(Tr("history")) .. [[}]])
     Append(out, [[\begin{itemize}]])
     Append(out,
         [[\item{} -10 Vin (]] .. Tr("years-ago", { 10 }) ..
@@ -29,14 +29,14 @@ local function generateExpected(isSecondAdded)
     if isSecondAdded then
         Append(out, [[\subsubsection{Test 2}]])
         Append(out, [[\label{test-2}]])
-        Append(out, [[\paragraph{]] .. Tr("history") .. [[}]])
+        Append(out, [[\paragraph{]] .. CapFirst(Tr("history")) .. [[}]])
         Append(out, [[\begin{itemize}]])
         Append(out,
             [[\item{} -10 Vin (]] ..
             Tr("years-ago", { 10 }) .. [[): Event that concerns \nameref{test-1} and \itref{test-2}.]])
         Append(out, [[\end{itemize}]])
     else
-        Append(out, [[\chapter{]] .. Tr("only-mentioned") .. [[}]])
+        Append(out, [[\chapter{]] .. CapFirst(Tr("only-mentioned")) .. [[}]])
         Append(out, [[\subparagraph{Test 2}]])
         Append(out, [[\label{test-2}]])
         Append(out, [[\hspace{1cm}]])

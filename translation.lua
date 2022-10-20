@@ -18,3 +18,18 @@ function Tr(keyword, additionalArguments)
     end
     return translation
 end
+
+local function randomWord(length)
+    local out = {}
+    for i = 1,length do
+        Append(out, string.char(math.random(97,97+25)))
+    end
+    return table.concat(out)
+end
+
+function RandomiseDictionary()
+    --Before you ask: This is purely for testing.
+    for key, val in pairs(Dictionary) do
+        Dictionary[key] = randomWord(5)
+    end
+end

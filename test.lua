@@ -14,7 +14,6 @@ local function resetEnvironment()
     SecondaryRefs = {}
     UnfoundRefs = {}
     IsShowFuture = true
-    SelectLanguage("english")
 end
 
 local function areEqual(obj1, obj2, elementNum, currentObj1, currentObj2)
@@ -131,6 +130,10 @@ function RunTests(testFiles)
 
     for key, testfile in pairs(testFiles) do
         resetEnvironment()
+        SelectLanguage("english")
+        dofile(RelativePath .. "/tests/" .. testfile .. ".lua")
+        resetEnvironment()
+        RandomiseDictionary()
         dofile(RelativePath .. "/tests/" .. testfile .. ".lua")
     end
 

@@ -5,47 +5,34 @@ AddEvent(CurrentEntity(), 5, [[Event in the future.]])
 
 AddAllEntitiesToPrimaryRefs()
 
+local function generateExpected()
+    local out = {}
+    Append(out, [[\chapter{]] .. Tr("places") .. [[}]])
+    Append(out, [[\section*{]] .. Tr("all") .. [[ ]] .. Tr("places") .. [[}]])
+    Append(out, [[\begin{itemize}]])
+    Append(out, [[\item{} \nameref{test-1}]])
+    Append(out, [[\end{itemize}]])
+    Append(out, [[\section{]] .. Tr("places") .. [[}]])
+    Append(out, [[\subsection{]] .. Tr("in-whole-world") .. [[}]])
+    Append(out, [[\subsubsection{Test 1}]])
+    Append(out, [[\label{test-1}]])
+    Append(out, [[\paragraph{]] .. Tr("history") .. [[}]])
+    Append(out, [[\begin{itemize}]])
+    Append(out, [[\item{} -20 Vin (]] .. Tr("years-ago", { 20 }) .. [[): Some event.]])
+    Append(out, [[\item{} -10 Vin (]] .. Tr("years-ago", { 10 }) .. [[): Event that concerns \nameref{test-1}.]])
+    if IsShowFuture then
+        Append(out, [[\item{} 5 Vin (]] .. Tr("in-years", { 5 }) .. [[): Event in the future.]])
+    end
+    Append(out, [[\end{itemize}]])
+    return out
+end
+
 IsShowFuture = false
 local out = AutomatedChapters()
-
-local expected = {
-    [[\chapter{Places}]],
-    [[\section*{All Places}]],
-    [[\begin{itemize}]],
-    [[\item{} \nameref{test-1}]],
-    [[\end{itemize}]],
-    [[\section{Places}]],
-    [[\subsection{In the whole World}]],
-    [[\subsubsection{Test 1}]],
-    [[\label{test-1}]],
-    [[\paragraph{History}]],
-    [[\begin{itemize}]],
-    [[\item{} -20 Vin (20 years ago): Some event.]],
-    [[\item{} -10 Vin (10 years ago): Event that concerns \nameref{test-1}.]],
-    [[\end{itemize}]]
-}
-
+local expected = generateExpected()
 Assert("history-events-no-future", expected, out)
 
 IsShowFuture = true
 out = AutomatedChapters()
-
-expected = {
-    [[\chapter{Places}]],
-    [[\section*{All Places}]],
-    [[\begin{itemize}]],
-    [[\item{} \nameref{test-1}]],
-    [[\end{itemize}]],
-    [[\section{Places}]],
-    [[\subsection{In the whole World}]],
-    [[\subsubsection{Test 1}]],
-    [[\label{test-1}]],
-    [[\paragraph{History}]],
-    [[\begin{itemize}]],
-    [[\item{} -20 Vin (20 years ago): Some event.]],
-    [[\item{} -10 Vin (10 years ago): Event that concerns \nameref{test-1}.]],
-    [[\item{} 5 Vin (in 5 years): Event in the future.]],
-    [[\end{itemize}]]
-}
-
+expected = generateExpected()
 Assert("history-events-with-future", expected, out)

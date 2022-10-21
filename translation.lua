@@ -33,7 +33,9 @@ end
 
 function RandomiseDictionary()
     --Before you ask: This is purely for testing.
+    --Only one word appended at beginning such that every word starts lowercase, but sorting of keywords remains the same.
+    local oneRandomWord = randomWord(5)
     for key, val in pairs(Dictionary) do
-        Dictionary[key] = randomWord(5)
+        Dictionary[key] = oneRandomWord .. "-".. Dictionary[key]
     end
 end

@@ -15,12 +15,12 @@ local expected = {
     [[\begin{itemize}]],
     [[\item{} \nameref{test-npc}]],
     [[\end{itemize}]],
-    [[\section{]] .. Tr("npcs") .. [[}]],
+    [[\section{]] .. CapFirst(Tr("npcs")) .. [[}]],
     [[\subsection{]] .. Tr("in-whole-world") .. [[}]],
     [[\subsubsection{Test NPC}]],
     [[\label{test-npc}]],
     [[\paragraph{]] .. CapFirst(Tr("appearance")) .. [[}]],
-    [[\subparagraph{]] .. Tr("Species-and-Age") .. [[:}\nameref {test-species}, 20 ]] .. Tr("years-old") .. [[.]],
+    [[\subparagraph{]] .. Tr("species-and-age") .. [[:}\nameref {test-species}, 20 ]] .. Tr("years-old") .. [[.]],
     [[\paragraph{]] .. CapFirst(Tr("history")) .. [[}]],
     [[\begin{itemize}]],
     [[\item{} -8 Vin (]] ..
@@ -36,7 +36,7 @@ local expected = {
     [[\subsection{]] .. Tr("in-whole-world") .. [[}]],
     [[\subsubsection{Test Species}]],
     [[\label{test-species}]],
-    [[\paragraph{]] .. Tr("lifestages") .. [[}]],
+    [[\paragraph{]] .. CapFirst(Tr("lifestages")) .. [[}]],
     [[\subparagraph{]] .. CapFirst(Tr("child")) .. [[} 0-12 ]] .. Tr("years") .. [[
     \subparagraph{]] .. CapFirst(Tr("juvenile")) .. [[} 12-20 ]] .. Tr("years") .. [[
     \subparagraph{]] .. CapFirst(Tr("young")) .. [[} 20-30 ]] .. Tr("years") .. [[

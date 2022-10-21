@@ -29,7 +29,7 @@ function AddAssociationDescriptors(entity)
                 Append(associationList, description)
             end
         end
-        SetDescriptor(entity, Tr("associations"), associationList)
+        SetDescriptor(entity, CapFirst(Tr("associations")), associationList)
     end
 end
 

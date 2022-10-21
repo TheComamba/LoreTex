@@ -124,6 +124,10 @@ local function generateExpected()
     if IsShowFuture then
         Append(out, [[\subsubsection{Unborn Organisation}]])
         Append(out, [[\label{unborn-orga}]])
+        Append(out, [[\paragraph{]] .. CapFirst(Tr("history")) .. [[}]])
+        Append(out, [[\begin{itemize}]])
+        Append(out, [[\item{} 10 Vin (]] .. Tr("in-years", { 10 }) .. [[): Founded.\birthof{unborn-orga}]])
+        Append(out, [[\end{itemize}]])
         Append(out, itemsParagraph())
     end
 
@@ -177,7 +181,7 @@ local function generateExpected()
         Append(out, associationParagraph())
         Append(out, [[\paragraph{]] .. CapFirst(Tr("history")) .. [[}]])
         Append(out, [[\begin{itemize}]])
-        Append(out, [[\item{} -7 Vin (]] .. Tr("years-ago", { 7 }) .. [[): Concerns \nameref{normal}]])
+        Append(out, [[\item{} 10 Vin (]] .. Tr("in-years", { 10 }) .. [[): Created.\birthof{unborn}]])
         Append(out, [[\end{itemize}]])
     end
 

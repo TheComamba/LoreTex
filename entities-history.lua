@@ -50,6 +50,8 @@ end
 local function isHistoryShown(historyItem)
     if not isAllConcnernsShown(historyItem) then
         return false
+    elseif not IsShowFuture and historyItem["year"] > CurrentYearVin then
+        return false
     elseif not IsShowSecrets then
         if historyItem["isSecret"] ~= nil and historyItem["isSecret"] then
             return false

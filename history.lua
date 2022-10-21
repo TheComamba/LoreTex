@@ -40,7 +40,7 @@ local function newHistoryItem(originator, year, event, day, isSecret)
 		LogError("Could not convert day \"" .. day .. "\" to number.")
 		return {}
 	end
-	item["event"] = event
+	
 	UniqueAppend(concerns, ScanForCmd(event, "concerns"))
 	UniqueAppend(concerns, ScanForCmd(event, "deathof"))
 	UniqueAppend(concerns, ScanForCmd(event, "birthof"))
@@ -48,11 +48,14 @@ local function newHistoryItem(originator, year, event, day, isSecret)
 		UniqueAppend(concerns, ScanForCmd(event, refType))
 	end
 	item["concerns"] = concerns
+	item["birthof"] = ScanForCmd(event, "birthof")
+	item["deathof"] = ScanForCmd(event, "deathof")
+	
 	if isSecret ~= nil then
 		item["isSecret"] = isSecret
 	end
-	item["birthof"] = ScanForCmd(event, "birthof")
-	item["deathof"] = ScanForCmd(event, "deathof")
+
+	item["event"] = event
 	return item
 end
 

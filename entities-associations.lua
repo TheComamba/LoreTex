@@ -19,7 +19,7 @@ function AddAssociationDescriptors(entity)
             local association = GetEntity(associationLabel)
             if not IsEmpty(association) and IsShown(association) then
                 if IsEmpty(assocationRole) then
-                    assocationRole = Tr("member")
+                    assocationRole = CapFirst(Tr("member"))
                 end
                 local description = assocationRole ..
                     " " .. Tr("of") .. " " .. TexCmd("nameref ", associationLabel) .. "."

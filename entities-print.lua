@@ -52,7 +52,7 @@ function DescriptorsString(entity)
     end
     table.sort(descriptorsList)
     for key, descriptor in pairs(descriptorsList) do
-        Append(out, TexCmd("paragraph", descriptor))
+        Append(out, TexCmd("paragraph", CapFirst(descriptor)))
         if descriptor == Tr("history") then
             Append(out, ListHistory(entity[descriptor]))
         elseif descriptor == HeightCaption then
@@ -91,7 +91,7 @@ function PrintOnlyMentionedChapter()
     local out = {}
     local secondaryEntities = GetEntitiesIf(IsSecondary, AllEntities)
     if #secondaryEntities > 0 then
-        Append(out, TexCmd("chapter", Tr("only-mentioned")))
+        Append(out, TexCmd("chapter", CapFirst(Tr("only-mentioned"))))
         table.sort(secondaryEntities, CompareByName)
         for index, entity in pairs(secondaryEntities) do
             Append(out, TexCmd("subparagraph", GetShortname(entity)))
@@ -114,9 +114,9 @@ end
 
 function PrintEntityChapterBeginning(name, primaryEntities)
     local out = {}
-    Append(out, TexCmd("chapter", name))
+    Append(out, TexCmd("chapter", CapFirst(name)))
     if not IsEmpty(primaryEntities) then
-        Append(out, TexCmd("section*", Tr("all") .. " " .. name))
+        Append(out, TexCmd("section*", CapFirst(Tr("all")) .. " " .. CapFirst(name)))
         Append(out, ListAll(getAllLabels(primaryEntities), NamerefString))
     end
     return out
@@ -130,7 +130,7 @@ local function printEntityChapterSortedByLocation(primaryEntities)
 
     for index, locationLabel in pairs(AllLocationLabelsSorted()) do
         local location = GetEntity(locationLabel)
-        local sectionname = "In " .. PlaceToName(location)
+        local sectionname = CapFirst(Tr("in")) .. " " .. PlaceToName(location)
         local entitiesHere = extractEntitiesAtLocation(primaryEntities, locationLabel)
         Append(out, printEntities(sectionname, entitiesHere))
     end
@@ -157,7 +157,7 @@ function PrintEntityChapter(primaryEntities, name, types)
     for i, type in pairs(types) do
         local entitiesOfType = GetEntitiesOfType(type, fittingEntities)
         if not IsEmpty(entitiesOfType) then
-            Append(out, TexCmd("section", Tr(type)))
+            Append(out, TexCmd("section", CapFirst(Tr(type))))
             Append(out, printEntityChapterSortedByLocation(entitiesOfType))
         end
     end

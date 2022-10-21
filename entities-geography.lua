@@ -48,6 +48,11 @@ local function getLocation(entity)
     end
 end
 
+function IsLocationUnrevealed(entity)
+    local location = getLocation(entity)
+    return IsSecret(location) and (not IsRevealed(location))
+end
+
 local function compareLocationLabelsByName(label1, label2)
     local entity1 = GetEntity(label1)
     local entity2 = GetEntity(label2)

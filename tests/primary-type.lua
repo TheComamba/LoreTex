@@ -17,18 +17,18 @@ local function generateExpected(primaryType)
     end
     Append(out, [[\end{itemize}]])
     Append(out, [[\section{]] .. CapFirst(Tr("npcs")) .. [[}]])
-    Append(out, [[\subsection{]] .. Tr("in-whole-world") .. [[}]])
+    Append(out, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
     Append(out, [[\subsubsection{Karl}]])
     Append(out, [[\label{karl}]])
     Append(out, [[\paragraph{]] .. CapFirst(Tr("appearance")) .. [[}]])
-    Append(out, [[\subparagraph{]] .. Tr("species-and-age") .. [[:}\nameref {human}.]])
+    Append(out, [[\subparagraph{]] .. CapFirst(Tr("species-and-age")) .. [[:}\nameref {human}.]])
     Append(out, [[\paragraph{Friend}]])
     Append(out, [[\nameref{peter}]])
     if primaryType == "npcs" then
         Append(out, [[\subsubsection{Peter}]])
         Append(out, [[\label{peter}]])
         Append(out, [[\paragraph{]] .. CapFirst(Tr("appearance")) .. [[}]])
-        Append(out, [[\subparagraph{]] .. Tr("species-and-age") .. [[:}\nameref {human}.]])
+        Append(out, [[\subparagraph{]] .. CapFirst(Tr("species-and-age")) .. [[:}\nameref {human}.]])
     end
 
     if primaryType == "species" then
@@ -38,7 +38,7 @@ local function generateExpected(primaryType)
         Append(out, [[\item{} \nameref{human}]])
         Append(out, [[\end{itemize}]])
         Append(out, [[\section{]] .. CapFirst(Tr("species")) .. [[}]])
-        Append(out, [[\subsection{]] .. Tr("in-whole-world") .. [[}]])
+        Append(out, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
         Append(out, [[\subsubsection{Human}]])
         Append(out, [[\label{human}]])
     end

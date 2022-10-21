@@ -112,7 +112,7 @@ local function generateExpected()
     Append(out, [[\end{itemize}]])
 
     Append(out, [[\section{]] .. CapFirst(Tr("organisations")) .. [[}]])
-    Append(out, [[\subsection{]] .. Tr("in-whole-world") .. [[}]])
+    Append(out, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
     Append(out, [[\subsubsection{Normal Organisation}]])
     Append(out, [[\label{normal-orga}]])
     Append(out, itemsParagraph())
@@ -137,7 +137,7 @@ local function generateExpected()
     Append(out, [[\end{itemize}]])
 
     Append(out, [[\section{]] .. CapFirst(Tr("items")) .. [[}]])
-    Append(out, [[\subsection{]] .. Tr("in-whole-world") .. [[}]])
+    Append(out, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
 
     Append(out, [[\subsubsection{Normal}]])
     Append(out, [[\label{normal}]])
@@ -186,7 +186,7 @@ local function generateExpected()
     if IsShowSecrets then
         Append(out, [[\subsection{]] .. CapFirst(Tr("in")) .. [[ Eldorado}]])
     else
-        Append(out, [[\subsection{]] .. Tr("at-secret-location") .. [[}]])
+        Append(out, [[\subsection{]] .. CapFirst(Tr("at-secret-locations")) .. [[}]])
     end
     Append(out, [[\subsubsection{At secret Location}]])
     Append(out, [[\label{at-secret-location}]])

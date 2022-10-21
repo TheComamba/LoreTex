@@ -76,7 +76,7 @@ local function printEntities(sectionname, entitiesList)
         StopBenchmarking("printEntities")
         return out
     end
-    Append(out, TexCmd("subsection", sectionname))
+    Append(out, TexCmd("subsection", CapFirst(sectionname)))
     table.sort(entitiesList, CompareByName)
     for key, entity in pairs(entitiesList) do
         Append(out, TexCmd("subsubsection", entity["name"], entity["shortname"]))
@@ -135,9 +135,13 @@ local function printEntityChapterSortedByLocation(primaryEntities)
         Append(out, printEntities(sectionname, entitiesHere))
     end
 
-    local sectionname = Tr("at-unknown-locations")
-    local entitiesSomewhere = GetEntitiesIf(IsLocationUnknown, primaryEntities)
-    Append(out, printEntities(sectionname, entitiesSomewhere))
+    local sectionname = Tr("at-secret-locations")
+    local entitiesAtSecretLocations = GetEntitiesIf(IsLocationUnrevealed, primaryEntities)
+    Append(out, printEntities(sectionname, entitiesAtSecretLocations))
+
+    local sectionname = Tr("at-unfound-locations")
+    local entitiesAtUnfoundLocations = GetEntitiesIf(IsLocationUnknown, primaryEntities)
+    Append(out, printEntities(sectionname, entitiesAtUnfoundLocations))
 
     StopBenchmarking("printEntityChapterSortedByLocation")
     return out

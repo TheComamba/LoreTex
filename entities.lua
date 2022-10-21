@@ -154,7 +154,7 @@ function IsSecret(entity)
     return isSecret
 end
 
-local function isRevealed(entity)
+function IsRevealed(entity)
     return IsAnyElemIn(GetLabels(entity), RevealedLabels)
 end
 
@@ -164,7 +164,7 @@ function IsShown(entity)
     elseif not IsBorn(entity) and not IsShowFuture then
         return false
     elseif IsSecret(entity) then
-        if isRevealed(entity) or IsShowSecrets then
+        if IsRevealed(entity) or IsShowSecrets then
             return true
         else
             return

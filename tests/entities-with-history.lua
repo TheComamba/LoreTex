@@ -17,7 +17,7 @@ local function generateExpected(isSecondAdded)
     end
     Append(out, [[\end{itemize}]])
     Append(out, [[\section{]] .. CapFirst(Tr("places")) .. [[}]])
-    Append(out, [[\subsection{]] .. Tr("in-whole-world") .. [[}]])
+    Append(out, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
     Append(out, [[\subsubsection{Test 1}]])
     Append(out, [[\label{test-1}]])
     Append(out, [[\paragraph{]] .. CapFirst(Tr("history")) .. [[}]])

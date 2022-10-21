@@ -15,7 +15,7 @@ local expected = {
     [[\item{} \nameref{test-region}]],
     [[\end{itemize}]],
     [[\section{]] .. CapFirst(Tr("places")) .. [[}]],
-    [[\subsection{]] .. Tr("in-whole-world") .. [[}]],
+    [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]],
     [[\subsubsection{Test Region}]],
     [[\label{test-region}]],
     [[\paragraph{]] .. CapFirst(Tr("places")) .. [[}]],

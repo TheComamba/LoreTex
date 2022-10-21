@@ -17,13 +17,13 @@ function AddAssociationDescriptors(entity)
             local associationLabel = associationAndRole[1]
             local assocationRole = associationAndRole[2]
             local association = GetEntity(associationLabel)
-            if not IsEmpty(association) and IsShown(association) then
+            if not IsEmpty(association) and IsEntityShown(association) then
                 if IsEmpty(assocationRole) then
                     assocationRole = CapFirst(Tr("member"))
                 end
                 local description = assocationRole ..
                     " " .. Tr("of") .. " " .. TexCmd("nameref ", associationLabel) .. "."
-                if IsSecret(association) then
+                if IsEntitySecret(association) then
                     description = "(" .. CapFirst(Tr("secret")) .. ") " .. description
                 end
                 Append(associationList, description)
@@ -36,7 +36,7 @@ end
 function MarkSecret(entity)
     if IsEmpty(entity["name"]) then
         LogError("Entity has no name: " .. DebugPrint(entity))
-    elseif IsSecret(entity) then
+    elseif IsEntitySecret(entity) then
         if entity["shortname"] == nil then
             entity["shortname"] = entity["name"]
         end

@@ -10,7 +10,7 @@ local function isAcceptsHistoryFrom(receiver, originator)
     end
 end
 
-local function isConcernsSecret(historyItem)
+local function isConcernsUnrevealed(historyItem)
     if historyItem == nil then
         LogError("called with nil value")
         return false
@@ -21,17 +21,12 @@ local function isConcernsSecret(historyItem)
         return false
     end
     for key, label in pairs(concerns) do
-        if IsSecret(GetEntity(label)) then
+        local entity = GetEntity(label)
+        if IsEntitySecret(entity) and not IsRevealed(entity) then
             return true
         end
     end
     return false
-end
-
-local function setSecrecy(historyItem)
-    if isConcernsSecret(historyItem) then
-        historyItem["isSecret"] = true
-    end
 end
 
 local function isAllConcnernsShown(historyItem)
@@ -45,16 +40,26 @@ local function isAllConcnernsShown(historyItem)
         return false
     end
     for key, label in pairs(concerns) do
-        if not IsShown(GetEntity(label)) then
+        if not IsEntityShown(GetEntity(label)) then
             return false
         end
     end
     return true
 end
 
-local function setShown(historyItem)
-    if historyItem["isShown"] == nil then
-        historyItem["isShown"] = isAllConcnernsShown(historyItem)
+local function isHistoryShown(historyItem)
+    if not isAllConcnernsShown(historyItem) then
+        return false
+    elseif not IsShowSecrets then
+        if historyItem["isSecret"] ~= nil and historyItem["isSecret"] then
+            return false
+        elseif isConcernsUnrevealed(historyItem) then
+            return false
+        else
+            return true
+        end
+    else
+        return true
     end
 end
 
@@ -88,9 +93,7 @@ end
 
 local function addHistoryDescriptors(entities)
     for key, historyItem in pairs(Histories) do
-        setSecrecy(historyItem)
-        setShown(historyItem)
-        if IsShown(historyItem) then
+        if isHistoryShown(historyItem) then
             addHistoryToEntities(historyItem, entities)
         end
     end

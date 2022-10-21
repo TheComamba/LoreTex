@@ -139,7 +139,7 @@ function GetEntity(label)
     return entity
 end
 
-function IsSecret(entity)
+function IsEntitySecret(entity)
     if entity == nil then
         return false
     end
@@ -158,12 +158,12 @@ function IsRevealed(entity)
     return IsAnyElemIn(GetLabels(entity), RevealedLabels)
 end
 
-function IsShown(entity)
+function IsEntityShown(entity)
     if IsEmpty(entity) then
         return false
     elseif not IsBorn(entity) and not IsShowFuture then
         return false
-    elseif IsSecret(entity) then
+    elseif IsEntitySecret(entity) then
         if IsRevealed(entity) or IsShowSecrets then
             return true
         else

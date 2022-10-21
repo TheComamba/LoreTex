@@ -1,6 +1,6 @@
 local function entityQualifiersString(srcEntity, targetEntity, role)
     local content = {}
-    if IsSecret(srcEntity) then
+    if IsEntitySecret(srcEntity) then
         Append(content, Tr("secret"))
     end
     if not IsEmpty(role) then
@@ -47,7 +47,7 @@ end
 
 local function addEntitiesTo(entityType, keyword, entities)
     local srcEntities = GetEntitiesOfType(entityType)
-    srcEntities = GetEntitiesIf(IsShown, srcEntities)
+    srcEntities = GetEntitiesIf(IsEntityShown, srcEntities)
     for label, srcEntity in pairs(srcEntities) do
         local targets = srcEntity[keyword]
         if targets ~= nil then
@@ -112,7 +112,7 @@ function ProcessEntities(entitiesIn)
     StartBenchmarking("ProcessEntities")
     local entitiesOut = {}
     local primaryEntities = GetEntitiesIf(IsPrimary, entitiesIn)
-    local visibleEntities = GetEntitiesIf(IsShown, primaryEntities)
+    local visibleEntities = GetEntitiesIf(IsEntityShown, primaryEntities)
     for key, entity in pairs(visibleEntities) do
         addProcessedEntity(entitiesOut, entity)
     end

@@ -131,10 +131,13 @@ function RunTests(testFiles)
     for key, testfile in pairs(testFiles) do
         resetEnvironment()
         SelectLanguage("english")
+        local currentlyFailed = numFailed
         dofile(RelativePath .. "/tests/" .. testfile .. ".lua")
-        resetEnvironment()
-        RandomiseDictionary()
-        dofile(RelativePath .. "/tests/" .. testfile .. ".lua")
+        if currentlyFailed == numFailed then
+            resetEnvironment()
+            RandomiseDictionary()
+            dofile(RelativePath .. "/tests/" .. testfile .. ".lua")
+        end
     end
 
     Append(out, TexCmd("section*", "Results"))

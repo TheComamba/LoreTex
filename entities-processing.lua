@@ -20,7 +20,9 @@ local function entityQualifiersString(srcEntity, targetEntity, role)
     end
     local location = srcEntity["location"]
     local targetLocation = targetEntity["location"]
-    if not IsPlace(targetEntity) and not IsEmpty(location) and location ~= targetLocation then
+    if IsLocationUnrevealed(srcEntity) then
+        Append(content, Tr("at-secret-location"))
+    elseif not IsPlace(targetEntity) and not IsEmpty(location) and location ~= targetLocation then
         Append(content, Tr("in") .. " " .. TexCmd("nameref", location))
     end
     if not IsEmpty(content) then

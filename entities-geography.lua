@@ -49,6 +49,9 @@ local function getLocation(entity)
 end
 
 function IsLocationUnrevealed(entity)
+    if IsShowSecrets then
+        return false
+    end
     local location = getLocation(entity)
     return IsSecret(location) and (not IsRevealed(location))
 end
@@ -77,6 +80,7 @@ end
 function AllLocationLabelsSorted()
     StartBenchmarking("AllLocationLabelsSorted")
     local places = GetEntitiesIf(IsPlace, AllEntities)
+    places = GetEntitiesIf(IsShown, places)
     local labels = {}
     for key, place in pairs(places) do
         labels[#labels + 1] = GetMainLabel(place)

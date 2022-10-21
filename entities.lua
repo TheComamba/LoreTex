@@ -167,7 +167,7 @@ function IsShown(entity)
         if IsRevealed(entity) or IsShowSecrets then
             return true
         else
-            return
+            return false
         end
     else
         return true

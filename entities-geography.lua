@@ -53,7 +53,7 @@ local function compareLocationLabelsByName(label1, label2)
     local entity2 = GetEntity(label2)
     local name1 = PlaceToName(entity1)
     local name2 = PlaceToName(entity2)
-    return name1 < name2
+    return StrCmp(name1, name2)
 end
 
 function PlaceToName(place)

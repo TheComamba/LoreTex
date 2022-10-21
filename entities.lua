@@ -177,5 +177,5 @@ end
 function CompareByName(entity1, entity2)
     local name1 = GetShortname(entity1)
     local name2 = GetShortname(entity2)
-    return name1 < name2
+    return StrCmp(name1, name2)
 end

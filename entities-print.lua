@@ -28,7 +28,7 @@ local function descritptorMapString(map)
     for key, elem in pairs(map) do
         keys[#keys + 1] = key
     end
-    table.sort(keys)
+    table.sort(keys, StrCmp)
     local out = {}
     for index, key in pairs(keys) do
         local content = map[key]
@@ -50,7 +50,7 @@ function DescriptorsString(entity)
             descriptorsList[#descriptorsList + 1] = descriptor
         end
     end
-    table.sort(descriptorsList)
+    table.sort(descriptorsList, StrCmp)
     for key, descriptor in pairs(descriptorsList) do
         Append(out, TexCmd("paragraph", CapFirst(descriptor)))
         if descriptor == Tr("history") then

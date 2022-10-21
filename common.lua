@@ -104,7 +104,7 @@ function ListAll(list, processor, additionalProcessorArg)
 		return ""
 	end
 	if type(list[1]) ~= "table" then
-		table.sort(list)
+		table.sort(list, StrCmp)
 	end
 
 	local processedList = processLabelList(list, processor, additionalProcessorArg)
@@ -218,4 +218,12 @@ function DeepCopy(inp)
 		out = inp
 	end
 	return out
+end
+
+function StrCmp(a, b)
+	if a:lower() == b:lower() then
+		return a < b
+	else
+		return a:lower() < b:lower()
+	end
 end

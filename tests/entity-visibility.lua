@@ -85,11 +85,12 @@ local function associationParagraph()
     Append(out, [[\begin{itemize}]])
     Append(out,
         [[\item{} (]] ..
-        Tr("secret") .. [[) ]] .. CapFirst(Tr("member")) .. [[ ]] .. Tr("of") .. [[ \nameref{revealed-orga}.]])
+        CapFirst(Tr("secret")) .. [[) ]] .. CapFirst(Tr("member")) .. [[ ]] .. Tr("of") .. [[ \nameref{revealed-orga}.]])
     if IsShowSecrets then
         Append(out,
             [[\item{} (]] ..
-            Tr("secret") .. [[) ]] .. CapFirst(Tr("member")) .. [[ ]] .. Tr("of") .. [[ \nameref{secret-orga}.]])
+            CapFirst(Tr("secret")) ..
+            [[) ]] .. CapFirst(Tr("member")) .. [[ ]] .. Tr("of") .. [[ \nameref{secret-orga}.]])
     end
     Append(out, [[\item{} ]] .. CapFirst(Tr("member")) .. [[ ]] .. Tr("of") .. [[ \nameref{normal-orga}.]])
     if IsShowFuture then

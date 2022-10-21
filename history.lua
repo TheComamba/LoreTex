@@ -6,7 +6,7 @@ function AddHistoryItemToHistory(historyItem, history)
 	local day = historyItem["day"]
 	local event = historyItem["event"]
 	if IsSecret(historyItem) then
-		event = "(" .. Tr("secret") .. ") " .. event
+		event = "(" .. CapFirst(Tr("secret")) .. ") " .. event
 	end
 	if history[year] == nil then
 		history[year] = {}

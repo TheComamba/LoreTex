@@ -65,7 +65,7 @@ local function printMinipage(caption, rows, i0, chunksize)
         Append(out, caption .. ":")
     end
     Append(out, TexCmd("begin", "verbatim"))
-    for i = i0, (i0 + chunksize) do
+    for i = i0, (i0 + chunksize - 1) do
         if i <= #rows then
             Append(out, rows[i])
         end

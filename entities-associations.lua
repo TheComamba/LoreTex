@@ -24,7 +24,7 @@ function AddAssociationDescriptors(entity)
                 local description = assocationRole ..
                     " " .. Tr("of") .. " " .. TexCmd("nameref ", associationLabel) .. "."
                 if IsSecret(association) then
-                    description = "(" .. Tr("secret") .. ") " .. description
+                    description = "(" .. CapFirst(Tr("secret")) .. ") " .. description
                 end
                 Append(associationList, description)
             end

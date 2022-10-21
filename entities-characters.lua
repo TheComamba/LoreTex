@@ -12,7 +12,7 @@ end
 
 function AddSpeciesAndAgeStringToNPC(entity)
     if IsChar(entity) then
-        SetDescriptor(entity, Tr("appearance"), SpeciesAndAgeString(entity, CurrentYearVin), Tr("species-and-age") .. ":")
+        SetDescriptor(entity, Tr("appearance"), SpeciesAndAgeString(entity, CurrentYearVin), CapFirst(Tr("species-and-age")) .. ":")
     end
 end
 

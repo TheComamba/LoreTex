@@ -81,7 +81,7 @@ end
 
 local function associationParagraph()
     local out = {}
-    Append(out, [[\paragraph{]] .. Tr("associations") .. [[}]])
+    Append(out, [[\paragraph{]] .. CapFirst(Tr("associations")) .. [[}]])
     Append(out, [[\begin{itemize}]])
     Append(out,
         [[\item{} (]] ..
@@ -141,6 +141,7 @@ local function generateExpected()
 
     Append(out, [[\subsubsection{Normal}]])
     Append(out, [[\label{normal}]])
+    Append(out, associationParagraph())
     Append(out, [[\paragraph{]] .. CapFirst(Tr("history")) .. [[}]])
     Append(out, [[\begin{itemize}]])
     if IsShowSecrets then
@@ -159,10 +160,10 @@ local function generateExpected()
         Append(out, [[\item{} -5 Vin (]] .. Tr("years-ago", { 5 }) .. [[): (]] .. Tr("secret") .. [[) Secret event]])
     end
     Append(out, [[\end{itemize}]])
-    Append(out, associationParagraph())
 
     Append(out, [[\subsubsection[Revealed]{(]] .. CapFirst(Tr("secret")) .. [[) Revealed}]])
     Append(out, [[\label{revealed}]])
+    Append(out, associationParagraph())
     Append(out, [[\paragraph{]] .. CapFirst(Tr("history")) .. [[}]])
     Append(out, [[\begin{itemize}]])
     Append(out,
@@ -170,17 +171,16 @@ local function generateExpected()
     Append(out, [[\item{} -6 Vin (]] .. Tr("years-ago", { 6 }) ..
         [[): (]] .. Tr("secret") .. [[) Concerns \nameref{normal}]])
     Append(out, [[\end{itemize}]])
-    Append(out, associationParagraph())
 
     if IsShowFuture then
         Append(out, [[\subsubsection{Unborn}]])
         Append(out, [[\label{unborn}]])
+        Append(out, associationParagraph())
         Append(out, [[\paragraph{]] .. CapFirst(Tr("history")) .. [[}]])
         Append(out, [[\begin{itemize}]])
         Append(out,
             [[\item{} -7 Vin (]] .. Tr("years-ago", { 7 }) .. [[): (]] .. Tr("secret") .. [[) Concerns \nameref{normal}]])
         Append(out, [[\end{itemize}]])
-        Append(out, associationParagraph())
     end
 
     if IsShowSecrets then

@@ -40,6 +40,6 @@ function MarkSecret(entity)
         if entity["shortname"] == nil then
             entity["shortname"] = entity["name"]
         end
-        entity["name"] = "(" .. Tr("secret") .. ") " .. entity["name"]
+        entity["name"] = "(" .. CapFirst(Tr("secret")) .. ") " .. entity["name"]
     end
 end

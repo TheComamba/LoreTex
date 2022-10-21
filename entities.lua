@@ -60,11 +60,6 @@ function IsPrimary(entity)
     return IsAnyElemIn(labels, PrimaryRefs)
 end
 
-function IsSecondary(entity)
-    local labels = GetLabels(entity)
-    return IsAnyElemIn(labels, SecondaryRefs) and not IsPrimary(entity)
-end
-
 function GetEntitiesIf(condition, list)
     StartBenchmarking("GetEntitiesIf")
     local out = {}

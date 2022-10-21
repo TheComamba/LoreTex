@@ -1,5 +1,4 @@
 PrimaryRefs = {}
-SecondaryRefs = {}
 UnfoundRefs = {}
 PrimaryRefTypes = {}
 IsAppendix = false
@@ -106,13 +105,15 @@ function ScanForCmd(content, cmd)
 end
 
 function ScanContentForSecondaryRefs(content)
+    local secondaryRefs = {}
     for key1, refType in pairs(RefTypes) do
         for key2, ref in pairs(ScanForCmd(content, refType)) do
             if not IsIn(ref, PrimaryRefs) then
-                AddRef(ref, SecondaryRefs)
+                UniqueAppend(secondaryRefs, ref)
             end
         end
     end
+    return secondaryRefs
 end
 
 function AddAllEntitiesToPrimaryRefs()

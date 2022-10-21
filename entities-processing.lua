@@ -119,7 +119,7 @@ function ProcessEntities(entitiesIn)
 
     --TODO: Funktionen für nur eine entity
     AddAutomatedDescriptors(entitiesOut)
-    ScanContentForSecondaryRefs(entitiesOut)
+    local secondaryRefs = ScanContentForSecondaryRefs(entitiesOut)
     StopBenchmarking("ProcessEntities")
-    return entitiesOut
+    return entitiesOut, secondaryRefs
 end

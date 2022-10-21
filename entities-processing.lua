@@ -102,8 +102,8 @@ end
 local function addProcessedEntity(entities, entity)
     if not isEntityIn(entity, entities) then
         local newEntity = DeepCopy(entity)
-        MarkDead(entity)
-        MarkSecret(entity)
+        MarkDead(newEntity)
+        MarkSecret(newEntity)
         entities[#entities + 1] = newEntity
     end
 end

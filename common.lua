@@ -221,9 +221,20 @@ function DeepCopy(inp)
 end
 
 function StrCmp(a, b)
-	if a:lower() == b:lower() then
+	if type(a) == "string" and type(b) == "string" then
+		if a:lower() == b:lower() then
+			return a < b
+		else
+			return a:lower() < b:lower()
+		end
+	elseif type(a) == type(b) then
 		return a < b
-	else
-		return a:lower() < b:lower()
+	elseif type(a) == "number" and type(b) == "string" then
+		return true --numbers before strings
+	elseif type(a) == "string" and type(b) == "number" then
+		return false --numbers before strings
 	end
+
+	LogError("Tried comparing " .. DebugPrint(a) .. " with " .. DebugPrint(b))
+	return true
 end

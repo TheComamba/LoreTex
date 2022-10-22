@@ -90,8 +90,10 @@ function IsEntityIn(entity, entities)
     if IsEmpty(entities) then
         return false
     end
+    StartBenchmarking("IsEntityIn")
     local label = GetMainLabel(entity)
     local testEntity = GetMutableEntity(label, entities)
+    StopBenchmarking("IsEntityIn")
     return not IsEmpty(testEntity)
 end
 

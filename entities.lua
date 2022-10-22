@@ -117,11 +117,14 @@ function GetMutableEntity(label, entityList)
         LogError("Trying to get mutable reference to member of AllEntities.")
         return {}
     end
+    StartBenchmarking("GetMutableEntity")
     for key, entity in pairs(entityList) do
         if IsIn(label, GetLabels(entity)) then
+            StopBenchmarking("GetMutableEntity")
             return entity
         end
     end
+    StopBenchmarking("GetMutableEntity")
     return {}
 end
 

@@ -1,3 +1,14 @@
+local labelToProcessedEntity = {}
+
+local function registerProcessedEntityLabels(labels, entity)
+    if type(labels) ~= "table" then
+        labels = { labels }
+    end
+    for key, label in pairs(labels) do
+        labelToProcessedEntity[label] = entity
+    end
+end
+
 local function entityQualifiersString(child, parent, relationship)
     local content = {}
     if IsEntitySecret(child) then
@@ -86,24 +97,18 @@ function AddAutomatedDescriptors(entity)
     StopBenchmarking("AddAutomatedDescriptors")
 end
 
-function IsEntityIn(entity, entities)
-    if IsEmpty(entities) then
-        return false
-    end
-    StartBenchmarking("IsEntityIn")
-    local label = GetMainLabel(entity)
-    local testEntity = GetMutableEntity(label, entities)
-    StopBenchmarking("IsEntityIn")
-    return not IsEmpty(testEntity)
+function IsEntityInProcessed(label)
+    return labelToProcessedEntity[label] ~= nil
 end
 
 local function addProcessedEntity(entities, entity, mentionedRefs)
-    if not IsEntityIn(entity, entities) then
+    if not IsEntityInProcessed(GetMainLabel(entity)) then
         local newEntity = DeepCopy(entity)
         MarkDead(newEntity)
         MarkSecret(newEntity)
         AddAutomatedDescriptors(newEntity)
         entities[#entities + 1] = newEntity
+        registerProcessedEntityLabels(GetLabels(newEntity), newEntity)
         local mentionedRefsHere = ScanContentForMentionedRefs(newEntity)
         for key, label in pairs(mentionedRefsHere) do
             local mentionedEntity = GetMutableEntityFromAll(label)
@@ -118,6 +123,7 @@ end
 
 function ProcessEntities(entitiesIn)
     StartBenchmarking("ProcessEntities")
+    labelToProcessedEntity = {}
     local entitiesOut = {}
     local primaryEntities = GetEntitiesIf(IsPrimary, entitiesIn)
     local visibleEntities = GetEntitiesIf(IsEntityShown, primaryEntities)

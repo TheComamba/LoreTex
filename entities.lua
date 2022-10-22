@@ -103,7 +103,7 @@ function GetEntitiesOfType(type, list)
     return out
 end
 
-function RegisterEntityLabel(labels, entity)
+function RegisterEntityLabels(labels, entity)
     if type(labels) ~= "table" then
         labels = { labels }
     end

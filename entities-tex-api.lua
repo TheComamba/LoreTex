@@ -32,7 +32,7 @@ function SetDescriptor(entity, descriptor, description, subdescriptor)
     local labels = GetLabels(entity)
     local additionalLabels = ScanForCmd(description, "label")
     UniqueAppend(labels, additionalLabels)
-    RegisterEntityLabel(additionalLabels, entity)
+    RegisterEntityLabels(additionalLabels, entity)
     AddDescriptorsFromNotYetFound(entity)
     StopBenchmarking("SetDescriptor")
 end
@@ -117,7 +117,7 @@ function NewEntity(label, type, shortname, name)
     if not IsEmpty(DefaultLocation) then
         SetLocation(entity, DefaultLocation)
     end
-    RegisterEntityLabel(label, entity)
+    RegisterEntityLabels(label, entity)
     AddDescriptorsFromNotYetFound(entity)
     AllEntities[#AllEntities + 1] = entity
     StopBenchmarking("NewEntity")
@@ -148,7 +148,7 @@ function AutomatedChapters()
     Append(output, PrintEntityChapter(processedEntities, Tr("spells"), SpellTypes))
     Append(output, PrintEntityChapter(processedEntities, Tr("items"), ItemTypes))
     Append(output, PrintEntityChapter(processedEntities, Tr("other"), OtherEntityTypes))
-    Append(output, PrintOnlyMentionedChapter(mentionedRefs, processedEntities))
+    Append(output, PrintOnlyMentionedChapter(mentionedRefs))
     if HasError() then
         Append(output, TexCmd("chapter", "Logging Messages"))
         Append(output, TexCmd("RpgTex"))

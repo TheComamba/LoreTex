@@ -118,7 +118,7 @@ local function printEntities(sectionname, entitiesList)
     return out
 end
 
-function PrintOnlyMentionedChapter(mentionedRefs, processedEntities)
+function PrintOnlyMentionedChapter(mentionedRefs)
     StartBenchmarking("PrintOnlyMentionedChapter")
     local out = {}
     table.sort(mentionedRefs, CompareByName)
@@ -126,9 +126,7 @@ function PrintOnlyMentionedChapter(mentionedRefs, processedEntities)
         if key == 1 then
             Append(out, TexCmd("chapter", CapFirst(Tr("only-mentioned"))))
         end
-        --TODO: This step of finding the entity can probably be circumvented.
-        local entity = GetEntity(label)
-        if not IsEntityIn(entity, processedEntities) then
+        if not IsEntityInProcessed(label) then
             Append(out, TexCmd("subparagraph", LabelToName(label)))
             Append(out, TexCmd("label", label))
             Append(out, TexCmd("hspace", "1cm"))

@@ -101,11 +101,9 @@ local function addHistoryDescriptors(entity)
     StopBenchmarking("addHistoryDescriptors")
 end
 
-function ProcessHistory(entities)
+function ProcessHistory(entity)
     StartBenchmarking("ProcessHistory")
-    for key, entity in pairs(entities) do
-        AddLifestageHistoryItemsToNPC(entity)
-        addHistoryDescriptors(entity)
-    end
+    AddLifestageHistoryItemsToNPC(entity)
+    addHistoryDescriptors(entity)
     StopBenchmarking("ProcessHistory")
 end

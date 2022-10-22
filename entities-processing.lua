@@ -76,15 +76,13 @@ local function addChildrenDescriptorsToParent(parent)
     StopBenchmarking("addChildrenDescriptorsToParent")
 end
 
-function AddAutomatedDescriptors(entities)
+function AddAutomatedDescriptors(entity)
     StartBenchmarking("AddAutomatedDescriptors")
-    ProcessHistory(entities)
-    for key, entity in pairs(entities) do
-        AddParentDescriptorsToChild(entity)
-        addChildrenDescriptorsToParent(entity)
-        AddSpeciesAndAgeStringToNPC(entity)
-        AddLifeStagesToSpecies(entity)
-    end
+    AddParentDescriptorsToChild(entity)
+    addChildrenDescriptorsToParent(entity)
+    AddSpeciesAndAgeStringToNPC(entity)
+    AddLifeStagesToSpecies(entity)
+    ProcessHistory(entity)
     StopBenchmarking("AddAutomatedDescriptors")
 end
 
@@ -103,6 +101,7 @@ local function addProcessedEntity(entities, entity)
         local newEntity = DeepCopy(entity)
         MarkDead(newEntity)
         MarkSecret(newEntity)
+        AddAutomatedDescriptors(newEntity)
         entities[#entities + 1] = newEntity
     end
     StopBenchmarking("addProcessedEntity")
@@ -113,14 +112,11 @@ function ProcessEntities(entitiesIn)
     local entitiesOut = {}
     local primaryEntities = GetEntitiesIf(IsPrimary, entitiesIn)
     local visibleEntities = GetEntitiesIf(IsEntityShown, primaryEntities)
+    local mentionedRefsHere = DeepCopy(MentionedRefs)
     for key, entity in pairs(visibleEntities) do
         addProcessedEntity(entitiesOut, entity)
+        UniqueAppend(mentionedRefsHere, ScanContentForMentionedRefs(entitiesOut[#entitiesOut]))
     end
-
-    --TODO: Funktionen für nur eine entity
-    AddAutomatedDescriptors(entitiesOut)
-    local mentionedRefsHere = DeepCopy(MentionedRefs)
-    UniqueAppend(mentionedRefsHere, ScanContentForMentionedRefs(entitiesOut))
     StopBenchmarking("ProcessEntities")
     return entitiesOut, mentionedRefsHere
 end

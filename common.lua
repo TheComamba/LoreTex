@@ -9,20 +9,10 @@ function ReadonlyTable(table)
 	local metaTable = {}
 	metaTable.__index = table
 	metaTable.__newindex = logErrorOnModify
+	metaTable.__pairs = function() return pairs(table) end
+	metaTable.__ipairs = function() return ipairs(table) end
 	setmetatable(proxy, metaTable)
 	return proxy
-end
-
-local original_pairs = pairs
-
-function pairs(tbl)
-   if next(tbl) == nil then
-      local mt = getmetatable(tbl)
-      if mt ~= nil and mt.__newindex == logErrorOnModify then
-         tbl = mt.__index
-      end
-   end
-   return original_pairs(tbl)
 end
 
 function Round(num)

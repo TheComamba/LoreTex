@@ -9,8 +9,8 @@ SetDescriptor(CurrentEntity(), "Subplace 1", [[\label{subplace-1}]])
 NewEntity("place-2", "places", nil, "Place 2")
 SetDescriptor(CurrentEntity(), "Subplace 2", [[\label{subplace-2}]])
 SetDescriptor(CurrentEntity(), "More Subplaces", 
-[[\subparagraph{Sublace 3} \label{subplace-3}
-\subparagraph{Sublace 4} \label{subplace-4}]])
+[[\subparagraph{Subplace 3} \label{subplace-3}
+\subparagraph{Subplace 4} \label{subplace-4}]])
 NewEntity("species", "species", nil, "Species")
 SetDescriptor(CurrentEntity(), "Subspecies", [[\label{subspecies}]])
 
@@ -25,11 +25,11 @@ local expected = {
     [[\item{} \nameref{some-npc}]],
     [[\end{itemize}]],
     [[\section{]] .. CapFirst(Tr("npcs")) .. [[}]],
-    [[\subsection{In Subplace 1}]],
+    [[\subsection{]] .. CapFirst(Tr("in")) .. [[ Subplace 1}]],
     [[\subsubsection{Some NPC}]],
     [[\label{some-npc}]],
     [[\paragraph{]] .. CapFirst(Tr("appearance")) .. [[}]],
-    [[\subparagraph{]] .. Tr("species-and-age") .. [[:}\nameref {subspecies}.]],
+    [[\subparagraph{]] .. CapFirst(Tr("species-and-age")) .. [[:}\nameref {subspecies}.]],
     [[\paragraph{Info 1}]],
     [[Refers to \nameref{subplace-2}.]],
     [[\paragraph{Info 2}]],

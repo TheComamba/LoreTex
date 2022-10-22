@@ -203,7 +203,9 @@ function IsEntityShown(entity)
 end
 
 function CompareByName(entity1, entity2)
-    local name1 = GetShortname(entity1)
-    local name2 = GetShortname(entity2)
-    return StrCmp(name1, name2)
+    if type(entity1) == "table" then
+        return StrCmp(GetShortname(entity1), GetShortname(entity2))
+    elseif type(entity1) == "string" then
+        return StrCmp(LabelToName(entity1), LabelToName(entity2))
+    end
 end

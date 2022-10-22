@@ -1,6 +1,6 @@
-NewEntity("test-1", "places", nil, "Test 1")
+NewEntity("places", "test-1", nil, "Test 1")
 
-NewEntity("test-2", "places", nil, "Test 2")
+NewEntity("places", "test-2", nil, "Test 2")
 AddEvent(CurrentEntity(), -10, [[Event that concerns \reference{test-1} and \itref{test-2}.]])
 AddEvent(CurrentEntity(), 10, [[Event in the future.]])
 

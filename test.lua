@@ -1,6 +1,6 @@
 local allTestFiles = { "common", "default-location", "dictionary", "entities-with-associations", "entities-with-history",
-    "entity-visibility", "history", "mentioned-refs", "npc-and-species", "primary-when-mentioned-type", "refs",
-    "region-and-city", "sub-label" }
+    "entity-visibility", "history", "make-primary-if", "mentioned-refs", "npc-and-species", "primary-when-mentioned-type",
+    "refs", "region-and-city", "sub-label" }
 local numSucceeded = 0
 local numFailed = 0
 
@@ -82,7 +82,7 @@ local function printMinipage(caption, rows, i0, chunksize)
                 if key == 1 then
                     line = rowcounter .. line
                 else
-                    for j = 1,string.len(rowcounter) do
+                    for j = 1, string.len(rowcounter) do
                         line = "." .. line
                     end
                 end

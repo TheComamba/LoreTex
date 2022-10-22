@@ -1,8 +1,8 @@
-NewEntity("orga", "organisations", nil, "Orga")
+NewEntity("organisations", "orga", nil, "Orga")
 local orga = CurrentEntity()
-NewEntity("place-1", "places", nil, "Place 1")
+NewEntity("places", "place-1", nil, "Place 1")
 AddParent(CurrentEntity(), "orga")
-NewEntity("place-2", "places", nil, "Place 2")
+NewEntity("places", "place-2", nil, "Place 2")
 local place2 = CurrentEntity()
 AddParent(CurrentEntity(), "orga", "Hometown")
 
@@ -49,8 +49,8 @@ local expected = {
 
 Assert("entities-with-associations", expected, out)
 
-NewEntity("place-3", "places", nil, "Place 3")
-NewEntity("place-4", "places", nil, "Place 4")
+NewEntity("places", "place-3", nil, "Place 3")
+NewEntity("places", "place-4", nil, "Place 4")
 SetLocation(orga, "place-3")
 SetLocation(place2, "place-4")
 
@@ -94,7 +94,7 @@ local expected = {
     [[\begin{itemize}]],
     [[\item{} Hometown ]] .. Tr("of") .. [[ \nameref{orga}.]],
     [[\end{itemize}]],
-    
+
     [[\chapter{]] .. CapFirst(Tr("only-mentioned")) .. [[}]],
     [[\subparagraph{Place 4}]],
     [[\label{place-4}]],

@@ -1,16 +1,16 @@
-NewEntity("primary-item", "items", nil, "Primary Item")
+NewEntity("items", "primary-item", nil, "Primary Item")
 AddRef("primary-item", PrimaryRefs)
 SetDescriptor(CurrentEntity(), "Description", [[Different than \nameref{other-item}.]])
 AddParent(CurrentEntity(), "some-organisation")
 
-NewEntity("mentioned-item", "items", nil, "Mentioned Item")
+NewEntity("items", "mentioned-item", nil, "Mentioned Item")
 AddRef("mentioned-item", MentionedRefs)
 
-NewEntity("other-item", "items", nil, "Other Item")
+NewEntity("items", "other-item", nil, "Other Item")
 
-NewEntity("not-mentioned-item", "items", nil, "Not mentioned Item")
+NewEntity("items", "not-mentioned-item", nil, "Not mentioned Item")
 
-NewEntity("some-organisation", "organisations", nil, "Some Organisation")
+NewEntity("organisations", "some-organisation", nil, "Some Organisation")
 
 local expected = {}
 Append(expected, [[\chapter{]] .. CapFirst(Tr("items")) .. [[}]])

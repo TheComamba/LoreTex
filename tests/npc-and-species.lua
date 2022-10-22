@@ -1,6 +1,6 @@
-NewEntity("test-species", "species", nil, "Test Species")
+NewEntity("species", "test-species", nil, "Test Species")
 
-NewEntity("test-npc", "npcs", nil, "Test NPC")
+NewEntity("npcs", "test-npc", nil, "Test NPC")
 SetSpecies(CurrentEntity(), "test-species")
 CurrentEntity()["born"] = -20
 
@@ -20,7 +20,8 @@ local expected = {
     [[\subsubsection{Test NPC}]],
     [[\label{test-npc}]],
     [[\paragraph{]] .. CapFirst(Tr("appearance")) .. [[}]],
-    [[\subparagraph{]] .. CapFirst(Tr("species-and-age")) .. [[:}\nameref {test-species}, 20 ]] .. Tr("years-old") .. [[.]],
+    [[\subparagraph{]] ..
+        CapFirst(Tr("species-and-age")) .. [[:}\nameref {test-species}, 20 ]] .. Tr("years-old") .. [[.]],
     [[\paragraph{]] .. CapFirst(Tr("history")) .. [[}]],
     [[\begin{itemize}]],
     [[\item{} -8 Vin (]] ..

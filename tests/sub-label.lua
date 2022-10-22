@@ -1,15 +1,15 @@
-NewEntity("some-npc", "npcs", nil, "Some NPC")
+NewEntity("npcs", "some-npc", nil, "Some NPC")
 SetSpecies(CurrentEntity(), "subspecies")
 SetLocation(CurrentEntity(), "subplace-1")
 SetDescriptor(CurrentEntity(), "Info 1", [[Refers to \nameref{subplace-2}.]])
 SetDescriptor(CurrentEntity(), "Info 2", [[Refers to \nameref{subplace-3}.]])
 SetDescriptor(CurrentEntity(), "Info 3", [[Refers to \nameref{subplace-4}.]])
-NewEntity("place-1", "places", nil, "Place 1")
+NewEntity("places", "place-1", nil, "Place 1")
 SetDescriptor(CurrentEntity(), "Subplace 1", [[\label{subplace-1}]])
-NewEntity("place-2", "places", nil, "Place 2")
+NewEntity("places", "place-2", nil, "Place 2")
 SetDescriptor(CurrentEntity(), "Subplace 2", [[\label{subplace-2}]])
-SetDescriptor(CurrentEntity(), "More Subplaces", 
-[[\subparagraph{Subplace 3} \label{subplace-3}
+SetDescriptor(CurrentEntity(), "More Subplaces",
+    [[\subparagraph{Subplace 3} \label{subplace-3}
 \subparagraph{Subplace 4} \label{subplace-4}]])
 NewEntity("species", "species", nil, "Species")
 SetDescriptor(CurrentEntity(), "Subspecies", [[\label{subspecies}]])

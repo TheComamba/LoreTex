@@ -1,9 +1,9 @@
-NewEntity("karl", "npcs", nil, "Karl")
+NewEntity("npcs", "karl", nil, "Karl")
 SetSpecies(CurrentEntity(), "human")
 SetDescriptor(CurrentEntity(), "Friend", [[\nameref{peter}]])
-NewEntity("peter", "npcs", nil, "Peter")
+NewEntity("npcs", "peter", nil, "Peter")
 SetSpecies(CurrentEntity(), "human")
-NewEntity("human", "species", nil, "Human")
+NewEntity("species", "human", nil, "Human")
 SetAgeFactor(CurrentEntity(), 0)
 AddRef("karl", PrimaryRefs)
 

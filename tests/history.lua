@@ -1,7 +1,7 @@
-NewEntity("test-1", "places", nil, "Test 1")
+NewEntity("places", "test-1", nil, "Test 1")
 AddEvent(CurrentEntity(), -20, [[Some event.]])
 AddEvent(CurrentEntity(), 5, [[Event in the future.]])
-NewEntity("test-2", "places", nil, "Test 2")
+NewEntity("places", "test-2", nil, "Test 2")
 
 AddEvent(nil, -10, [[Event that concerns \reference{test-1}, but not \reference{test-2}.\notconcerns{test-2}]])
 

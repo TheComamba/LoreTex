@@ -3,7 +3,7 @@
 \end{luacode*}
 
 \newcommand{\makeEntityPrimary}[1]{\directlua{AddRef("#1", PrimaryRefs)}}
-\newcommand{\makeAllEntitiesOfTypePrimary}[1]{\directlua{MakePrimaryIf(Bind(IsType, #1))}}
+\newcommand{\makeAllEntitiesOfTypePrimary}[1]{\directlua{MakePrimaryIf(Bind(IsType, "#1"))}}
 \newcommand{\mention}[1]{\directlua{AddRef("#1", MentionedRefs)}}
 \newcommand{\reference}[1]{\makeEntityPrimary{#1}\nameref{#1}}
 \newcommand{\itref}[1]{\textit{\nameref{#1}}}

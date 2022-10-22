@@ -1,9 +1,9 @@
-NewEntity("test-continent", "places", nil, "Test Continent")
+NewEntity("places", "test-continent", nil, "Test Continent")
 
-NewEntity("test-region", "places", nil, "Test Region")
+NewEntity("places", "test-region", nil, "Test Region")
 SetLocation(CurrentEntity(), "test-continent")
 
-NewEntity("test-city", "places", nil, "Test City")
+NewEntity("places", "test-city", nil, "Test City")
 SetLocation(CurrentEntity(), "test-region")
 
 AddAllEntitiesToPrimaryRefs()

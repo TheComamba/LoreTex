@@ -132,7 +132,7 @@ function NewCharacter(label, shortname, name)
 end
 
 function AutomatedChapters()
-    if not IsEmpty(NotYetFoundEntities) ~= nil then
+    if not IsEmpty(NotYetFoundEntities) then
         LogError("The following entities have been mentioned, but not yet created:" .. DebugPrint(NotYetFoundEntities))
     end
     StartBenchmarking("AutomatedChapters")

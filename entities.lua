@@ -1,7 +1,7 @@
 AllEntities = {}
 local labelToEntity = {}
 IsShowSecrets = false
-ProtectedDescriptors = { "name", "shortname", "type", "isSecret", "isShown", "labels" }
+ProtectedDescriptors = { "name", "shortname", "type", "isSecret", "labels", "parents", "children" }
 OtherEntityTypes = { "other" }
 OtherEntityTypeNames = { "Andere" }
 RevealedLabels = {}

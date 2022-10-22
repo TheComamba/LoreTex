@@ -1,10 +1,10 @@
 NewEntity("orga", "organisations", nil, "Orga")
 local orga = CurrentEntity()
 NewEntity("place-1", "places", nil, "Place 1")
-AddAssociation(CurrentEntity(), "orga")
+AddParent(CurrentEntity(), "orga")
 NewEntity("place-2", "places", nil, "Place 2")
 local place2 = CurrentEntity()
-AddAssociation(CurrentEntity(), "orga", "Hometown")
+AddParent(CurrentEntity(), "orga", "Hometown")
 
 AddAllEntitiesToPrimaryRefs()
 local out = AutomatedChapters()
@@ -20,13 +20,13 @@ local expected = {
     [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]],
     [[\subsubsection{Place 1}]],
     [[\label{place-1}]],
-    [[\paragraph{]] .. CapFirst(Tr("associations")) .. [[}]],
+    [[\paragraph{]] .. CapFirst(Tr("affiliations")) .. [[}]],
     [[\begin{itemize}]],
     [[\item{} ]] .. CapFirst(Tr("member")) .. [[ ]] .. Tr("of") .. [[ \nameref{orga}.]],
     [[\end{itemize}]],
     [[\subsubsection{Place 2}]],
     [[\label{place-2}]],
-    [[\paragraph{]] .. CapFirst(Tr("associations")) .. [[}]],
+    [[\paragraph{]] .. CapFirst(Tr("affiliations")) .. [[}]],
     [[\begin{itemize}]],
     [[\item{} Hometown ]] .. Tr("of") .. [[ \nameref{orga}.]],
     [[\end{itemize}]],
@@ -67,14 +67,14 @@ local expected = {
     [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]],
     [[\subsubsection{Place 1}]],
     [[\label{place-1}]],
-    [[\paragraph{]] .. CapFirst(Tr("associations")) .. [[}]],
+    [[\paragraph{]] .. CapFirst(Tr("affiliations")) .. [[}]],
     [[\begin{itemize}]],
     [[\item{} ]] .. CapFirst(Tr("member")) .. [[ ]] .. Tr("of") .. [[ \nameref{orga}.]],
     [[\end{itemize}]],
     [[\subsection{]] .. CapFirst(Tr("in")) .. [[ Place 4}]],
     [[\subsubsection{Place 2}]],
     [[\label{place-2}]],
-    [[\paragraph{]] .. CapFirst(Tr("associations")) .. [[}]],
+    [[\paragraph{]] .. CapFirst(Tr("affiliations")) .. [[}]],
     [[\begin{itemize}]],
     [[\item{} Hometown ]] .. Tr("of") .. [[ \nameref{orga}.]],
     [[\end{itemize}]],

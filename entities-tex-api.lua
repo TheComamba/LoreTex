@@ -43,12 +43,12 @@ function Reveal(label)
     AddRef(label, PrimaryRefs)
 end
 
-function AddAssociation(entity, association, role)
+function AddParent(entity, parent, relationship)
     if entity ~= nil then
-        if entity["associations"] == nil then
-            entity["associations"] = {}
+        if entity["parents"] == nil then
+            entity["parents"] = {}
         end
-        entity["associations"][#entity["associations"] + 1] = { association, role }
+        entity["parents"][#entity["parents"] + 1] = { parent, relationship }
     end
 end
 

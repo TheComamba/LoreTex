@@ -74,7 +74,7 @@ end
 
 local function addAllChildrenToParents(entities)
     for type, name in pairs(TypeToNameMap()) do
-        for key2, keyword in pairs({ "location", "associations" }) do
+        for key2, keyword in pairs({ "location", "parents" }) do
             addChildrenToParents(type, keyword, entities)
         end
     end
@@ -84,7 +84,7 @@ function AddAutomatedDescriptors(entities)
     addAllChildrenToParents(entities)
     ProcessHistory(entities)
     for key, entity in pairs(entities) do
-        AddAssociationDescriptors(entity)
+        AddParentDescriptorsToChildren(entity)
         AddSpeciesAndAgeStringToNPC(entity)
         AddLifeStagesToSpecies(entity)
     end

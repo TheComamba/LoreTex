@@ -30,7 +30,7 @@ function CreateBenchmarkingTest(sizeStr)
         NewCharacter("char-" .. i, nil, "Character " .. i)
         SetDescriptor(CurrentEntity(), "species", "species-" .. i)
         SetDescriptor(CurrentEntity(), "location", "place-" .. i)
-        SetDescriptor(CurrentEntity(), "associations", "organisation-" .. i)
+        AddParent(CurrentEntity(), "organisation-" .. i)
         SetDescriptor(CurrentEntity(), "Best Friend", [[\nameref{mentioned-char-]] .. i .. [[}]])
         AddRef("char-" .. i, PrimaryRefs)
 

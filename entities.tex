@@ -187,7 +187,7 @@
 }
 
 \newcommand{\setAssociation}[2][]{
-	\directlua{AddAssociation(CurrentEntity(), "#2", [[\detokenize{#1}]])}
+	\directlua{AddParent(CurrentEntity(), "#2", [[\detokenize{#1}]])}
 }
 
 \newcommand{\setSpecies}[1]{

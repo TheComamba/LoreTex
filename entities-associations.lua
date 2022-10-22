@@ -1,4 +1,3 @@
-Append(ProtectedDescriptors, { "associations" })
 AssociationTypes = { "organisations", "families", "ships" }
 AssociationTypeNames = { "Organisationen", "Familien", "Schiffe" }
 
@@ -10,33 +9,33 @@ function IsAssociation(entity)
     return type ~= nil and IsIn(entity["type"], AssociationTypes)
 end
 
-function AddAssociationDescriptors(entity)
-    local associationList = {}
-    local associationsAndRoles = entity["associations"]
-    if associationsAndRoles ~= nil then
-        if type(associationsAndRoles) == "string" then
-            associationsAndRoles = { associationsAndRoles }
+function AddParentDescriptorsToChildren(entity)
+    local parentList = {}
+    local parentsAndRelationships = entity["parents"]
+    if parentsAndRelationships ~= nil then
+        if type(parentsAndRelationships) == "string" then
+            parentsAndRelationships = { parentsAndRelationships }
         end
-        for key, associationAndRole in pairs(associationsAndRoles) do
-            if type(associationAndRole) == "string" then
-                associationAndRole = { associationAndRole }
+        for key, parentAndRelationship in pairs(parentsAndRelationships) do
+            if type(parentAndRelationship) == "string" then
+                parentAndRelationship = { parentAndRelationship }
             end
-            local associationLabel = associationAndRole[1]
-            local assocationRole = associationAndRole[2]
-            local association = GetEntity(associationLabel)
-            if not IsEmpty(association) and IsEntityShown(association) then
-                if IsEmpty(assocationRole) then
-                    assocationRole = CapFirst(Tr("member"))
+            local parentLabel = parentAndRelationship[1]
+            local relationship = parentAndRelationship[2]
+            local parent = GetEntity(parentLabel)
+            if not IsEmpty(parent) and IsEntityShown(parent) then
+                if IsEmpty(relationship) then
+                    relationship = CapFirst(Tr("member"))
                 end
-                local description = assocationRole ..
-                    " " .. Tr("of") .. " " .. TexCmd("nameref ", associationLabel) .. "."
-                if IsEntitySecret(association) then
+                local description = relationship ..
+                    " " .. Tr("of") .. " " .. TexCmd("nameref ", parentLabel) .. "."
+                if IsEntitySecret(parent) then
                     description = "(" .. CapFirst(Tr("secret")) .. ") " .. description
                 end
-                Append(associationList, description)
+                Append(parentList, description)
             end
         end
-        SetDescriptor(entity, CapFirst(Tr("associations")), associationList)
+        SetDescriptor(entity, Tr("affiliations"), parentList)
     end
 end
 

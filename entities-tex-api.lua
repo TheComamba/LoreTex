@@ -1,7 +1,12 @@
 function SetDescriptor(entity, descriptor, description, subdescriptor)
-    if IsEmpty(descriptor) then
+    if IsEmpty(entity) then
+        LogError("Called with empty entity. Descriptor is " .. DebugPrint(descriptor))
+        return
+    elseif IsEmpty(descriptor) then
+        LogError("Called with empty descriptor for entity " .. DebugPrint(entity))
         return
     elseif IsEmpty(description) then
+        LogError("Called with empty description for entity" .. DebugPrint(entity))
         return
     elseif IsIn(descriptor, ProtectedDescriptors) then
         LogError("Called with protected descriptor" .. DebugPrint(descriptor))
@@ -136,7 +141,7 @@ end
 
 function AutomatedChapters()
     if not IsEmpty(NotYetFoundEntities) then
-        LogError("The following entities have been mentioned, but not yet created:" .. DebugPrint(NotYetFoundEntities))
+        ComplainAboutNotYetFoundEntities()
     end
     StartBenchmarking("AutomatedChapters")
     local processedEntities, mentionedRefs = ProcessEntities(AllEntities)

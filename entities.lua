@@ -15,6 +15,12 @@ end
 
 ResetEntities()
 
+function ComplainAboutNotYetFoundEntities()
+    for label, entity in pairs(NotYetFoundEntities) do
+        LogError("Entity with label \"" .. label .. "\" was mentioned, but not created.")
+    end
+end
+
 function CurrentEntity()
     return AllEntities[#AllEntities]
 end
@@ -132,8 +138,20 @@ function AddDescriptorsFromNotYetFound(entity)
             for field, value in pairs(preliminaryEntity) do
                 if entity[field] == nil then
                     entity[field] = value
+                elseif type(entity[field]) == "table" and type(value) == "table" then
+                    for key, subvalue in pairs(value) do
+                        if type(key) == "number" then
+                            entity[field][#entity[field] + 1] = subvalue
+                        else
+                            if entity[field][key] == nil then
+                                entity[field][key] = subvalue
+                            else
+                                LogError("Tried to add already existing field " .. DebugPrint(key))
+                            end
+                        end
+                    end
                 else
-                    LogError("Tried to add already existing field.")
+                    LogError("Tried to add already existing field " .. DebugPrint(field))
                 end
             end
             NotYetFoundEntities[label] = nil

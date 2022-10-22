@@ -27,7 +27,9 @@ function AddParentDescriptorsToChild(child)
                 end
             end
         end
-        SetDescriptor(child, Tr("affiliations"), parentList)
+        if not IsEmpty(parentList) then
+            SetDescriptor(child, Tr("affiliations"), parentList)
+        end
     end
     StopBenchmarking("AddParentDescriptorsToChild")
 end

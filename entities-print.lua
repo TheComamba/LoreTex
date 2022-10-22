@@ -144,12 +144,11 @@ local function getAllLabels(list)
     return out
 end
 
-function PrintEntityChapterBeginning(name, primaryEntities)
+local function PrintAllEntities(name, entities)
     local out = {}
-    Append(out, TexCmd("chapter", CapFirst(name)))
-    if not IsEmpty(primaryEntities) then
-        Append(out, TexCmd("section*", CapFirst(Tr("all")) .. " " .. CapFirst(name)))
-        Append(out, ListAll(getAllLabels(primaryEntities), NamerefString))
+    if not IsEmpty(entities) then
+        Append(out, TexCmd("subsection*", CapFirst(Tr("all")) .. " " .. CapFirst(name)))
+        Append(out, ListAll(getAllLabels(entities), NamerefString))
     end
     return out
 end
@@ -170,6 +169,7 @@ end
 
 local function printEntityChapterSortedByLocation(entities)
     StartBenchmarking("printEntityChapterSortedByLocation")
+
     local sectionname = Tr("in-whole-world")
     local entitiesWorldwide = extractEntitiesAtLocation(entities, nil)
     local out = printEntities(sectionname, entitiesWorldwide)
@@ -203,14 +203,15 @@ function PrintEntityChapter(primaryEntities, metatype)
         StopBenchmarking("PrintEntityChapter")
         return out
     end
-
-    Append(out, PrintEntityChapterBeginning(Tr(metatype), fittingEntities))
+    
+    Append(out, TexCmd("chapter", CapFirst(Tr(metatype))))
     local types = AllTypes[metatype]
     table.sort(types, SortByTranslation)
     for i, type in pairs(types) do
         local entitiesOfType = GetEntitiesOfType(type, fittingEntities)
         if not IsEmpty(entitiesOfType) then
             Append(out, TexCmd("section", CapFirst(Tr(type))))
+            Append(out, PrintAllEntities(Tr(type), entitiesOfType))
             Append(out, printEntityChapterSortedByLocation(entitiesOfType))
         end
     end

@@ -9,14 +9,14 @@ AddRef("test-1", PrimaryRefs)
 local function generateExpected(isSecondAdded)
     local out = {}
     Append(out, [[\chapter{]] .. CapFirst(Tr("places")) .. [[}]])
-    Append(out, [[\section*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("places")) .. [[}]])
+    Append(out, [[\section{]] .. CapFirst(Tr("places")) .. [[}]])
+    Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("places")) .. [[}]])
     Append(out, [[\begin{itemize}]])
     Append(out, [[\item{} \nameref{test-1}]])
     if isSecondAdded then
         Append(out, [[\item{} \nameref{test-2}]])
     end
     Append(out, [[\end{itemize}]])
-    Append(out, [[\section{]] .. CapFirst(Tr("places")) .. [[}]])
     Append(out, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
     Append(out, [[\subsubsection{Test 1}]])
     Append(out, [[\label{test-1}]])

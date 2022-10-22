@@ -104,7 +104,8 @@ end
 local function generateExpected()
     local out = {}
     Append(out, [[\chapter{]] .. CapFirst(Tr("associations")) .. [[}]])
-    Append(out, [[\section*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("associations")) .. [[}]])
+    Append(out, [[\section{]] .. CapFirst(Tr("organisations")) .. [[}]])
+    Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("organisations")) .. [[}]])
     Append(out, [[\begin{itemize}]])
     Append(out, [[\item{} \nameref{normal-orga}]])
     Append(out, [[\item{} \nameref{revealed-orga}]])
@@ -113,7 +114,6 @@ local function generateExpected()
     end
     Append(out, [[\end{itemize}]])
 
-    Append(out, [[\section{]] .. CapFirst(Tr("organisations")) .. [[}]])
     Append(out, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
     Append(out, [[\subsubsection{Normal Organisation}]])
     Append(out, [[\label{normal-orga}]])
@@ -132,7 +132,8 @@ local function generateExpected()
     end
 
     Append(out, [[\chapter{]] .. CapFirst(Tr("items")) .. [[}]])
-    Append(out, [[\section*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("items")) .. [[}]])
+    Append(out, [[\section{]] .. CapFirst(Tr("items")) .. [[}]])
+    Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("items")) .. [[}]])
     Append(out, [[\begin{itemize}]])
     Append(out, [[\item{} \nameref{at-secret-location}]])
     Append(out, [[\item{} \nameref{normal}]])
@@ -142,7 +143,6 @@ local function generateExpected()
     end
     Append(out, [[\end{itemize}]])
 
-    Append(out, [[\section{]] .. CapFirst(Tr("items")) .. [[}]])
     Append(out, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
 
     Append(out, [[\subsubsection{Normal}]])

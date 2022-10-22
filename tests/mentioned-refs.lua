@@ -14,11 +14,11 @@ NewEntity("some-organisation", "organisations", nil, "Some Organisation")
 
 local expected = {}
 Append(expected, [[\chapter{]] .. CapFirst(Tr("items")) .. [[}]])
-Append(expected, [[\section*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("items")) .. [[}]])
+Append(expected, [[\section{]] .. CapFirst(Tr("items")) .. [[}]])
+Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("items")) .. [[}]])
 Append(expected, [[\begin{itemize}]])
 Append(expected, [[\item{} \nameref{primary-item}]])
 Append(expected, [[\end{itemize}]])
-Append(expected, [[\section{]] .. CapFirst(Tr("items")) .. [[}]])
 Append(expected, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
 Append(expected, [[\subsubsection{Primary Item}]])
 Append(expected, [[\label{primary-item}]])

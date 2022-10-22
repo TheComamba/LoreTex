@@ -20,11 +20,11 @@ local out = AutomatedChapters()
 
 local expected = {
     [[\chapter{]] .. CapFirst(Tr("characters")) .. [[}]],
-    [[\section*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("characters")) .. [[}]],
+    [[\section{]] .. CapFirst(Tr("npcs")) .. [[}]],
+    [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("npcs")) .. [[}]],
     [[\begin{itemize}]],
     [[\item{} \nameref{some-npc}]],
     [[\end{itemize}]],
-    [[\section{]] .. CapFirst(Tr("npcs")) .. [[}]],
     [[\subsection{]] .. CapFirst(Tr("in")) .. [[ Subplace 1}]],
     [[\subsubsection{Some NPC}]],
     [[\label{some-npc}]],

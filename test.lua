@@ -5,8 +5,7 @@ local numSucceeded = 0
 local numFailed = 0
 
 local function resetEnvironment()
-    AllEntities = {}
-    NotYetFoundEntities = {}
+    ResetEntities()
     Histories = {}
     CurrentYearVin = 0
     PrintHistoryYear = 0
@@ -16,6 +15,7 @@ local function resetEnvironment()
     MentionedRefs = {}
     UnfoundRefs = {}
     IsShowFuture = true
+    IsShowSecrets = false
 end
 
 local function areEqual(obj1, obj2, elementNum, currentObj1, currentObj2)
@@ -64,7 +64,7 @@ local function splitStringInLinebreaks(str, maxWidth)
     local out = {}
     while string.len(str) > 0 do
         Append(out, string.sub(str, 1, maxWidth))
-        str = string.sub(str, maxWidth + 1, 2 * maxWidth)
+        str = string.sub(str, maxWidth + 1)
     end
     return out
 end
@@ -114,6 +114,10 @@ function Assert(caller, expected, received)
     local failedIndex = { 0 }
     local failedItem1 = { "" }
     local failedItem2 = { "" }
+
+    if IsDictionaryRandomised then
+        caller = caller .. "-with-randomised-dictionary"
+    end
 
     if HasError() then
         local out = {}

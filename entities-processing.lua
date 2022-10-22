@@ -46,6 +46,18 @@ local function addSingleChildDescriptorToParent(child, parent, relationship)
     UniqueAppend(parent[descriptor], table.concat(content))
 end
 
+local function getRelationship(child, parentLabels)
+    for key, parentAndRelationship in pairs(child["parents"]) do
+        if IsIn(parentAndRelationship[1], parentLabels) then
+            if parentAndRelationship[2] ~= nil then
+                return parentAndRelationship[2]
+            end
+            break
+        end
+    end
+    return ""
+end
+
 local function addChildrenDescriptorsToParent(parent)
     StartBenchmarking("addChildrenDescriptorsToParent")
     local childrenLabels = parent["children"]
@@ -57,15 +69,7 @@ local function addChildrenDescriptorsToParent(parent)
     for key, childLabel in pairs(childrenLabels) do
         local child = GetEntity(childLabel)
         if IsEntityShown(child) then
-            local relationship = ""
-            for key, parentAndRelationship in pairs(child["parents"]) do
-                if IsIn(parentAndRelationship[1], parentLabels) then
-                    if parentAndRelationship[2] ~= nil then
-                        relationship = parentAndRelationship[2]
-                    end
-                    break
-                end
-            end
+            local relationship = getRelationship(child, parentLabels)
             addSingleChildDescriptorToParent(child, parent, relationship)
         end
     end

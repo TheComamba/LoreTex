@@ -57,7 +57,7 @@ function AddParent(entity, parentLabel, relationship)
     if parent["children"] == nil then
         parent["children"] = {}
     end
-    parent["children"][#parent["children"] + 1] = GetMainLabel(entity)
+    UniqueAppend(parent["children"], GetMainLabel(entity))
 end
 
 function DeclarePC(label)

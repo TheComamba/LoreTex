@@ -47,6 +47,7 @@ function DescriptorsString(entity)
     StartBenchmarking("DescriptorsString")
     local out = {}
 
+    
     local descriptorsList = {}
     for descriptor, description in pairs(entity) do
         if not IsIn(descriptor, ProtectedDescriptors) then

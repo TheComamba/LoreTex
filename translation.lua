@@ -1,7 +1,9 @@
 Dictionary = {}
+IsDictionaryRandomised = false
 
 function SelectLanguage(language)
     dofile(RelativePath .. "/translation/" .. language .. ".lua")
+    IsDictionaryRandomised = false
 end
 
 function Tr(keyword, additionalArguments)
@@ -36,4 +38,5 @@ function RandomiseDictionary()
     for key, val in pairs(Dictionary) do
         Dictionary[key] = Dictionary[key]:lower() .. "-" .. randomWord(5)
     end
+    IsDictionaryRandomised = true
 end

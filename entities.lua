@@ -7,6 +7,16 @@ OtherEntityTypes = { "other" }
 OtherEntityTypeNames = { "Andere" }
 RevealedLabels = {}
 
+function ResetEntities()
+    AllEntities = {}
+    NotYetFoundEntities = {}
+    labelToEntity = {}
+    IsShowSecrets = false
+    RevealedLabels = {}
+end
+
+ResetEntities()
+
 function IsOtherEntity(entity)
     if entity == nil then
         return false

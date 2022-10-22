@@ -1,8 +1,8 @@
 NewEntity("karl", "npcs", nil, "Karl")
-SetDescriptor(CurrentEntity(), "species", "human")
+SetSpecies(CurrentEntity(), "human")
 SetDescriptor(CurrentEntity(), "Friend", [[\nameref{peter}]])
 NewEntity("peter", "npcs", nil, "Peter")
-SetDescriptor(CurrentEntity(), "species", "human")
+SetSpecies(CurrentEntity(), "human")
 NewEntity("human", "species", nil, "Human")
 AddRef("karl", PrimaryRefs)
 

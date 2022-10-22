@@ -50,8 +50,8 @@ Assert("entities-with-associations", expected, out)
 
 NewEntity("place-3", "places", nil, "Place 3")
 NewEntity("place-4", "places", nil, "Place 4")
-SetDescriptor(orga, "location", "place-3")
-SetDescriptor(place2, "location", "place-4")
+SetLocation(orga, "place-3")
+SetLocation(place2, "place-4")
 
 
 out = AutomatedChapters()

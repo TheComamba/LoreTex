@@ -1,7 +1,7 @@
 NewEntity("test-region", "places", nil, "Test Region")
 
 NewEntity("test-city", "places", nil, "Test City")
-SetDescriptor(CurrentEntity(), "location", "test-region")
+SetLocation(CurrentEntity(), "test-region")
 
 AddAllEntitiesToPrimaryRefs()
 

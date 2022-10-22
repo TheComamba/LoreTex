@@ -1,8 +1,8 @@
 NewEntity("test-species", "species", nil, "Test Species")
 
 NewEntity("test-npc", "npcs", nil, "Test NPC")
-SetDescriptor(CurrentEntity(), "species", "test-species")
-SetDescriptor(CurrentEntity(), "born", -20)
+SetSpecies(CurrentEntity(), "test-species")
+CurrentEntity()["born"] = -20
 
 AddAllEntitiesToPrimaryRefs()
 

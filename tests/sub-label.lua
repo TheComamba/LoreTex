@@ -1,6 +1,6 @@
 NewEntity("npc", "npcs", nil, "NPC")
-SetDescriptor(CurrentEntity(), "species", "subspecies")
-SetDescriptor(CurrentEntity(), "location", "subplace-1")
+SetSpecies(CurrentEntity(), "subspecies")
+SetLocation(CurrentEntity(), "subplace-1")
 SetDescriptor(CurrentEntity(), "Some Info", [[Refers to \nameref{subplace-2}.]])
 NewEntity("place-1", "places", nil, "Place 1")
 SetDescriptor(CurrentEntity(), "Subplace 1", [[\label{subplace-1}]])

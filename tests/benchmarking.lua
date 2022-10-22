@@ -21,15 +21,15 @@ function CreateBenchmarkingTest(sizeStr)
         AddRef("place-" .. i, PrimaryRefs)
 
         NewEntity("species-" .. i, "species", nil, "Species " .. i)
-        SetDescriptor(CurrentEntity(), [[ageFactor]], i)
+        SetAgeFactor(CurrentEntity(), i)
         AddRef("species-" .. i, PrimaryRefs)
 
         NewEntity("organisation-" .. i, "organisations", nil, "Organisation " .. i)
         AddRef("organisation-" .. i, PrimaryRefs)
 
         NewCharacter("char-" .. i, nil, "Character " .. i)
-        SetDescriptor(CurrentEntity(), "species", "species-" .. i)
-        SetDescriptor(CurrentEntity(), "location", "place-" .. i)
+        SetSpecies(CurrentEntity(), "species-" .. i)
+        SetLocation(CurrentEntity(), "place-" .. i)
         AddParent(CurrentEntity(), "organisation-" .. i)
         SetDescriptor(CurrentEntity(), "Best Friend", [[\nameref{mentioned-char-]] .. i .. [[}]])
         AddRef("char-" .. i, PrimaryRefs)

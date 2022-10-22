@@ -35,7 +35,7 @@ AddParent(CurrentEntity(), "unborn-orga")
 AddRef("unborn", PrimaryRefs)
 
 NewEntity("at-secret-location", "items", nil, "At secret Location")
-SetDescriptor(CurrentEntity(), "location", "eldorado")
+SetLocation(CurrentEntity(), "eldorado")
 AddParent(CurrentEntity(), "normal-orga")
 AddParent(CurrentEntity(), "secret-orga")
 AddParent(CurrentEntity(), "revealed-orga")

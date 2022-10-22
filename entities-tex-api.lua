@@ -3,6 +3,9 @@ function SetDescriptor(entity, descriptor, description, subdescriptor)
         return
     elseif IsEmpty(description) then
         return
+    elseif IsIn(descriptor, ProtectedDescriptors) then
+        LogError("Called with protected descriptor" .. DebugPrint(descriptor))
+        return
     end
 
     StartBenchmarking("SetDescriptor")
@@ -35,7 +38,7 @@ function SetDescriptor(entity, descriptor, description, subdescriptor)
 end
 
 function SetSecret(entity)
-    SetDescriptor(entity, "isSecret", true)
+    entity["isSecret"] = true
 end
 
 function Reveal(label)
@@ -57,8 +60,24 @@ function DeclarePC(label)
     AddRef(label, PrimaryRefs)
 end
 
+function SetAgeFactor(entity, factor)
+    entity["ageFactor"] = factor
+end
+
+function SetAgeExponent(entity, exponent)
+    entity["ageExponent"] = exponent
+end
+
 function SetAgeModifierMixing(entity, species1, species2)
-    SetDescriptor(entity, "ageMixing", { species1, species2 })
+    entity["ageMixing"] = { species1, species2 }
+end
+
+function SetLocation(entity, location)
+    entity["location"] = location
+end
+
+function SetSpecies(entity, species)
+    entity["species"] = species
 end
 
 function MakePrimaryIf(condition)
@@ -85,12 +104,12 @@ function NewEntity(label, type, shortname, name)
         return
     end
     local entity = {}
-    SetDescriptor(entity, "labels", { label })
-    SetDescriptor(entity, "type", type)
-    SetDescriptor(entity, "shortname", shortname)
-    SetDescriptor(entity, "name", name)
+    entity["labels"] = { label }
+    entity["type"] = type
+    entity["shortname"] = shortname
+    entity["name"] = name
     if not IsEmpty(DefaultLocation) then
-        SetDescriptor(entity, "location", DefaultLocation)
+        SetLocation(entity, DefaultLocation)
     end
     RegisterEntityLabel(label, entity)
     AddSpecialFieldsToPreviouslyUnfoundEntity(entity)

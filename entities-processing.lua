@@ -1,28 +1,28 @@
-local function entityQualifiersString(srcEntity, targetEntity, role)
+local function entityQualifiersString(child, parent, relationship)
     local content = {}
-    if IsEntitySecret(srcEntity) then
+    if IsEntitySecret(child) then
         Append(content, Tr("secret"))
     end
-    if not IsEmpty(role) then
-        Append(content, role)
+    if not IsEmpty(relationship) then
+        Append(content, relationship)
     end
-    local birthyearstr = srcEntity["born"]
+    local birthyearstr = child["born"]
     local birthyear = tonumber(birthyearstr)
     if not IsEmpty(birthyear) and birthyear <= CurrentYearVin then
         birthyear = ConvertYearFromVin(birthyear, YearFmt)
         Append(content, TexCmd("textborn") .. birthyear)
     end
-    local deathyearstr = srcEntity["died"]
+    local deathyearstr = child["died"]
     local deathyear = tonumber(deathyearstr)
     if not IsEmpty(deathyear) and deathyear <= CurrentYearVin then
         deathyear = ConvertYearFromVin(deathyear, YearFmt)
         Append(content, TexCmd("textdied") .. deathyear)
     end
-    local location = srcEntity["location"]
-    local targetLocation = targetEntity["location"]
-    if IsLocationUnrevealed(srcEntity) then
+    local location = child["location"]
+    local targetLocation = parent["location"]
+    if IsLocationUnrevealed(child) then
         Append(content, Tr("at-secret-location"))
-    elseif not IsPlace(targetEntity) and not IsEmpty(location) and location ~= targetLocation then
+    elseif not IsPlace(parent) and not IsEmpty(location) and location ~= targetLocation then
         Append(content, Tr("in") .. " " .. TexCmd("nameref", location))
     end
     if not IsEmpty(content) then
@@ -32,59 +32,48 @@ local function entityQualifiersString(srcEntity, targetEntity, role)
     end
 end
 
-local function addSingleEntity(srcEntity, targetEntity, entityType, role)
-    local name = Tr(entityType)
-    if targetEntity[name] == nil then
-        targetEntity[name] = {}
+local function addSingleChildDescriptorToParent(child, parent, relationship)
+    local childType = child["type"]
+    local descriptor = Tr(childType)
+    if parent[descriptor] == nil then
+        parent[descriptor] = {}
     end
     local content = {}
-    local srcLabel = GetMainLabel(srcEntity)
+    local srcLabel = GetMainLabel(child)
     Append(content, TexCmd("nameref", srcLabel))
     Append(content, " ")
-    Append(content, entityQualifiersString(srcEntity, targetEntity, role))
-    UniqueAppend(targetEntity[name], table.concat(content))
+    Append(content, entityQualifiersString(child, parent, relationship))
+    UniqueAppend(parent[descriptor], table.concat(content))
 end
 
-local function addChildrenToParents(entityType, keyword, entities)
-    local srcEntities = GetEntitiesOfType(entityType)
-    srcEntities = GetEntitiesIf(IsEntityShown, srcEntities)
-    for label, srcEntity in pairs(srcEntities) do
-        local targets = srcEntity[keyword]
-        if targets ~= nil then
-            if type(targets) ~= "table" then
-                targets = { targets }
-            end
-            for key, target in pairs(targets) do
-                local targetLabel = ""
-                local role = ""
-                if type(target) == "string" then
-                    targetLabel = target
-                elseif type(target) == "table" then
-                    targetLabel = target[1]
-                    role = target[2]
-                end
-                local targetEntity = GetMutableEntity(targetLabel, entities)
-                if targetEntity ~= nil then
-                    addSingleEntity(srcEntity, targetEntity, entityType, role)
-                end
-            end
-        end
+local function addChildrenDescriptorsToParent(parent)
+    local childrenLabels = parent["children"]
+    if childrenLabels == nil then
+        return
     end
-end
-
-local function addAllChildrenToParents(entities)
-    for type, name in pairs(TypeToNameMap()) do
-        for key2, keyword in pairs({ "location", "parents" }) do
-            addChildrenToParents(type, keyword, entities)
+    local parentLabels = GetLabels(parent)
+    for key, childLabel in pairs(childrenLabels) do
+        local child = GetEntity(childLabel)
+        if IsEntityShown(child) then
+            local relationship = ""
+            for key, parentAndRelationship in pairs(child["parents"]) do
+                if IsIn(parentAndRelationship[1], parentLabels) then
+                    if parentAndRelationship[2] ~= nil then
+                        relationship = parentAndRelationship[2]
+                    end
+                    break
+                end
+            end
+            addSingleChildDescriptorToParent(child, parent, relationship)
         end
     end
 end
 
 function AddAutomatedDescriptors(entities)
-    addAllChildrenToParents(entities)
     ProcessHistory(entities)
     for key, entity in pairs(entities) do
-        AddParentDescriptorsToChildren(entity)
+        AddParentDescriptorsToChild(entity)
+        addChildrenDescriptorsToParent(entity)
         AddSpeciesAndAgeStringToNPC(entity)
         AddLifeStagesToSpecies(entity)
     end

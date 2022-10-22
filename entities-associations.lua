@@ -9,9 +9,9 @@ function IsAssociation(entity)
     return type ~= nil and IsIn(entity["type"], AssociationTypes)
 end
 
-function AddParentDescriptorsToChildren(entity)
+function AddParentDescriptorsToChild(child)
     local parentList = {}
-    local parentsAndRelationships = entity["parents"]
+    local parentsAndRelationships = child["parents"]
     if parentsAndRelationships ~= nil then
         if type(parentsAndRelationships) == "string" then
             parentsAndRelationships = { parentsAndRelationships }
@@ -22,20 +22,22 @@ function AddParentDescriptorsToChildren(entity)
             end
             local parentLabel = parentAndRelationship[1]
             local relationship = parentAndRelationship[2]
-            local parent = GetEntity(parentLabel)
-            if not IsEmpty(parent) and IsEntityShown(parent) then
-                if IsEmpty(relationship) then
-                    relationship = CapFirst(Tr("member"))
+            if parentLabel ~= child["location"] or not IsEmpty(relationship) then
+                local parent = GetEntity(parentLabel)
+                if not IsEmpty(parent) and IsEntityShown(parent) then
+                    if IsEmpty(relationship) then
+                        relationship = CapFirst(Tr("member"))
+                    end
+                    local description = relationship ..
+                        " " .. Tr("of") .. " " .. TexCmd("nameref ", parentLabel) .. "."
+                    if IsEntitySecret(parent) then
+                        description = "(" .. CapFirst(Tr("secret")) .. ") " .. description
+                    end
+                    Append(parentList, description)
                 end
-                local description = relationship ..
-                    " " .. Tr("of") .. " " .. TexCmd("nameref ", parentLabel) .. "."
-                if IsEntitySecret(parent) then
-                    description = "(" .. CapFirst(Tr("secret")) .. ") " .. description
-                end
-                Append(parentList, description)
             end
         end
-        SetDescriptor(entity, Tr("affiliations"), parentList)
+        SetDescriptor(child, Tr("affiliations"), parentList)
     end
 end
 

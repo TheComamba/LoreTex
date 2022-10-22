@@ -1,10 +1,3 @@
-local function addChild(entity, childLabel)
-    if entity["children"] == nil then
-        entity["children"] = {}
-    end
-    entity["children"][#entity["children"] + 1] = childLabel
-end
-
 function SetDescriptor(entity, descriptor, description, subdescriptor)
     if IsEmpty(descriptor) then
         return
@@ -61,7 +54,10 @@ function AddParent(entity, parentLabel, relationship)
         entity["parents"][#entity["parents"] + 1] = { parentLabel, relationship }
     end
     local parent = GetMutableEntityFromAll(parentLabel)
-    addChild(parent, GetMainLabel(entity))
+    if parent["children"] == nil then
+        parent["children"] = {}
+    end
+    parent["children"][#parent["children"] + 1] = GetMainLabel(entity)
 end
 
 function DeclarePC(label)
@@ -83,6 +79,7 @@ end
 
 function SetLocation(entity, location)
     entity["location"] = location
+    AddParent(entity, location)
 end
 
 function SetSpecies(entity, species)

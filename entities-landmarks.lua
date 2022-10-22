@@ -1,6 +1,4 @@
 HeightCaption = "Höhe"
-LandmarkTypes = { "forests", "grasslands", "mountainranges", "mountains", "rivers", "glaciers", "lakes" }
-LandmarkTypeNames = { "Wälder", "Grasländer", "Gebirge", "Berge", "Flüsse", "Gletscher", "Seen" }
 local planetRadiusInKM = 6371
 
 local function distanceToHorizon(heightInM)

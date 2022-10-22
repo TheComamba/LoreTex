@@ -1,2 +1,0 @@
-LanguageTypes = { "languages" }
-LanguageTypeNames = { "Sprachen" }

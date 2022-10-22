@@ -1,2 +1,0 @@
-ItemTypes = { "items" }
-ItemTypeNames = { "Gegenstände" }

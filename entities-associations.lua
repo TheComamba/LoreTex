@@ -1,6 +1,3 @@
-AssociationTypes = { "organisations", "families", "ships" }
-AssociationTypeNames = { "Organisationen", "Familien", "Schiffe" }
-
 function AddParentDescriptorsToChild(child)
     StartBenchmarking("AddParentDescriptorsToChild")
     local parentList = {}

@@ -1,6 +1,4 @@
 Append(ProtectedDescriptors, { "born", "died", "species", "gender", "ageFactor", "ageExponent", "ageMixing" })
-SpeciesTypes = { "species" }
-SpeciesTypeNames = { "Spezies" }
 local lifestagesAndAges = {}
 lifestagesAndAges[#lifestagesAndAges + 1] = { "child", 0 }
 lifestagesAndAges[#lifestagesAndAges + 1] = { "juvenile", 12 }
@@ -182,7 +180,7 @@ end
 
 function AddLifestageHistoryItemsToNPC(entity)
 	StartBenchmarking("AddLifestageHistoryItemsToNPC")
-	if IsType(CharacterTypes, entity) then
+	if IsType("characters", entity) then
 		addLifestageHistoryItems(entity)
 	end
 	StopBenchmarking("AddLifestageHistoryItemsToNPC")
@@ -219,7 +217,7 @@ end
 
 function AddLifeStagesToSpecies(entity)
 	StartBenchmarking("AddLifeStagesToSpecies")
-	if IsType(SpeciesTypes, entity) then
+	if IsType("species", entity) then
 		if isAges(entity) then
 			local lifestages = lifestagesDescription(entity)
 			if not IsEmpty(lifestages) then

@@ -40,3 +40,7 @@ function RandomiseDictionary()
     end
     IsDictionaryRandomised = true
 end
+
+function SortByTranslation(a, b)
+    return StrCmp(Tr(a), Tr(b))
+end

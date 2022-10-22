@@ -138,16 +138,9 @@ function AutomatedChapters()
     StartBenchmarking("AutomatedChapters")
     local processedEntities, mentionedRefs = ProcessEntities(AllEntities)
     local output = {}
-    Append(output, PrintEntityChapter(processedEntities, Tr("places"), PlaceTypes))
-    Append(output, PrintEntityChapter(processedEntities, Tr("landmarks"), LandmarkTypes))
-    Append(output, PrintEntityChapter(processedEntities, Tr("characters"), CharacterTypes))
-    Append(output, PrintEntityChapter(processedEntities, Tr("associations"), AssociationTypes))
-    Append(output, PrintEntityChapter(processedEntities, Tr("species"), SpeciesTypes))
-    Append(output, PrintEntityChapter(processedEntities, Tr("languages"), LanguageTypes))
-    Append(output, PrintEntityChapter(processedEntities, Tr("classes"), ClassTypes))
-    Append(output, PrintEntityChapter(processedEntities, Tr("spells"), SpellTypes))
-    Append(output, PrintEntityChapter(processedEntities, Tr("items"), ItemTypes))
-    Append(output, PrintEntityChapter(processedEntities, Tr("other"), OtherEntityTypes))
+    for key, metatype in pairs(SortedMetatypes()) do
+        Append(output, PrintEntityChapter(processedEntities, metatype))
+    end
     Append(output, PrintOnlyMentionedChapter(mentionedRefs))
     if HasError() then
         Append(output, TexCmd("chapter", "Logging Messages"))

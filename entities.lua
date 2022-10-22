@@ -3,8 +3,6 @@ NotYetFoundEntities = {}
 local labelToEntity = {}
 IsShowSecrets = false
 ProtectedDescriptors = { "name", "shortname", "type", "isSecret", "labels", "parents", "children" }
-OtherEntityTypes = { "other" }
-OtherEntityTypeNames = { "Andere" }
 RevealedLabels = {}
 
 function ResetEntities()
@@ -16,14 +14,6 @@ function ResetEntities()
 end
 
 ResetEntities()
-
-function IsOtherEntity(entity)
-    if entity == nil then
-        return false
-    end
-    local type = entity["type"]
-    return type ~= nil and IsIn(entity["type"], OtherEntityTypes)
-end
 
 function CurrentEntity()
     return AllEntities[#AllEntities]

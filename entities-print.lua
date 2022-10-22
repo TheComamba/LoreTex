@@ -194,9 +194,9 @@ local function printEntityChapterSortedByLocation(entities)
     return out
 end
 
-function PrintEntityChapter(primaryEntities, name, types)
+function PrintEntityChapter(primaryEntities, metatype)
     StartBenchmarking("PrintEntityChapter")
-    local isOfFittingType = Bind(IsType, types)
+    local isOfFittingType = Bind(IsType, metatype)
     local fittingEntities = GetEntitiesIf(isOfFittingType, primaryEntities)
     local out = {}
     if IsEmpty(fittingEntities) then
@@ -204,8 +204,8 @@ function PrintEntityChapter(primaryEntities, name, types)
         return out
     end
 
-    Append(out, PrintEntityChapterBeginning(name, fittingEntities))
-    for i, type in pairs(types) do
+    Append(out, PrintEntityChapterBeginning(Tr(metatype), fittingEntities))
+    for i, type in pairs(AllTypes[metatype]) do
         local entitiesOfType = GetEntitiesOfType(type, fittingEntities)
         if not IsEmpty(entitiesOfType) then
             Append(out, TexCmd("section", CapFirst(Tr(type))))

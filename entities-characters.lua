@@ -1,10 +1,8 @@
-CharacterTypes = { "pcs", "npcs", "gods" }
-CharacterTypeNames = { "Spielercharaktere", "NPCs", "Götter" }
 PCs = {}
 
 function AddSpeciesAndAgeStringToNPC(entity)
     StartBenchmarking("AddSpeciesAndAgeStringToNPC")
-    if IsType(CharacterTypes, entity) then
+    if IsType("characters", entity) then
         SetDescriptor(entity, Tr("appearance"), SpeciesAndAgeString(entity, CurrentYearVin), CapFirst(Tr("species-and-age")) .. ":")
     end
     StopBenchmarking("AddSpeciesAndAgeStringToNPC")

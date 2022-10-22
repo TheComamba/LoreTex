@@ -112,22 +112,6 @@ function RegisterEntityLabels(labels, entity)
     end
 end
 
-function GetMutableEntity(label, entityList)
-    if entityList == AllEntities then
-        LogError("Trying to get mutable reference to member of AllEntities.")
-        return {}
-    end
-    StartBenchmarking("GetMutableEntity")
-    for key, entity in pairs(entityList) do
-        if IsIn(label, GetLabels(entity)) then
-            StopBenchmarking("GetMutableEntity")
-            return entity
-        end
-    end
-    StopBenchmarking("GetMutableEntity")
-    return {}
-end
-
 function GetMutableEntityFromAll(label)
     local entity = labelToEntity[label]
     if entity == nil then

@@ -74,30 +74,28 @@ local function getHistory(entity)
     end
 end
 
-local function addHistoryToEntities(historyItem, entities)
+local function addHistoryToEntity(historyItem, entity)
     local originator = {}
     local originatorLabel = historyItem["originator"]
     if not IsEmpty(originatorLabel) then
         originator = GetEntity(originatorLabel)
     end
-    local concerns = historyItem["concerns"]
-    for key, label in pairs(concerns) do
-        local concernedEntity = GetMutableEntity(label, entities)
-        if not IsEmpty(concernedEntity) then
-            if isAcceptsHistoryFrom(concernedEntity, originator) then
-                local history = getHistory(concernedEntity)
-                AddHistoryItemToHistory(historyItem, history)
-                SetDescriptor(concernedEntity, Tr("history"), history)
-            end
-        end
+    if isAcceptsHistoryFrom(entity, originator) then
+        local history = getHistory(entity)
+        AddHistoryItemToHistory(historyItem, history)
+        SetDescriptor(entity, Tr("history"), history)
     end
 end
 
-local function addHistoryDescriptors(entities)
+local function addHistoryDescriptors(entity)
     StartBenchmarking("addHistoryDescriptors")
-    for key, historyItem in pairs(Histories) do
+    local historyItems = entity["historyItems"]
+    if historyItems == nil then
+        historyItems = {}
+    end
+    for key, historyItem in pairs(historyItems) do
         if isHistoryShown(historyItem) then
-            addHistoryToEntities(historyItem, entities)
+            addHistoryToEntity(historyItem, entity)
         end
     end
     StopBenchmarking("addHistoryDescriptors")
@@ -107,7 +105,7 @@ function ProcessHistory(entities)
     StartBenchmarking("ProcessHistory")
     for key, entity in pairs(entities) do
         AddLifestageHistoryItemsToNPC(entity)
+        addHistoryDescriptors(entity)
     end
-    addHistoryDescriptors(entities)
     StopBenchmarking("ProcessHistory")
 end

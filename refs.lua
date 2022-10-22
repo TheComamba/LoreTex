@@ -88,7 +88,9 @@ function ScanForCmd(content, cmd)
     elseif type(content) == "table" then
         local out = {}
         for key, elem in pairs(content) do
-            Append(out, ScanForCmd(elem, cmd))
+            if not IsIn(key, ProtectedDescriptors) then
+                Append(out, ScanForCmd(elem, cmd))
+            end
         end
         return out
     else

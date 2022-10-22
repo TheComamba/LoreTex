@@ -182,9 +182,11 @@ local function addLifestageHistoryItems(entity)
 end
 
 function AddLifestageHistoryItemsToNPC(entity)
+    StartBenchmarking("AddLifestageHistoryItemsToNPC")
 	if IsChar(entity) then
 		addLifestageHistoryItems(entity)
 	end
+    StopBenchmarking("AddLifestageHistoryItemsToNPC")
 end
 
 function AddSpeciesToPrimaryRefs()
@@ -227,6 +229,7 @@ local function lifestagesDescription(species)
 end
 
 function AddLifeStagesToSpecies(entity)
+    StartBenchmarking("AddLifeStagesToSpecies")
 	if IsSpecies(entity) then
 		if isAges(entity) then
 			local lifestages = lifestagesDescription(entity)
@@ -235,4 +238,5 @@ function AddLifeStagesToSpecies(entity)
 			end
 		end
 	end
+    StopBenchmarking("AddLifeStagesToSpecies")
 end

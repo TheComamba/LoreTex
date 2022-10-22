@@ -11,9 +11,11 @@ function IsChar(entity)
 end
 
 function AddSpeciesAndAgeStringToNPC(entity)
+    StartBenchmarking("AddSpeciesAndAgeStringToNPC")
     if IsChar(entity) then
         SetDescriptor(entity, Tr("appearance"), SpeciesAndAgeString(entity, CurrentYearVin), CapFirst(Tr("species-and-age")) .. ":")
     end
+    StopBenchmarking("AddSpeciesAndAgeStringToNPC")
 end
 
 local function isHasHappened(entity, keyword, onNil)

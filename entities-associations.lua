@@ -10,6 +10,7 @@ function IsAssociation(entity)
 end
 
 function AddParentDescriptorsToChild(child)
+    StartBenchmarking("AddParentDescriptorsToChild")
     local parentList = {}
     local parentsAndRelationships = child["parents"]
     if parentsAndRelationships ~= nil then
@@ -39,6 +40,7 @@ function AddParentDescriptorsToChild(child)
         end
         SetDescriptor(child, Tr("affiliations"), parentList)
     end
+    StopBenchmarking("AddParentDescriptorsToChild")
 end
 
 function MarkSecret(entity)

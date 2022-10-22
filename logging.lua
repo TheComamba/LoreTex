@@ -166,14 +166,20 @@ function PrintBenchmarking()
             Append(str, RoundedNumString(time / calls, 3))
             Append(str, "s on avg.)")
         end
-        Append(benchmarkStrings, table.concat(str))
+        benchmarkStrings[#benchmarkStrings + 1] = { time, table.concat(str) }
     end
     local out = {}
     if not IsEmpty(benchmarkStrings) then
+        table.sort(benchmarkStrings, function(a, b) return a[1] > b[1] end)
         Append(out, TexCmd("section", "Benchmarking"))
         Append(out, TexCmd("RpgTex"))
-        Append(out, " benchmarked the following functions:")
-        Append(out, ListAll(benchmarkStrings))
+        Append(out, " benchmarked the following functions (sorted by total runtime):")
+        Append(out, TexCmd("begin", "itemize"))
+        for key, timeAndString in pairs(benchmarkStrings) do
+            Append(out, TexCmd("item"))
+            Append(out, timeAndString[2])
+        end
+        Append(out, TexCmd("end", "itemize"))
     end
     return out
 end

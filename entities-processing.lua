@@ -47,8 +47,10 @@ local function addSingleChildDescriptorToParent(child, parent, relationship)
 end
 
 local function addChildrenDescriptorsToParent(parent)
+    StartBenchmarking("addChildrenDescriptorsToParent")
     local childrenLabels = parent["children"]
     if childrenLabels == nil then
+        StopBenchmarking("addChildrenDescriptorsToParent")
         return
     end
     local parentLabels = GetLabels(parent)
@@ -67,9 +69,11 @@ local function addChildrenDescriptorsToParent(parent)
             addSingleChildDescriptorToParent(child, parent, relationship)
         end
     end
+    StopBenchmarking("addChildrenDescriptorsToParent")
 end
 
 function AddAutomatedDescriptors(entities)
+    StartBenchmarking("AddAutomatedDescriptors")
     ProcessHistory(entities)
     for key, entity in pairs(entities) do
         AddParentDescriptorsToChild(entity)
@@ -77,6 +81,7 @@ function AddAutomatedDescriptors(entities)
         AddSpeciesAndAgeStringToNPC(entity)
         AddLifeStagesToSpecies(entity)
     end
+    StopBenchmarking("AddAutomatedDescriptors")
 end
 
 local function isEntityIn(entity, entities)
@@ -89,12 +94,14 @@ local function isEntityIn(entity, entities)
 end
 
 local function addProcessedEntity(entities, entity)
+    StartBenchmarking("addProcessedEntity")
     if not isEntityIn(entity, entities) then
         local newEntity = DeepCopy(entity)
         MarkDead(newEntity)
         MarkSecret(newEntity)
         entities[#entities + 1] = newEntity
     end
+    StopBenchmarking("addProcessedEntity")
 end
 
 function ProcessEntities(entitiesIn)

@@ -94,16 +94,20 @@ local function addHistoryToEntities(historyItem, entities)
 end
 
 local function addHistoryDescriptors(entities)
+    StartBenchmarking("addHistoryDescriptors")
     for key, historyItem in pairs(Histories) do
         if isHistoryShown(historyItem) then
             addHistoryToEntities(historyItem, entities)
         end
     end
+    StopBenchmarking("addHistoryDescriptors")
 end
 
 function ProcessHistory(entities)
+    StartBenchmarking("ProcessHistory")
     for key, entity in pairs(entities) do
         AddLifestageHistoryItemsToNPC(entity)
     end
     addHistoryDescriptors(entities)
+    StopBenchmarking("ProcessHistory")
 end

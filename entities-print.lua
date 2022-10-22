@@ -205,7 +205,9 @@ function PrintEntityChapter(primaryEntities, metatype)
     end
 
     Append(out, PrintEntityChapterBeginning(Tr(metatype), fittingEntities))
-    for i, type in pairs(AllTypes[metatype]) do
+    local types = AllTypes[metatype]
+    table.sort(types, SortByTranslation)
+    for i, type in pairs(types) do
         local entitiesOfType = GetEntitiesOfType(type, fittingEntities)
         if not IsEmpty(entitiesOfType) then
             Append(out, TexCmd("section", CapFirst(Tr(type))))

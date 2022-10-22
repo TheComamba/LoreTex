@@ -1,24 +1,24 @@
 AllTypes = {}
-AllTypes["associations"] = { "organisations", "families", "ships" }
-AllTypes["characters"] = { "pcs", "npcs", "gods" }
+AllTypes["associations"] = { "families", "organisations" }
+AllTypes["characters"] = { "gods", "npcs", "pcs" }
 AllTypes["classes"] = { "classes", "subclasses" }
+AllTypes["items"] = { "artefacts", "items", "ships" }
+AllTypes["landmarks"] = { "forests", "glaciers", "grasslands", "lakes", "mountainranges", "mountains", "rivers" }
+AllTypes["magic"] = { "spells", "spell-properties" }
+AllTypes["other"] = { "other" }
+AllTypes["peoples"] = { "languages", "species" }
 AllTypes["places"] = { "places" }
-AllTypes["items"] = { "items" }
-AllTypes["landmarks"] = { "forests", "grasslands", "mountainranges", "mountains", "rivers", "glaciers", "lakes" }
-AllTypes["languages"] = { "languages" }
-AllTypes["species"] = { "species" }
-AllTypes["spells"] = { "spells", "spell-properties" }
 
-function IsType(metatype, entity)
-    if IsEmpty(entity) or entity["type"] == nil then
+function IsType(type, entity)
+    local entityType = entity["type"]
+    if IsEmpty(entity) or entityType == nil then
         return false
     else
-        local types = AllTypes[metatype]
+        local types = AllTypes[type]
         if types == nil then
-            LogError("Called with unknown metatype " .. DebugPrint(metatype))
-            return false
+            return entityType == type
         else
-            return IsIn(entity["type"], types)
+            return IsIn(entityType, types)
         end
     end
 end

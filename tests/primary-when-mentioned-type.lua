@@ -33,8 +33,8 @@ local function generateExpected(primaryType)
     end
 
     if primaryType == "species" then
-        Append(out, [[\chapter{]] .. CapFirst(Tr("species")) .. [[}]])
-        Append(out, [[\section*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("species")) .. [[}]])
+        Append(out, [[\chapter{]] .. CapFirst(Tr("peoples")) .. [[}]])
+        Append(out, [[\section*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("peoples")) .. [[}]])
         Append(out, [[\begin{itemize}]])
         Append(out, [[\item{} \nameref{human}]])
         Append(out, [[\end{itemize}]])

@@ -60,6 +60,15 @@ local function printAllChars(str)
     return out
 end
 
+local function splitStringInLinebreaks(str, maxWidth)
+    local out = {}
+    while string.len(str) > 0 do
+        Append(out, string.sub(str, 1, maxWidth))
+        str = string.sub(str, maxWidth + 1, 2 * maxWidth)
+    end
+    return out
+end
+
 local function printMinipage(caption, rows, i0, chunksize)
     local out = {}
     Append(out, [[\begin{minipage}[t]{.5\textwidth}]])
@@ -69,7 +78,18 @@ local function printMinipage(caption, rows, i0, chunksize)
     Append(out, TexCmd("begin", "verbatim"))
     for i = i0, (i0 + chunksize - 1) do
         if i <= #rows then
-            Append(out, rows[i])
+            local rowcounter = tostring(i) .. " - "
+            local splitRow = splitStringInLinebreaks(rows[i], 40)
+            for key, line in pairs(splitRow) do
+                if key == 1 then
+                    line = rowcounter .. line
+                else
+                    for j = 1,string.len(rowcounter) do
+                        line = "." .. line
+                    end
+                end
+                Append(out, line)
+            end
         end
     end
     Append(out, TexCmd("end", "verbatim"))

@@ -91,22 +91,23 @@ local function printEntities(sectionname, entitiesList)
 end
 
 function PrintOnlyMentionedChapter(mentionedRefs)
+    StartBenchmarking("PrintOnlyMentionedChapter")
     local out = {}
-    local mentionedEntities = {}
+    if IsEmpty(mentionedRefs) then
+        StopBenchmarking("PrintOnlyMentionedChapter")
+        return out
+    end
+    Append(out, TexCmd("chapter", CapFirst(Tr("only-mentioned"))))
+    table.sort(mentionedRefs, CompareByName)
     for key, label in pairs(mentionedRefs) do
-        mentionedEntities[#mentionedEntities+1] = GetEntity(label)
-    end
-    if #mentionedEntities > 0 then
-        Append(out, TexCmd("chapter", CapFirst(Tr("only-mentioned"))))
-        table.sort(mentionedEntities, CompareByName)
-        for index, entity in pairs(mentionedEntities) do
-            Append(out, TexCmd("subparagraph", GetShortname(entity)))
-            for key, label in pairs(GetLabels(entity)) do
-                Append(out, TexCmd("label", label))
-            end
-            Append(out, TexCmd("hspace", "1cm"))
+        local entity = GetEntity(label)
+        Append(out, TexCmd("subparagraph", GetShortname(entity)))
+        for key, label in pairs(GetLabels(entity)) do
+            Append(out, TexCmd("label", label))
         end
+        Append(out, TexCmd("hspace", "1cm"))
     end
+    StopBenchmarking("PrintOnlyMentionedChapter")
     return out
 end
 

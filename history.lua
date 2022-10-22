@@ -1,4 +1,5 @@
 Histories = {}
+Append(ProtectedDescriptors, { "historyItems" })
 
 function AddHistoryItemToHistory(historyItem, history)
 	local year = historyItem["year"]
@@ -49,6 +50,14 @@ local function newHistoryItem(originator, year, event, day, isSecret)
 	item["concerns"] = concerns
 	item["birthof"] = ScanForCmd(event, "birthof")
 	item["deathof"] = ScanForCmd(event, "deathof")
+
+	for key, concernedLabel in pairs(concerns) do
+		local entity = GetMutableEntityFromAll(concernedLabel)
+		if entity["historyItems"] == nil then
+			entity["historyItems"] = {}
+		end
+		entity["historyItems"][#entity["historyItems"]+1] = item
+	end
 
 	if isSecret ~= nil then
 		item["isSecret"] = isSecret

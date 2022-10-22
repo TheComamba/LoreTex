@@ -105,6 +105,9 @@ function NewEntity(label, type, shortname, name)
     elseif IsEmpty(type) then
         LogError("Entity " .. label .. " has no type!")
         return
+    elseif not IsTypeKnown(type) then
+        LogError("Trying to create entity with unkown type " .. DebugPrint(type))
+        return
     elseif IsEmpty(name) then
         LogError("Entity " .. name .. " has no name!")
         return

@@ -23,6 +23,17 @@ function IsType(type, entity)
     end
 end
 
+function IsTypeKnown(queriedType)
+    for key1, types in pairs(AllTypes) do
+        for key2, type in pairs(types) do
+            if type == queriedType then
+                return true
+            end
+        end
+    end
+    return false
+end
+
 function SortedMetatypes()
     local metatypes = {}
     for key, types in pairs(AllTypes) do

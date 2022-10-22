@@ -197,16 +197,6 @@ function AddLifestageHistoryItemsToNPC(entity)
     StopBenchmarking("AddLifestageHistoryItemsToNPC")
 end
 
-function AddSpeciesToPrimaryRefs()
-	local primaryEntities = GetEntitiesIf(IsPrimary, AllEntities)
-	for key, entity in pairs(primaryEntities) do
-		local speciesRef = getSpeciesRef(entity)
-		if not IsEmpty(speciesRef) then
-			AddRef(speciesRef, PrimaryRefs)
-		end
-	end
-end
-
 local function lifestagesDescription(species)
 	if IsEmpty(species) then
 		LogError("Called with " .. DebugPrint(species))

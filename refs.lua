@@ -5,6 +5,15 @@ PrimaryRefWhenMentionedTypes = {}
 IsAppendix = false
 RefTypes = { "reference", "nameref", "itref", "ref" }
 
+function ResetRefs()
+    PrimaryRefs = {}
+    MentionedRefs = {}
+    UnfoundRefs = {}
+    PrimaryRefWhenMentionedTypes = {}
+end
+
+ResetRefs()
+
 local function addSingleRef(label, refs)
     if label ~= nil and not IsIn(label, refs) then
         refs[#refs + 1] = label

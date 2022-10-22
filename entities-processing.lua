@@ -33,7 +33,7 @@ local function entityQualifiersString(child, parent, relationship)
     local targetLocation = parent["location"]
     if IsLocationUnrevealed(child) then
         Append(content, Tr("at-secret-location"))
-    elseif not IsPlace(parent) and not IsEmpty(location) and location ~= targetLocation then
+    elseif not IsType(PlaceTypes, parent) and not IsEmpty(location) and location ~= targetLocation then
         Append(content, Tr("in") .. " " .. TexCmd("nameref", location))
     end
     if not IsEmpty(content) then

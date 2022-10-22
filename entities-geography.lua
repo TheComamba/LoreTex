@@ -3,14 +3,6 @@ DefaultLocation = ""
 PlaceTypes = { "places" }
 PlaceTypeNames = { "Orte" }
 
-function IsPlace(entity)
-    if entity == nil then
-        return false
-    end
-    local type = entity["type"]
-    return type ~= nil and IsIn(entity["type"], PlaceTypes)
-end
-
 function IsLocationUnknown(entity)
     local locationLabel = entity["location"]
     if IsEmpty(locationLabel) then
@@ -26,7 +18,7 @@ function IsLocationUnknown(entity)
             Append(err, "\" not found.")
             LogError(table.concat(err))
             return true
-        elseif not IsPlace(location) then
+        elseif not IsType(PlaceTypes, location) then
             Append(err, "\" is not a place.")
             LogError(table.concat(err))
             return true

@@ -9,15 +9,6 @@ lifestagesAndAges[#lifestagesAndAges + 1] = { "adult", 30 }
 lifestagesAndAges[#lifestagesAndAges + 1] = { "old", 60 }
 lifestagesAndAges[#lifestagesAndAges + 1] = { "ancient", 90 }
 
-
-function IsSpecies(entity)
-	if entity == nil then
-		return false
-	end
-	local type = entity["type"]
-	return type ~= nil and IsIn(entity["type"], SpeciesTypes)
-end
-
 local function isAges(species)
 	local factor, exponent = GetAgeFactorAndExponent(species)
 	return factor ~= 0 and exponent ~= 0
@@ -179,22 +170,22 @@ local function addLifestageHistoryItems(entity)
 				item["year"] = year
 				item["day"] = 0
 				item["event"] = table.concat(event)
-				item["concerns"] = {label}
+				item["concerns"] = { label }
 				if entity["historyItems"] == nil then
 					entity["historyItems"] = {}
 				end
-				entity["historyItems"][#entity["historyItems"]+1] = item
+				entity["historyItems"][#entity["historyItems"] + 1] = item
 			end
 		end
 	end
 end
 
 function AddLifestageHistoryItemsToNPC(entity)
-    StartBenchmarking("AddLifestageHistoryItemsToNPC")
-	if IsChar(entity) then
+	StartBenchmarking("AddLifestageHistoryItemsToNPC")
+	if IsType(CharacterTypes, entity) then
 		addLifestageHistoryItems(entity)
 	end
-    StopBenchmarking("AddLifestageHistoryItemsToNPC")
+	StopBenchmarking("AddLifestageHistoryItemsToNPC")
 end
 
 local function lifestagesDescription(species)
@@ -227,8 +218,8 @@ local function lifestagesDescription(species)
 end
 
 function AddLifeStagesToSpecies(entity)
-    StartBenchmarking("AddLifeStagesToSpecies")
-	if IsSpecies(entity) then
+	StartBenchmarking("AddLifeStagesToSpecies")
+	if IsType(SpeciesTypes, entity) then
 		if isAges(entity) then
 			local lifestages = lifestagesDescription(entity)
 			if not IsEmpty(lifestages) then
@@ -236,5 +227,5 @@ function AddLifeStagesToSpecies(entity)
 			end
 		end
 	end
-    StopBenchmarking("AddLifeStagesToSpecies")
+	StopBenchmarking("AddLifeStagesToSpecies")
 end

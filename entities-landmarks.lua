@@ -3,14 +3,6 @@ LandmarkTypes = { "forests", "grasslands", "mountainranges", "mountains", "river
 LandmarkTypeNames = { "Wälder", "Grasländer", "Gebirge", "Berge", "Flüsse", "Gletscher", "Seen" }
 local planetRadiusInKM = 6371
 
-function IsLandmark(entity)
-    if entity == nil then
-        return false
-    end
-    local type = entity["type"]
-    return type ~= nil and IsIn(entity["type"], LandmarkTypes)
-end
-
 local function distanceToHorizon(heightInM)
     local heightInKM = heightInM / 1000.
     local distanceFromCentre = planetRadiusInKM + heightInKM

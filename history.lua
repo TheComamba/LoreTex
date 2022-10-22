@@ -1,5 +1,4 @@
 Histories = {}
-local unfoundLabelFields = {}
 
 function AddHistoryItemToHistory(historyItem, history)
 	local year = historyItem["year"]
@@ -40,7 +39,7 @@ local function newHistoryItem(originator, year, event, day, isSecret)
 		LogError("Could not convert day \"" .. day .. "\" to number.")
 		return {}
 	end
-	
+
 	UniqueAppend(concerns, ScanForCmd(event, "concerns"))
 	UniqueAppend(concerns, ScanForCmd(event, "deathof"))
 	UniqueAppend(concerns, ScanForCmd(event, "birthof"))
@@ -50,7 +49,7 @@ local function newHistoryItem(originator, year, event, day, isSecret)
 	item["concerns"] = concerns
 	item["birthof"] = ScanForCmd(event, "birthof")
 	item["deathof"] = ScanForCmd(event, "deathof")
-	
+
 	if isSecret ~= nil then
 		item["isSecret"] = isSecret
 	end
@@ -59,28 +58,10 @@ local function newHistoryItem(originator, year, event, day, isSecret)
 	return item
 end
 
-local function addSpecialFieldsToEntities(field, value, labels)
+local function addSpecialyearsToEntities(field, year, labels)
 	for key, label in pairs(labels) do
 		local entity = GetMutableEntityFromAll(label)
-		if IsEmpty(entity) then
-			if unfoundLabelFields[label] == nil then
-				unfoundLabelFields[label] = {}
-			end
-			unfoundLabelFields[label][field] = value
-		else
-			entity[field] = value
-		end
-	end
-end
-
-function AddSpecialFieldsToPreviouslyUnfoundEntity(entity)
-	for label, fieldsAndValues in pairs(unfoundLabelFields) do
-		if IsIn(label, GetLabels(entity)) then
-			for field, value in pairs(fieldsAndValues) do
-				entity[field] = value
-			end
-			unfoundLabelFields[label] = nil
-		end
+		entity[field] = year
 	end
 end
 
@@ -100,8 +81,8 @@ function AddEvent(originator, year, event, day, isSecret)
 	end
 	local historyItem = newHistoryItem(originator, year, event, day, isSecret)
 	Histories[#Histories + 1] = historyItem
-	addSpecialFieldsToEntities("born", historyItem["year"], historyItem["birthof"])
-	addSpecialFieldsToEntities("died", historyItem["year"], historyItem["deathof"])
+	addSpecialyearsToEntities("born", historyItem["year"], historyItem["birthof"])
+	addSpecialyearsToEntities("died", historyItem["year"], historyItem["deathof"])
 	StopBenchmarking("AddEvent")
 end
 

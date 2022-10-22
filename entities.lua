@@ -1,4 +1,5 @@
 AllEntities = {}
+NotYetFoundEntities = {}
 local labelToEntity = {}
 IsShowSecrets = false
 ProtectedDescriptors = { "name", "shortname", "type", "isSecret", "labels", "parents", "children" }
@@ -116,8 +117,11 @@ end
 
 function GetMutableEntityFromAll(label)
     local entity = labelToEntity[label]
-    if IsEmpty(entity) then
-        entity = {}
+    if entity == nil then
+        if NotYetFoundEntities[label] == nil then
+            NotYetFoundEntities[label] = {}
+        end
+        entity = NotYetFoundEntities[label]
     end
     return entity
 end
@@ -132,6 +136,22 @@ function GetEntity(label)
     end
     StopBenchmarking("GetEntity")
     return entity
+end
+
+function AddDescriptorsFromNotYetFound(entity)
+    for key, label in pairs(GetLabels(entity)) do
+        local preliminaryEntity = NotYetFoundEntities[label]
+        if preliminaryEntity ~= nil then
+            for field, value in pairs(preliminaryEntity) do
+                if entity[field] == nil then
+                    entity[field] = value
+                else
+                    LogError("Tried to add already existing field.")
+                end
+            end
+            NotYetFoundEntities[label] = nil
+        end
+    end
 end
 
 function IsEntitySecret(entity)

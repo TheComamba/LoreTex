@@ -6,6 +6,7 @@ local numFailed = 0
 
 local function resetEnvironment()
     AllEntities = {}
+    NotYetFoundEntities = {}
     Histories = {}
     CurrentYearVin = 0
     PrintHistoryYear = 0

@@ -1,3 +1,10 @@
+local function addChild(entity, childLabel)
+    if entity["children"] == nil then
+        entity["children"] = {}
+    end
+    entity["children"][#entity["children"] + 1] = childLabel
+end
+
 function SetDescriptor(entity, descriptor, description, subdescriptor)
     if IsEmpty(descriptor) then
         return
@@ -33,7 +40,7 @@ function SetDescriptor(entity, descriptor, description, subdescriptor)
     local additionalLabels = ScanForCmd(description, "label")
     UniqueAppend(labels, additionalLabels)
     RegisterEntityLabel(additionalLabels, entity)
-    AddSpecialFieldsToPreviouslyUnfoundEntity(entity)
+    AddDescriptorsFromNotYetFound(entity)
     StopBenchmarking("SetDescriptor")
 end
 
@@ -46,13 +53,15 @@ function Reveal(label)
     AddRef(label, PrimaryRefs)
 end
 
-function AddParent(entity, parent, relationship)
+function AddParent(entity, parentLabel, relationship)
     if entity ~= nil then
         if entity["parents"] == nil then
             entity["parents"] = {}
         end
-        entity["parents"][#entity["parents"] + 1] = { parent, relationship }
+        entity["parents"][#entity["parents"] + 1] = { parentLabel, relationship }
     end
+    local parent = GetMutableEntityFromAll(parentLabel)
+    addChild(parent, GetMainLabel(entity))
 end
 
 function DeclarePC(label)
@@ -112,7 +121,7 @@ function NewEntity(label, type, shortname, name)
         SetLocation(entity, DefaultLocation)
     end
     RegisterEntityLabel(label, entity)
-    AddSpecialFieldsToPreviouslyUnfoundEntity(entity)
+    AddDescriptorsFromNotYetFound(entity)
     AllEntities[#AllEntities + 1] = entity
     StopBenchmarking("NewEntity")
 end
@@ -126,6 +135,9 @@ function NewCharacter(label, shortname, name)
 end
 
 function AutomatedChapters()
+    if next(NotYetFoundEntities) ~= nil then
+        LogError("The following entities have been mentioned, but not yet created:" .. DebugPrint(NotYetFoundEntities))
+    end
     StartBenchmarking("AutomatedChapters")
     local processedEntities, mentionedRefs = ProcessEntities(AllEntities)
     local output = {}

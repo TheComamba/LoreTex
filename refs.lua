@@ -1,6 +1,7 @@
 PrimaryRefs = {}
+MentionedRefs = {}
 UnfoundRefs = {}
-PrimaryRefTypes = {}
+PrimaryRefWhenMentionedTypes = {}
 IsAppendix = false
 RefTypes = { "reference", "nameref", "itref", "ref" }
 
@@ -29,14 +30,6 @@ function IsContainsPrimary(list)
     return false
 end
 
-function AddRefPrimaryOrSecondary(label)
-    if not IsAppendix then
-        AddRef(label, PrimaryRefs)
-    else
-        AddRef(label, SecondaryRefs)
-    end
-end
-
 function NamerefString(label)
     return TexCmd("nameref", label)
 end
@@ -51,10 +44,10 @@ local function namerefDebugString(label)
 end
 
 function ListAllRefs()
-    tex.print(TexCmd("paragraph", "primaryRefs"))
+    tex.print(TexCmd("paragraph", "PrimaryRefs"))
     tex.print(ListAll(PrimaryRefs, namerefDebugString))
-    tex.print(TexCmd("paragraph", "secondaryRefs"))
-    tex.print(ListAll(SecondaryRefs, namerefDebugString))
+    tex.print(TexCmd("paragraph", "MentionedRefs"))
+    tex.print(ListAll(MentionedRefs, namerefDebugString))
 end
 
 local function scanStringFor(str, cmd)
@@ -104,16 +97,16 @@ function ScanForCmd(content, cmd)
     end
 end
 
-function ScanContentForSecondaryRefs(content)
-    local secondaryRefs = {}
+function ScanContentForMentionedRefs(content)
+    local mentionedRefsHere = {}
     for key1, refType in pairs(RefTypes) do
         for key2, ref in pairs(ScanForCmd(content, refType)) do
             if not IsIn(ref, PrimaryRefs) then
-                UniqueAppend(secondaryRefs, ref)
+                UniqueAppend(mentionedRefsHere, ref)
             end
         end
     end
-    return secondaryRefs
+    return mentionedRefsHere
 end
 
 function AddAllEntitiesToPrimaryRefs()
@@ -122,6 +115,6 @@ function AddAllEntitiesToPrimaryRefs()
     end
 end
 
-function MakeTypePrimary(type)
-    UniqueAppend(PrimaryRefTypes, type)
+function MakeTypePrimaryWhenMentioned(type)
+    UniqueAppend(PrimaryRefWhenMentionedTypes, type)
 end

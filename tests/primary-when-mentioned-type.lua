@@ -64,10 +64,13 @@ out = AutomatedChapters()
 expected = generateExpected(nil)
 Assert("two-npcs-one-mentioned", expected, out)
 
+MakeTypePrimaryWhenMentioned("species")
 out = AutomatedChapters()
 expected = generateExpected("species")
 Assert("species-are-primary-types", expected, out)
 
+PrimaryRefWhenMentionedTypes = {}
+MakeTypePrimaryWhenMentioned("npcs")
 out = AutomatedChapters()
 expected = generateExpected("npcs")
 Assert("npcs-are-primary-types", expected, out)

@@ -108,7 +108,7 @@ end
 
 function AutomatedChapters()
     StartBenchmarking("AutomatedChapters")
-    local processedEntities, secondaryRefs = ProcessEntities(AllEntities)
+    local processedEntities, mentionedRefs = ProcessEntities(AllEntities)
     local output = {}
     Append(output, PrintEntityChapter(processedEntities, Tr("places"), PlaceTypes))
     Append(output, PrintEntityChapter(processedEntities, Tr("landmarks"), LandmarkTypes))
@@ -120,7 +120,7 @@ function AutomatedChapters()
     Append(output, PrintEntityChapter(processedEntities, Tr("spells"), SpellTypes))
     Append(output, PrintEntityChapter(processedEntities, Tr("items"), ItemTypes))
     Append(output, PrintEntityChapter(processedEntities, Tr("other"), OtherEntityTypes))
-    Append(output, PrintOnlyMentionedChapter(secondaryRefs))
+    Append(output, PrintOnlyMentionedChapter(mentionedRefs))
     if HasError() then
         Append(output, TexCmd("chapter", "Logging Messages"))
         Append(output, TexCmd("RpgTex"))

@@ -87,16 +87,16 @@ local function printEntities(sectionname, entitiesList)
     return out
 end
 
-function PrintOnlyMentionedChapter(secondaryRefs)
+function PrintOnlyMentionedChapter(mentionedRefs)
     local out = {}
-    local secondaryEntities = {}
-    for key, label in pairs(secondaryRefs) do
-        secondaryEntities[#secondaryEntities+1] = GetEntity(label)
+    local mentionedEntities = {}
+    for key, label in pairs(mentionedRefs) do
+        mentionedEntities[#mentionedEntities+1] = GetEntity(label)
     end
-    if #secondaryEntities > 0 then
+    if #mentionedEntities > 0 then
         Append(out, TexCmd("chapter", CapFirst(Tr("only-mentioned"))))
-        table.sort(secondaryEntities, CompareByName)
-        for index, entity in pairs(secondaryEntities) do
+        table.sort(mentionedEntities, CompareByName)
+        for index, entity in pairs(mentionedEntities) do
             Append(out, TexCmd("subparagraph", GetShortname(entity)))
             for key, label in pairs(GetLabels(entity)) do
                 Append(out, TexCmd("label", label))

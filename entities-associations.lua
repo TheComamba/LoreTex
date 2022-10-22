@@ -12,8 +12,15 @@ end
 
 function AddAssociationDescriptors(entity)
     local associationList = {}
-    if entity["associations"] ~= nil then
-        for key, associationAndRole in pairs(entity["associations"]) do
+    local associationsAndRoles = entity["associations"]
+    if associationsAndRoles ~= nil then
+        if type(associationsAndRoles) == "string" then
+            associationsAndRoles = { associationsAndRoles }
+        end
+        for key, associationAndRole in pairs(associationsAndRoles) do
+            if type(associationAndRole) == "string" then
+                associationAndRole = { associationAndRole }
+            end
             local associationLabel = associationAndRole[1]
             local assocationRole = associationAndRole[2]
             local association = GetEntity(associationLabel)

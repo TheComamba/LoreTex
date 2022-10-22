@@ -119,7 +119,8 @@ function ProcessEntities(entitiesIn)
 
     --TODO: Funktionen für nur eine entity
     AddAutomatedDescriptors(entitiesOut)
-    local secondaryRefs = ScanContentForSecondaryRefs(entitiesOut)
+    local mentionedRefsHere = DeepCopy(MentionedRefs)
+    UniqueAppend(mentionedRefsHere, ScanContentForMentionedRefs(entitiesOut))
     StopBenchmarking("ProcessEntities")
-    return entitiesOut, secondaryRefs
+    return entitiesOut, mentionedRefsHere
 end

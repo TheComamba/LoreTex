@@ -4,8 +4,8 @@
 
 \newcommand{\makeEntityPrimary}[1]{\directlua{AddRef("#1", PrimaryRefs)}}
 \newcommand{\makeAllEntitiesOfTypePrimary}[1]{\directlua{MakePrimaryIf(Bind(IsType, #1))}}
-\newcommand{\mention}[1]{\directlua{AddRef("#1", SecondaryRefs)}}
+\newcommand{\mention}[1]{\directlua{AddRef("#1", MentionedRefs)}}
 \newcommand{\reference}[1]{\makeEntityPrimary{#1}\nameref{#1}}
 \newcommand{\itref}[1]{\textit{\nameref{#1}}}
 \newcommand{\listAllRefs}{\directlua{ListAllRefs()}}
-\newcommand{\makeTypePrimary}[1]{\directlua{makeTypePrimary("#1")}}
+\newcommand{\makeTypePrimaryWhenMentioned}[1]{\directlua{makeTypePrimaryWhenMentioned("#1")}}

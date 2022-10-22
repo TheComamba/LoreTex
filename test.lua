@@ -1,5 +1,6 @@
 local allTestFiles = { "common", "default-location", "dictionary", "entities-with-associations", "entities-with-history",
-    "entity-visibility", "history", "npc-and-species", "primary-type", "refs", "region-and-city", "sub-label" }
+    "entity-visibility", "history", "mentioned-refs", "npc-and-species", "primary-when-mentioned-type", "refs",
+    "region-and-city", "sub-label" }
 local numSucceeded = 0
 local numFailed = 0
 
@@ -11,7 +12,7 @@ local function resetEnvironment()
     PrintHistoryDay = 0
     DefaultLocation = ""
     PrimaryRefs = {}
-    SecondaryRefs = {}
+    MentionedRefs = {}
     UnfoundRefs = {}
     IsShowFuture = true
 end

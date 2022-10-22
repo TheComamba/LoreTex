@@ -17,25 +17,10 @@
 	\directlua{DefaultLocation = "#1"}
 }
 
-\newcommand{\resetCurrentLabels}{
-	\setDefaultLocation{}
-	\directlua{
-		LogError("Use of deprecated function resetCurrentLabels.")
-	}
-}
-
 \newcommand{\newEntity}[4]{
 	\directlua{
 		NewEntity("#1","#2", [[\detokenize{#3}]], [[\detokenize{#4}]])
 	}
-}
-
-\newcommand{\newPlace}[3]{
-	\newEntity{places}{#1}{#2}{#3}
-}
-
-\newcommand{\declarePC}[1]{
-	\directlua{DeclarePC("#1")}
 }
 
 \newcommand{\newNPC}[3]{
@@ -44,51 +29,14 @@
 	}
 }
 
-\newcommand{\newGod}[3]{
-	\newEntity{gods}{#1}{#2}{#3}
-	\setSpecies{gott}
+\newcommand{\declarePC}[1]{
+	\directlua{DeclarePC("#1")}
 }
 
 \newcommand{\charappearance}[3]{
 	\addDescriptor[Körper:]{Erscheinung}{#1}
 	\addDescriptor[Kleidung und Ausrüstung:]{Erscheinung}{#2}
 	\addDescriptor[Stimme / Verhalten:]{Erscheinung}{#3}
-}
-
-\newcommand{\newOrganisation}[3]{
-	\newEntity{organisations}{#1}{#2}{#3}
-}
-
-\newcommand{\newFamily}[3]{
-	\newEntity{families}{#1}{#2}{#3}
-}
-
-\newcommand{\newShip}[3]{
-	\newEntity{ships}{#1}{#2}{#3}
-}
-
-\newcommand{\newSpecies}[3]{
-	\newEntity{species}{#1}{#2}{#3}
-}
-
-\newcommand{\newLanguage}[3]{
-	\newEntity{languages}{#1}{#2}{#3}
-}
-
-\newcommand{\newClass}[2]{
-	\newEntity{classes}{#1}{}{#2}
-}
-
-\newcommand{\newSubclass}[2]{
-	\newEntity{subclasses}{#1}{}{#2}
-}
-
-\newcommand{\newSpell}[2]{
-	\newEntity{spells}{#1}{}{#2}
-}
-
-\newcommand{\newSpellproperty}[2]{
-	\newEntity{spell-properties}{#1}{}{#2}
 }
 
 \newcommand{\spellProperties}[6]{
@@ -102,38 +50,6 @@
 		SetDescriptor(CurrentEntity(), "Properties", [[\detokenize{#5}]],"Components:")
 		SetDescriptor(CurrentEntity(), "Properties", [[\detokenize{#6}]],"Duration:")
 	}
-}
-
-\newcommand{\newForest}[3]{
-	\newEntity{forests}{#1}{#2}{#3}
-}
-
-\newcommand{\newGrassland}[3]{
-	\newEntity{grasslands}{#1}{#2}{#3}
-}
-
-\newcommand{\newRange}[3]{
-	\newEntity{mountainranges}{#1}{#2}{#3}
-}
-
-\newcommand{\newMountain}[3]{
-	\newEntity{mountains}{#1}{#2}{#3}
-}
-
-\newcommand{\newRiver}[3]{
-	\newEntity{rivers}{#1}{#2}{#3}
-}
-
-\newcommand{\newGlacier}[3]{
-	\newEntity{glaciers}{#1}{#2}{#3}
-}
-
-\newcommand{\newLake}[3]{
-	\newEntity{lakes}{#1}{#2}{#3}
-}
-
-\newcommand{\newItem}[3]{
-	\newEntity{items}{#1}{#2}{#3}
 }
 
 \newcommand{\addDescriptor}[3][]{

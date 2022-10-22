@@ -107,7 +107,6 @@ function MakePrimaryIf(condition)
 end
 
 function NewEntity(type, label, shortname, name)
-    StartBenchmarking("NewEntity")
     if IsEmpty(type) then
         LogError("Entity " .. label .. " has no type!")
         return
@@ -121,6 +120,7 @@ function NewEntity(type, label, shortname, name)
         LogError("Entity " .. name .. " has no name!")
         return
     end
+    StartBenchmarking("NewEntity")
     local entity = {}
     entity["type"] = type
     entity["labels"] = { label }

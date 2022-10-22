@@ -26,6 +26,33 @@ function GetShortname(entity)
     end
 end
 
+function LabelToName(label)
+    local entity = GetEntity(label)
+    if label == GetMainLabel(entity) then
+        return GetShortname(entity)
+    else
+        for paragraph, content in pairs(entity) do
+            local foundLabels = ScanForCmd(content, "label")
+            local labelIndex = nil
+            for ind, someLabel in pairs(foundLabels) do
+                if someLabel == label then
+                    labelIndex = ind
+                    break
+                end
+            end
+            if labelIndex ~= nil then
+                local subparagraphs = ScanForCmd(content, "subparagraph")
+                if #foundLabels == #subparagraphs then
+                    return subparagraphs[labelIndex]
+                else
+                    return paragraph
+                end
+            end
+        end
+    end
+    return "NO NAME"
+end
+
 local function descritptorMapString(map)
     local keys = {}
     for key, elem in pairs(map) do
@@ -99,12 +126,11 @@ function PrintOnlyMentionedChapter(mentionedRefs, processedEntities)
         if key == 1 then
             Append(out, TexCmd("chapter", CapFirst(Tr("only-mentioned"))))
         end
+        --TODO: This step of finding the entity can probably be circumvented.
         local entity = GetEntity(label)
         if not IsEntityIn(entity, processedEntities) then
-            Append(out, TexCmd("subparagraph", GetShortname(entity)))
-            for key, label in pairs(GetLabels(entity)) do
-                Append(out, TexCmd("label", label))
-            end
+            Append(out, TexCmd("subparagraph", LabelToName(label)))
+            Append(out, TexCmd("label", label))
             Append(out, TexCmd("hspace", "1cm"))
         end
     end

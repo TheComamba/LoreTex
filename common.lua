@@ -13,6 +13,18 @@ function ReadonlyTable(table)
 	return proxy
 end
 
+local original_pairs = pairs
+
+function pairs(tbl)
+   if next(tbl) == nil then
+      local mt = getmetatable(tbl)
+      if mt ~= nil and mt.__newindex == logErrorOnModify then
+         tbl = mt.__index
+      end
+   end
+   return original_pairs(tbl)
+end
+
 function Round(num)
 	return math.floor(num + 0.5)
 end
@@ -129,13 +141,6 @@ function IsEmpty(obj)
 	if obj == nil then
 		return true
 	elseif type(obj) == "table" then
-		local mTable = getmetatable(obj)
-		if mTable ~= nil and mTable.__newindex == logErrorOnModify then
-			obj = mTable.__index
-		end
-		if not next(obj) then
-			return true
-		end
 		for key, val in pairs(obj) do
 			if not IsEmpty(val) then
 				return false

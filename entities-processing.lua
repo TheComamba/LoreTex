@@ -86,7 +86,7 @@ function AddAutomatedDescriptors(entity)
     StopBenchmarking("AddAutomatedDescriptors")
 end
 
-local function isEntityIn(entity, entities)
+function IsEntityIn(entity, entities)
     if IsEmpty(entities) then
         return false
     end
@@ -95,16 +95,23 @@ local function isEntityIn(entity, entities)
     return not IsEmpty(testEntity)
 end
 
-local function addProcessedEntity(entities, entity)
-    StartBenchmarking("addProcessedEntity")
-    if not isEntityIn(entity, entities) then
+local function addProcessedEntity(entities, entity, mentionedRefs)
+    if not IsEntityIn(entity, entities) then
         local newEntity = DeepCopy(entity)
         MarkDead(newEntity)
         MarkSecret(newEntity)
         AddAutomatedDescriptors(newEntity)
         entities[#entities + 1] = newEntity
+        local mentionedRefsHere = ScanContentForMentionedRefs(newEntity)
+        for key, label in pairs(mentionedRefsHere) do
+            local mentionedEntity = GetMutableEntityFromAll(label)
+            local typeName = mentionedEntity["type"]
+            if IsEntityShown(mentionedEntity) and IsIn(typeName, PrimaryRefWhenMentionedTypes) then
+                addProcessedEntity(entities, mentionedEntity, mentionedRefs)
+            end
+        end
+        UniqueAppend(mentionedRefs, mentionedRefsHere)
     end
-    StopBenchmarking("addProcessedEntity")
 end
 
 function ProcessEntities(entitiesIn)
@@ -114,8 +121,9 @@ function ProcessEntities(entitiesIn)
     local visibleEntities = GetEntitiesIf(IsEntityShown, primaryEntities)
     local mentionedRefsHere = DeepCopy(MentionedRefs)
     for key, entity in pairs(visibleEntities) do
-        addProcessedEntity(entitiesOut, entity)
-        UniqueAppend(mentionedRefsHere, ScanContentForMentionedRefs(entitiesOut[#entitiesOut]))
+        StartBenchmarking("addProcessedEntity")
+        addProcessedEntity(entitiesOut, entity, mentionedRefsHere)
+        StopBenchmarking("addProcessedEntity")
     end
     StopBenchmarking("ProcessEntities")
     return entitiesOut, mentionedRefsHere

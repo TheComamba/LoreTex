@@ -129,17 +129,19 @@ function IsEmpty(obj)
 	if obj == nil then
 		return true
 	elseif type(obj) == "table" then
-		local out = true
 		local mTable = getmetatable(obj)
 		if mTable ~= nil and mTable.__newindex == logErrorOnModify then
 			obj = mTable.__index
+		end
+		if not next(obj) then
+			return true
 		end
 		for key, val in pairs(obj) do
 			if not IsEmpty(val) then
 				return false
 			end
 		end
-		return out
+		return true
 	elseif type(obj) == "string" then
 		return FirstNonWhitespaceChar(obj) == nil
 	else

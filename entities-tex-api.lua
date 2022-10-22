@@ -148,7 +148,7 @@ function AutomatedChapters()
     Append(output, PrintEntityChapter(processedEntities, Tr("spells"), SpellTypes))
     Append(output, PrintEntityChapter(processedEntities, Tr("items"), ItemTypes))
     Append(output, PrintEntityChapter(processedEntities, Tr("other"), OtherEntityTypes))
-    Append(output, PrintOnlyMentionedChapter(mentionedRefs))
+    Append(output, PrintOnlyMentionedChapter(mentionedRefs, processedEntities))
     if HasError() then
         Append(output, TexCmd("chapter", "Logging Messages"))
         Append(output, TexCmd("RpgTex"))

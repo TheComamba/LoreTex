@@ -4,6 +4,7 @@ SetDescriptor(CurrentEntity(), "Friend", [[\nameref{peter}]])
 NewEntity("peter", "npcs", nil, "Peter")
 SetSpecies(CurrentEntity(), "human")
 NewEntity("human", "species", nil, "Human")
+SetAgeFactor(CurrentEntity(), 0)
 AddRef("karl", PrimaryRefs)
 
 local function generateExpected(primaryType)

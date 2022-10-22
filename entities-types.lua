@@ -29,9 +29,9 @@ function TypeToNameMap()
 end
 
 function IsType(types, entity)
-    if IsEmpty(entity) then
-        LogError("Called with empty entity!")
+    if IsEmpty(entity) or entity["type"] == nil then
         return false
+    else
+        return IsIn(entity["type"], types)
     end
-    return IsIn(entity["type"], types)
 end

@@ -47,7 +47,7 @@ function DescriptorsString(entity)
     StartBenchmarking("DescriptorsString")
     local out = {}
 
-    
+
     local descriptorsList = {}
     for descriptor, description in pairs(entity) do
         if not IsIn(descriptor, ProtectedDescriptors) then
@@ -91,22 +91,22 @@ local function printEntities(sectionname, entitiesList)
     return out
 end
 
-function PrintOnlyMentionedChapter(mentionedRefs)
+function PrintOnlyMentionedChapter(mentionedRefs, processedEntities)
     StartBenchmarking("PrintOnlyMentionedChapter")
     local out = {}
-    if IsEmpty(mentionedRefs) then
-        StopBenchmarking("PrintOnlyMentionedChapter")
-        return out
-    end
-    Append(out, TexCmd("chapter", CapFirst(Tr("only-mentioned"))))
     table.sort(mentionedRefs, CompareByName)
     for key, label in pairs(mentionedRefs) do
-        local entity = GetEntity(label)
-        Append(out, TexCmd("subparagraph", GetShortname(entity)))
-        for key, label in pairs(GetLabels(entity)) do
-            Append(out, TexCmd("label", label))
+        if key == 1 then
+            Append(out, TexCmd("chapter", CapFirst(Tr("only-mentioned"))))
         end
-        Append(out, TexCmd("hspace", "1cm"))
+        local entity = GetEntity(label)
+        if not IsEntityIn(entity, processedEntities) then
+            Append(out, TexCmd("subparagraph", GetShortname(entity)))
+            for key, label in pairs(GetLabels(entity)) do
+                Append(out, TexCmd("label", label))
+            end
+            Append(out, TexCmd("hspace", "1cm"))
+        end
     end
     StopBenchmarking("PrintOnlyMentionedChapter")
     return out

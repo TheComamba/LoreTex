@@ -1,15 +1,3 @@
-local function isAcceptsHistoryFrom(receiver, originator)
-    if IsChar(originator) and IsPlace(receiver) then
-        return false
-    elseif IsAssociation(originator) and IsPlace(receiver) then
-        return false
-    elseif IsChar(originator) and IsSpecies(receiver) then
-        return false
-    else
-        return true
-    end
-end
-
 local function isConcernsUnrevealed(historyItem)
     if historyItem == nil then
         LogError("called with nil value")
@@ -75,16 +63,9 @@ local function getHistory(entity)
 end
 
 local function addHistoryToEntity(historyItem, entity)
-    local originator = {}
-    local originatorLabel = historyItem["originator"]
-    if not IsEmpty(originatorLabel) then
-        originator = GetEntity(originatorLabel)
-    end
-    if isAcceptsHistoryFrom(entity, originator) then
-        local history = getHistory(entity)
-        AddHistoryItemToHistory(historyItem, history)
-        SetDescriptor(entity, Tr("history"), history)
-    end
+    local history = getHistory(entity)
+    AddHistoryItemToHistory(historyItem, history)
+    SetDescriptor(entity, Tr("history"), history)
 end
 
 local function addHistoryDescriptors(entity)

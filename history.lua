@@ -18,17 +18,30 @@ function AddHistoryItemToHistory(historyItem, history)
 	end
 end
 
+local function collectConcerns(item)
+	local concernsPrelim = {}
+	UniqueAppend(concernsPrelim, ScanForCmd(item["event"], "concerns"))
+	UniqueAppend(concernsPrelim, item["birthof"])
+	UniqueAppend(concernsPrelim, item["deathof"])
+	UniqueAppend(concernsPrelim, item["originator"])
+	for key1, refType in pairs(RefTypes) do
+		UniqueAppend(concernsPrelim, ScanForCmd(item["event"], refType))
+	end
+	local notConcerns = ScanForCmd(item["event"], "notconcerns")
+	local concerns = {}
+	for key, concerned in pairs(concernsPrelim) do
+		if not IsIn(concerned, notConcerns) then
+			Append(concerns, concerned)
+		end
+	end
+	item["concerns"] = concerns
+end
+
 local function newHistoryItem(originator, year, event, day, isSecret)
 	local item = {}
-	local concerns = {}
 	if not IsEmpty(originator) then
 		local originatorLabel = GetMainLabel(originator)
-		if IsEmpty(originatorLabel) then
-			LogError("This originator has no label: " .. DebugPrint(originator))
-			return {}
-		end
 		item["originator"] = originatorLabel
-		Append(concerns, originatorLabel)
 	end
 	item["year"] = tonumber(year)
 	if item["year"] == nil then
@@ -40,30 +53,23 @@ local function newHistoryItem(originator, year, event, day, isSecret)
 		LogError("Could not convert day \"" .. day .. "\" to number.")
 		return {}
 	end
-
-	UniqueAppend(concerns, ScanForCmd(event, "concerns"))
-	UniqueAppend(concerns, ScanForCmd(event, "deathof"))
-	UniqueAppend(concerns, ScanForCmd(event, "birthof"))
-	for key1, refType in pairs(RefTypes) do
-		UniqueAppend(concerns, ScanForCmd(event, refType))
-	end
-	item["concerns"] = concerns
+	item["event"] = event
 	item["birthof"] = ScanForCmd(event, "birthof")
 	item["deathof"] = ScanForCmd(event, "deathof")
+	collectConcerns(item)
 
-	for key, concernedLabel in pairs(concerns) do
+	for key, concernedLabel in pairs(item["concerns"]) do
 		local entity = GetMutableEntityFromAll(concernedLabel)
 		if entity["historyItems"] == nil then
 			entity["historyItems"] = {}
 		end
-		entity["historyItems"][#entity["historyItems"]+1] = item
+		entity["historyItems"][#entity["historyItems"] + 1] = item
 	end
 
 	if isSecret ~= nil then
 		item["isSecret"] = isSecret
 	end
 
-	item["event"] = event
 	return item
 end
 
@@ -76,12 +82,8 @@ end
 
 function AddEvent(originator, year, event, day, isSecret)
 	StartBenchmarking("AddEvent")
-	if originator ~= nil and type(originator) ~= "table" then
-		LogError("Called with " .. DebugPrint(originator))
-		StopBenchmarking("AddEvent")
-		return
-	elseif IsEmpty(year) then
-		LogError(originator .. " has a history item without a year!")
+	if IsEmpty(year) then
+		LogError("History item has no year!")
 		StopBenchmarking("AddEvent")
 		return
 	end

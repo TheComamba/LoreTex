@@ -1,9 +1,11 @@
 NewEntity("test-1", "places", nil, "Test 1")
 AddEvent(CurrentEntity(), -20, [[Some event.]])
-AddEvent(nil, -10, [[Event that concerns \reference{test-1}.]])
 AddEvent(CurrentEntity(), 5, [[Event in the future.]])
+NewEntity("test-2", "places", nil, "Test 2")
 
-AddAllEntitiesToPrimaryRefs()
+AddEvent(nil, -10, [[Event that concerns \reference{test-1}, but not \reference{test-2}.\notconcerns{test-2}]])
+
+AddRef("test-1", PrimaryRefs)
 
 local function generateExpected()
     local out = {}
@@ -19,11 +21,18 @@ local function generateExpected()
     Append(out, [[\paragraph{]] .. CapFirst(Tr("history")) .. [[}]])
     Append(out, [[\begin{itemize}]])
     Append(out, [[\item{} -20 Vin (]] .. Tr("years-ago", { 20 }) .. [[): Some event.]])
-    Append(out, [[\item{} -10 Vin (]] .. Tr("years-ago", { 10 }) .. [[): Event that concerns \nameref{test-1}.]])
+    Append(out,
+        [[\item{} -10 Vin (]] ..
+        Tr("years-ago", { 10 }) ..
+        [[): Event that concerns \nameref{test-1}, but not \nameref{test-2}.\notconcerns{test-2}]])
     if IsShowFuture then
         Append(out, [[\item{} 5 Vin (]] .. Tr("in-years", { 5 }) .. [[): Event in the future.]])
     end
     Append(out, [[\end{itemize}]])
+    Append(out, [[\chapter{]] .. CapFirst(Tr("only-mentioned")) .. [[}]])
+    Append(out, [[\subparagraph{Test 2}]])
+    Append(out, [[\label{test-2}]])
+    Append(out, [[\hspace{1cm}]])
     return out
 end
 

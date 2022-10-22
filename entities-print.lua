@@ -14,11 +14,11 @@ function GetShortname(entity)
     if type(entity) == "string" then
         entity = GetEntity(entity)
     end
-    if entity == nil then
+    if IsEmpty(entity) then
         return "NIL"
-    elseif entity["shortname"] ~= nil then
+    elseif not IsEmpty(entity["shortname"]) then
         return entity["shortname"]
-    elseif entity["name"] ~= nil then
+    elseif not IsEmpty(entity["name"]) then
         return entity["name"]
     else
         LogError("Entity " .. DebugPrint(entity) .. " has no name.")
@@ -50,7 +50,7 @@ function LabelToName(label)
             end
         end
     end
-    return "NO NAME"
+    return label:upper()
 end
 
 local function descritptorMapString(map)
@@ -110,7 +110,12 @@ local function printEntities(sectionname, entitiesList)
     Append(out, TexCmd("subsection", CapFirst(sectionname)))
     table.sort(entitiesList, CompareByName)
     for key, entity in pairs(entitiesList) do
-        Append(out, TexCmd("subsubsection", entity["name"], entity["shortname"]))
+        local shortname = entity["shortname"]
+        if IsEmpty(shortname) then
+            Append(out, TexCmd("subsubsection", entity["name"]))
+        else
+            Append(out, TexCmd("subsubsection", entity["name"], shortname))
+        end
         Append(out, TexCmd("label", GetMainLabel(entity)))
         Append(out, DescriptorsString(entity))
     end

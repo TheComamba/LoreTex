@@ -45,7 +45,7 @@ local function addSingleEntity(srcEntity, targetEntity, entityType, role)
     UniqueAppend(targetEntity[name], table.concat(content))
 end
 
-local function addEntitiesTo(entityType, keyword, entities)
+local function addChildrenToParents(entityType, keyword, entities)
     local srcEntities = GetEntitiesOfType(entityType)
     srcEntities = GetEntitiesIf(IsEntityShown, srcEntities)
     for label, srcEntity in pairs(srcEntities) do
@@ -72,16 +72,16 @@ local function addEntitiesTo(entityType, keyword, entities)
     end
 end
 
-local function addAllEntitiesTo(entities)
+local function addAllChildrenToParents(entities)
     for type, name in pairs(TypeToNameMap()) do
         for key2, keyword in pairs({ "location", "associations" }) do
-            addEntitiesTo(type, keyword, entities)
+            addChildrenToParents(type, keyword, entities)
         end
     end
 end
 
 function AddAutomatedDescriptors(entities)
-    addAllEntitiesTo(entities)
+    addAllChildrenToParents(entities)
     ProcessHistory(entities)
     for key, entity in pairs(entities) do
         AddAssociationDescriptors(entity)

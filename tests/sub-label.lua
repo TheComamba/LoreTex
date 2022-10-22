@@ -1,9 +1,9 @@
 NewEntity("some-npc", "npcs", nil, "Some NPC")
 SetSpecies(CurrentEntity(), "subspecies")
 SetLocation(CurrentEntity(), "subplace-1")
-SetDescriptor(CurrentEntity(), "Some Info", [[Refers to \nameref{subplace-2}.]])
-SetDescriptor(CurrentEntity(), "Some More Info", [[Refers to \nameref{subplace-3}.]])
-SetDescriptor(CurrentEntity(), "Even More Info", [[Refers to \nameref{subplace-4}.]])
+SetDescriptor(CurrentEntity(), "Info 1", [[Refers to \nameref{subplace-2}.]])
+SetDescriptor(CurrentEntity(), "Info 2", [[Refers to \nameref{subplace-3}.]])
+SetDescriptor(CurrentEntity(), "Info 3", [[Refers to \nameref{subplace-4}.]])
 NewEntity("place-1", "places", nil, "Place 1")
 SetDescriptor(CurrentEntity(), "Subplace 1", [[\label{subplace-1}]])
 NewEntity("place-2", "places", nil, "Place 2")
@@ -22,7 +22,7 @@ local expected = {
     [[\chapter{]] .. CapFirst(Tr("characters")) .. [[}]],
     [[\section*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("characters")) .. [[}]],
     [[\begin{itemize}]],
-    [[\item{} \nameref{npc}]],
+    [[\item{} \nameref{some-npc}]],
     [[\end{itemize}]],
     [[\section{]] .. CapFirst(Tr("npcs")) .. [[}]],
     [[\subsection{In Subplace 1}]],
@@ -30,11 +30,11 @@ local expected = {
     [[\label{some-npc}]],
     [[\paragraph{]] .. CapFirst(Tr("appearance")) .. [[}]],
     [[\subparagraph{]] .. Tr("species-and-age") .. [[:}\nameref {subspecies}.]],
-    [[\paragraph{Some Info}]],
+    [[\paragraph{Info 1}]],
     [[Refers to \nameref{subplace-2}.]],
-    [[\paragraph{Some More Info}]],
+    [[\paragraph{Info 2}]],
     [[Refers to \nameref{subplace-3}.]],
-    [[\paragraph{Even More Info}]],
+    [[\paragraph{Info 3}]],
     [[Refers to \nameref{subplace-4}.]],
     [[\chapter{]] .. CapFirst(Tr("only-mentioned")) .. [[}]],
     [[\subparagraph{Subplace 2}]],

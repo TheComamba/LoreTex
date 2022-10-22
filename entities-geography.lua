@@ -56,36 +56,22 @@ function IsLocationUnrevealed(entity)
     return IsEntitySecret(location) and (not IsRevealed(location))
 end
 
-local function compareLocationLabelsByName(label1, label2)
-    local entity1 = GetEntity(label1)
-    local entity2 = GetEntity(label2)
-    local name1 = PlaceToName(entity1)
-    local name2 = PlaceToName(entity2)
+function CompareLocationLabelsByName(label1, label2)
+    local name1 = PlaceToName(label1)
+    local name2 = PlaceToName(label2)
     return StrCmp(name1, name2)
 end
 
-function PlaceToName(place)
+function PlaceToName(locationLabel)
     local name = ""
-    while not IsEmpty(place) do
+    while not IsEmpty(locationLabel) do
         if name == "" then
-            name = GetShortname(place)
+            name = LabelToName(locationLabel)
         else
-            name = GetShortname(place) .. " - " .. name
+            name = LabelToName(locationLabel) .. " - " .. name
         end
-        place = getLocation(place)
+        local place = GetEntity(locationLabel)
+        locationLabel = place["location"]
     end
     return name
-end
-
-function AllLocationLabelsSorted()
-    StartBenchmarking("AllLocationLabelsSorted")
-    local places = GetEntitiesIf(IsPlace, AllEntities)
-    places = GetEntitiesIf(IsEntityShown, places)
-    local labels = {}
-    for key, place in pairs(places) do
-        labels[#labels + 1] = GetMainLabel(place)
-    end
-    table.sort(labels, compareLocationLabelsByName)
-    StopBenchmarking("AllLocationLabelsSorted")
-    return labels
 end

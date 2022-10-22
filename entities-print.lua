@@ -156,25 +156,40 @@ function PrintEntityChapterBeginning(name, primaryEntities)
     return out
 end
 
-local function printEntityChapterSortedByLocation(primaryEntities)
+local function getAllLocationLabelsSorted(entities)
+    local locationLabels = {}
+    for key, entity in pairs(entities) do
+        local locationLabel = entity["location"]
+        if not IsEmpty(locationLabel) then
+            if IsEntityShown(GetEntity(locationLabel)) then
+                UniqueAppend(locationLabels, locationLabel)
+            end
+        end
+    end
+    table.sort(locationLabels, CompareLocationLabelsByName)
+    return locationLabels
+end
+
+local function printEntityChapterSortedByLocation(entities)
     StartBenchmarking("printEntityChapterSortedByLocation")
     local sectionname = Tr("in-whole-world")
-    local entitiesWorldwide = extractEntitiesAtLocation(primaryEntities, nil)
+    local entitiesWorldwide = extractEntitiesAtLocation(entities, nil)
     local out = printEntities(sectionname, entitiesWorldwide)
 
-    for index, locationLabel in pairs(AllLocationLabelsSorted()) do
+    local locationLabels = getAllLocationLabelsSorted(entities)
+    for index, locationLabel in pairs(locationLabels) do
         local location = GetEntity(locationLabel)
-        local sectionname = CapFirst(Tr("in")) .. " " .. PlaceToName(location)
-        local entitiesHere = extractEntitiesAtLocation(primaryEntities, locationLabel)
+        local sectionname = CapFirst(Tr("in")) .. " " .. PlaceToName(locationLabel)
+        local entitiesHere = extractEntitiesAtLocation(entities, locationLabel)
         Append(out, printEntities(sectionname, entitiesHere))
     end
 
     local sectionname = Tr("at-secret-locations")
-    local entitiesAtSecretLocations = GetEntitiesIf(IsLocationUnrevealed, primaryEntities)
+    local entitiesAtSecretLocations = GetEntitiesIf(IsLocationUnrevealed, entities)
     Append(out, printEntities(sectionname, entitiesAtSecretLocations))
 
     local sectionname = Tr("at-unfound-locations")
-    local entitiesAtUnfoundLocations = GetEntitiesIf(IsLocationUnknown, primaryEntities)
+    local entitiesAtUnfoundLocations = GetEntitiesIf(IsLocationUnknown, entities)
     Append(out, printEntities(sectionname, entitiesAtUnfoundLocations))
 
     StopBenchmarking("printEntityChapterSortedByLocation")

@@ -127,9 +127,12 @@ function PrintOnlyMentionedChapter(mentionedRefs)
             Append(out, TexCmd("chapter", CapFirst(Tr("only-mentioned"))))
         end
         if not IsEntityInProcessed(label) then
-            Append(out, TexCmd("subparagraph", LabelToName(label)))
-            Append(out, TexCmd("label", label))
-            Append(out, TexCmd("hspace", "1cm"))
+            local name = LabelToName(label)
+            if not IsEmpty(name) then
+                Append(out, TexCmd("subparagraph", name))
+                Append(out, TexCmd("label", label))
+                Append(out, TexCmd("hspace", "1cm"))
+            end
         end
     end
     StopBenchmarking("PrintOnlyMentionedChapter")
@@ -203,7 +206,7 @@ function PrintEntityChapter(primaryEntities, metatype)
         StopBenchmarking("PrintEntityChapter")
         return out
     end
-    
+
     Append(out, TexCmd("chapter", CapFirst(Tr(metatype))))
     local types = AllTypes[metatype]
     table.sort(types, SortByTranslation)

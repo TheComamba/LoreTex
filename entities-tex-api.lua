@@ -3,13 +3,13 @@ function SetDescriptor(entity, descriptor, description, subdescriptor)
         LogError("Called with empty entity. Descriptor is " .. DebugPrint(descriptor))
         return
     elseif IsEmpty(descriptor) then
-        LogError("Called with empty descriptor for entity " .. DebugPrint(entity))
+        LogError("Called with empty descriptor for entity with label " .. GetMainLabel(entity) .. "\"")
         return
     elseif IsEmpty(description) then
-        LogError("Called with empty description for entity" .. DebugPrint(entity))
         return
     elseif IsIn(descriptor, ProtectedDescriptors) then
-        LogError("Called with protected descriptor" .. DebugPrint(descriptor))
+        LogError("Called with protected descriptor \"" ..
+            descriptor .. "\" for entity with label \"" .. GetMainLabel(entity) .. "\"")
         return
     end
 
@@ -91,6 +91,10 @@ function SetSpecies(entity, species)
     entity["species"] = species
 end
 
+function SetGender(entity, gender)
+    entity["gender"] = gender
+end
+
 function MakePrimaryIf(condition)
     StartBenchmarking("MakePrimaryIf")
     for key, entity in pairs(AllEntities) do
@@ -153,7 +157,7 @@ function AutomatedChapters()
     if HasError() then
         Append(output, TexCmd("chapter", "Logging Messages"))
         Append(output, TexCmd("RpgTex"))
-        Append(output, [[ encountered errors. Call \\PrintRpgTexErrors to show them.]])
+        Append(output, " encountered errors. Call PrintRpgTexErrors to show them.")
     end
     StopBenchmarking("AutomatedChapters")
     return output

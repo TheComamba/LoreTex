@@ -31,7 +31,7 @@
 }
 
 \newcommand{\newPlace}[3]{
-	\newEntity{#1}{place}{#2}{#3}
+	\newEntity{#1}{places}{#2}{#3}
 }
 
 \newcommand{\declarePC}[1]{
@@ -45,7 +45,7 @@
 }
 
 \newcommand{\newGod}[3]{
-	\newEntity{#1}{god}{#2}{#3}
+	\newEntity{#1}{gods}{#2}{#3}
 	\setSpecies{gott}
 }
 
@@ -194,7 +194,7 @@
 
 \newcommand{\setGender}[1]{
 	\directlua{
-		SetDescriptor(CurrentEntity(),[[gender]],[[\detokenize{#1}]])
+		SetGender(CurrentEntity(), [[\detokenize{#1}]])
 	}
 }
 

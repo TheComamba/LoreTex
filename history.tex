@@ -66,38 +66,38 @@ dofile(RelativePath .. "history.lua")
 
 \newcommand{\born}[3][0]{
 	\addHistory[#1]{#2}{#3}
-	\addDescriptor{born}{#2}
+	\directlua{CurrentEntity()["born"] = #2}
 }
 
 \newcommand{\bornDjo}[3][0]{
 	\addHistoryDjo[#1]{#2}{#3}
 	\directlua{
-		SetDescriptor(CurrentEntity(),"born",tostring(ConvertYearToVin(#2, YearFmtDjo)))
+		CurrentEntity()["born"] = ConvertYearToVin(#2, YearFmtDjo)
 	}
 }
 
 \newcommand{\bornNar}[3][0]{
 	\addHistoryNar[#1]{#2}{#3}
 	\directlua{
-	SetDescriptor(CurrentEntity(),"born",tostring(ConvertYearToVin(#2, YearFmtNar)))
+		CurrentEntity()["born"] = ConvertYearToVin(#2, YearFmtNar)
 	}
 }
 
 \newcommand{\died}[3][0]{
 	\addHistory[#1]{#2}{#3}
-	\addDescriptor{died}{#2}
+	\directlua{CurrentEntity()["died"] = #2}
 }
 
 \newcommand{\diedDjo}[3][0]{
 	\addHistoryDjo[#1]{#2}{#3}
 	\directlua{
-		SetDescriptor(CurrentEntity(),"died",ConvertYearToVin(#2, YearFmtDjo))
+		CurrentEntity()["died"] = ConvertYearToVin(#2, YearFmtDjo)
 	}
 }
 
 \newcommand{\diedNar}[3][0]{
 	\addHistoryNar[#1]{#2}{#3}
 	\directlua{
-		SetDescriptor(CurrentEntity(),"died",ConvertYearToVin(#2, YearFmtNar))
+		CurrentEntity()["died"] = ConvertYearToVin(#2, YearFmtNar)
 	}
 }

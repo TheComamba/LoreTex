@@ -58,7 +58,7 @@ function PrintErrors()
         Append(out, TexCmd("RpgTex"))
         Append(out, " encountered " .. #errorMessages .. " errors:")
         Append(out, ListAll(cleanedErrors()))
-        Append(out, "For a traceback, use the \\ThrowOnError command, rerun, and search the logfile for \"traceback\".")
+        Append(out, "For a traceback, use the ThrowOnError command, rerun, and search the logfile for \"traceback\".")
         Append(out, TexCmd("newpage"))
     end
     return out

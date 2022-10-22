@@ -16,17 +16,26 @@ function CreateBenchmarkingTest(sizeStr)
         size = numcast
     end
     for i = 1, size do
-        NewEntity("place-" .. i, "place", nil, "Place " .. i)
+        NewEntity("place-" .. i, "places", nil, "Place " .. i)
         AddEvent(CurrentEntity(), -i, [[Birth of \reference{char-]] .. i .. [[} \birthof{char-]] .. i .. [[}]])
+        AddRef("place-" .. i, PrimaryRefs)
 
         NewEntity("species-" .. i, "species", nil, "Species " .. i)
         SetDescriptor(CurrentEntity(), [[ageFactor]], i)
+        AddRef("species-" .. i, PrimaryRefs)
+
+        NewEntity("organisation-" .. i, "organisations", nil, "Organisation " .. i)
+        AddRef("organisation-" .. i, PrimaryRefs)
 
         NewCharacter("char-" .. i, nil, "Character " .. i)
         SetDescriptor(CurrentEntity(), "species", "species-" .. i)
         SetDescriptor(CurrentEntity(), "location", "place-" .. i)
+        SetDescriptor(CurrentEntity(), "associations", "organisation-" .. i)
+        SetDescriptor(CurrentEntity(), "Best Friend", [[\nameref{mentioned-char-]] .. i .. [[}]])
+        AddRef("char-" .. i, PrimaryRefs)
+
+        NewCharacter("mentioned-char-" .. i, nil, "Mentioned Character " .. i)
     end
 
-    AddAllEntitiesToPrimaryRefs()
     return AutomatedChapters()
 end

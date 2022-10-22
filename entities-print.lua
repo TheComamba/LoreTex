@@ -11,6 +11,9 @@ local function extractEntitiesAtLocation(list, location)
 end
 
 function GetShortname(entity)
+    if type(entity) == "string" then
+        entity = GetEntity(entity)
+    end
     if entity == nil then
         return "NIL"
     elseif entity["shortname"] ~= nil then

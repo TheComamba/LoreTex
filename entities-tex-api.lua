@@ -100,9 +100,9 @@ end
 
 function NewCharacter(label, shortname, name)
     if IsIn(label, PCs) then
-        NewEntity(label, "pc", shortname, name)
+        NewEntity(label, "pcs", shortname, name)
     else
-        NewEntity(label, "npc", shortname, name)
+        NewEntity(label, "npcs", shortname, name)
     end
 end
 

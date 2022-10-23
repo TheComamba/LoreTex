@@ -54,6 +54,14 @@ function SetYear(historyItem, year)
 	end
 end
 
+function SetYearFmt(historyItem, fmt)
+	if IsEmpty(fmt) then
+		LogError("Called with unknown year format for history item:" .. DebugPrint(historyItem))
+	else
+		historyItem["yearFormat"] = fmt
+	end
+end
+
 local function collectConcerns(item)
 	local concernsPrelim = {}
 	UniqueAppend(concernsPrelim, ScanForCmd(item["event"], "concerns"))

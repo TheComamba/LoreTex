@@ -47,7 +47,7 @@
 			local item = EmptyHistoryItem()
 			item["originator"] = GetMainLabel(CurrentEntity())
 			SetDay(item, "#1")
-			item["yearFmt"] = "#2"
+			SetYearFmt(item, #2)
 			SetYear(item, "#3")
 			item["event"] = [[\detokenize{#4}]]
 			ProcessEvent(item)
@@ -60,7 +60,7 @@
 			local item = EmptyHistoryItem()
 			item["originator"] = GetMainLabel(CurrentEntity())
 			SetDay(item, "#1")
-			item["yearFmt"] = "#2"
+			SetYearFmt(item, #2)
 			SetYear(item, "#3")
 			item["event"] = [[\detokenize{#4}]]
 			item["isSecret"] = true
@@ -74,7 +74,7 @@
 			local item = EmptyHistoryItem()
 			item["originator"] = GetMainLabel(CurrentEntity())
 			SetDay(item, "#1")
-			item["yearFmt"] = "#2"
+			SetYearFmt(item, #2)
 			SetYear(item, "#3")
 			item["event"] = [[\detokenize{#4}]]
 			item["isConcernsOthers"] = false

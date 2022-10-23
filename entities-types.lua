@@ -1,6 +1,7 @@
 AllTypes = {}
 AllTypes["associations"] = { "families", "organisations" }
 AllTypes["characters"] = { "gods", "npcs", "pcs" }
+AllTypes["chronologies"] = { "events", "stories" }
 AllTypes["classes"] = { "classes", "subclasses" }
 AllTypes["items"] = { "artefacts", "items", "ships" }
 AllTypes["landmarks"] = { "forests", "glaciers", "grasslands", "lakes", "mountainranges", "mountains", "rivers" }

@@ -1,8 +1,20 @@
 NewEntity("places", "test-1", nil, "Test 1")
 
 NewEntity("places", "test-2", nil, "Test 2")
-ProcessEvent(CurrentEntity(), -10, [[Event that concerns \reference{test-1} and \itref{test-2}.]])
-ProcessEvent(CurrentEntity(), 10, [[Event in the future.]])
+if true then
+    local hist = EmptyHistoryItem()
+    hist["originator"] = "test-2"
+    hist["year"] = -10
+    hist["event"] = [[Event that concerns \reference{test-1} and \itref{test-2}.]]
+    ProcessEvent(hist)
+end
+if true then
+    local hist = EmptyHistoryItem()
+    hist["originator"] = "test-2"
+    hist["year"] = 10
+    hist["event"] = [[Event in the future.]]
+    ProcessEvent(hist)
+end
 
 AddRef("test-1", PrimaryRefs)
 

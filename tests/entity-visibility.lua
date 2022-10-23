@@ -3,10 +3,35 @@ AddParent(CurrentEntity(), "normal-orga")
 AddParent(CurrentEntity(), "secret-orga")
 AddParent(CurrentEntity(), "revealed-orga")
 AddParent(CurrentEntity(), "unborn-orga")
-ProcessEvent(CurrentEntity(), -10, [[Normal event]])
-ProcessEvent(CurrentEntity(), -9, [[Concerns \reference{secret}]])
-ProcessEvent(CurrentEntity(), -8, [[Concerns \reference{revealed}]])
-ProcessEvent(CurrentEntity(), -5, [[Secret event]], 0, true)
+if true then
+    local hist = EmptyHistoryItem()
+    hist["originator"] = "normal"
+    hist["year"] = -10
+    hist["event"] = [[Normal event]]
+    ProcessEvent(hist)
+end
+if true then
+    local hist = EmptyHistoryItem()
+    hist["originator"] = "normal"
+    hist["year"] = -9
+    hist["event"] = [[Concerns \reference{secret}]]
+    ProcessEvent(hist)
+end
+if true then
+    local hist = EmptyHistoryItem()
+    hist["originator"] = "normal"
+    hist["year"] = -8
+    hist["event"] = [[Concerns \reference{revealed}]]
+    ProcessEvent(hist)
+end
+if true then
+    local hist = EmptyHistoryItem()
+    hist["originator"] = "normal"
+    hist["year"] = -5
+    hist["event"] = [[Secret event]]
+    hist["isSecret"] = true
+    ProcessEvent(hist)
+end
 AddRef("normal", PrimaryRefs)
 
 NewEntity("items", "secret", nil, "Secret")
@@ -15,7 +40,13 @@ AddParent(CurrentEntity(), "normal-orga")
 AddParent(CurrentEntity(), "secret-orga")
 AddParent(CurrentEntity(), "revealed-orga")
 AddParent(CurrentEntity(), "unborn-orga")
-ProcessEvent(CurrentEntity(), -7, [[Concerns \reference{normal}]])
+if true then
+    local hist = EmptyHistoryItem()
+    hist["originator"] = "secret"
+    hist["year"] = -7
+    hist["event"] = [[Concerns \reference{normal}]]
+    ProcessEvent(hist)
+end
 
 NewEntity("items", "revealed", nil, "Revealed")
 SetSecret(CurrentEntity())
@@ -23,11 +54,23 @@ AddParent(CurrentEntity(), "normal-orga")
 AddParent(CurrentEntity(), "secret-orga")
 AddParent(CurrentEntity(), "revealed-orga")
 AddParent(CurrentEntity(), "unborn-orga")
-ProcessEvent(CurrentEntity(), -6, [[Concerns \reference{normal}]])
+if true then
+    local hist = EmptyHistoryItem()
+    hist["originator"] = "revealed"
+    hist["year"] = -6
+    hist["event"] = [[Concerns \reference{normal}]]
+    ProcessEvent(hist)
+end
 Reveal("revealed")
 
 NewEntity("items", "unborn", nil, "Unborn")
-ProcessEvent(CurrentEntity(), 10, [[Created.\birthof{unborn}]])
+if true then
+    local hist = EmptyHistoryItem()
+    hist["originator"] = "unborn"
+    hist["year"] = 10
+    hist["event"] = [[Created.\birthof{unborn}]]
+    ProcessEvent(hist)
+end
 AddParent(CurrentEntity(), "normal-orga")
 AddParent(CurrentEntity(), "secret-orga")
 AddParent(CurrentEntity(), "revealed-orga")
@@ -56,7 +99,13 @@ SetSecret(CurrentEntity())
 Reveal("revealed-orga")
 
 NewEntity("organisations", "unborn-orga", nil, "Unborn Organisation")
-ProcessEvent(CurrentEntity(), 10, [[Founded.\birthof{unborn-orga}]])
+if true then
+    local hist = EmptyHistoryItem()
+    hist["originator"] = "unborn-orga"
+    hist["year"] = 10
+    hist["event"] = [[Founded.\birthof{unborn-orga}]]
+    ProcessEvent(hist)
+end
 AddRef("unborn-orga", PrimaryRefs)
 
 local function itemsParagraph()

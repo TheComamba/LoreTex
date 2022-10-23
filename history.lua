@@ -1,4 +1,3 @@
-Histories = {}
 Append(ProtectedDescriptors, { "historyItems" })
 
 function AddHistoryItemToHistory(historyItem, history)
@@ -101,7 +100,6 @@ function ProcessEvent(item)
 
 	addSpecialyearsToEntities("born", item["year"], item["birthof"])
 	addSpecialyearsToEntities("died", item["year"], item["deathof"])
-	Histories[#Histories + 1] = item
 
 	StopBenchmarking("ProcessEvent")
 end

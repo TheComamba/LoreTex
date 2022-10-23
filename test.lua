@@ -7,7 +7,6 @@ local numFailed = 0
 local function resetEnvironment()
     ResetEntities()
     ResetRefs()
-    Histories = {}
     CurrentYearVin = 0
     PrintHistoryYear = 0
     PrintHistoryDay = 0

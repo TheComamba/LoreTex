@@ -11,6 +11,7 @@
 			SetDay(item, "#1")
 			SetYear(item, "#2")
 			item["event"] = [[\detokenize{#3}]]
+			ProcessEvent(item)
 		end
 	}
 }
@@ -23,6 +24,7 @@
 			SetYear(item, "#2")
 			item["event"] = [[\detokenize{#3}]]
 			item["isSecret"] = true
+			ProcessEvent(item)
 		end
 	}
 }
@@ -35,6 +37,48 @@
 			SetYear(item, "#2")
 			item["event"] = [[\detokenize{#3}]]
 			item["isConcernsOthers"] = false
+			ProcessEvent(item)
+		end
+	}
+}
+\newcommand{\addHistoryInFmt}[4][0]{
+	\directlua{
+		if true then
+			local item = EmptyHistoryItem()
+			item["originator"] = GetMainLabel(CurrentEntity())
+			SetDay(item, "#1")
+			item["yearFmt"] = "#2"
+			SetYear(item, "#3")
+			item["event"] = [[\detokenize{#4}]]
+			ProcessEvent(item)
+		end
+	}
+}
+\newcommand{\addSecretHistoryInFmt}[4][0]{
+	\directlua{
+		if true then
+			local item = EmptyHistoryItem()
+			item["originator"] = GetMainLabel(CurrentEntity())
+			SetDay(item, "#1")
+			item["yearFmt"] = "#2"
+			SetYear(item, "#3")
+			item["event"] = [[\detokenize{#4}]]
+			item["isSecret"] = true
+			ProcessEvent(item)
+		end
+	}
+}
+\newcommand{\addHistoryInFmtOnlyHere}[4][0]{
+	\directlua{
+		if true then
+			local item = EmptyHistoryItem()
+			item["originator"] = GetMainLabel(CurrentEntity())
+			SetDay(item, "#1")
+			item["yearFmt"] = "#2"
+			SetYear(item, "#3")
+			item["event"] = [[\detokenize{#4}]]
+			item["isConcernsOthers"] = false
+			ProcessEvent(item)
 		end
 	}
 }
@@ -44,7 +88,10 @@
 \newcommand{\printHistory}[1]{#1\directlua{AddEvent(nil, PrintHistoryYear, [[\detokenize{#1}]], PrintHistoryDay)}}
 \newcommand{\printSecretHistory}[1]{\mybox{#1}\directlua{AddEvent(nil, PrintHistoryYear, [[\detokenize{#1}]], PrintHistoryDay, true)}}
 
-\newcommand{\addHistoryDjo}[3][0]{\directlua{LogError("Use of deprecated function!")}}
+\newcommand{\addHistoryDjo}[3][0]{
+	\directlua{LogError("Use of deprecated function!")}
+	\addHistoryInFmt[#1]{YearFmtDjo}{#2}{#3}
+}
 \newcommand{\addSecretHistoryDjo}[3][0]{\directlua{LogError("Use of deprecated function!")}}
 \newcommand{\addHistoryNar}[3][0]{\directlua{LogError("Use of deprecated function!")}}
 

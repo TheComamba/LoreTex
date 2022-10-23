@@ -165,7 +165,7 @@ local function addLifestageHistoryItems(entity)
 				Append(event, Tr(lifestage))
 				Append(event, ".")
 				local item = {}
-				item["year"] = year
+				SetYear(item, year)
 				item["day"] = 0
 				item["event"] = table.concat(event)
 				item["concerns"] = { label }

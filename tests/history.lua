@@ -2,14 +2,14 @@ NewEntity("places", "test-1", nil, "Test 1")
 if true then
     local hist = EmptyHistoryItem()
     hist["originator"] = "test-1"
-    hist["year"] = -20
+    SetYear(hist, -20)
     hist["event"] = [[Some event.]]
     ProcessEvent(hist)
 end
 if true then
     local hist = EmptyHistoryItem()
     hist["originator"] = "test-1"
-    hist["year"] = -10
+    SetYear(hist, -10)
     hist["event"] = [[Event that concerns \reference{test-1}, but not \reference{test-2}.]]
     hist["isConcernsOthers"] = false
     ProcessEvent(hist)
@@ -17,14 +17,14 @@ end
 if true then
     local hist = EmptyHistoryItem()
     hist["originator"] = "test-1"
-    hist["year"] = 5
+    SetYear(hist, 5)
     hist["event"] = [[Event in the future.]]
     ProcessEvent(hist)
 end
 NewEntity("places", "test-2", nil, "Test 2")
 if true then
     local hist = EmptyHistoryItem()
-    hist["year"] = -5
+    SetYear(hist, -5)
     hist["event"] = [[Event that concerns \reference{test-1}, but not \reference{test-2}.\notconcerns{test-2}]]
     ProcessEvent(hist)
 end

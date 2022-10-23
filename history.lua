@@ -50,7 +50,7 @@ function SetYear(historyItem, year)
 		if not IsEmpty(yearFmt) then
 			yearNumber = ConvertYearToVin(yearNumber, yearFmt)
 		end
-		historyItem["day"] = yearNumber
+		historyItem["year"] = yearNumber
 	end
 end
 
@@ -82,6 +82,11 @@ end
 
 function ProcessEvent(item)
 	StartBenchmarking("ProcessEvent")
+	if item["year"] == nil then
+		LogError("This event has no year:" .. DebugPrint(item))
+		StopBenchmarking("ProcessEvent")
+		return
+	end
 	item["birthof"] = ScanForCmd(item["event"], "birthof")
 	item["deathof"] = ScanForCmd(item["event"], "deathof")
 	if item["isConcernsOthers"] then

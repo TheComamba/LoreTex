@@ -11,10 +11,47 @@ function AddHistoryItemToHistory(historyItem, history)
 	if history[year] == nil then
 		history[year] = {}
 	end
+	if day == nil then
+		day = 0
+	end
 	if history[year][day] == nil then
 		history[year][day] = event
 	else
 		history[year][day] = history[year][day] .. [[\\]] .. event
+	end
+end
+
+function EmptyHistoryItem()
+	local item = {}
+	item["originator"] = nil
+	item["day"] = nil
+	item["year"] = nil
+	item["yearFormat"] = nil
+	item["event"] = ""
+	item["isSecret"] = false
+	item["isConcernsOthers"] = true
+	return item
+end
+
+function SetDay(historyItem, day)
+	local dayNumber = tonumber(day)
+	if dayNumber == nil then
+		LogError("Could not convert to number:" .. DebugPrint(day))
+	else
+		historyItem["day"] = dayNumber
+	end
+end
+
+function SetYear(historyItem, year)
+	local yearNumber = tonumber(year)
+	if yearNumber == nil then
+		LogError("Could not convert to number:" .. DebugPrint(year))
+	else
+		local yearFmt = historyItem["yearFormat"]
+		if not IsEmpty(yearFmt) then
+			yearNumber = ConvertYearToVin(yearNumber, yearFmt)
+		end
+		historyItem["day"] = yearNumber
 	end
 end
 
@@ -37,26 +74,22 @@ local function collectConcerns(item)
 	item["concerns"] = concerns
 end
 
-local function newHistoryItem(originator, year, event, day, isSecret)
-	local item = {}
-	if not IsEmpty(originator) then
-		local originatorLabel = GetMainLabel(originator)
-		item["originator"] = originatorLabel
+local function addSpecialyearsToEntities(field, year, labels)
+	for key, label in pairs(labels) do
+		local entity = GetMutableEntityFromAll(label)
+		entity[field] = year
 	end
-	item["year"] = tonumber(year)
-	if item["year"] == nil then
-		LogError("Could not convert year \"" .. year .. "\" to number.")
-		return {}
+end
+
+function ProcessEvent(item)
+	StartBenchmarking("ProcessEvent")
+	item["birthof"] = ScanForCmd(item["event"], "birthof")
+	item["deathof"] = ScanForCmd(item["event"], "deathof")
+	if item["isConcernsOthers"] then
+		collectConcerns(item)
+	else
+		item["concerns"] = { item["originator"] }
 	end
-	item["day"] = tonumber(day)
-	if item["day"] == nil then
-		LogError("Could not convert day \"" .. day .. "\" to number.")
-		return {}
-	end
-	item["event"] = event
-	item["birthof"] = ScanForCmd(event, "birthof")
-	item["deathof"] = ScanForCmd(event, "deathof")
-	collectConcerns(item)
 
 	for key, concernedLabel in pairs(item["concerns"]) do
 		local entity = GetMutableEntityFromAll(concernedLabel)
@@ -66,35 +99,11 @@ local function newHistoryItem(originator, year, event, day, isSecret)
 		entity["historyItems"][#entity["historyItems"] + 1] = item
 	end
 
-	if isSecret ~= nil then
-		item["isSecret"] = isSecret
-	end
+	addSpecialyearsToEntities("born", item["year"], item["birthof"])
+	addSpecialyearsToEntities("died", item["year"], item["deathof"])
+	Histories[#Histories + 1] = item
 
-	return item
-end
-
-local function addSpecialyearsToEntities(field, year, labels)
-	for key, label in pairs(labels) do
-		local entity = GetMutableEntityFromAll(label)
-		entity[field] = year
-	end
-end
-
-function AddEvent(originator, year, event, day, isSecret)
-	StartBenchmarking("AddEvent")
-	if IsEmpty(year) then
-		LogError("History item has no year!")
-		StopBenchmarking("AddEvent")
-		return
-	end
-	if IsEmpty(day) then
-		day = 0
-	end
-	local historyItem = newHistoryItem(originator, year, event, day, isSecret)
-	Histories[#Histories + 1] = historyItem
-	addSpecialyearsToEntities("born", historyItem["year"], historyItem["birthof"])
-	addSpecialyearsToEntities("died", historyItem["year"], historyItem["deathof"])
-	StopBenchmarking("AddEvent")
+	StopBenchmarking("ProcessEvent")
 end
 
 function HistoryEventString(yearAndDay, history)

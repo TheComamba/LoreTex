@@ -1,9 +1,11 @@
 NewEntity("places", "test-1", nil, "Test 1")
-AddEvent(CurrentEntity(), -20, [[Some event.]])
-AddEvent(CurrentEntity(), 5, [[Event in the future.]])
+ProcessEvent(CurrentEntity(), -20, [[Some event.]], false, true)
+ProcessEvent(CurrentEntity(), -10, [[Event that concerns \reference{test-1}, but not \reference{test-2}.]], false, false)
+ProcessEvent(CurrentEntity(), 5, [[Event in the future.]], false, true)
 NewEntity("places", "test-2", nil, "Test 2")
+ProcessEvent(nil, -5, [[Event that concerns \reference{test-1}, but not \reference{test-2}.\notconcerns{test-2}]], false,
+    true)
 
-AddEvent(nil, -10, [[Event that concerns \reference{test-1}, but not \reference{test-2}.\notconcerns{test-2}]])
 
 AddRef("test-1", PrimaryRefs)
 
@@ -24,6 +26,10 @@ local function generateExpected()
     Append(out,
         [[\item{} -10 Vin (]] ..
         Tr("years-ago", { 10 }) ..
+        [[): Event that concerns \nameref{test-1}, but not \nameref{test-2}.]])
+    Append(out,
+        [[\item{} -5 Vin (]] ..
+        Tr("years-ago", { 5 }) ..
         [[): Event that concerns \nameref{test-1}, but not \nameref{test-2}.\notconcerns{test-2}]])
     if IsShowFuture then
         Append(out, [[\item{} 5 Vin (]] .. Tr("in-years", { 5 }) .. [[): Event in the future.]])

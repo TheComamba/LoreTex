@@ -16,15 +16,21 @@ function CreateBenchmarkingTest(sizeStr)
         size = numcast
     end
     for i = 1, size do
-        NewEntity("place-" .. i, "places", nil, "Place " .. i)
-        AddEvent(CurrentEntity(), -i, [[Birth of \reference{char-]] .. i .. [[} \birthof{char-]] .. i .. [[}]])
+        NewEntity("places", "place-" .. i, nil, "Place " .. i)
+        if true then
+            local hist = EmptyHistoryItem()
+            hist["originator"] = "place-" .. i
+            hist["year"] = -i
+            hist["event"] = [[Birth of \reference{char-]] .. i .. [[} \birthof{char-]] .. i .. [[}]]
+            ProcessEvent(hist)
+        end
         AddRef("place-" .. i, PrimaryRefs)
 
-        NewEntity("species-" .. i, "species", nil, "Species " .. i)
+        NewEntity("species", "species-" .. i, nil, "Species " .. i)
         SetAgeFactor(CurrentEntity(), i)
         AddRef("species-" .. i, PrimaryRefs)
 
-        NewEntity("organisation-" .. i, "organisations", nil, "Organisation " .. i)
+        NewEntity("organisations", "organisation-" .. i, nil, "Organisation " .. i)
         AddRef("organisation-" .. i, PrimaryRefs)
 
         NewCharacter("char-" .. i, nil, "Character " .. i)

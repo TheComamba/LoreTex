@@ -3,61 +3,50 @@
 dofile(RelativePath .. "history.lua")
 \end{luacode*}
 
-\newcommand{\addHistory}[3][0]{
+\newcommand{\addHistory}[3][]{
 	\directlua{
-		AddEvent(CurrentEntity(), #2, [[\detokenize{#3}]], #1)
+		if true then
+			local item = EmptyHistoryItem()
+			item["originator"] = GetMainLabel(CurrentEntity())
+			SetDay("#1")
+			SetYear(item, "#2")
+			item["event"] = [[\detokenize{#3}]]
+		end
 	}
 }
-
-\newcommand{\setPrintHistoryYear}[1]{
-	\directlua{
-		PrintHistoryYear = #1
-	}
-}
-
-\newcommand{\setPrintHistoryDay}[1]{
-	\directlua{
-		PrintHistoryDay = #1
-	}
-}
-
-\newcommand{\printHistory}[1]{
-	#1
-	\directlua{
-		AddEvent(nil, PrintHistoryYear, [[\detokenize{#1}]], PrintHistoryDay)
-	}
-}
-
-\newcommand{\printSecretHistory}[1]{
-	\mybox{#1}
-	\directlua{
-		AddEvent(nil, PrintHistoryYear, [[\detokenize{#1}]], PrintHistoryDay, true)
-	}
-}
-
 \newcommand{\addSecretHistory}[3][0]{
 	\directlua{
-		AddEvent(CurrentEntity(), #2, [[\detokenize{#3}]], #1, true)
+		if true then
+			local item = EmptyHistoryItem()
+			item["originator"] = GetMainLabel(CurrentEntity())
+			SetDay("#1")
+			SetYear(item, "#2")
+			item["event"] = [[\detokenize{#3}]]
+			item["isSecret"] = true
+		end
+	}
+}
+\newcommand{\addHistoryOnlyHere}[3][0]{
+	\directlua{
+		if true then
+			local item = EmptyHistoryItem()
+			item["originator"] = GetMainLabel(CurrentEntity())
+			SetDay("#1")
+			SetYear(item, "#2")
+			item["event"] = [[\detokenize{#3}]]
+			item["isConcernsOthers"] = false
+		end
 	}
 }
 
-\newcommand{\addHistoryDjo}[3][0]{
-	\directlua{
-		AddEvent(CurrentEntity(), ConvertYearToVin(#2, YearFmtDjo), [[\detokenize{#3}]], #1)
-	}
-}
+\newcommand{\setPrintHistoryYear}[1]{\directlua{PrintHistoryYear = #1}}
+\newcommand{\setPrintHistoryDay}[1]{\directlua{PrintHistoryDay = #1}}
+\newcommand{\printHistory}[1]{#1\directlua{AddEvent(nil, PrintHistoryYear, [[\detokenize{#1}]], PrintHistoryDay)}}
+\newcommand{\printSecretHistory}[1]{\mybox{#1}\directlua{AddEvent(nil, PrintHistoryYear, [[\detokenize{#1}]], PrintHistoryDay, true)}}
 
-\newcommand{\addSecretHistoryDjo}[3][0]{
-	\directlua{
-		AddEvent(CurrentEntity(), ConvertYearToVin(#2, YearFmtDjo), [[\detokenize{#3}]], #1, true)
-	}
-}
-
-\newcommand{\addHistoryNar}[3][0]{
-	\directlua{
-		AddEvent(CurrentEntity(), ConvertYearToVin(#2, YearFmtNar), [[\detokenize{#3}]], #1)
-	}
-}
+\newcommand{\addHistoryDjo}[3][0]{\directlua{LogError("Use of deprecated function!")}}
+\newcommand{\addSecretHistoryDjo}[3][0]{\directlua{LogError("Use of deprecated function!")}}
+\newcommand{\addHistoryNar}[3][0]{\directlua{LogError("Use of deprecated function!")}}
 
 \newcommand{\concerns}[1]{}
 \newcommand{\notconcerns}[1]{}
@@ -71,16 +60,12 @@ dofile(RelativePath .. "history.lua")
 
 \newcommand{\bornDjo}[3][0]{
 	\addHistoryDjo[#1]{#2}{#3}
-	\directlua{
-		CurrentEntity()["born"] = ConvertYearToVin(#2, YearFmtDjo)
-	}
+	\directlua{CurrentEntity()["born"] = ConvertYearToVin(#2, YearFmtDjo)}
 }
 
 \newcommand{\bornNar}[3][0]{
 	\addHistoryNar[#1]{#2}{#3}
-	\directlua{
-		CurrentEntity()["born"] = ConvertYearToVin(#2, YearFmtNar)
-	}
+	\directlua{CurrentEntity()["born"] = ConvertYearToVin(#2, YearFmtNar)}
 }
 
 \newcommand{\died}[3][0]{
@@ -90,14 +75,10 @@ dofile(RelativePath .. "history.lua")
 
 \newcommand{\diedDjo}[3][0]{
 	\addHistoryDjo[#1]{#2}{#3}
-	\directlua{
-		CurrentEntity()["died"] = ConvertYearToVin(#2, YearFmtDjo)
-	}
+	\directlua{CurrentEntity()["died"] = ConvertYearToVin(#2, YearFmtDjo)}
 }
 
 \newcommand{\diedNar}[3][0]{
 	\addHistoryNar[#1]{#2}{#3}
-	\directlua{
-		CurrentEntity()["died"] = ConvertYearToVin(#2, YearFmtNar)
-	}
+	\directlua{CurrentEntity()["died"] = ConvertYearToVin(#2, YearFmtNar)}
 }

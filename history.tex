@@ -1,14 +1,14 @@
 
 \begin{luacode*}
-dofile(RelativePath .. "history.lua")
+	dofile(RelativePath .. "history.lua")
 \end{luacode*}
 
-\newcommand{\addHistory}[3][]{
+\newcommand{\addHistory}[3][0]{
 	\directlua{
 		if true then
 			local item = EmptyHistoryItem()
 			item["originator"] = GetMainLabel(CurrentEntity())
-			SetDay("#1")
+			SetDay(item, "#1")
 			SetYear(item, "#2")
 			item["event"] = [[\detokenize{#3}]]
 		end
@@ -19,7 +19,7 @@ dofile(RelativePath .. "history.lua")
 		if true then
 			local item = EmptyHistoryItem()
 			item["originator"] = GetMainLabel(CurrentEntity())
-			SetDay("#1")
+			SetDay(item, "#1")
 			SetYear(item, "#2")
 			item["event"] = [[\detokenize{#3}]]
 			item["isSecret"] = true
@@ -31,7 +31,7 @@ dofile(RelativePath .. "history.lua")
 		if true then
 			local item = EmptyHistoryItem()
 			item["originator"] = GetMainLabel(CurrentEntity())
-			SetDay("#1")
+			SetDay(item, "#1")
 			SetYear(item, "#2")
 			item["event"] = [[\detokenize{#3}]]
 			item["isConcernsOthers"] = false

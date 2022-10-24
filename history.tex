@@ -83,12 +83,6 @@
 	}
 }
 
-\newcommand{\setPrintHistoryYear}[1]{\directlua{PrintHistoryYear = #1}}
-\newcommand{\setPrintHistoryDay}[1]{\directlua{PrintHistoryDay = #1}}
-\newcommand{\printHistory}[1]{#1\directlua{AddEvent(nil, PrintHistoryYear, [[\detokenize{#1}]], PrintHistoryDay)}}
-\newcommand{\printSecretHistory}[1]{\mybox{#1}\directlua{AddEvent(nil, PrintHistoryYear, [[\detokenize{#1}]], PrintHistoryDay, true)}}
-
-
 \newcommand{\concerns}[1]{}
 \newcommand{\notconcerns}[1]{}
 \newcommand{\birthof}[1]{}

@@ -5,25 +5,19 @@ function IsLocationUnknown(entity)
     local locationLabel = entity["location"]
     if IsEmpty(locationLabel) then
         return false
-    else
-        local location = GetEntity(locationLabel)
+    end
+    local location = GetEntity(locationLabel)
+    if IsEmpty(location) then
         local err = {}
         Append(err, "Location\"")
         Append(err, locationLabel)
         Append(err, "\" of entity \"")
-        Append(err, entity["name"])
-        if IsEmpty(location) then
-            Append(err, "\" not found.")
-            LogError(table.concat(err))
-            return true
-        elseif not IsType("places", location) then
-            Append(err, "\" is not a place.")
-            LogError(table.concat(err))
-            return true
-        else
-            return false
-        end
+        Append(err, GetMainLabel(entity))
+        Append(err, "\" not found.")
+        LogError(table.concat(err))
+        return true
     end
+    return false
 end
 
 local function getLocation(entity)

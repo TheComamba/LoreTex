@@ -47,15 +47,32 @@ function CompareLocationLabelsByName(label1, label2)
 end
 
 function PlaceToName(locationLabel)
+    StartBenchmarking("PlaceToName")
     local name = ""
+    local locationLabels = {}
     while not IsEmpty(locationLabel) do
         if name == "" then
             name = LabelToName(locationLabel)
         else
             name = LabelToName(locationLabel) .. " - " .. name
         end
+
+        if IsIn(locationLabel, locationLabels) then
+            Append(locationLabels, locationLabel)
+            local err = {}
+            Append(err, "Enountered loop! Output is \"")
+            Append(err, name)
+            Append(err, "\", generated from location labels:")
+            Append(err, DebugPrint(locationLabels))
+            LogError(err)
+            break
+        else
+            Append(locationLabels, locationLabel)
+        end
+
         local place = GetEntity(locationLabel)
         locationLabel = place["location"]
     end
+    StopBenchmarking("PlaceToName")
     return name
 end

@@ -116,7 +116,7 @@ function Assert(caller, expected, received)
         caller = caller .. "-with-randomised-dictionary"
     end
 
-    if HasError() and false then
+    if HasError() then
         local out = {}
         numFailed = numFailed + 1
         Append(out, [[Error in function "]] .. caller .. [["!\\]])

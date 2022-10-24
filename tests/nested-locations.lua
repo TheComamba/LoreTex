@@ -7,7 +7,7 @@ NewEntity("classes", "class-1", nil, "Class 1")
 NewEntity("classes", "class-2", nil, "Class 2")
 SetLocation(CurrentEntity(), "class-1")
 NewEntity("classes", "class-3", nil, "Class 3")
--- SetLocation(CurrentEntity(), "class-3")
+SetLocation(CurrentEntity(), "class-2")
 AddAllEntitiesToPrimaryRefs()
 
 local expected = {}

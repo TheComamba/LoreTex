@@ -33,58 +33,9 @@
 	\directlua{DeclarePC("#1")}
 }
 
-\newcommand{\charappearance}[3]{
-	\addDescriptor[Körper:]{Erscheinung}{#1}
-	\addDescriptor[Kleidung und Ausrüstung:]{Erscheinung}{#2}
-	\addDescriptor[Stimme / Verhalten:]{Erscheinung}{#3}
-}
-
-\newcommand{\spellProperties}[6]{
-	\setAssociation{level-#1-spells}
-	\setAssociation{#2-spells}
-	\directlua{
-		SetDescriptor(CurrentEntity(), "Properties", [[\detokenize{#1}]],"Level:")
-		SetDescriptor(CurrentEntity(), "Properties", [[\detokenize{#2}]],"School:")
-		SetDescriptor(CurrentEntity(), "Properties", [[\detokenize{#3}]],"Casting-time:")
-		SetDescriptor(CurrentEntity(), "Properties", [[\detokenize{#4}]],"Range:")
-		SetDescriptor(CurrentEntity(), "Properties", [[\detokenize{#5}]],"Components:")
-		SetDescriptor(CurrentEntity(), "Properties", [[\detokenize{#6}]],"Duration:")
-	}
-}
-
 \newcommand{\addDescriptor}[3][]{
 	\directlua{
 		SetDescriptor(CurrentEntity(),[[\detokenize{#2}]],[[\detokenize{#3}]], [[\detokenize{#1}]])
-	}
-}
-
-\newcommand{\setDescription}[1]{
-	\directlua{
-		SetDescriptor(CurrentEntity(),[[Beschreibung]],[[\detokenize{#1}]])
-	}
-}
-
-\newcommand{\setEtymology}[1]{
-	\directlua{
-		SetDescriptor(CurrentEntity(),[[Etymologie]],[[\detokenize{#1}]])
-	}
-}
-
-\newcommand{\setStats}[1]{
-	\directlua{
-		SetDescriptor(CurrentEntity(),[[Werte]],[[\detokenize{#1}]])
-	}
-}
-
-\newcommand{\setSpells}[1]{
-	\directlua{
-		SetDescriptor(CurrentEntity(),[[Zauber]],[[\detokenize{#1}]])
-	}
-}
-
-\newcommand{\setPlayer}[1]{
-	\directlua{
-		SetDescriptor(CurrentEntity(),[[Spieler]],[[\detokenize{#1}]])
 	}
 }
 

@@ -101,8 +101,18 @@ function IsEntityInProcessed(label)
     return labelToProcessedEntity[label] ~= nil
 end
 
-local function addProcessedEntity(entities, entity, mentionedRefs)
-    if not IsEntityInProcessed(GetMainLabel(entity)) then
+local function addPrimariesWhenMentioned(entities, mentionedRefsHere, allMentionedRefs)
+    for key, label in pairs(mentionedRefsHere) do
+        local mentionedEntity = GetEntity(label)
+        local typeName = mentionedEntity["type"]
+        if IsIn(typeName, PrimaryRefWhenMentionedTypes) then
+            AddProcessedEntity(entities, mentionedEntity, allMentionedRefs)
+        end
+    end
+end
+
+function AddProcessedEntity(entities, entity, allMentionedRefs)
+    if IsEntityShown(entity) and not IsEntityInProcessed(GetMainLabel(entity)) then
         local newEntity = DeepCopy(entity)
         MarkDead(newEntity)
         MarkSecret(newEntity)
@@ -110,14 +120,8 @@ local function addProcessedEntity(entities, entity, mentionedRefs)
         entities[#entities + 1] = newEntity
         registerProcessedEntityLabels(GetLabels(newEntity), newEntity)
         local mentionedRefsHere = ScanContentForMentionedRefs(newEntity)
-        for key, label in pairs(mentionedRefsHere) do
-            local mentionedEntity = GetMutableEntityFromAll(label)
-            local typeName = mentionedEntity["type"]
-            if IsEntityShown(mentionedEntity) and IsIn(typeName, PrimaryRefWhenMentionedTypes) then
-                addProcessedEntity(entities, mentionedEntity, mentionedRefs)
-            end
-        end
-        UniqueAppend(mentionedRefs, mentionedRefsHere)
+        addPrimariesWhenMentioned(entities, mentionedRefsHere, allMentionedRefs)
+        UniqueAppend(allMentionedRefs, mentionedRefsHere)
     end
 end
 
@@ -126,11 +130,11 @@ function ProcessEntities(entitiesIn)
     labelToProcessedEntity = {}
     local entitiesOut = {}
     local primaryEntities = GetEntitiesIf(IsPrimary, entitiesIn)
-    local visibleEntities = GetEntitiesIf(IsEntityShown, primaryEntities)
     local mentionedRefsHere = DeepCopy(MentionedRefs)
-    for key, entity in pairs(visibleEntities) do
+    addPrimariesWhenMentioned(entitiesOut, mentionedRefsHere, mentionedRefsHere)
+    for key, entity in pairs(primaryEntities) do
         StartBenchmarking("addProcessedEntity")
-        addProcessedEntity(entitiesOut, entity, mentionedRefsHere)
+        AddProcessedEntity(entitiesOut, entity, mentionedRefsHere)
         StopBenchmarking("addProcessedEntity")
     end
     StopBenchmarking("ProcessEntities")

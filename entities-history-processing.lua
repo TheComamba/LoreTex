@@ -37,15 +37,6 @@ local function isHistoryShown(historyItem)
     end
 end
 
-local function getHistory(entity)
-    local history = entity[Tr("history")]
-    if IsEmpty(history) then
-        return {}
-    else
-        return history
-    end
-end
-
 local function historyEventString(yearAndDay, history)
     local year = yearAndDay[1]
     local day = yearAndDay[2]
@@ -79,12 +70,6 @@ local function historyItemToString(historyItem)
     return historyEventString(yearAndDay, history)
 end
 
-local function addHistoryToEntity(historyItem, entity)
-    local history = getHistory(entity)
-    Append(history, historyItemToString(historyItem))
-    SetDescriptor(entity, Tr("history"), history)
-end
-
 local function sortHistoryItemsChronologically(a, b)
     if a["year"] ~= b["year"] then
         return a["year"] < b["year"]
@@ -104,11 +89,13 @@ local function addHistoryDescriptors(entity)
         historyItems = {}
     end
     table.sort(historyItems, sortHistoryItemsChronologically)
+    local processedHistory = {}
     for key, historyItem in pairs(historyItems) do
         if isHistoryShown(historyItem) then
-            addHistoryToEntity(historyItem, entity)
+            Append(processedHistory, historyItemToString(historyItem))
         end
     end
+    SetDescriptor(entity, Tr("history"), processedHistory)
     StopBenchmarking("addHistoryDescriptors")
 end
 

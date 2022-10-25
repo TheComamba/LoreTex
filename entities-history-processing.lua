@@ -1,14 +1,5 @@
 local function isConcernsUnrevealed(historyItem)
-    if historyItem == nil then
-        LogError("called with nil value")
-        return false
-    end
-    local concerns = historyItem["concerns"]
-    if concerns == nil then
-        LogError("This history item concerns nobody:" .. DebugPrint(historyItem))
-        return false
-    end
-    for key, label in pairs(concerns) do
+    for key, label in pairs(historyItem["concerns"]) do
         local entity = GetEntity(label)
         if IsEntitySecret(entity) and not IsRevealed(entity) then
             return true
@@ -18,16 +9,7 @@ local function isConcernsUnrevealed(historyItem)
 end
 
 local function isAllConcnernsShown(historyItem)
-    if historyItem == nil then
-        LogError("called with nil value")
-        return false
-    end
-    local concerns = historyItem["concerns"]
-    if concerns == nil then
-        LogError("This history item concerns nobody: " .. DebugPrint(historyItem))
-        return false
-    end
-    for key, label in pairs(concerns) do
+    for key, label in pairs(historyItem["concerns"]) do
         if not IsEntityShown(GetEntity(label)) then
             return false
         end
@@ -36,7 +18,9 @@ local function isAllConcnernsShown(historyItem)
 end
 
 local function isHistoryShown(historyItem)
-    if not isAllConcnernsShown(historyItem) then
+    if IsEmpty(historyItem) then
+        return false
+    elseif not isAllConcnernsShown(historyItem) then
         return false
     elseif not IsShowFuture and historyItem["year"] > CurrentYearVin then
         return false
@@ -62,9 +46,42 @@ local function getHistory(entity)
     end
 end
 
+local function historyEventString(yearAndDay, history)
+	local year = yearAndDay[1]
+	local day = yearAndDay[2]
+	local out = AnnoString(year)
+	if day > 0 then
+		out = out .. ", " .. Tr("day") .. " " .. Date(day, {})
+	end
+	return out .. ": " .. history[year][day]
+end
+
+local function historyItemToString(historyItem)
+	local year = historyItem["year"]
+	local day = historyItem["day"]
+	local event = historyItem["event"]
+	local history = {}
+	if historyItem["isSecret"] ~= nil and historyItem["isSecret"] then
+		event = "(" .. CapFirst(Tr("secret")) .. ") " .. event
+	end
+	if history[year] == nil then
+		history[year] = {}
+	end
+	if day == nil then
+		day = 0
+	end
+	if history[year][day] == nil then
+		history[year][day] = event
+	else
+		history[year][day] = history[year][day] .. [[\\]] .. event
+	end
+	local yearAndDay = { year, day }
+	return historyEventString(yearAndDay, history)
+end
+
 local function addHistoryToEntity(historyItem, entity)
     local history = getHistory(entity)
-    Append(history, AddHistoryItemToHistory(historyItem))
+    Append(history, historyItemToString(historyItem))
     SetDescriptor(entity, Tr("history"), history)
 end
 

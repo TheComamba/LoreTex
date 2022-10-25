@@ -1,28 +1,3 @@
-Append(ProtectedDescriptors, { "historyItems" })
-
-function AddHistoryItemToHistory(historyItem, historyInput)
-	local year = historyItem["year"]
-	local day = historyItem["day"]
-	local event = historyItem["event"]
-	local history = {}
-	if historyItem["isSecret"] ~= nil and historyItem["isSecret"] then
-		event = "(" .. CapFirst(Tr("secret")) .. ") " .. event
-	end
-	if history[year] == nil then
-		history[year] = {}
-	end
-	if day == nil then
-		day = 0
-	end
-	if history[year][day] == nil then
-		history[year][day] = event
-	else
-		history[year][day] = history[year][day] .. [[\\]] .. event
-	end
-	local yearAndDay = {year, day}
-	return HistoryEventString(yearAndDay, history)
-end
-
 function EmptyHistoryItem()
 	local item = {}
 	item["originator"] = nil
@@ -93,11 +68,7 @@ end
 
 function ProcessEvent(item)
 	StartBenchmarking("ProcessEvent")
-	if item["year"] == nil then
-		LogError("This event has no year:" .. DebugPrint(item))
-		StopBenchmarking("ProcessEvent")
-		return
-	end
+
 	item["birthof"] = ScanForCmd(item["event"], "birthof")
 	item["deathof"] = ScanForCmd(item["event"], "deathof")
 	if item["isConcernsOthers"] then
@@ -117,15 +88,13 @@ function ProcessEvent(item)
 	addSpecialyearsToEntities("born", item["year"], item["birthof"])
 	addSpecialyearsToEntities("died", item["year"], item["deathof"])
 
-	StopBenchmarking("ProcessEvent")
-end
 
-function HistoryEventString(yearAndDay, history)
-	local year = yearAndDay[1]
-	local day = yearAndDay[2]
-	local out = AnnoString(year)
-	if day > 0 then
-		out = out .. ", " .. Tr("day") .. " " .. Date(day, {})
+	if item["year"] == nil then
+		LogError("This event has no year:" .. DebugPrint(item))
 	end
-	return out .. ": " .. history[year][day]
+	if IsEmpty(item["concerns"]) then
+		LogError("This history item concerns nobody:" .. DebugPrint(item))
+	end
+
+	StopBenchmarking("ProcessEvent")
 end

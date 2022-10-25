@@ -2,7 +2,7 @@ AllEntities = {}
 NotYetFoundEntities = {}
 local labelToEntity = {}
 IsShowSecrets = false
-ProtectedDescriptors = { "name", "shortname", "type", "isSecret", "labels", "parents", "children" }
+ProtectedDescriptors = { "name", "shortname", "type", "isSecret", "labels", "parents", "children", "historyItems" }
 RevealedLabels = {}
 
 function ResetEntities()

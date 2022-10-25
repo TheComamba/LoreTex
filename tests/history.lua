@@ -2,16 +2,16 @@ NewEntity("places", "test-1", nil, "Test 1")
 if true then
     local hist = EmptyHistoryItem()
     hist["originator"] = "test-1"
-    SetYear(hist, -20)
-    hist["event"] = [[Some event.]]
+    SetYear(hist, -10)
+    hist["event"] = [[Event that concerns \reference{test-1}, but not \reference{test-2}.]]
+    hist["isConcernsOthers"] = false
     ProcessEvent(hist)
 end
 if true then
     local hist = EmptyHistoryItem()
     hist["originator"] = "test-1"
-    SetYear(hist, -10)
-    hist["event"] = [[Event that concerns \reference{test-1}, but not \reference{test-2}.]]
-    hist["isConcernsOthers"] = false
+    SetYear(hist, -20)
+    hist["event"] = [[Some event.]]
     ProcessEvent(hist)
 end
 if true then

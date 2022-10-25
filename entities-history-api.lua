@@ -89,8 +89,12 @@ function ProcessEvent(item)
 	addSpecialyearsToEntities("died", item["year"], item["deathof"])
 
 
-	if item["year"] == nil then
+	if IsEmpty(item["year"]) then
 		LogError("This event has no year:" .. DebugPrint(item))
+		item["year"] = 1e6
+	end
+	if IsEmpty(item["day"]) then
+		item["day"] = nil
 	end
 	if IsEmpty(item["concerns"]) then
 		LogError("This history item concerns nobody:" .. DebugPrint(item))

@@ -46,7 +46,7 @@ local function eventToString(year, day, event, isSecret)
     if year ~= nil then
         Append(out, AnnoString(year))
     end
-    if day ~= nil and day > 0 then
+    if day ~= nil then
         Append(out, ", ")
         Append(out, Tr("day"))
         Append(out, " ")

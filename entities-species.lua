@@ -166,7 +166,6 @@ local function addLifestageHistoryItems(entity)
 				Append(event, ".")
 				local item = {}
 				SetYear(item, year)
-				item["day"] = 0
 				item["event"] = table.concat(event)
 				item["concerns"] = { label }
 				if entity["historyItems"] == nil then

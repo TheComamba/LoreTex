@@ -1,3 +1,4 @@
+local historyItemCounter = 1
 function EmptyHistoryItem()
 	local item = {}
 	item["originator"] = nil
@@ -7,6 +8,8 @@ function EmptyHistoryItem()
 	item["event"] = ""
 	item["isSecret"] = false
 	item["isConcernsOthers"] = true
+	item["counter"] = historyItemCounter
+	historyItemCounter = historyItemCounter + 1
 	return item
 end
 
@@ -98,6 +101,12 @@ function ProcessEvent(item)
 	end
 	if IsEmpty(item["day"]) then
 		item["day"] = nil
+	end
+	if IsEmpty(item["birthof"]) then
+		item["birthof"] = nil
+	end
+	if IsEmpty(item["deathof"]) then
+		item["deathof"] = nil
 	end
 	if IsEmpty(item["concerns"]) then
 		LogError("This history item concerns nobody:" .. DebugPrint(item))

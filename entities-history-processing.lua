@@ -54,12 +54,16 @@ end
 local function sortHistoryItemsChronologically(a, b)
     if a["year"] ~= b["year"] then
         return a["year"] < b["year"]
+    elseif a["day"] == nil and b["day"] == nil then
+        return a["counter"] < b["counter"]
     elseif b["day"] == nil then
         return false
     elseif a["day"] == nil then
         return true
-    else
+    elseif a["day"] ~= b["day"] then
         return a["day"] < b["day"]
+    else
+        return a["counter"] < b["counter"]
     end
 end
 

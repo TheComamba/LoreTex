@@ -37,7 +37,6 @@ if true then
     hist["event"] = [[Long time ago.]]
     ProcessEvent(hist)
 end
-
 if true then
     local hist = EmptyHistoryItem()
     hist["originator"] = "test-1"
@@ -184,9 +183,9 @@ local function generateExpected()
         Tr("years-ago", { 5 }) ..
         [[):\\Event that concerns \nameref{test-1}, but not \nameref{test-2}.\notconcerns{test-2}]])
 
-    
-        Append(out, [[\item{} -2 Vin, ]] .. Tr("day") .. [[ 5 (]] .. Tr("years-ago", {2}) .. [[):\\Event with day.]])
-        Append(out, [[\item{} Event on same day.]])
+
+    Append(out, [[\item{} -2 Vin, ]] .. Tr("day") .. [[ 5 (]] .. Tr("years-ago", { 2 }) .. [[):\\Event with day.]])
+    Append(out, [[\item{} Event on same day.]])
 
     Append(out, [[\item{} -1 Vin (]] .. Tr("last-year") .. [[):\\ Event last year.]])
     Append(out, [[\item{} -1 Vin, ]] .. Tr("day") .. [[ 1 (]] .. Tr("last-year") .. [[):\\Event last year, with day.]])
@@ -223,7 +222,7 @@ local function generateExpected()
 
 
     if IsShowFuture then
-        Append(out, [[\item{} 0 Vin (]] .. Tr("next-year") .. [[):\\Event next year.]])
+        Append(out, [[\item{} 1 Vin (]] .. Tr("next-year") .. [[):\\Event next year.]])
         if CurrentDay == 0 then
             Append(out,
                 [[\item{} 1 Vin, ]] ..

@@ -1,4 +1,5 @@
-CurrentYearVin = 0
+CurrentYear = 0
+CurrentDay = 0
 DaysPerYear = 364
 IsShowFuture = true
 
@@ -6,6 +7,14 @@ YearFmtVin = "Vin"
 YearFmtDjo = [[\'Et]]
 YearFmtNar = "NM"
 YearFmt = YearFmtVin
+
+local function isCurrentDaySet()
+    return CurrentDay > 0
+end
+
+local function isDaysPerYearSet()
+    return DaysPerYear > 0
+end
 
 function ConvertYearToVin(year, fmt)
     if fmt == YearFmtVin then
@@ -33,12 +42,54 @@ function ConvertYearFromVin(year, fmt)
     end
 end
 
+local function daysAgo(day, year)
+    if isCurrentDaySet() and day ~= nil then
+        return CurrentDay - day + (CurrentYear - year) * DaysPerYear
+    else
+        return (CurrentYear - year) * DaysPerYear
+    end
+end
+
+local function timeDiffString(day, year)
+    local timeDiffInDays = daysAgo(day, year)
+    if not isDaysPerYearSet() then
+        LogError("Cannot work with a year with 0 days.")
+        return
+    end
+    local timeDiffInYears = math.floor(timeDiffInDays / DaysPerYear)
+    if timeDiffInYears < 1 and isCurrentDaySet() then
+        if timeDiffInDays == 0 then
+            return Tr("today")
+        elseif timeDiffInDays == 1 then
+            return Tr("yesterday")
+        elseif timeDiffInDays == -1 then
+            return Tr("tomorrow")
+        elseif timeDiffInDays > 1 then
+            return Tr("days-ago", { timeDiffInDays })
+        else
+            return Tr("in-days", { math.abs(timeDiffInDays) })
+        end
+    else
+        if timeDiffInYears == 0 then
+            return Tr("this-year")
+        elseif timeDiffInYears == 1 then
+            return Tr("last-year")
+        elseif timeDiffInYears == -1 then
+            return Tr("next-year")
+        elseif timeDiffInYears > 1 then
+            return Tr("years-ago", { timeDiffInYears })
+        else
+            return Tr("in-years", { math.abs(timeDiffInYears) })
+        end
+    end
+end
+
 function AnnoString(yearIn, fmt)
     local year = tonumber(yearIn)
     if year == nil then
         LogError("Could  not convert year string \"" .. yearIn .. "\" to number.")
     end
-    local diff = CurrentYearVin - year
+    local diff = CurrentYear - year
 
     if fmt == nil then
         fmt = YearFmt
@@ -49,17 +100,9 @@ function AnnoString(yearIn, fmt)
     Append(out, tostring(year))
     Append(out, " ")
     Append(out, fmt)
-    if diff == 0 then
-        Append(out, " (" .. Tr("this-year") .. ")")
-    elseif diff == 1 then
-        Append(out, " (" .. Tr("last-year") .. ")")
-    elseif diff == -1 then
-        Append(out, " (" .. Tr("next-year") .. ")")
-    elseif diff > 0 then
-        Append(out, " (" .. Tr("years-ago", { diff }) .. ")")
-    elseif diff < 0 then
-        Append(out, " (" .. Tr("in-years", { math.abs(diff) }) .. ")")
-    end
+    Append(out, " (")
+    Append(out, timeDiffString(nil, year))
+    Append(out, ")")
     return table.concat(out)
 end
 

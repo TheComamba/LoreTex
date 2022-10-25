@@ -33,6 +33,14 @@ end
 if true then
     local hist = EmptyHistoryItem()
     hist["originator"] = "test-1"
+    SetYear(hist, -987654321)
+    hist["event"] = [[Long time ago.]]
+    ProcessEvent(hist)
+end
+
+if true then
+    local hist = EmptyHistoryItem()
+    hist["originator"] = "test-1"
     SetYear(hist, -2)
     SetDay(hist, 5)
     hist["event"] = [[Event with day.]]
@@ -176,7 +184,20 @@ local function generateExpected()
     return out
 end
 
-CurrentYearVin = 0
+CurrentYear = 0
+CurrentDay = 0
+
+IsShowFuture = false
+local out = AutomatedChapters()
+local expected = generateExpected()
+Assert("history-events-no-future", expected, out)
+
+IsShowFuture = true
+out = AutomatedChapters()
+expected = generateExpected()
+Assert("history-events-with-future", expected, out)
+
+
 CurrentDay = 10
 
 IsShowFuture = false

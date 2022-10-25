@@ -19,13 +19,13 @@ local function entityQualifiersString(child, parent, relationship)
     end
     local birthyearstr = child["born"]
     local birthyear = tonumber(birthyearstr)
-    if not IsEmpty(birthyear) and birthyear <= CurrentYearVin then
+    if not IsEmpty(birthyear) and birthyear <= CurrentYear then
         birthyear = ConvertYearFromVin(birthyear, YearFmt)
         Append(content, TexCmd("textborn") .. birthyear)
     end
     local deathyearstr = child["died"]
     local deathyear = tonumber(deathyearstr)
-    if not IsEmpty(deathyear) and deathyear <= CurrentYearVin then
+    if not IsEmpty(deathyear) and deathyear <= CurrentYear then
         deathyear = ConvertYearFromVin(deathyear, YearFmt)
         Append(content, TexCmd("textdied") .. deathyear)
     end

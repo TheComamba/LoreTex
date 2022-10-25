@@ -258,7 +258,7 @@ local function generateExpected()
     return out
 end
 
-CurrentYearVin = 0
+CurrentYear = 0
 local out = {}
 local expected = {}
 

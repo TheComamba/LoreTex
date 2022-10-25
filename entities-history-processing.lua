@@ -22,7 +22,7 @@ local function isHistoryShown(historyItem)
         return false
     elseif not isAllConcnernsShown(historyItem) then
         return false
-    elseif not IsShowFuture and historyItem["year"] > CurrentYearVin then
+    elseif not IsShowFuture and historyItem["year"] > CurrentYear then
         return false
     elseif not IsShowSecrets then
         if historyItem["isSecret"] ~= nil and historyItem["isSecret"] then

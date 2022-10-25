@@ -7,7 +7,8 @@ local numFailed = 0
 local function resetEnvironment()
     ResetEntities()
     ResetRefs()
-    CurrentYearVin = 0
+    CurrentYear = 0
+    CurrentDay = 0
     IsShowFuture = true
     IsShowSecrets = false
 end

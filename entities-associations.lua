@@ -1,3 +1,7 @@
+local function compareByNameOfFirstElement(a, b)
+    return CompareByName(a[1], b[1])
+end
+
 function AddParentDescriptorsToChild(child)
     StartBenchmarking("AddParentDescriptorsToChild")
     local parentList = {}
@@ -6,6 +10,7 @@ function AddParentDescriptorsToChild(child)
         if type(parentsAndRelationships) == "string" then
             parentsAndRelationships = { parentsAndRelationships }
         end
+        table.sort(parentsAndRelationships, compareByNameOfFirstElement)
         for key, parentAndRelationship in pairs(parentsAndRelationships) do
             if type(parentAndRelationship) == "string" then
                 parentAndRelationship = { parentAndRelationship }

@@ -133,6 +133,7 @@ local function affiliationParagraph()
     local out = {}
     Append(out, [[\paragraph{]] .. CapFirst(Tr("affiliations")) .. [[}]])
     Append(out, [[\begin{itemize}]])
+    Append(out, [[\item{} ]] .. CapFirst(Tr("member")) .. [[ ]] .. Tr("of") .. [[ \nameref{normal-orga}.]])
     Append(out,
         [[\item{} (]] ..
         CapFirst(Tr("secret")) .. [[) ]] .. CapFirst(Tr("member")) .. [[ ]] .. Tr("of") .. [[ \nameref{revealed-orga}.]])
@@ -142,7 +143,6 @@ local function affiliationParagraph()
             CapFirst(Tr("secret")) ..
             [[) ]] .. CapFirst(Tr("member")) .. [[ ]] .. Tr("of") .. [[ \nameref{secret-orga}.]])
     end
-    Append(out, [[\item{} ]] .. CapFirst(Tr("member")) .. [[ ]] .. Tr("of") .. [[ \nameref{normal-orga}.]])
     if IsShowFuture then
         Append(out, [[\item{} ]] .. CapFirst(Tr("member")) .. [[ ]] .. Tr("of") .. [[ \nameref{unborn-orga}.]])
     end

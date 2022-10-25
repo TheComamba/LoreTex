@@ -73,9 +73,9 @@ local function addChildrenDescriptorsToParent(parent)
     StartBenchmarking("addChildrenDescriptorsToParent")
     local childrenLabels = parent["children"]
     if childrenLabels == nil then
-        StopBenchmarking("addChildrenDescriptorsToParent")
-        return
+        childrenLabels = {}
     end
+    table.sort(childrenLabels, CompareByName)
     local parentLabels = GetLabels(parent)
     for key, childLabel in pairs(childrenLabels) do
         local child = GetEntity(childLabel)

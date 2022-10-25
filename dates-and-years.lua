@@ -1,6 +1,5 @@
 CurrentYearVin = 0
-PrintHistoryYear = 0
-PrintHistoryDay = 0
+DaysPerYear = 364
 IsShowFuture = true
 
 YearFmtVin = "Vin"
@@ -75,8 +74,6 @@ end
 function AnnoNar(year)
     tex.print(AnnoString(ConvertYearToVin(year, YearFmtNar)))
 end
-
-DaysPerYear = 364
 
 ElvenMonthsAndFirstDays = {
     { [[Rin]], 1 },

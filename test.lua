@@ -8,8 +8,6 @@ local function resetEnvironment()
     ResetEntities()
     ResetRefs()
     CurrentYearVin = 0
-    PrintHistoryYear = 0
-    PrintHistoryDay = 0
     IsShowFuture = true
     IsShowSecrets = false
 end

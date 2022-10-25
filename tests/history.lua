@@ -21,11 +21,122 @@ if true then
     hist["event"] = [[Event in the future.]]
     ProcessEvent(hist)
 end
+
 NewEntity("places", "test-2", nil, "Test 2")
 if true then
     local hist = EmptyHistoryItem()
     SetYear(hist, -5)
     hist["event"] = [[Event that concerns \reference{test-1}, but not \reference{test-2}.\notconcerns{test-2}]]
+    ProcessEvent(hist)
+end
+
+if true then
+    local hist = EmptyHistoryItem()
+    hist["originator"] = "test-1"
+    SetYear(hist, -2)
+    SetDay(hist, 5)
+    hist["event"] = [[Event with day.]]
+    ProcessEvent(hist)
+end
+if true then
+    local hist = EmptyHistoryItem()
+    hist["originator"] = "test-1"
+    SetYear(hist, -2)
+    SetDay(hist, 5)
+    hist["event"] = [[Event on same day.]]
+    ProcessEvent(hist)
+end
+if true then
+    local hist = EmptyHistoryItem()
+    hist["originator"] = "test-1"
+    SetYear(hist, -1)
+    hist["event"] = [[Event last year.]]
+    ProcessEvent(hist)
+end
+if true then
+    local hist = EmptyHistoryItem()
+    hist["originator"] = "test-1"
+    SetYear(hist, -1)
+    SetDay(hist, 1)
+    hist["event"] = [[Event last year, with day.]]
+    ProcessEvent(hist)
+end
+if true then
+    local hist = EmptyHistoryItem()
+    hist["originator"] = "test-1"
+    SetYear(hist, -1)
+    SetDay(hist, 100)
+    hist["event"] = [[Event less than a year ago.]]
+    ProcessEvent(hist)
+end
+if true then
+    local hist = EmptyHistoryItem()
+    hist["originator"] = "test-1"
+    SetYear(hist, 0)
+    hist["event"] = [[Event this year.]]
+    ProcessEvent(hist)
+end
+if true then
+    local hist = EmptyHistoryItem()
+    hist["originator"] = "test-1"
+    SetYear(hist, 0)
+    SetDay(hist, 5)
+    hist["event"] = [[Event this year, with day.]]
+    ProcessEvent(hist)
+end
+if true then
+    local hist = EmptyHistoryItem()
+    hist["originator"] = "test-1"
+    SetYear(hist, 0)
+    SetDay(hist, 9)
+    hist["event"] = [[Event yesterday.]]
+    ProcessEvent(hist)
+end
+if true then
+    local hist = EmptyHistoryItem()
+    hist["originator"] = "test-1"
+    SetYear(hist, 0)
+    SetDay(hist, 10)
+    hist["event"] = [[Event today.]]
+    ProcessEvent(hist)
+end
+if true then
+    local hist = EmptyHistoryItem()
+    hist["originator"] = "test-1"
+    SetYear(hist, 0)
+    SetDay(hist, 11)
+    hist["event"] = [[Event tomorrow.]]
+    ProcessEvent(hist)
+end
+if true then
+    local hist = EmptyHistoryItem()
+    hist["originator"] = "test-1"
+    SetYear(hist, 0)
+    SetDay(hist, 15)
+    hist["event"] = [[Event this year, with day in future.]]
+    ProcessEvent(hist)
+end
+if true then
+    local hist = EmptyHistoryItem()
+    hist["originator"] = "test-1"
+    SetYear(hist, 1)
+    SetDay(hist, 5)
+    hist["event"] = [[Event in less than a year.]]
+    ProcessEvent(hist)
+end
+if true then
+    local hist = EmptyHistoryItem()
+    hist["originator"] = "test-1"
+    SetYear(hist, 1)
+    hist["event"] = [[Event next year.]]
+    ProcessEvent(hist)
+end
+if true then
+    local hist = EmptyHistoryItem()
+    hist["originator"] = "test-1"
+    SetYear(hist, 1)
+    SetDay(hist, 15)
+    hist["event"] = [[Event next year, with day.]]
     ProcessEvent(hist)
 end
 
@@ -64,6 +175,9 @@ local function generateExpected()
     Append(out, [[\hspace{1cm}]])
     return out
 end
+
+CurrentYearVin = 0
+CurrentDay = 10
 
 IsShowFuture = false
 local out = AutomatedChapters()

@@ -25,8 +25,8 @@ local expected = {
     [[\paragraph{]] .. CapFirst(Tr("history")) .. [[}]],
     [[\begin{itemize}]],
     [[\item{} -8 Vin (]] ..
-        Tr("years-ago", { 8 }) .. [[): \nameref{test-npc} ]] .. Tr("is") .. [[ ]] .. Tr("juvenile") .. [[.]],
-    [[\item{} 0 Vin (]] .. Tr("this-year") .. [[): \nameref{test-npc} ]] .. Tr("is") .. [[ ]] .. Tr("young") .. [[.]],
+        Tr("years-ago", { 8 }) .. [[):\\ \nameref{test-npc} ]] .. Tr("is") .. [[ ]] .. Tr("juvenile") .. [[.]],
+    [[\item{} 0 Vin (]] .. Tr("this-year") .. [[):\\ \nameref{test-npc} ]] .. Tr("is") .. [[ ]] .. Tr("young") .. [[.]],
     [[\end{itemize}]],
     [[\chapter{]] .. CapFirst(Tr("peoples")) .. [[}]],
     [[\section{]] .. CapFirst(Tr("species")) .. [[}]],

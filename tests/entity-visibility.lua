@@ -175,7 +175,7 @@ local function generateExpected()
         Append(out, [[\label{unborn-orga}]])
         Append(out, [[\paragraph{]] .. CapFirst(Tr("history")) .. [[}]])
         Append(out, [[\begin{itemize}]])
-        Append(out, [[\item{} 10 Vin (]] .. Tr("in-years", { 10 }) .. [[): Founded.\birthof{unborn-orga}]])
+        Append(out, [[\item{} 10 Vin (]] .. Tr("in-years", { 10 }) .. [[):\\ Founded.\birthof{unborn-orga}]])
         Append(out, [[\end{itemize}]])
         Append(out, itemsParagraph())
     end
@@ -199,19 +199,19 @@ local function generateExpected()
     Append(out, affiliationParagraph())
     Append(out, [[\paragraph{]] .. CapFirst(Tr("history")) .. [[}]])
     Append(out, [[\begin{itemize}]])
-    Append(out, [[\item{} -10 Vin (]] .. Tr("years-ago", { 10 }) .. [[): Normal event]])
+    Append(out, [[\item{} -10 Vin (]] .. Tr("years-ago", { 10 }) .. [[):\\ Normal event]])
     if IsShowSecrets then
-        Append(out, [[\item{} -9 Vin (]] .. Tr("years-ago", { 9 }) .. [[): Concerns \nameref{secret}]])
+        Append(out, [[\item{} -9 Vin (]] .. Tr("years-ago", { 9 }) .. [[):\\ Concerns \nameref{secret}]])
     end
     Append(out,
-        [[\item{} -8 Vin (]] .. Tr("years-ago", { 8 }) .. [[): Concerns \nameref{revealed}]])
+        [[\item{} -8 Vin (]] .. Tr("years-ago", { 8 }) .. [[):\\ Concerns \nameref{revealed}]])
     if IsShowSecrets then
-        Append(out, [[\item{} -7 Vin (]] .. Tr("years-ago", { 7 }) .. [[): Concerns \nameref{normal}]])
+        Append(out, [[\item{} -7 Vin (]] .. Tr("years-ago", { 7 }) .. [[):\\ Concerns \nameref{normal}]])
     end
-    Append(out, [[\item{} -6 Vin (]] .. Tr("years-ago", { 6 }) .. [[): Concerns \nameref{normal}]])
+    Append(out, [[\item{} -6 Vin (]] .. Tr("years-ago", { 6 }) .. [[):\\ Concerns \nameref{normal}]])
     if IsShowSecrets then
         Append(out,
-            [[\item{} -5 Vin (]] .. Tr("years-ago", { 5 }) .. [[): (]] .. CapFirst(Tr("secret")) .. [[) Secret event]])
+            [[\item{} -5 Vin (]] .. Tr("years-ago", { 5 }) .. [[):\\ (]] .. CapFirst(Tr("secret")) .. [[) Secret event]])
     end
     Append(out, [[\end{itemize}]])
 
@@ -220,8 +220,8 @@ local function generateExpected()
     Append(out, affiliationParagraph())
     Append(out, [[\paragraph{]] .. CapFirst(Tr("history")) .. [[}]])
     Append(out, [[\begin{itemize}]])
-    Append(out, [[\item{} -8 Vin (]] .. Tr("years-ago", { 8 }) .. [[): Concerns \nameref{revealed}]])
-    Append(out, [[\item{} -6 Vin (]] .. Tr("years-ago", { 6 }) .. [[): Concerns \nameref{normal}]])
+    Append(out, [[\item{} -8 Vin (]] .. Tr("years-ago", { 8 }) .. [[):\\ Concerns \nameref{revealed}]])
+    Append(out, [[\item{} -6 Vin (]] .. Tr("years-ago", { 6 }) .. [[):\\ Concerns \nameref{normal}]])
     Append(out, [[\end{itemize}]])
 
     if IsShowFuture then
@@ -230,7 +230,7 @@ local function generateExpected()
         Append(out, affiliationParagraph())
         Append(out, [[\paragraph{]] .. CapFirst(Tr("history")) .. [[}]])
         Append(out, [[\begin{itemize}]])
-        Append(out, [[\item{} 10 Vin (]] .. Tr("in-years", { 10 }) .. [[): Created.\birthof{unborn}]])
+        Append(out, [[\item{} 10 Vin (]] .. Tr("in-years", { 10 }) .. [[):\\ Created.\birthof{unborn}]])
         Append(out, [[\end{itemize}]])
     end
 

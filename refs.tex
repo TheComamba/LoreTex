@@ -1,7 +1,3 @@
-\begin{luacode*}
-    dofile(RelativePath .. "/refs.lua")
-\end{luacode*}
-
 \newcommand{\makeEntityPrimary}[1]{\directlua{AddRef("#1", PrimaryRefs)}}
 \newcommand{\makeAllEntitiesOfTypePrimary}[1]{\directlua{MakePrimaryIf(Bind(IsType, "#1"))}}
 \newcommand{\mention}[1]{\directlua{AddRef("#1", MentionedRefs)}}

@@ -10,7 +10,6 @@ local function resetEnvironment()
     CurrentYearVin = 0
     PrintHistoryYear = 0
     PrintHistoryDay = 0
-    DefaultLocation = ""
     IsShowFuture = true
     IsShowSecrets = false
 end
@@ -153,13 +152,18 @@ function RunTests(testFiles)
 
     for key, testfile in pairs(testFiles) do
         resetEnvironment()
+        PushScopedVariables()
         SelectLanguage("english")
         local currentlyFailed = numFailed
         dofile(RelativePath .. "/tests/" .. testfile .. ".lua")
+        PopScopedVariables()
+
         if currentlyFailed == numFailed then
             resetEnvironment()
+            PushScopedVariables()
             RandomiseDictionary()
             dofile(RelativePath .. "/tests/" .. testfile .. ".lua")
+            PopScopedVariables()
         end
     end
 

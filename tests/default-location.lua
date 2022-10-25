@@ -2,8 +2,16 @@ NewEntity("places", "test-place-1", nil, "Test Place 1")
 Assert("Default Location Place 1", nil, CurrentEntity()["location"])
 NewCharacter("test-char-1", nil, "Test Char 1")
 Assert("Default Location Char 1", nil, CurrentEntity()["location"])
-DefaultLocation = "lalaland"
+
+PushScopedVariables()
+SetScopedVariable("DefaultLocation", "lalaland")
 NewEntity("places", "test-place-2", nil, "Test Place 2")
 Assert("Default Location Place 2", "lalaland", CurrentEntity()["location"])
 NewCharacter("test-char-2", nil, "Test Char 2")
 Assert("Default Location Char 2", "lalaland", CurrentEntity()["location"])
+PopScopedVariables()
+
+NewEntity("places", "test-place-3", nil, "Test Place 3")
+Assert("Default Location Place 3", nil, CurrentEntity()["location"])
+NewCharacter("test-char-3", nil, "Test Char 3")
+Assert("Default Location Char 3", nil, CurrentEntity()["location"])

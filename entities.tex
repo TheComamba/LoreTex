@@ -13,10 +13,6 @@
 	dofile(RelativePath .. "/entities-types.lua")
 \end{luacode*}
 
-\newcommand{\setDefaultLocation}[1]{
-	\directlua{DefaultLocation = "#1"}
-}
-
 \newcommand{\newEntity}[4]{
 	\directlua{
 		NewEntity("#1","#2", [[\detokenize{#3}]], [[\detokenize{#4}]])

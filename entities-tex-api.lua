@@ -126,8 +126,9 @@ function NewEntity(type, label, shortname, name)
     entity["labels"] = { label }
     entity["shortname"] = shortname
     entity["name"] = name
-    if not IsEmpty(DefaultLocation) then
-        SetLocation(entity, DefaultLocation)
+    local defaultLocation = GetScopedVariable("DefaultLocation")
+    if not IsEmpty(defaultLocation) then
+        SetLocation(entity, defaultLocation)
     end
     RegisterEntityLabels(label, entity)
     AddDescriptorsFromNotYetFound(entity)

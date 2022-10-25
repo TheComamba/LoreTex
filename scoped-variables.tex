@@ -8,3 +8,5 @@
     \directlua{ LoadChildFile( [[#1]], [[#2]]) }
     \directlua{ PopScopedVariables() }
 }
+
+\newcommand{\setDefaultLocation}[1]{ \directlua{ SetScopedVariable( "DefaultLocation", "#1" ) } }

@@ -1,5 +1,4 @@
 Append(ProtectedDescriptors, { "location" })
-DefaultLocation = ""
 
 function IsLocationUnknown(entity)
     local locationLabel = entity["location"]

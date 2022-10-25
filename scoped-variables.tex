@@ -1,0 +1,10 @@
+\begin{luacode*}
+    dofile(RelativePath .. "/scoped-variables.lua")
+\end{luacode*}
+
+\newcommand{\setEntitiesPath}[1]{ \directlua{ SetScopedVariable( "FilepathToEntities", [[#1]] ) } }
+
+\newcommand{\loadChild}[2][]{
+    \directlua{ LoadChildFile( [[#1]], [[#2]]) }
+    \directlua{ PopScopedVariables() }
+}

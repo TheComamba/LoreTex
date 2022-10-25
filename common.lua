@@ -101,17 +101,14 @@ local function processLabelList(list, processor, additionalProcessorArg)
 	return out
 end
 
-function ListAll(list, processor, additionalProcessorArg)
+function ListAll(list, processor)
 	if #list == 0 then
-		return ""
-	end
-	if type(list[1]) ~= "table" then
-		table.sort(list, StrCmp)
+		return {}
 	end
 
-	local processedList = processLabelList(list, processor, additionalProcessorArg)
+	local processedList = processLabelList(list, processor)
 	if IsEmpty(processedList) then
-		return ""
+		return {}
 	end
 
 	local out = {}

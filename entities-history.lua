@@ -64,7 +64,7 @@ end
 
 local function addHistoryToEntity(historyItem, entity)
     local history = getHistory(entity)
-    AddHistoryItemToHistory(historyItem, history)
+    Append(history, AddHistoryItemToHistory(historyItem))
     SetDescriptor(entity, Tr("history"), history)
 end
 

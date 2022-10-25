@@ -84,9 +84,7 @@ function DescriptorsString(entity)
     table.sort(descriptorsList, StrCmp)
     for key, descriptor in pairs(descriptorsList) do
         Append(out, TexCmd("paragraph", CapFirst(descriptor)))
-        if descriptor == Tr("history") then
-            Append(out, ListHistory(entity[descriptor]))
-        elseif descriptor == HeightCaption then
+        if descriptor == HeightCaption then
             Append(out, HeightDescriptor(entity[descriptor]))
         elseif type(entity[descriptor]) == "string" then
             Append(out, entity[descriptor])
@@ -154,9 +152,11 @@ end
 
 local function PrintAllEntities(name, entities)
     local out = {}
-    if not IsEmpty(entities) then
+    local allLabels = getAllLabels(entities)
+    table.sort(allLabels, CompareByName)
+    if not IsEmpty(allLabels) then
         Append(out, TexCmd("subsection*", CapFirst(Tr("all")) .. " " .. CapFirst(name)))
-        Append(out, ListAll(getAllLabels(entities), NamerefString))
+        Append(out, ListAll(allLabels, NamerefString))
     end
     return out
 end

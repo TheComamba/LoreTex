@@ -10,6 +10,9 @@ end
 
 function SetScopedVariable(key, value)
     ScopedVariables[#ScopedVariables][key] = value
+    if IsEmpty(value) then
+        LogError("SetScopedVariable called with empty value for key \"" .. key .. "\". Rather call PopScopedVariables.")
+    end
 end
 
 function GetScopedVariable(key)

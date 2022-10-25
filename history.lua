@@ -1,9 +1,10 @@
 Append(ProtectedDescriptors, { "historyItems" })
 
-function AddHistoryItemToHistory(historyItem, history)
+function AddHistoryItemToHistory(historyItem, historyInput)
 	local year = historyItem["year"]
 	local day = historyItem["day"]
 	local event = historyItem["event"]
+	local history = {}
 	if historyItem["isSecret"] ~= nil and historyItem["isSecret"] then
 		event = "(" .. CapFirst(Tr("secret")) .. ") " .. event
 	end
@@ -18,6 +19,8 @@ function AddHistoryItemToHistory(historyItem, history)
 	else
 		history[year][day] = history[year][day] .. [[\\]] .. event
 	end
+	local yearAndDay = {year, day}
+	return HistoryEventString(yearAndDay, history)
 end
 
 function EmptyHistoryItem()
@@ -125,27 +128,4 @@ function HistoryEventString(yearAndDay, history)
 		out = out .. ", " .. Tr("day") .. " " .. Date(day, {})
 	end
 	return out .. ": " .. history[year][day]
-end
-
-function ListHistory(history)
-	local years = {}
-	for year, daysAndEvents in pairs(history) do
-		if year <= CurrentYearVin or IsShowFuture then
-			years[#years + 1] = year
-		end
-	end
-	table.sort(years)
-	local yearsAndDays = {}
-	for key1, year in pairs(years) do
-		local days = {}
-		for day, event in pairs(history[year]) do
-			days[#days + 1] = day
-		end
-		table.sort(days)
-		for key2, day in pairs(days) do
-			yearsAndDays[#yearsAndDays + 1] = { year, day }
-		end
-	end
-
-	return ListAll(yearsAndDays, HistoryEventString, history)
 end

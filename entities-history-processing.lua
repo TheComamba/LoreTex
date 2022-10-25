@@ -37,37 +37,24 @@ local function isHistoryShown(historyItem)
     end
 end
 
-local function historyEventString(yearAndDay, history)
-    local year = yearAndDay[1]
-    local day = yearAndDay[2]
-    local out = AnnoString(year)
-    if day > 0 then
-        out = out .. ", " .. Tr("day") .. " " .. Date(day, {})
-    end
-    return out .. ": " .. history[year][day]
-end
-
-local function historyItemToString(historyItem)
-    local year = historyItem["year"]
-    local day = historyItem["day"]
-    local event = historyItem["event"]
+local function eventToString(year, day, event, isSecret)
     local history = {}
-    if historyItem["isSecret"] ~= nil and historyItem["isSecret"] then
+    if isSecret ~= nil and isSecret then
         event = "(" .. CapFirst(Tr("secret")) .. ") " .. event
     end
-    if history[year] == nil then
-        history[year] = {}
+    local out = {}
+    if year ~= nil then
+        Append(out, AnnoString(year))
     end
-    if day == nil then
-        day = 0
+    if day ~= nil and day > 0 then
+        Append(out, ", ")
+        Append(out, Tr("day"))
+        Append(out, " ")
+        Append(out, Date(day, {}))
     end
-    if history[year][day] == nil then
-        history[year][day] = event
-    else
-        history[year][day] = history[year][day] .. [[\\]] .. event
-    end
-    local yearAndDay = { year, day }
-    return historyEventString(yearAndDay, history)
+    Append(out, ": ")
+    Append(out, event)
+    return table.concat(out)
 end
 
 local function sortHistoryItemsChronologically(a, b)
@@ -82,6 +69,20 @@ local function sortHistoryItemsChronologically(a, b)
     end
 end
 
+local function isSameDate(item1, item2)
+    if item1["year"] ~= item2["year"] then
+        return false
+    elseif item1["day"] == nil and item2["day"] == nil then
+        return true
+    elseif item1["day"] == nil then
+        return false
+    elseif item2["day"] == nil then
+        return false
+    else
+        return item1["day"] == item2["day"]
+    end
+end
+
 local function addHistoryDescriptors(entity)
     StartBenchmarking("addHistoryDescriptors")
     local historyItems = entity["historyItems"]
@@ -92,7 +93,13 @@ local function addHistoryDescriptors(entity)
     local processedHistory = {}
     for key, historyItem in pairs(historyItems) do
         if isHistoryShown(historyItem) then
-            Append(processedHistory, historyItemToString(historyItem))
+            local year = historyItem["year"]
+            local day = historyItem["day"]
+            if key > 1 and isSameDate(historyItem, historyItems[key - 1]) then
+                year = nil
+                day = nil
+            end
+            Append(processedHistory, eventToString(year, day, historyItem["event"], historyItem["isSecret"]))
         end
     end
     SetDescriptor(entity, Tr("history"), processedHistory)

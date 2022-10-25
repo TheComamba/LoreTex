@@ -11,6 +11,9 @@ function EmptyHistoryItem()
 end
 
 function SetDay(historyItem, day)
+	if IsEmpty(day) then
+		return
+	end
 	local dayNumber = tonumber(day)
 	if dayNumber == nil then
 		LogError("Could not convert to number:" .. DebugPrint(day))

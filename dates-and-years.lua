@@ -84,13 +84,7 @@ local function timeDiffString(day, year)
     end
 end
 
-function AnnoString(yearIn, fmt)
-    local year = tonumber(yearIn)
-    if year == nil then
-        LogError("Could  not convert year string \"" .. yearIn .. "\" to number.")
-    end
-    local diff = CurrentYear - year
-
+function YearAndDateString(year, day, fmt)
     if fmt == nil then
         fmt = YearFmt
     end
@@ -100,22 +94,43 @@ function AnnoString(yearIn, fmt)
     Append(out, tostring(year))
     Append(out, " ")
     Append(out, fmt)
+    if day ~= nil then
+        Append(out, ", ")
+        Append(out, Tr("day"))
+        Append(out, " ")
+        Append(out, tostring(day))
+    end
     Append(out, " (")
-    Append(out, timeDiffString(nil, year))
+    Append(out, timeDiffString(day, year))
     Append(out, ")")
     return table.concat(out)
 end
 
-function AnnoVin(year)
-    tex.print(AnnoString(year))
+function AnnoVin(yearIn)
+    local year = tonumber(yearIn)
+    if year == nil then
+        LogError("Could  not convert year string \"" .. yearIn .. "\" to number.")
+        return
+    end
+    tex.print(YearAndDateString(year))
 end
 
-function AnnoDjo(year)
-    tex.print(AnnoString(ConvertYearToVin(year, YearFmtDjo)))
+function AnnoDjo(yearIn)
+    local year = tonumber(yearIn)
+    if year == nil then
+        LogError("Could  not convert year string \"" .. yearIn .. "\" to number.")
+        return
+    end
+    tex.print(YearAndDateString(ConvertYearToVin(year, YearFmtDjo)))
 end
 
-function AnnoNar(year)
-    tex.print(AnnoString(ConvertYearToVin(year, YearFmtNar)))
+function AnnoNar(yearIn)
+    local year = tonumber(yearIn)
+    if year == nil then
+        LogError("Could  not convert year string \"" .. yearIn .. "\" to number.")
+        return
+    end
+    tex.print(YearAndDateString(ConvertYearToVin(year, YearFmtNar)))
 end
 
 ElvenMonthsAndFirstDays = {

@@ -190,12 +190,12 @@ CurrentDay = 0
 IsShowFuture = false
 local out = AutomatedChapters()
 local expected = generateExpected()
-Assert("history-events-no-future", expected, out)
+Assert("history-events-no-future-day-not-set", expected, out)
 
 IsShowFuture = true
 out = AutomatedChapters()
 expected = generateExpected()
-Assert("history-events-with-future", expected, out)
+Assert("history-events-with-future-day-not-set", expected, out)
 
 
 CurrentDay = 10
@@ -203,9 +203,9 @@ CurrentDay = 10
 IsShowFuture = false
 local out = AutomatedChapters()
 local expected = generateExpected()
-Assert("history-events-no-future", expected, out)
+Assert("history-events-no-future-day-set", expected, out)
 
 IsShowFuture = true
 out = AutomatedChapters()
 expected = generateExpected()
-Assert("history-events-with-future", expected, out)
+Assert("history-events-with-future-day-set", expected, out)

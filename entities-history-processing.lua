@@ -44,15 +44,9 @@ local function eventToString(year, day, event, isSecret)
     end
     local out = {}
     if year ~= nil then
-        Append(out, AnnoString(year))
+        Append(out, YearAndDateString(year, day))
+        Append(out, [[:\\]])
     end
-    if day ~= nil then
-        Append(out, ", ")
-        Append(out, Tr("day"))
-        Append(out, " ")
-        Append(out, Date(day, {}))
-    end
-    Append(out, ": ")
     Append(out, event)
     return table.concat(out)
 end

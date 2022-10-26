@@ -56,8 +56,8 @@ local function timeDiffString(day, year)
         LogError("Cannot work with a year with 0 days.")
         return
     end
-    local timeDiffInYears = math.floor(timeDiffInDays / DaysPerYear)
-    if timeDiffInYears < 1 and isCurrentDaySet() then
+    local timeDiffInYears = timeDiffInDays / DaysPerYear
+    if math.abs(timeDiffInYears) < 1 and isCurrentDaySet() and day ~= nil then
         if timeDiffInDays == 0 then
             return Tr("today")
         elseif timeDiffInDays == 1 then
@@ -70,6 +70,7 @@ local function timeDiffString(day, year)
             return Tr("in-days", { math.abs(timeDiffInDays) })
         end
     else
+        timeDiffInYears = Round(timeDiffInYears)
         if timeDiffInYears == 0 then
             return Tr("this-year")
         elseif timeDiffInYears == 1 then
@@ -82,6 +83,10 @@ local function timeDiffString(day, year)
             return Tr("in-years", { math.abs(timeDiffInYears) })
         end
     end
+end
+
+function IsFutureEvent(historyItem)
+    return daysAgo(historyItem["day"], historyItem["year"]) < 0
 end
 
 function YearAndDateString(year, day, fmt)

@@ -39,13 +39,15 @@ end
 
 local function eventToString(year, day, event, isSecret)
     local history = {}
-    if isSecret ~= nil and isSecret then
-        event = "(" .. CapFirst(Tr("secret")) .. ") " .. event
-    end
     local out = {}
     if year ~= nil then
         Append(out, YearAndDateString(year, day))
         Append(out, [[:\\]])
+    end
+    if isSecret ~= nil and isSecret then
+        Append(out, "(")
+        Append(out, CapFirst(Tr("secret")))
+        Append(out, ") ")
     end
     Append(out, event)
     return table.concat(out)

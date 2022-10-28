@@ -43,7 +43,7 @@ function MarkSecret(entity)
     if IsEmpty(entity["name"]) then
         LogError("Entity has no name: " .. DebugPrint(entity))
     elseif IsEntitySecret(entity) then
-        if entity["shortname"] == nil then
+        if IsEmpty(entity["shortname"]) then
             entity["shortname"] = entity["name"]
         end
         entity["name"] = "(" .. CapFirst(Tr("secret")) .. ") " .. entity["name"]

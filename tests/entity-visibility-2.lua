@@ -7,7 +7,7 @@ if true then
     ProcessEvent(hist)
 end
 AddRef("teststory", PrimaryRefs)
-NewEntity("items", "secret-item", nil, "Secret Item")
+NewEntity("items", "secret-item", "", "Secret Item")
 SetSecret(CurrentEntity())
 
 local function generateHistoryParagraph()

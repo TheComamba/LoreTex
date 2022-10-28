@@ -10,6 +10,7 @@ Dictionary["associations"] = "Zusammenschlüsse"
 Dictionary["at-secret-location"] = "an geheimem Ort"
 Dictionary["at-secret-locations"] = "an geheimen Orten"
 Dictionary["at-unfound-locations"] = "an nicht gefundenen Orten"
+Dictionary["calendars"] = "Kalender"
 Dictionary["characters"] = "Charaktere"
 Dictionary["child"] = "Kind"
 Dictionary["chronologies"] = [[Chronologi\"en]]

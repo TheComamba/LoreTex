@@ -1,6 +1,6 @@
 local allTestFiles = { "common", "default-location", "dictionary", "entities-with-associations", "entities-with-history",
-    "entity-visibility", "history", "make-primary-if", "mentioned-refs", "nested-locations", "npc-and-species",
-    "primary-when-mentioned-type", "refs", "region-and-city", "sub-label" }
+    "entity-visibility", "entity-visibility-2", "history", "make-primary-if", "mentioned-refs", "nested-locations",
+    "npc-and-species", "primary-when-mentioned-type", "refs", "region-and-city", "sub-label" }
 local numSucceeded = 0
 local numFailed = 0
 

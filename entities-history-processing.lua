@@ -8,6 +8,16 @@ local function isConcernsUnrevealed(historyItem)
     return false
 end
 
+local function isConcernsSecret(historyItem)
+    for key, label in pairs(historyItem["concerns"]) do
+        local entity = GetEntity(label)
+        if IsEntitySecret(entity) then
+            return true
+        end
+    end
+    return false
+end
+
 local function isAllConcnernsShown(historyItem)
     for key, label in pairs(historyItem["concerns"]) do
         if not IsEntityShown(GetEntity(label)) then
@@ -99,7 +109,8 @@ local function addHistoryDescriptors(entity)
                 year = nil
                 day = nil
             end
-            Append(processedHistory, eventToString(year, day, historyItem["event"], historyItem["isSecret"]))
+            Append(processedHistory,
+                eventToString(year, day, historyItem["event"], historyItem["isSecret"] or isConcernsSecret(historyItem)))
         end
     end
     SetDescriptor(entity, Tr("history"), processedHistory)

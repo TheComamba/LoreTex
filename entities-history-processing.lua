@@ -47,11 +47,14 @@ local function isHistoryShown(historyItem)
     end
 end
 
-local function eventToString(year, day, event, isSecret)
-    local history = {}
+local function historyItemToString(historyItem, isPrintDate)
+    local year = historyItem["year"]
+    local day = historyItem["day"]
+    local event = historyItem["event"]
+    local isSecret = historyItem["isSecret"] or isConcernsSecret(historyItem)
     local out = {}
-    if year ~= nil then
-        Append(out, YearAndDateString(year, day))
+    if isPrintDate then
+        Append(out, YearAndDateString(historyItem))
         Append(out, [[:\\]])
     end
     if isSecret ~= nil and isSecret then
@@ -103,14 +106,8 @@ local function addHistoryDescriptors(entity)
     local processedHistory = {}
     for key, historyItem in pairs(historyItems) do
         if isHistoryShown(historyItem) then
-            local year = historyItem["year"]
-            local day = historyItem["day"]
-            if key > 1 and isSameDate(historyItem, historyItems[key - 1]) then
-                year = nil
-                day = nil
-            end
-            Append(processedHistory,
-                eventToString(year, day, historyItem["event"], historyItem["isSecret"] or isConcernsSecret(historyItem)))
+            local isPrintDate = (key == 1 or not isSameDate(historyItem, historyItems[key - 1]))
+            Append(processedHistory, historyItemToString(historyItem, isPrintDate))
         end
     end
     SetDescriptor(entity, Tr("history"), processedHistory)

@@ -42,7 +42,9 @@ function ConvertYearFromVin(year, fmt)
     end
 end
 
-local function daysAgo(day, year)
+local function daysAgo(historyItem)
+    local year = historyItem["year"]
+    local day = historyItem["day"]
     if isCurrentDaySet() and day ~= nil then
         return CurrentDay - day + (CurrentYear - year) * DaysPerYear
     else
@@ -50,8 +52,10 @@ local function daysAgo(day, year)
     end
 end
 
-local function timeDiffString(day, year)
-    local timeDiffInDays = daysAgo(day, year)
+local function timeDiffString(historyItem)
+    local year = historyItem["year"]
+    local day = historyItem["day"]
+    local timeDiffInDays = daysAgo(historyItem)
     if not isDaysPerYearSet() then
         LogError("Cannot work with a year with 0 days.")
         return
@@ -86,10 +90,12 @@ local function timeDiffString(day, year)
 end
 
 function IsFutureEvent(historyItem)
-    return daysAgo(historyItem["day"], historyItem["year"]) < 0
+    return daysAgo(historyItem) < 0
 end
 
-function YearAndDateString(year, day, fmt)
+function YearAndDateString(historyItem, fmt)
+    local year = historyItem["year"]
+    local day = historyItem["day"]
     if fmt == nil then
         fmt = YearFmt
     end
@@ -106,7 +112,7 @@ function YearAndDateString(year, day, fmt)
         Append(out, tostring(day))
     end
     Append(out, " (")
-    Append(out, timeDiffString(day, year))
+    Append(out, timeDiffString(historyItem))
     Append(out, ")")
     return table.concat(out)
 end
@@ -117,7 +123,9 @@ function AnnoVin(yearIn)
         LogError("Could  not convert year string \"" .. yearIn .. "\" to number.")
         return
     end
-    tex.print(YearAndDateString(year))
+    local item = {}
+    item["year"] = year
+    tex.print(YearAndDateString(item))
 end
 
 function AnnoDjo(yearIn)
@@ -126,7 +134,9 @@ function AnnoDjo(yearIn)
         LogError("Could  not convert year string \"" .. yearIn .. "\" to number.")
         return
     end
-    tex.print(YearAndDateString(ConvertYearToVin(year, YearFmtDjo)))
+    local item = {}
+    item["year"] = year
+    tex.print(YearAndDateString(ConvertYearToVin(item, YearFmtDjo)))
 end
 
 function AnnoNar(yearIn)
@@ -135,7 +145,9 @@ function AnnoNar(yearIn)
         LogError("Could  not convert year string \"" .. yearIn .. "\" to number.")
         return
     end
-    tex.print(YearAndDateString(ConvertYearToVin(year, YearFmtNar)))
+    local item = {}
+    item["year"] = year
+    tex.print(YearAndDateString(ConvertYearToVin(item, YearFmtNar)))
 end
 
 ElvenMonthsAndFirstDays = {

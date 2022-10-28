@@ -1,6 +1,21 @@
-local allTestFiles = { "common", "default-location", "dictionary", "entities-with-associations", "entities-with-history",
-    "entity-visibility", "entity-visibility-2", "history", "make-primary-if", "mentioned-refs", "nested-locations",
-    "npc-and-species", "primary-when-mentioned-type", "refs", "region-and-city", "sub-label" }
+local allTestFiles = {}
+Append(allTestFiles, "calendars")
+Append(allTestFiles, "common")
+Append(allTestFiles, "default-location")
+Append(allTestFiles, "dictionary")
+Append(allTestFiles, "entities-with-associations")
+Append(allTestFiles, "entities-with-history")
+Append(allTestFiles, "entity-visibility")
+Append(allTestFiles, "entity-visibility-2")
+Append(allTestFiles, "history")
+Append(allTestFiles, "make-primary-if")
+Append(allTestFiles, "mentioned-refs")
+Append(allTestFiles, "nested-locations")
+Append(allTestFiles, "npc-and-species")
+Append(allTestFiles, "primary-when-mentioned-type")
+Append(allTestFiles, "refs")
+Append(allTestFiles, "region-and-city")
+Append(allTestFiles, "sub-label")
 local numSucceeded = 0
 local numFailed = 0
 

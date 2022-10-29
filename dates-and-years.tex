@@ -1,5 +1,6 @@
 \newcommand{\setCurrentYear}[1]{\directlua{CurrentYear = #1}}
 \newcommand{\setCurrentDay}[1]{\directlua{CurrentDay = #1}}
+\newcommand{\setDaysPerYear}[1]{\directlua{DaysPerYear = #1}}
 \newcommand{\setYearFmtDjo}{\directlua{YearFmt = YearFmtDjo}}
 \newcommand{\setYearFmtNar}{\directlua{YearFmt = YearFmtNar}}
 \newcommand{\annoVin}[1]{\directlua{AnnoVin(#1)}}
@@ -8,3 +9,6 @@
 \newcommand{\bornVin}[1]{Geboren im Jahr \annoVin{#1}}
 
 \newcommand{\datefmt}[1]{\directlua{tex.print(Date(#1))}}
+
+\newcommand{\setYearAbbreviation}[1]{\directlua{SetYearAbbreviation(CurrentEntity(), [[#1]])}}
+\newcommand{\addMonth}[2]{\directlua{AddMonth(CurrentEntity(), [[#1]], #2)}}

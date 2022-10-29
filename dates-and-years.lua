@@ -8,6 +8,37 @@ YearFmtDjo = [[\'Et]]
 YearFmtNar = "NM"
 YearFmt = YearFmtVin
 
+function SetYearAbbreviation(entity, abbr)
+    if IsEmpty(entity) then
+        LogError("Called with empty entity and abbreviation:" .. DebugPrint(abbr))
+        return
+    end
+    if IsEmpty(abbr) then
+        LogError("Called with empty abbreviation for entity:" .. DebugPrint(entity))
+        return
+    end
+    entity["yearAbbreviation"] = abbr
+end
+
+function AddMonth(entity, month, firstDay)
+    if IsEmpty(entity) then
+        LogError("Called with empty entity and month:" .. DebugPrint(month))
+        return
+    end
+    if IsEmpty(month) then
+        LogError("Called with empty month for enitty:" .. DebugPrint(entity))
+        return
+    end
+    if IsEmpty(firstDay) or type(firstDay) ~= "number" then
+        LogError("Called without first day of month:" .. DebugPrint(month))
+        return
+    end
+    if entity["monthsAndFirstDays"] == nil then
+        entity["monthsAndFirstDays"] = {}
+    end
+    entity["monthsAndFirstDays"][#entity["monthsAndFirstDays"] + 1] = { month, firstDay }
+end
+
 local function isCurrentDaySet()
     return CurrentDay > 0
 end

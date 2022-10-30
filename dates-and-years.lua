@@ -8,6 +8,21 @@ YearFmtDjo = [[\'Et]]
 YearFmtNar = "NM"
 YearFmt = YearFmtVin
 
+DateFmt = {}
+
+function ResetDateFmt()
+    DateFmt = {}
+end
+
+function AddDateFmt(label)
+    local calendar = GetEntity(label)
+    if IsEmpty(calendar) then
+        LogError("Could not find a calendar for label \"" .. label .. "\"")
+        return
+    end
+    DateFmt[#DateFmt + 1] = calendar
+end
+
 function SetYearAbbreviation(entity, abbr)
     if IsEmpty(entity) then
         LogError("Called with empty entity and abbreviation:" .. DebugPrint(abbr))
@@ -181,41 +196,7 @@ function AnnoNar(yearIn)
     tex.print(YearAndDateString(ConvertYearToVin(item, YearFmtNar)))
 end
 
-ElvenMonthsAndFirstDays = {
-    { [[Rin]], 1 },
-    { [[N\'en]], 29 },
-    { [[Coi]], 57 },
-    { [[L\'ot]], 85 },
-    { [[Erd]], 113 },
-    { [[N\'ar]], 141 },
-    { [[Lo\"e]], 169 },
-    { [[\'Uri]], 197 },
-    { [[Yav]], 225 },
-    { [[S\'ul]], 253 },
-    { [[Las]], 281 },
-    { [[Nqu]], 309 },
-    { [[H\'is]], 337 }
-}
-
-RealworldMonthsAndFirstDays = {
-    { [[Jan]], 11 },
-    { [[Feb]], 42 },
-    { [[Mär]], 70 },
-    { [[Apr]], 101 },
-    { [[Mai]], 131 },
-    { [[Jun]], 162 },
-    { [[Jul]], 192 },
-    { [[Aug]], 225 },
-    { [[Sep]], 254 },
-    { [[Okt]], 284 },
-    { [[Nov]], 315 },
-    { [[Dez]], 345 }
-}
-
-DefaultDateFmt = { ElvenMonthsAndFirstDays, RealworldMonthsAndFirstDays }
-DateFmt = DefaultDateFmt
-
-function MonthAndDay(day, namesAndFirstDays)
+local function monthAndDay(day, namesAndFirstDays)
     local firstDay = 1
     local month = "NoMonthFound"
     if day < namesAndFirstDays[1][2] then
@@ -246,8 +227,8 @@ function Date(day, fmt)
     end
     local out = {}
     Append(out, day)
-    for key, monthsAndFirstDays in pairs(fmt) do
-        local month, dayOfMonth = MonthAndDay(day, monthsAndFirstDays)
+    for key, calendar in pairs(fmt) do
+        local month, dayOfMonth = monthAndDay(day, calendar["monthsAndFirstDays"])
         Append(out, [[ / ]])
         Append(out, dayOfMonth)
         Append(out, [[.]])

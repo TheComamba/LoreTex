@@ -2,7 +2,7 @@ AllEntities = {}
 NotYetFoundEntities = {}
 local labelToEntity = {}
 IsShowSecrets = false
-ProtectedDescriptors = { }
+ProtectedDescriptors = {}
 Append(ProtectedDescriptors, "children")
 Append(ProtectedDescriptors, "historyItems")
 Append(ProtectedDescriptors, "isSecret")

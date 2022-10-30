@@ -9,6 +9,8 @@
 \newcommand{\bornVin}[1]{Geboren im Jahr \annoVin{#1}}
 
 \newcommand{\datefmt}[1]{\directlua{tex.print(Date(#1))}}
+\newcommand{\resetDateFmt}{\directlua{ResetDateFmt()}}
+\newcommand{\addDateFmt}[1]{\directlua{AddDateFmt("#1")}}
 
 \newcommand{\setYearAbbreviation}[1]{\directlua{SetYearAbbreviation(CurrentEntity(), [[#1]])}}
 \newcommand{\addMonth}[2]{\directlua{AddMonth(CurrentEntity(), [[#1]], #2)}}

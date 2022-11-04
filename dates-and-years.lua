@@ -183,8 +183,8 @@ function AnnoDjo(yearIn)
         return
     end
     local item = {}
-    item["year"] = year
-    tex.print(YearAndDateString(ConvertYearToVin(item, YearFmtDjo)))
+    item["year"] = ConvertYearToVin(year, YearFmtDjo)
+    tex.print(YearAndDateString(item))
 end
 
 function AnnoNar(yearIn)
@@ -194,8 +194,8 @@ function AnnoNar(yearIn)
         return
     end
     local item = {}
-    item["year"] = year
-    tex.print(YearAndDateString(ConvertYearToVin(item, YearFmtNar)))
+    item["year"] = ConvertYearToVin(year, YearFmtNar)
+    tex.print(YearAndDateString(item))
 end
 
 local function monthAndDay(day, namesAndFirstDays)

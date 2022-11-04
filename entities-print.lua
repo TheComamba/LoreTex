@@ -50,6 +50,7 @@ function LabelToName(label)
             end
         end
     end
+    LogError("Label \"" .. label .. "\" not found.")
     return label:upper()
 end
 

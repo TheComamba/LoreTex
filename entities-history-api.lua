@@ -31,10 +31,10 @@ function SetYear(historyItem, year)
 		LogError("Could not convert to number:" .. DebugPrint(year))
 	else
 		local yearFmt = historyItem["yearFormat"]
-		if not IsEmpty(yearFmt) then
-			yearNumber = ConvertYearToVin(yearNumber, yearFmt)
-		end
 		historyItem["year"] = yearNumber
+		if not IsEmpty(yearFmt) then
+			historyItem["year"] = ConvertYearToVin(yearNumber, yearFmt)
+		end
 	end
 end
 

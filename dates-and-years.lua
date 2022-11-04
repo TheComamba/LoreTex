@@ -20,6 +20,10 @@ function AddDateFmt(label)
         LogError("Could not find a calendar for label \"" .. label .. "\"")
         return
     end
+    if IsEmpty(calendar["monthsAndFirstDays"]) then
+        LogError("Calendar \"" .. label .. "\" has no months defined.")
+        return
+    end
     DateFmt[#DateFmt + 1] = calendar
 end
 
@@ -153,9 +157,7 @@ function YearAndDateString(historyItem, fmt)
     Append(out, fmt)
     if day ~= nil then
         Append(out, ", ")
-        Append(out, Tr("day"))
-        Append(out, " ")
-        Append(out, tostring(day))
+        Append(out, Date(day))
     end
     Append(out, " (")
     Append(out, timeDiffString(historyItem))
@@ -226,6 +228,7 @@ function Date(day, fmt)
         fmt = DateFmt
     end
     local out = {}
+    Append(out, Tr("day") .. " ")
     Append(out, day)
     for key, calendar in pairs(fmt) do
         local month, dayOfMonth = monthAndDay(day, calendar["monthsAndFirstDays"])

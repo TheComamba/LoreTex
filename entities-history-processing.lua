@@ -70,6 +70,10 @@ local function sortHistoryItemsChronologically(a, b)
     if a["year"] ~= b["year"] then
         return a["year"] < b["year"]
     elseif a["day"] == nil and b["day"] == nil then
+        if a["counter"] == nil or b["counter"] == nil then
+            LogError("TODO: Properly process lifestage history items.")
+            return false
+        end
         return a["counter"] < b["counter"]
     elseif b["day"] == nil then
         return false

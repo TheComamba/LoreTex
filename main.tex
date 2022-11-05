@@ -1,4 +1,5 @@
 \usepackage{luacode}
+\usepackage{nameref}
 
 \newcommand{\RpgTex}{\textsc{Rpg}\TeX}
 
@@ -17,12 +18,12 @@
         dofile([[#1]] .. "/entities-species.lua")
         dofile([[#1]] .. "/entities-tex-api.lua")
         dofile([[#1]] .. "/entities-types.lua")
-        dofile([[#1]] .. "entities-history-processing.lua")
-        dofile([[#1]] .. "entities-history-api.lua")
+        dofile([[#1]] .. "/entities-history-processing.lua")
+        dofile([[#1]] .. "/entities-history-api.lua")
         dofile([[#1]] .. "/logging.lua")
         dofile([[#1]] .. "/refs.lua")
         dofile([[#1]] .. "/scoped-variables.lua")
-        dofile([[#1]] .. "test.lua")
+        dofile([[#1]] .. "/test.lua")
         dofile([[#1]] .. "/translation.lua")
         dofile([[#1]] .. "/units.lua")
         RelativePath = [[#1]]

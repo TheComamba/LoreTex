@@ -18,7 +18,7 @@
 			SetDay(item, "#1")
 			SetYear(item, "#2")
 			item["event"] = [[\detokenize{#3}]]
-			item["isSecret"] = true
+			SetProtectedField(item, "isSecret", true)
 			ProcessEvent(item)
 		end
 	}
@@ -85,17 +85,17 @@
 
 \newcommand{\born}[3][]{
 	\addHistory[#1]{#2}{#3}
-	\directlua{CurrentEntity()["born"] = #2}
+	\directlua{SetProtectedDescriptor(CurrentEntity(), "born", #2)}
 }
 \newcommand{\died}[3][]{
 	\addHistory[#1]{#2}{#3}
-	\directlua{CurrentEntity()["died"] = #2}
+	\directlua{SetProtectedDescriptor(CurrentEntity(), "died", #2)}
 }
 \newcommand{\bornInFmt}[4][]{
 	\addHistoryInFmt[#1]{#2}{#3}{#4}
-	\directlua{CurrentEntity()["born"] = ConvertYearToVin(#3, #2)}
+	\directlua{SetProtectedDescriptor(CurrentEntity(), "born", ConvertYearToVin(#3, #2))}
 }
 \newcommand{\diedInFmt}[4][]{
 	\addHistoryInFmt[#1]{#2}{#3}{#4}
-	\directlua{CurrentEntity()["died"] = ConvertYearToVin(#3, #2)}
+	\directlua{SetProtectedDescriptor(CurrentEntity(), "died", ConvertYearToVin(#3, #2))}
 }

@@ -29,7 +29,7 @@ if true then
     hist["originator"] = "normal"
     SetYear(hist, -5)
     hist["event"] = [[Secret event]]
-    hist["isSecret"] = true
+    SetProtectedField(hist, "isSecret", true)
     ProcessEvent(hist)
 end
 AddRef("normal", PrimaryRefs)

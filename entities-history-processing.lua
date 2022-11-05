@@ -35,7 +35,8 @@ local function isHistoryShown(historyItem)
     elseif not IsShowFuture and IsFutureEvent(historyItem) then
         return false
     elseif not IsShowSecrets then
-        if historyItem["isSecret"] ~= nil and historyItem["isSecret"] then
+        local isSecret = GetProtectedField(historyItem, "isSecret")
+        if isSecret ~= nil and isSecret then
             return false
         elseif isConcernsUnrevealed(historyItem) then
             return false
@@ -51,7 +52,7 @@ local function historyItemToString(historyItem, isPrintDate)
     local year = historyItem["year"]
     local day = historyItem["day"]
     local event = historyItem["event"]
-    local isSecret = historyItem["isSecret"] or isConcernsSecret(historyItem)
+    local isSecret = GetProtectedField(historyItem, "isSecret") or isConcernsSecret(historyItem)
     local out = {}
     if isPrintDate then
         Append(out, YearAndDateString(historyItem))
@@ -102,7 +103,7 @@ end
 
 local function addHistoryDescriptors(entity)
     StartBenchmarking("addHistoryDescriptors")
-    local historyItems = entity["historyItems"]
+    local historyItems = GetProtectedField(entity, "historyItems")
     if historyItems == nil then
         historyItems = {}
     end

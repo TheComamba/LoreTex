@@ -68,7 +68,7 @@ end
 local function addSpecialyearsToEntities(field, year, labels)
 	for key, label in pairs(labels) do
 		local entity = GetMutableEntityFromAll(label)
-		entity[field] = year
+		SetProtectedField(entity, field, year)
 	end
 end
 

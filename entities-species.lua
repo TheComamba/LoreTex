@@ -21,7 +21,7 @@ local function getSpeciesRef(entity)
 end
 
 local function getGender(entity)
-	local gender = GetProtectedField(entity,"gender")
+	local gender = GetProtectedField(entity, "gender")
 	if IsEmpty(gender) then
 		return ""
 	else
@@ -54,7 +54,7 @@ local function getMixedAgeFactorAndExponent(speciesMixing)
 end
 
 function GetAgeFactorAndExponent(species)
-	local speciesMixing = GetProtectedField(species,"ageMixing")
+	local speciesMixing = GetProtectedField(species, "ageMixing")
 	if not IsEmpty(speciesMixing) then
 		return getMixedAgeFactorAndExponent(speciesMixing)
 	end
@@ -150,7 +150,7 @@ local function addLifestageHistoryItems(entity)
 	if IsEmpty(label) then
 		return
 	end
-	local birthyear = tonumber(entity["born"])
+	local birthyear = GetProtectedField(entity, "born")
 	if IsEmpty(birthyear) then
 		return
 	end
@@ -162,7 +162,7 @@ local function addLifestageHistoryItems(entity)
 	if IsEmpty(species) then
 		return
 	end
-	local deathyear = tonumber(entity["died"])
+	local deathyear = GetProtectedField(entity, "died")
 	local factor, exponent = GetAgeFactorAndExponent(species)
 	for i = 2, #lifestagesAndAges do
 		local lifestage = lifestagesAndAges[i][1]

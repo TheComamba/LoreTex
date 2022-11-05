@@ -2,7 +2,7 @@ NewEntity("species", "test-species", nil, "Test Species")
 
 NewEntity("npcs", "test-npc", nil, "Test NPC")
 SetSpecies(CurrentEntity(), "test-species")
-CurrentEntity()["born"] = -20
+SetProtectedField(CurrentEntity(), "born", -20)
 
 AddAllEntitiesToPrimaryRefs()
 

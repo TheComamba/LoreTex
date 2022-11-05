@@ -17,20 +17,20 @@ local function entityQualifiersString(child, parent, relationship)
     if not IsEmpty(relationship) then
         Append(content, relationship)
     end
-    local birthyearstr = child["born"]
+    local birthyearstr = GetProtectedField(child, "born")
     local birthyear = tonumber(birthyearstr)
     if not IsEmpty(birthyear) and birthyear <= CurrentYear then
         birthyear = ConvertYearFromVin(birthyear, YearFmt)
         Append(content, TexCmd("textborn") .. birthyear)
     end
-    local deathyearstr = child["died"]
+    local deathyearstr = GetProtectedField(child, "died")
     local deathyear = tonumber(deathyearstr)
     if not IsEmpty(deathyear) and deathyear <= CurrentYear then
         deathyear = ConvertYearFromVin(deathyear, YearFmt)
         Append(content, TexCmd("textdied") .. deathyear)
     end
-    local location = child["location"]
-    local targetLocation = parent["location"]
+    local location = GetProtectedField(child, "location")
+    local targetLocation = GetProtectedField(parent, "location")
     if IsLocationUnrevealed(child) then
         Append(content, Tr("at-secret-location"))
     elseif not IsEmpty(location) and location ~= targetLocation and not IsIn(location, GetLabels(parent)) then
@@ -44,7 +44,7 @@ local function entityQualifiersString(child, parent, relationship)
 end
 
 local function addSingleChildDescriptorToParent(child, parent, relationship)
-    local childType = child["type"]
+    local childType = GetProtectedField(child, "type")
     local descriptor = Tr(childType)
     if parent[descriptor] == nil then
         parent[descriptor] = {}
@@ -58,7 +58,8 @@ local function addSingleChildDescriptorToParent(child, parent, relationship)
 end
 
 local function getRelationship(child, parentLabels)
-    for key, parentAndRelationship in pairs(child["parents"]) do
+    local parents = GetProtectedField(child, "parents")
+    for key, parentAndRelationship in pairs(parents) do
         if IsIn(parentAndRelationship[1], parentLabels) then
             if parentAndRelationship[2] ~= nil then
                 return parentAndRelationship[2]
@@ -71,7 +72,7 @@ end
 
 local function addChildrenDescriptorsToParent(parent)
     StartBenchmarking("addChildrenDescriptorsToParent")
-    local childrenLabels = parent["children"]
+    local childrenLabels = GetProtectedField(parent, "children")
     if childrenLabels == nil then
         childrenLabels = {}
     end
@@ -104,7 +105,7 @@ end
 local function addPrimariesWhenMentioned(entities, mentionedRefsHere, allMentionedRefs)
     for key, label in pairs(mentionedRefsHere) do
         local mentionedEntity = GetEntity(label)
-        local typeName = mentionedEntity["type"]
+        local typeName = GetProtectedField(mentionedEntity, "type")
         if IsIn(typeName, PrimaryRefWhenMentionedTypes) then
             AddProcessedEntity(entities, mentionedEntity, allMentionedRefs)
         end

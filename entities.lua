@@ -25,11 +25,9 @@ function CurrentEntity()
 end
 
 function GetLabels(entity)
-    local labels = entity["labels"]
+    local labels = GetProtectedField(entity, "labels")
     if labels == nil then
         return {}
-    elseif type(labels) == "string" then
-        return { labels }
     else
         return labels
     end
@@ -77,7 +75,7 @@ function GetEntitiesOfType(type, list)
         list = AllEntities
     end
     for key, entity in pairs(list) do
-        if entity["type"] == type then
+        if GetProtectedField(entity, "type") == type then
             out[#out + 1] = entity
         end
     end
@@ -149,7 +147,7 @@ function IsEntitySecret(entity)
     if entity == nil then
         return false
     end
-    local isSecret = entity["isSecret"]
+    local isSecret = GetProtectedField(entity, "isSecret")
     if isSecret == nil then
         return false
     end

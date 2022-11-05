@@ -119,8 +119,6 @@ function SpeciesAndAgeString(entity, year)
 	local speciesRef = getSpeciesRef(entity)
 	if not IsEmpty(speciesRef) then
 		Append(parts, TexCmd("nameref ", speciesRef))
-	else
-		LogError(GetShortname(entity) .. " has no species defined!")
 	end
 	local gender = getGender(entity)
 	if not IsEmpty(gender) then

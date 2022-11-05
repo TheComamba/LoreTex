@@ -8,7 +8,6 @@ function SetDescriptor(entity, descriptor, description, subdescriptor)
     elseif IsEmpty(description) then
         return
     elseif IsProtectedDescriptor(descriptor) then
-    -- elseif IsIn(descriptor, protectedDescriptors) then
         LogError("Called with protected descriptor \"" ..
             descriptor .. "\" for entity with label \"" .. GetMainLabel(entity) .. "\"")
         return
@@ -44,7 +43,7 @@ function SetDescriptor(entity, descriptor, description, subdescriptor)
 end
 
 function SetSecret(entity)
-    entity["isSecret"] = true
+    SetProtectedField(entity, "isSecret", true)
 end
 
 function Reveal(label)
@@ -54,16 +53,10 @@ end
 
 function AddParent(entity, parentLabel, relationship)
     if entity ~= nil then
-        if entity["parents"] == nil then
-            entity["parents"] = {}
-        end
-        entity["parents"][#entity["parents"] + 1] = { parentLabel, relationship }
+        AddToProtectedField(entity, "parents", { parentLabel, relationship })
     end
     local parent = GetMutableEntityFromAll(parentLabel)
-    if parent["children"] == nil then
-        parent["children"] = {}
-    end
-    UniqueAppend(parent["children"], GetMainLabel(entity))
+    AddToProtectedField(parent, "children", GetMainLabel(entity))
 end
 
 function DeclarePC(label)
@@ -72,28 +65,28 @@ function DeclarePC(label)
 end
 
 function SetAgeFactor(entity, factor)
-    entity["ageFactor"] = factor
+    SetProtectedField(entity, "ageFactor", factor)
 end
 
 function SetAgeExponent(entity, exponent)
-    entity["ageExponent"] = exponent
+    SetProtectedField(entity, "ageExponent", exponent)
 end
 
 function SetAgeModifierMixing(entity, species1, species2)
-    entity["ageMixing"] = { species1, species2 }
+    SetProtectedField(entity, "ageMixing", { species1, species2 })
 end
 
 function SetLocation(entity, location)
-    entity["location"] = location
+    SetProtectedField(entity, "location", location)
     AddParent(entity, location)
 end
 
 function SetSpecies(entity, species)
-    entity["species"] = species
+    SetProtectedField(entity, "species", species)
 end
 
 function SetGender(entity, gender)
-    entity["gender"] = gender
+    SetProtectedField(entity, "gender", gender)
 end
 
 function MakePrimaryIf(condition)
@@ -123,10 +116,10 @@ function NewEntity(type, label, shortname, name)
     end
     StartBenchmarking("NewEntity")
     local entity = {}
-    entity["type"] = type
-    entity["labels"] = { label }
-    entity["shortname"] = shortname
-    entity["name"] = name
+    SetProtectedField(entity, "type", type)
+    SetProtectedField(entity, "labels", { label })
+    SetProtectedField(entity, "shortname", shortname)
+    SetProtectedField(entity, "name", name)
     local defaultLocation = GetScopedVariable("DefaultLocation")
     if not IsEmpty(defaultLocation) then
         SetLocation(entity, defaultLocation)

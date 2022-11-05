@@ -12,7 +12,7 @@ local function isAges(species)
 end
 
 local function getSpeciesRef(entity)
-	local species = entity["species"]
+	local species = GetProtectedField(entity, "species")
 	if IsEmpty(species) then
 		return ""
 	else
@@ -21,7 +21,7 @@ local function getSpeciesRef(entity)
 end
 
 local function getGender(entity)
-	local gender = entity["gender"]
+	local gender = GetProtectedField(entity,"gender")
 	if IsEmpty(gender) then
 		return ""
 	else
@@ -54,12 +54,18 @@ local function getMixedAgeFactorAndExponent(speciesMixing)
 end
 
 function GetAgeFactorAndExponent(species)
-	local speciesMixing = species["ageMixing"]
+	local speciesMixing = GetProtectedField(species,"ageMixing")
 	if not IsEmpty(speciesMixing) then
 		return getMixedAgeFactorAndExponent(speciesMixing)
 	end
-	local factor = GetNumberField(species, "ageFactor", 1)
-	local exponent = GetNumberField(species, "ageExponent", 1)
+	local factor = GetProtectedField(species, "ageFactor")
+	if factor == nil then
+		factor = 1
+	end
+	local exponent = GetProtectedField(species, "ageExponent")
+	if exponent == nil then
+		exponent = 1
+	end
 	return factor, exponent
 end
 

@@ -1,0 +1,68 @@
+\documentclass[openany]{memoir}
+
+\input{../../main.tex}
+\loadLuacode{../../}
+
+\setsecnumdepth{subsubsection} %the deepest level still numbered
+\setafterparaskip{0.01cm} %force linebreak after paragraph
+%defines the style of the headers:
+\setsecheadstyle{\LARGE\bfseries\scshape}
+\setsubsecheadstyle{\Large\bfseries\scshape}
+\setsubsubsecheadstyle{\Large\bfseries\scshape}
+\setparaheadstyle{\large\bfseries\scshape}
+\setsubparaheadstyle{\bfseries}
+
+\begin{document}
+
+The newEntity command gives an entity a name, which is a good start, but not enough to fill it with life. Introducing:
+\begin{verbatim}
+	\addDescriptor{descriptor}{description}
+\end{verbatim}
+Using this command after a newEntity command adds a description to the entity. Both descriptor and description can contain almost arbitrary \TeX{} code.\footnote{Because the compiler evaluates them only once the description is printed during the generation of the automated chapters. This has a downside: If the code inside a description contains an error, the compiler will always put it in the line where automatedChapters is called. Debugging can become a bit tricky.}
+
+For example, let us add some descriptors to \reference{sting} and \mention{glamdring}.
+
+\begin{verbatim}
+\newEntity{items}{sting}{}{Sting}
+
+\addDescriptor{Appearance}{A short sword that glows when \nameref{orc}s are nearby.}
+
+\addDescriptor{Engraving}{Woe to those who dislike apples!}
+
+\newEntity{items}{glamdring}{}{Glamdring}
+
+\addDescriptor{Etymology}{Sindarin for noise-hammer.}
+
+\newEntity{species}{orc}{}{Orc}
+\end{verbatim}
+
+\newEntity{items}{sting}{}{Sting}
+
+\addDescriptor{Appearance}{A short sword that glows when \nameref{orc}s are nearby.}
+
+\addDescriptor{Engraving}{Woe to those who dislike apples!}
+
+\newEntity{items}{glamdring}{}{Glamdring}
+
+\addDescriptor{Etymology}{Sindarin for noise-hammer.}
+
+\newEntity{species}{orc}{}{Orc}
+
+\RpgTex{} prints only the descriptors of entities referred to by the reference command, sorted alphabetically. You may notice, though, that the description of \reference{sting} mentions another entity, which is therefore also put into the Only Mentioned chapter at the end.
+
+The \TeX{} command generated when printing entity entries is subsubsection, and the descriptors are printed as paragraph. In the unmodified book class they look the same, so I personally prefer to use the memoir class instead, and add the following preamble:
+\begin{verbatim}
+\setsecnumdepth{subsubsection} %the deepest level still numbered
+\setafterparaskip{0.01cm} %force linebreak after paragraph
+%defines the style of the headers:
+\setsecheadstyle{\LARGE\bfseries\scshape}
+\setsubsecheadstyle{\Large\bfseries\scshape}
+\setsubsubsecheadstyle{\Large\bfseries\scshape}
+\setparaheadstyle{\large\bfseries\scshape}
+\setsubparaheadstyle{\bfseries}
+\end{verbatim}
+The details are, of course, entirely up to the user.
+
+\automatedChapters{}
+
+\end{document}

@@ -1,0 +1,89 @@
+\documentclass[openany]{memoir}
+
+\input{../../main.tex}
+\loadLuacode{../../}
+
+\setsecnumdepth{subsubsection} %the deepest level still numbered
+\setafterparaskip{0.01cm} %force linebreak after paragraph
+%defines the style of the headers:
+\setsecheadstyle{\LARGE\bfseries\scshape}
+\setsubsecheadstyle{\Large\bfseries\scshape}
+\setsubsubsecheadstyle{\Large\bfseries\scshape}
+\setparaheadstyle{\large\bfseries\scshape}
+\setsubparaheadstyle{\bfseries}
+
+\begin{document}
+	
+It is a common theme in fantasy stories that the world contains some fantastical species that age at a different rate than humans do. To portray such a character it can be interesting to know both their age, and to what human age this roughly corresponds.
+
+To this end, any newly created species is asigned life stages. Per default, they correspond to the ages that we are used to (compare the entry for \reference{human}).
+
+If your species shall age at a different rate, you can specify a factor $f$, using setAgeFactor, and an exponent $e$, using setAgeExponent. The years $y$ a being of age $a$ has walked in this world is then calculated via
+\begin{equation}
+y = f a^e \hspace{0.3cm} .
+\end{equation}
+Perhaps the more intuitive (but equivalent) statement is that if some being is $y$ years old, then its corresponding age $a$ if it were a human is
+\begin{equation}
+	a = \left(\frac{y}{f}\right)^\frac{1}{e} \hspace{0.3cm} .
+\end{equation}
+If this is too mathsy for you that's alright. In practice you usually find both factor and exponent by trying around until you are happy.
+
+If mingling between species is a theme in your world, you may also automatically mix the age factor and exponent. To do this, use the command:
+\begin{verbatim}
+\setAgeModifierMixing{label-of-species-1}{label-of-species-2}
+\end{verbatim}
+\RpgTex{} then looks up the factors and exponents of the two species (default of 1, if none was specified) and takes the geometric mean:
+\begin{equation}
+f_3 = \sqrt{f_1 f_2}
+\hspace{0.3cm}
+,
+\hspace{0.3cm}
+e_3 = \sqrt{e_1 e_3}
+\end{equation}
+This means that the mixed species ages somewhere in between the two parent species.
+
+If you want to tell \RpgTex{} what species a character has, you can do so using the setSpecies command with the label of the species as an argument. Their corresponding human age is then calculated and displayed, and them reaching certain life stages is added to their history.
+
+If desired, you can specify the gender of a character with the setGender command. It takes any text as input and adds it to the appearance description.
+
+\setCurrentYear{3019}
+
+\newEntity{npcs}{aragorn}{}{Aragorn}
+\setSpecies{dunedain}
+\setGender{male}
+\born{2931}{Birth of \nameref{aragorn}.}
+
+\newEntity{npcs}{arwen}{}{Arwen}
+\setSpecies{elf}
+\setGender{female}
+\born{241}{Birth of \nameref{arwen}.}
+
+\newEntity{npcs}{boromir}{}{Boromir}
+\setSpecies{human}
+\born{2978}{Birth of \nameref{boromir}.}
+\died{3019}{Death of \nameref{boromir} at the hands of orcs.}
+
+\newEntity{species}{human}{}{Human}
+
+\newEntity{species}{elf}{}{Elf}
+\setAgeFactor{0.03}
+\setAgeExponent{3}
+
+\addDescriptor{Apology}{I am aware that Tolkien's elves are, in principle, immortal. Setting either factor or exponent to 0 tells \RpgTex{} exactly that, but then the AgeModifierMixing for the \nameref{dunedain} is pointless.}
+
+\newEntity{species}{dunedain}{}{Dunedain}
+\setAgeModifierMixing{human}{elf}
+
+
+\addDescriptor{Etymology}{Sindarin for Humans of the West.}
+
+\makeEntityPrimary{aragorn}
+\makeEntityPrimary{arwen}
+\makeEntityPrimary{boromir}
+\makeEntityPrimary{human}
+\makeEntityPrimary{elf}
+\makeEntityPrimary{dunedain}
+
+\automatedChapters{}
+
+\end{document}

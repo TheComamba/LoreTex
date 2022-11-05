@@ -1,0 +1,65 @@
+\documentclass[openany]{memoir}
+
+\input{../../main.tex}
+\loadLuacode{../../}
+
+\setsecnumdepth{subsubsection} %the deepest level still numbered
+\setafterparaskip{0.01cm} %force linebreak after paragraph
+%defines the style of the headers:
+\setsecheadstyle{\LARGE\bfseries\scshape}
+\setsubsecheadstyle{\Large\bfseries\scshape}
+\setsubsubsecheadstyle{\Large\bfseries\scshape}
+\setparaheadstyle{\large\bfseries\scshape}
+\setsubparaheadstyle{\bfseries}
+
+\begin{document}
+
+If an imaginary world grows large, it becomes ever more important to sort entities. The topmost sorting layer is that of entity type - items and species will appear in separate chapters. Below that, the entities are sorted by location. A location can be any other entity of any type. It usually makes most sense for a location to be of type places, but \RpgTex{} doesn't care. One plausible counterexample is a ship, which serves as the location of its crew. A location is set using the setLocation command with the label of the location after declaring a new entity.
+
+A location can itself have a location, allowing to make the sorting exactly as fine grained as desired. Locations do not have to be referenced in the main text to work. Any entities that have another entity as a location are listed in the entry of that location, sorted by their type.
+
+\newEntity{places}{outer-rim}{}{Outer Rim}
+
+\newEntity{places}{tattooine}{}{Tattooine}
+\setLocation{outer-rim}
+
+\addDescriptor{Description}{A desert planet.}
+
+\newEntity{places}{mos-eisley}{}{Mos Eisley}
+\setLocation{tattooine}
+
+\newEntity{species}{tusken}{}{Tusken}
+\setLocation{tattooine}
+
+\newEntity{species}{jawa}{}{Jawa}
+\setLocation{tattooine}
+
+\makeEntityPrimary{tattooine}
+\makeEntityPrimary{mos-eisley}
+
+Associations are a similar concept, but they do not influence how an entity is sorted. They are set using the setAssociation command with the label of the associated entity. Both entities will acknowledge the connection if they are printed out.
+
+The setAssociation command can be given a role in the association as an optional argument. Otherwise they will simply be called member. An entity can have an arbitrary number of associations.
+
+\newEntity{organisations}{galactic-empire}{}{Galactic Empire}
+
+\newEntity{ships}{star-destroyer}{}{Star Destroyer}
+\setAssociation{galactic-empire}
+
+\newEntity{ships}{death-star}{}{Death Star}
+\setAssociation[Flawless Flagship]{galactic-empire}
+
+\newEntity{ships}{death-star-2}{}{Death Star 2}
+\setAssociation[Unfinished Flagship]{galactic-empire}
+\setAssociation[Successor]{death-star}
+
+\makeEntityPrimary{galactic-empire}
+\makeEntityPrimary{star-destroyer}
+\makeEntityPrimary{death-star}
+
+
+
+
+\automatedChapters{}
+
+\end{document}

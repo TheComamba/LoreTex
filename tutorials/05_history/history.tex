@@ -1,0 +1,86 @@
+\documentclass[openany]{memoir}
+
+\input{../../main.tex}
+\loadLuacode{../../}
+
+\setsecnumdepth{subsubsection} %the deepest level still numbered
+\setafterparaskip{0.01cm} %force linebreak after paragraph
+%defines the style of the headers:
+\setsecheadstyle{\LARGE\bfseries\scshape}
+\setsubsecheadstyle{\Large\bfseries\scshape}
+\setsubsubsecheadstyle{\Large\bfseries\scshape}
+\setparaheadstyle{\large\bfseries\scshape}
+\setsubparaheadstyle{\bfseries}
+
+\begin{document}
+
+The problem of history shared between various entities is what spawned this project. The most noteworthy events in the history of e.g. a character are usually those that affect others as well. This means that their character entry should probably display the same event. In the past, I used to copy events to all entities it concerned, but this was tedious, error-prone, and hard to maintain. \RpgTex{} fixes that.
+
+The command to add history to an entity is:
+\begin{verbatim}
+\addHistory[day]{year}{event}
+\end{verbatim}
+Note that giving a day is optional.
+
+\newEntity{npcs}{flora}{}{Flora}
+
+\addHistory{1823}{
+	\nameref{flora} begins to speak.
+}
+
+Any event that references another entity is added to that entity as well.
+
+\addHistory{1830}{
+	\nameref{flora} befriends \nameref{paul}.
+}
+
+If an event does not mention another entity, but nonetheless concerns it, you can use the concerns command to signal exactly that. The opposite command, notconcerns, also exists, to signal that an event should not be added to some entity even though it is mentioned.
+
+\addHistory{1832}{
+	\nameref{flora} moves to \nameref{rome}.
+	\concerns{paul}
+	\notconcerns{rome}
+}
+
+Two more important commands to signal the birth and death (or, more generally, the coming in and out of existence) of an entity also exists: birthof and deathof.
+
+\addHistory{1820}{
+	The twins \nameref{flora} and \nameref{ramona} are born.
+	\birthof{flora}
+	\birthof{ramona}
+}
+
+\addHistory{1878}{
+	\nameref{flora} dies.
+	\deathof{flora}
+}
+
+To put histories into context, you can specify the current year and day of the current year (both default to 0 otherwise):
+\begin{verbatim}
+\setCurrentYear{year}
+\setCurrentDay{day}
+\end{verbatim}
+\setCurrentYear{1888}
+\setCurrentDay{166}
+Note, for example, that \RpgTex{} calculates the current age of characters whose birthyear was given.
+
+
+\newEntity{npcs}{paul}{}{Paul}
+
+\addHistory[32]{1888}{
+	\nameref{paul} finds out about \nameref{flora}'s demise.
+	\notconcerns{flora}
+}
+
+\newEntity{npcs}{ramona}{}{Ramona}
+\newEntity{places}{rome}{}{Rome}
+
+
+\makeEntityPrimary{flora}
+\makeEntityPrimary{paul}
+\makeEntityPrimary{ramona}
+\makeEntityPrimary{rome}
+
+\automatedChapters{}
+
+\end{document}

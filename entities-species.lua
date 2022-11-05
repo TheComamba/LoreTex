@@ -142,35 +142,45 @@ end
 
 local function addLifestageHistoryItems(entity)
 	local label = GetMainLabel(entity)
+	if IsEmpty(label) then
+		return
+	end
 	local birthyear = tonumber(entity["born"])
+	if IsEmpty(birthyear) then
+		return
+	end
 	local speciesRef = getSpeciesRef(entity)
+	if IsEmpty(speciesRef) then
+		return
+	end
 	local species = GetEntity(speciesRef)
-	if not IsEmpty(label) and not IsEmpty(birthyear) and not IsEmpty(species) then
-		local deathyear = tonumber(entity["died"])
-		local factor, exponent = GetAgeFactorAndExponent(species)
-		for i = 2, #lifestagesAndAges do
-			local lifestage = lifestagesAndAges[i][1]
-			local humanAge = lifestagesAndAges[i][2]
-			local realAge = ageToYears(humanAge, factor, exponent)
-			realAge = Round(realAge)
-			local year = birthyear + realAge
-			if deathyear == nil or year <= deathyear then
-				local event = {}
-				Append(event, TexCmd("nameref", label))
-				Append(event, " ")
-				Append(event, Tr("is"))
-				Append(event, " ")
-				Append(event, Tr(lifestage))
-				Append(event, ".")
-				local item = {}
-				SetYear(item, year)
-				item["event"] = table.concat(event)
-				item["concerns"] = { label }
-				if entity["historyItems"] == nil then
-					entity["historyItems"] = {}
-				end
-				entity["historyItems"][#entity["historyItems"] + 1] = item
+	if IsEmpty(species) then
+		return
+	end
+	local deathyear = tonumber(entity["died"])
+	local factor, exponent = GetAgeFactorAndExponent(species)
+	for i = 2, #lifestagesAndAges do
+		local lifestage = lifestagesAndAges[i][1]
+		local humanAge = lifestagesAndAges[i][2]
+		local realAge = ageToYears(humanAge, factor, exponent)
+		realAge = Round(realAge)
+		local year = birthyear + realAge
+		if deathyear == nil or year <= deathyear then
+			local event = {}
+			Append(event, TexCmd("nameref", label))
+			Append(event, " ")
+			Append(event, Tr("is"))
+			Append(event, " ")
+			Append(event, Tr(lifestage))
+			Append(event, ".")
+			local item = {}
+			SetYear(item, year)
+			item["event"] = table.concat(event)
+			item["concerns"] = { label }
+			if entity["historyItems"] == nil then
+				entity["historyItems"] = {}
 			end
+			entity["historyItems"][#entity["historyItems"] + 1] = item
 		end
 	end
 end

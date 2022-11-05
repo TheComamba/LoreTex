@@ -7,7 +7,8 @@ function SetDescriptor(entity, descriptor, description, subdescriptor)
         return
     elseif IsEmpty(description) then
         return
-    elseif IsIn(descriptor, ProtectedDescriptors) then
+    elseif IsProtectedDescriptor(descriptor) then
+    -- elseif IsIn(descriptor, protectedDescriptors) then
         LogError("Called with protected descriptor \"" ..
             descriptor .. "\" for entity with label \"" .. GetMainLabel(entity) .. "\"")
         return

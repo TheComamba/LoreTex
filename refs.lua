@@ -97,8 +97,9 @@ function ScanForCmd(content, cmd)
     elseif type(content) == "table" then
         local out = {}
         for key, elem in pairs(content) do
-            if not IsIn(key, ProtectedDescriptors) then
-                Append(out, ScanForCmd(elem, cmd))
+            if not IsProtectedDescriptor(key) then
+                local commands = ScanForCmd(elem, cmd)
+                Append(out, commands)
             end
         end
         return out
@@ -111,7 +112,8 @@ end
 function ScanContentForMentionedRefs(content)
     local mentionedRefsHere = {}
     for key1, refType in pairs(RefTypes) do
-        for key2, ref in pairs(ScanForCmd(content, refType)) do
+        local refs = ScanForCmd(content, refType)
+        for key2, ref in pairs(refs) do
             if not IsIn(ref, PrimaryRefs) then
                 UniqueAppend(mentionedRefsHere, ref)
             end

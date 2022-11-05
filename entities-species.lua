@@ -1,4 +1,3 @@
-Append(ProtectedDescriptors, { "born", "died", "species", "gender", "ageFactor", "ageExponent", "ageMixing" })
 local lifestagesAndAges = {}
 lifestagesAndAges[#lifestagesAndAges + 1] = { "child", 0 }
 lifestagesAndAges[#lifestagesAndAges + 1] = { "juvenile", 12 }

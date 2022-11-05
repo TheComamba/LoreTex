@@ -1,5 +1,3 @@
-Append(ProtectedDescriptors, { "location" })
-
 function IsLocationUnknown(entity)
     local locationLabel = entity["location"]
     if IsEmpty(locationLabel) then

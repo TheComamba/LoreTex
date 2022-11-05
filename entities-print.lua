@@ -78,7 +78,7 @@ function DescriptorsString(entity)
 
     local descriptorsList = {}
     for descriptor, description in pairs(entity) do
-        if not IsIn(descriptor, ProtectedDescriptors) then
+        if not IsProtectedDescriptor(descriptor) then
             descriptorsList[#descriptorsList + 1] = descriptor
         end
     end

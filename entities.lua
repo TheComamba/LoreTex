@@ -2,17 +2,6 @@ AllEntities = {}
 NotYetFoundEntities = {}
 local labelToEntity = {}
 IsShowSecrets = false
-ProtectedDescriptors = {}
-Append(ProtectedDescriptors, "children")
-Append(ProtectedDescriptors, "historyItems")
-Append(ProtectedDescriptors, "isSecret")
-Append(ProtectedDescriptors, "labels")
-Append(ProtectedDescriptors, "monthsAndFirstDays")
-Append(ProtectedDescriptors, "name")
-Append(ProtectedDescriptors, "parents")
-Append(ProtectedDescriptors, "shortname")
-Append(ProtectedDescriptors, "type")
-Append(ProtectedDescriptors, "yearAbbreviation")
 RevealedLabels = {}
 
 function ResetEntities()

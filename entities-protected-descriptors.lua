@@ -1,0 +1,23 @@
+local protectedDescriptors = {}
+Append(protectedDescriptors, "children")
+Append(protectedDescriptors, "historyItems")
+Append(protectedDescriptors, "isSecret")
+Append(protectedDescriptors, "labels")
+Append(protectedDescriptors, "location")
+Append(protectedDescriptors, "monthsAndFirstDays")
+Append(protectedDescriptors, "name")
+Append(protectedDescriptors, "parents")
+Append(protectedDescriptors, "shortname")
+Append(protectedDescriptors, "type")
+Append(protectedDescriptors, "yearAbbreviation")
+Append(protectedDescriptors, "born")
+Append(protectedDescriptors, "died")
+Append(protectedDescriptors, "species")
+Append(protectedDescriptors, "gender")
+Append(protectedDescriptors, "ageFactor")
+Append(protectedDescriptors, "ageExponent")
+Append(protectedDescriptors, "ageMixing")
+
+function IsProtectedDescriptor(descriptor)
+    return IsIn(descriptor, protectedDescriptors)
+end

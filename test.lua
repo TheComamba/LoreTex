@@ -16,6 +16,7 @@ Append(allTestFiles, "npc-and-species")
 Append(allTestFiles, "primary-when-mentioned-type")
 Append(allTestFiles, "refs")
 Append(allTestFiles, "region-and-city")
+Append(allTestFiles, "ship-crew")
 Append(allTestFiles, "species-at-location")
 Append(allTestFiles, "sub-label")
 local numSucceeded = 0

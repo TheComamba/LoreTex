@@ -2,12 +2,18 @@ function CompareString(a, b)
     if a:lower() == b:lower() then
         return a < b
     else
+        local numberPosA = string.find(a, "%d+")
+        local numberPosB = string.find(b, "%d+")
         return a:lower() < b:lower()
     end
 end
 
 function CompareAlphanumerical(a, b)
-    if type(a) == "string" and type(b) == "string" then
+    if type(a) == "string" and tonumber(a) ~= nil then
+        return CompareAlphanumerical(tonumber(a), b)
+    elseif type(b) == "string" and tonumber(b) ~= nil then
+        return CompareAlphanumerical(a, tonumber(b))
+    elseif type(a) == "string" and type(b) == "string" then
         return CompareString(a, b)
     elseif type(a) == "number" and type(b) == "number" then
         return a < b

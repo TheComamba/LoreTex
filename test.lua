@@ -154,7 +154,7 @@ function Assert(caller, expected, received)
             Append(out, type(received) .. [[.\\]])
         else
             Append(out, printComparison(expected, received))
-            if type(failedItem1[1]) == "string" then
+            if type(failedItem1[1]) == "string" and type(failedItem2[1]) == "string" then
                 Append(out, "At Element " .. failedIndex[1] .. [[:\\]])
                 Append(out, printComparison(printAllChars(failedItem1[1]), printAllChars(failedItem2[1])))
             end

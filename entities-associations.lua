@@ -5,7 +5,7 @@ end
 function AddParentDescriptorsToChild(child)
     StartBenchmarking("AddParentDescriptorsToChild")
     local parentList = {}
-    local parentsAndRelationships = child["parents"]
+    local parentsAndRelationships = GetProtectedField(child, "parents")
     if parentsAndRelationships ~= nil then
         if type(parentsAndRelationships) == "string" then
             parentsAndRelationships = { parentsAndRelationships }
@@ -17,7 +17,7 @@ function AddParentDescriptorsToChild(child)
             end
             local parentLabel = parentAndRelationship[1]
             local relationship = parentAndRelationship[2]
-            if parentLabel ~= child["location"] or not IsEmpty(relationship) then
+            if parentLabel ~= GetProtectedField(child, "location") or not IsEmpty(relationship) then
                 local parent = GetEntity(parentLabel)
                 if not IsEmpty(parent) and IsEntityShown(parent) then
                     if IsEmpty(relationship) then
@@ -40,12 +40,13 @@ function AddParentDescriptorsToChild(child)
 end
 
 function MarkSecret(entity)
-    if IsEmpty(entity["name"]) then
+    local name = GetProtectedField(entity, "name")
+    if IsEmpty(name) then
         LogError("Entity has no name: " .. DebugPrint(entity))
     elseif IsEntitySecret(entity) then
-        if IsEmpty(entity["shortname"]) then
-            entity["shortname"] = entity["name"]
+        if IsEmpty(GetProtectedField(entity, "shortname")) then
+            SetProtectedField(entity, "shortname", name)
         end
-        entity["name"] = "(" .. CapFirst(Tr("secret")) .. ") " .. entity["name"]
+        SetProtectedField(entity, "name", "(" .. CapFirst(Tr("secret")) .. ") " .. name)
     end
 end

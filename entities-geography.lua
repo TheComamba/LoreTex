@@ -1,5 +1,5 @@
 function IsLocationUnknown(entity)
-    local locationLabel = entity["location"]
+    local locationLabel = GetProtectedField(entity, "location")
     if IsEmpty(locationLabel) then
         return false
     end
@@ -18,7 +18,7 @@ function IsLocationUnknown(entity)
 end
 
 local function getLocation(entity)
-    local locationLabel = entity["location"]
+    local locationLabel = GetProtectedField(entity, "location")
     if IsEmpty(locationLabel) then
         return {}
     elseif IsIn(locationLabel, GetLabels(entity)) then
@@ -68,7 +68,7 @@ function PlaceToName(locationLabel)
         end
 
         local place = GetEntity(locationLabel)
-        locationLabel = place["location"]
+        locationLabel = GetProtectedField(place, "location")
     end
     StopBenchmarking("PlaceToName")
     return name

@@ -16,10 +16,10 @@ function GetShortname(entity)
     end
     if IsEmpty(entity) then
         return "NIL"
-    elseif not IsEmpty(entity["shortname"]) then
-        return entity["shortname"]
-    elseif not IsEmpty(entity["name"]) then
-        return entity["name"]
+    elseif not IsEmpty(GetProtectedField(entity, "shortname")) then
+        return GetProtectedField(entity, "shortname")
+    elseif not IsEmpty(GetProtectedField(entity, "name")) then
+        return GetProtectedField(entity, "name")
     else
         LogError("Entity " .. DebugPrint(entity) .. " has no name.")
         return "NO NAME"
@@ -109,11 +109,11 @@ local function printEntities(sectionname, entitiesList)
     Append(out, TexCmd("subsection", CapFirst(sectionname)))
     table.sort(entitiesList, CompareByName)
     for key, entity in pairs(entitiesList) do
-        local shortname = entity["shortname"]
+        local shortname = GetProtectedField(entity, "shortname")
         if IsEmpty(shortname) then
-            Append(out, TexCmd("subsubsection", entity["name"]))
+            Append(out, TexCmd("subsubsection", GetProtectedField(entity, "name")))
         else
-            Append(out, TexCmd("subsubsection", entity["name"], shortname))
+            Append(out, TexCmd("subsubsection", GetProtectedField(entity, "name"), shortname))
         end
         Append(out, TexCmd("label", GetMainLabel(entity)))
         Append(out, DescriptorsString(entity))
@@ -165,7 +165,7 @@ end
 local function getAllLocationLabelsSorted(entities)
     local locationLabels = {}
     for key, entity in pairs(entities) do
-        local locationLabel = entity["location"]
+        local locationLabel = GetProtectedField(entity, "location")
         if not IsEmpty(locationLabel) then
             if IsEntityShown(GetEntity(locationLabel)) then
                 UniqueAppend(locationLabels, locationLabel)

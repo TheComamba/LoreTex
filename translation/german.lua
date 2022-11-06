@@ -1,5 +1,6 @@
 Dictionary = {}
 Dictionary["adult"] = "erwachsen"
+Dictionary["affiliated"] = "zugehörige"
 Dictionary["affiliations"] = "Zugehörigkeiten"
 Dictionary["aged"] = "wurde"
 Dictionary["all"] = "alle"

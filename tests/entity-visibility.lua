@@ -110,7 +110,7 @@ AddRef("unborn-orga", PrimaryRefs)
 
 local function itemsParagraph()
     local out = {}
-    Append(out, [[\paragraph{]] .. CapFirst(Tr("items")) .. [[}]])
+    Append(out, [[\paragraph{]] .. CapFirst(Tr("affiliated")) .. [[ ]] .. Tr("items") .. [[}]])
     Append(out, [[\begin{itemize}]])
     if IsShowSecrets then
         Append(out, [[\item{} \nameref{at-secret-location} (]] .. Tr("in") .. [[ \nameref{eldorado})]])
@@ -173,11 +173,11 @@ local function generateExpected()
     if IsShowFuture then
         Append(out, [[\subsubsection{Unborn Organisation}]])
         Append(out, [[\label{unborn-orga}]])
+        Append(out, itemsParagraph())
         Append(out, [[\paragraph{]] .. CapFirst(Tr("history")) .. [[}]])
         Append(out, [[\begin{itemize}]])
         Append(out, [[\item{} 10 Vin (]] .. Tr("in-years", { 10 }) .. [[):\\ Founded.\birthof{unborn-orga}]])
         Append(out, [[\end{itemize}]])
-        Append(out, itemsParagraph())
     end
 
     Append(out, [[\chapter{]] .. CapFirst(Tr("items")) .. [[}]])

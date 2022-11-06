@@ -15,7 +15,7 @@ local function entityQualifiersString(child, parent, relationships)
         Append(content, Tr("secret"))
     end
     for key, relationship in pairs(relationships) do
-        Append(content, relationships)
+        Append(content, relationship)
     end
     local birthyearstr = GetProtectedField(child, "born")
     local birthyear = tonumber(birthyearstr)

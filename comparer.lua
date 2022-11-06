@@ -1,9 +1,33 @@
+local function substringUntil(str, start, pattern)
+    local pos = string.find(str, pattern, start)
+    if pos == nil then
+        return string.sub(str, start), -1
+    else
+        return string.sub(str, start, pos - 1), pos
+    end
+end
+
 function CompareString(a, b)
     if a:lower() == b:lower() then
         return a < b
     else
-        local numberPosA = string.find(a, "%d+")
-        local numberPosB = string.find(b, "%d+")
+        local posA = 1
+        local posB = 1
+        local subA = ""
+        local subB = ""
+        while posA > 0 and posB > 0 do
+            for key, pattern in pairs({ "%d", "%D" }) do
+                subA, posA = substringUntil(a, posA, pattern)
+                subB, posB = substringUntil(b, posB, pattern)
+                if subA:lower() ~= subB:lower() then
+                    if tonumber(subA) ~= nil and tonumber(subB) ~= nil then
+                        return tonumber(subA) < tonumber(subB)
+                    else
+                        return subA:lower() < subB:lower()
+                    end
+                end
+            end
+        end
         return a:lower() < b:lower()
     end
 end

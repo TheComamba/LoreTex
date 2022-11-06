@@ -1,7 +1,7 @@
 local protectedDescriptors = {}
 
 local function addProtectedDescriptor(descriptor)
-    Append(protectedDescriptors, descriptor)
+    protectedDescriptors[descriptor] = "_" .. descriptor .. "_"
 end
 
 addProtectedDescriptor("ageExponent")
@@ -23,33 +23,41 @@ addProtectedDescriptor("shortname")
 addProtectedDescriptor("type")
 addProtectedDescriptor("yearAbbreviation")
 
+function IsProtectedDescriptor(descriptor)
+    for key, protectedDescriptor in pairs(protectedDescriptors) do
+        if protectedDescriptor == descriptor then
+            return true
+        end
+    end
+    return false
+end
+
 function GetProtectedField(entity, key)
-    if not IsIn(key, protectedDescriptors) then
-        LogError("key \"" .. key .. "\"not found in protectedDescriptors.")
+    local descriptor = protectedDescriptors[key]
+    if descriptor == nil then
+        LogError("Key \"" .. key .. "\" does not name a protected descriptor.")
         return nil
     end
-    return entity[key]
+    return entity[descriptor]
 end
 
 function SetProtectedField(entity, key, value)
-    if not IsIn(key, protectedDescriptors) then
-        LogError("key \"" .. key .. "\"not found in protectedDescriptors.")
+    local descriptor = protectedDescriptors[key]
+    if descriptor == nil then
+        LogError("Key \"" .. key .. "\" does not name a protected descriptor.")
         return nil
     end
-    entity[key] = value
+    entity[descriptor] = value
 end
 
 function AddToProtectedField(entity, key, value)
-    if not IsIn(key, protectedDescriptors) then
-        LogError("key \"" .. key .. "\"not found in protectedDescriptors.")
+    local descriptor = protectedDescriptors[key]
+    if descriptor == nil then
+        LogError("Key \"" .. key .. "\" does not name a protected descriptor.")
         return nil
     end
-    if entity[key] == nil then
-        entity[key] = {}
+    if entity[descriptor] == nil then
+        entity[descriptor] = {}
     end
-    entity[key][#entity[key] + 1] = value
-end
-
-function IsProtectedDescriptor(descriptor)
-    return IsIn(descriptor, protectedDescriptors)
+    entity[descriptor][#entity[descriptor] + 1] = value
 end

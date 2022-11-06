@@ -78,7 +78,7 @@ end
 
 function SetLocation(entity, location)
     SetProtectedField(entity, "location", location)
-    AddParent(entity, location)
+    AddParent(entity, location, GetProtectedDescriptor("location"))
 end
 
 function SetSpecies(entity, species)

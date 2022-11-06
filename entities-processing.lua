@@ -14,7 +14,7 @@ local function entityQualifiersString(child, parent, relationship)
     if IsEntitySecret(child) then
         Append(content, Tr("secret"))
     end
-    if not IsEmpty(relationship) then
+    if not IsEmpty(relationship) and not IsProtectedDescriptor(relationship) then
         Append(content, relationship)
     end
     local birthyearstr = GetProtectedField(child, "born")

@@ -3,7 +3,11 @@ local inInCm = 2.54
 local MiInKM = 1.609
 local lbInKg = 0.4536
 local gallonInLiter = 3.785
+local quartInLiter = gallonInLiter * 0.25
+local ouncesInLiter = 0.02957
 local MCubedInLiter = 1000
+local fahrenheitFactor = 5 / 9
+local fahrenheitOffset = -32
 
 function PrintFtToM(valInFt)
     if valInFt == nil or type(valInFt) ~= "number" then
@@ -98,5 +102,41 @@ function PrintGallonToLiter(valInGallons)
     str = str .. " l ("
     str = str .. RoundedNumString(valInGallons, 1)
     str = str .. " gallons)"
+    tex.print(str)
+end
+
+function PrintOunceToLiter(valInOunces)
+    if valInOunces == nil or type(valInOunces) ~= "number" then
+        LogError("Called with " .. DebugPrint(valInOunces))
+        return
+    end
+    local str = RoundedNumString(valInOunces * ouncesInLiter, 1)
+    str = str .. " l ("
+    str = str .. RoundedNumString(valInOunces, 1)
+    str = str .. " fl oz)"
+    tex.print(str)
+end
+
+function PrintQuartToLiter(valInQuart)
+    if valInQuart == nil or type(valInQuart) ~= "number" then
+        LogError("Called with " .. DebugPrint(valInQuart))
+        return
+    end
+    local str = RoundedNumString(valInQuart * quartInLiter, 1)
+    str = str .. " l ("
+    str = str .. RoundedNumString(valInQuart, 1)
+    str = str .. " qt)"
+    tex.print(str)
+end
+
+function PrintFahrenheitToCelsius(valInFahrenheit)
+    if valInFahrenheit == nil or type(valInFahrenheit) ~= "number" then
+        LogError("Called with " .. DebugPrint(valInFahrenheit))
+        return
+    end
+    local str = RoundedNumString((valInFahrenheit + fahrenheitOffset) * fahrenheitFactor, 0)
+    str = str .. " deg. C ("
+    str = str .. RoundedNumString(valInFahrenheit, 0)
+    str = str .. " deg. F)"
     tex.print(str)
 end

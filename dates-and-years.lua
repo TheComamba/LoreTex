@@ -20,7 +20,7 @@ function AddDateFmt(label)
         LogError("Could not find a calendar for label \"" .. label .. "\"")
         return
     end
-    if IsEmpty(calendar["monthsAndFirstDays"]) then
+    if IsEmpty(GetProtectedField(calendar, "monthsAndFirstDays")) then
         LogError("Calendar \"" .. label .. "\" has no months defined.")
         return
     end
@@ -36,7 +36,7 @@ function SetYearAbbreviation(entity, abbr)
         LogError("Called with empty abbreviation for entity:" .. DebugPrint(entity))
         return
     end
-    entity["yearAbbreviation"] = abbr
+    SetProtectedField(entity, "yearAbbreviation", abbr)
 end
 
 function AddMonth(entity, month, firstDay)
@@ -52,10 +52,7 @@ function AddMonth(entity, month, firstDay)
         LogError("Called without first day of month:" .. DebugPrint(month))
         return
     end
-    if entity["monthsAndFirstDays"] == nil then
-        entity["monthsAndFirstDays"] = {}
-    end
-    entity["monthsAndFirstDays"][#entity["monthsAndFirstDays"] + 1] = { month, firstDay }
+    AddToProtectedField(entity, "monthsAndFirstDays", { month, firstDay })
 end
 
 local function isCurrentDaySet()
@@ -231,7 +228,8 @@ function Date(day, fmt)
     Append(out, Tr("day") .. " ")
     Append(out, day)
     for key, calendar in pairs(fmt) do
-        local month, dayOfMonth = monthAndDay(day, calendar["monthsAndFirstDays"])
+        local monthsAndDays = GetProtectedField(calendar, "monthsAndFirstDays")
+        local month, dayOfMonth = monthAndDay(day, monthsAndDays)
         Append(out, [[ / ]])
         Append(out, dayOfMonth)
         Append(out, [[.]])

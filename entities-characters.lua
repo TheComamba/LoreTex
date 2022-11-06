@@ -23,7 +23,7 @@ local function isHasHappened(entity, keyword, onNil)
     else
         year = tonumber(year)
         if year == nil then
-            LogError("Entry with key \"" .. keyword .. "\" of " .. entity["name"] .. " is not a number.")
+            LogError("Entry with key \"" .. keyword .. "\" of is not a number:" .. DebugPrint(entity))
             return onNil
         end
         return year <= CurrentYear
@@ -39,13 +39,14 @@ function IsDead(entity)
 end
 
 function MarkDead(entity)
-    if IsEmpty(entity["name"]) then
+    local name = GetProtectedField(entity, "name")
+    if IsEmpty(name) then
         LogError("Entity has no name: " .. DebugPrint(entity))
     elseif IsDead(entity) then
-        if entity["shortname"] == nil then
-            entity["shortname"] = entity["name"]
+        if GetProtectedField(entity, "shortname") == nil then
+            SetProtectedField(entity, "shortname", name)
         end
-        entity["name"] = entity["name"] .. " " .. TexCmd("textdied")
+        SetProtectedField(entity, "name", name .. " " .. TexCmd("textdied"))
     end
 end
 

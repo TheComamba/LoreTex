@@ -11,7 +11,7 @@ AllTypes["peoples"] = { "languages", "species" }
 AllTypes["places"] = { "places" }
 
 function IsType(type, entity)
-    local entityType = entity["type"]
+    local entityType = GetProtectedField(entity, "type")
     if IsEmpty(entity) or entityType == nil then
         return false
     else

@@ -67,26 +67,6 @@ local function historyItemToString(historyItem, isPrintDate)
     return table.concat(out)
 end
 
-local function sortHistoryItemsChronologically(a, b)
-    if a["year"] ~= b["year"] then
-        return a["year"] < b["year"]
-    elseif a["day"] == nil and b["day"] == nil then
-        if a["counter"] == nil or b["counter"] == nil then
-            LogError("TODO: Properly process lifestage history items.")
-            return false
-        end
-        return a["counter"] < b["counter"]
-    elseif b["day"] == nil then
-        return false
-    elseif a["day"] == nil then
-        return true
-    elseif a["day"] ~= b["day"] then
-        return a["day"] < b["day"]
-    else
-        return a["counter"] < b["counter"]
-    end
-end
-
 local function isSameDate(item1, item2)
     if item1["year"] ~= item2["year"] then
         return false
@@ -107,7 +87,7 @@ local function addHistoryDescriptors(entity)
     if historyItems == nil then
         historyItems = {}
     end
-    table.sort(historyItems, sortHistoryItemsChronologically)
+    table.sort(historyItems, CompareHistoryItems)
     local processedHistory = {}
     for key, historyItem in pairs(historyItems) do
         if isHistoryShown(historyItem) then

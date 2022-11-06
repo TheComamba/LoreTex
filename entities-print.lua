@@ -60,7 +60,7 @@ local function descritptorMapString(map)
     for key, elem in pairs(map) do
         keys[#keys + 1] = key
     end
-    table.sort(keys, StrCmp)
+    table.sort(keys, CompareStrings)
     local out = {}
     for index, key in pairs(keys) do
         local content = map[key]
@@ -83,7 +83,7 @@ function DescriptorsString(entity)
             descriptorsList[#descriptorsList + 1] = descriptor
         end
     end
-    table.sort(descriptorsList, StrCmp)
+    table.sort(descriptorsList, CompareStrings)
     for key, descriptor in pairs(descriptorsList) do
         Append(out, TexCmd("paragraph", CapFirst(descriptor)))
         if descriptor == HeightCaption then
@@ -216,7 +216,7 @@ function PrintEntityChapter(primaryEntities, metatype)
 
     Append(out, TexCmd("chapter", CapFirst(Tr(metatype))))
     local types = AllTypes[metatype]
-    table.sort(types, SortByTranslation)
+    table.sort(types, CompareTranslation)
     for i, type in pairs(types) do
         local entitiesOfType = GetEntitiesOfType(type, fittingEntities)
         if not IsEmpty(entitiesOfType) then

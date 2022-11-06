@@ -1,15 +1,3 @@
-local function compareAffiliations(a, b)
-    if a[1] ~= b[1] then
-        return CompareByName(a[1], b[1])
-    elseif #a ~= #b then
-        return #a < #b
-    elseif #a > 1 then
-        return a[2] < b[2]
-    else
-        return false
-    end
-end
-
 function AddParentDescriptorsToChild(child)
     StartBenchmarking("AddParentDescriptorsToChild")
     local parentList = {}
@@ -18,7 +6,7 @@ function AddParentDescriptorsToChild(child)
         if type(parentsAndRelationships) == "string" then
             parentsAndRelationships = { parentsAndRelationships }
         end
-        table.sort(parentsAndRelationships, compareAffiliations)
+        table.sort(parentsAndRelationships, CompareAffiliations)
         for key, parentAndRelationship in pairs(parentsAndRelationships) do
             if type(parentAndRelationship) == "string" then
                 parentAndRelationship = { parentAndRelationship }

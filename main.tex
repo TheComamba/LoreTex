@@ -6,6 +6,7 @@
 \newcommand{\loadLuacode}[1]{
     \directlua{
         dofile([[#1]] .. "/common.lua")
+        dofile([[#1]] .. "/comparer.lua")
         dofile([[#1]] .. "/dates-and-years.lua")
         dofile([[#1]] .. "/dictionary.lua")
         dofile([[#1]] .. "/entities.lua")

@@ -37,12 +37,6 @@ function IsLocationUnrevealed(entity)
     return IsEntitySecret(location) and (not IsRevealed(location))
 end
 
-function CompareLocationLabelsByName(label1, label2)
-    local name1 = PlaceToName(label1)
-    local name2 = PlaceToName(label2)
-    return StrCmp(name1, name2)
-end
-
 function PlaceToName(locationLabel)
     StartBenchmarking("PlaceToName")
     local name = ""

@@ -1,6 +1,7 @@
 local allTestFiles = {}
 Append(allTestFiles, "calendars")
 Append(allTestFiles, "common")
+Append(allTestFiles, "comparer")
 Append(allTestFiles, "default-location")
 Append(allTestFiles, "dictionary")
 Append(allTestFiles, "entities-with-associations")

@@ -31,7 +31,7 @@ function CompareAffiliations(a, b)
     elseif #a ~= #b then
         return #a < #b
     elseif #a > 1 then
-        return a[2] < b[2]
+        return CompareStrings(a[2], b[2])
     else
         return false
     end

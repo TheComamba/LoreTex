@@ -182,10 +182,7 @@ local function addLifestageHistoryItems(entity)
 			SetYear(item, year)
 			item["event"] = table.concat(event)
 			item["concerns"] = { label }
-			if entity["historyItems"] == nil then
-				entity["historyItems"] = {}
-			end
-			entity["historyItems"][#entity["historyItems"] + 1] = item
+			AddToProtectedField(entity, "historyItems", item)
 		end
 	end
 end

@@ -2,7 +2,8 @@ local function extractEntitiesAtLocation(list, location)
     StartBenchmarking("extractEntitiesAtLocation")
     local out = {}
     for key, entity in pairs(list) do
-        if entity["location"] == location or (IsEmpty(entity["location"]) and IsEmpty(location)) then
+        local entityLocation = GetProtectedField(entity, "location")
+        if entityLocation == location or (IsEmpty(entityLocation) and IsEmpty(location)) then
             out[#out + 1] = entity
         end
     end

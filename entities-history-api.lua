@@ -6,7 +6,7 @@ function EmptyHistoryItem()
 	item["year"] = nil
 	item["yearFormat"] = nil
 	item["event"] = ""
-	item["isSecret"] = false
+	SetProtectedField(item, "isSecret", false)
 	item["isConcernsOthers"] = true
 	item["counter"] = historyItemCounter
 	historyItemCounter = historyItemCounter + 1
@@ -85,10 +85,7 @@ function ProcessEvent(item)
 
 	for key, concernedLabel in pairs(item["concerns"]) do
 		local entity = GetMutableEntityFromAll(concernedLabel)
-		if entity["historyItems"] == nil then
-			entity["historyItems"] = {}
-		end
-		entity["historyItems"][#entity["historyItems"] + 1] = item
+		AddToProtectedField(entity, "historyItems", item)
 	end
 
 	addSpecialyearsToEntities("born", item["year"], item["birthof"])

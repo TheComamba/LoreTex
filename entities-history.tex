@@ -58,7 +58,7 @@
 			SetYearFmt(item, #2)
 			SetYear(item, "#3")
 			item["event"] = [[\detokenize{#4}]]
-			item["isSecret"] = true
+			SetProtectedField(item, "isSecret", true)
 			ProcessEvent(item)
 		end
 	}

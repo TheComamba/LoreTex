@@ -58,7 +58,7 @@ Append(expected, [[\paragraph{]] .. CapFirst(Tr("affiliated")).. [[ ]] .. Tr("np
 Append(expected, [[\begin{itemize}]])
 Append(expected, [[\item{} \nameref{balagog} (Cook)]])
 Append(expected, [[\item{} \nameref{cuen}]])
-Append(expected, [[\item{} \nameref{haldora} (Captain).]])
+Append(expected, [[\item{} \nameref{haldora} (Captain)]])
 Append(expected, [[\end{itemize}]])
 
 Append(expected, [[\chapter{]] .. CapFirst(Tr("places")).. [[}]])

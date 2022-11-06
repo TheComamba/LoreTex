@@ -9,13 +9,13 @@ local function registerProcessedEntityLabels(labels, entity)
     end
 end
 
-local function entityQualifiersString(child, parent, relationship)
+local function entityQualifiersString(child, parent, relationships)
     local content = {}
     if IsEntitySecret(child) then
         Append(content, Tr("secret"))
     end
-    if not IsEmpty(relationship) and not IsProtectedDescriptor(relationship) then
-        Append(content, relationship)
+    for key, relationship in pairs(relationships) do
+        Append(content, relationships)
     end
     local birthyearstr = GetProtectedField(child, "born")
     local birthyear = tonumber(birthyearstr)
@@ -43,7 +43,7 @@ local function entityQualifiersString(child, parent, relationship)
     end
 end
 
-local function addSingleChildDescriptorToParent(child, parent, relationship)
+local function addSingleChildDescriptorToParent(child, parent, relationships)
     local childType = GetProtectedField(child, "type")
     local descriptor = Tr("affiliated") .. " " .. Tr(childType)
     if parent[descriptor] == nil then
@@ -53,21 +53,23 @@ local function addSingleChildDescriptorToParent(child, parent, relationship)
     local srcLabel = GetMainLabel(child)
     Append(content, TexCmd("nameref", srcLabel))
     Append(content, " ")
-    Append(content, entityQualifiersString(child, parent, relationship))
+    Append(content, entityQualifiersString(child, parent, relationships))
     UniqueAppend(parent[descriptor], table.concat(content))
 end
 
-local function getRelationship(child, parentLabels)
+local function getRelationships(child, parentLabels)
     local parents = GetProtectedField(child, "parents")
+    local relationships = {}
     for key, parentAndRelationship in pairs(parents) do
         if IsIn(parentAndRelationship[1], parentLabels) then
-            if parentAndRelationship[2] ~= nil then
-                return parentAndRelationship[2]
+            local relationship = parentAndRelationship[2]
+            if not IsEmpty(relationship) and not IsProtectedDescriptor(relationship) then
+                UniqueAppend(relationships, parentAndRelationship[2])
             end
-            break
         end
     end
-    return ""
+    table.sort(relationships)
+    return relationships
 end
 
 local function addChildrenDescriptorsToParent(parent)
@@ -81,8 +83,8 @@ local function addChildrenDescriptorsToParent(parent)
     for key, childLabel in pairs(childrenLabels) do
         local child = GetEntity(childLabel)
         if IsEntityShown(child) then
-            local relationship = getRelationship(child, parentLabels)
-            addSingleChildDescriptorToParent(child, parent, relationship)
+            local relationships = getRelationships(child, parentLabels)
+            addSingleChildDescriptorToParent(child, parent, relationships)
         end
     end
     StopBenchmarking("addChildrenDescriptorsToParent")

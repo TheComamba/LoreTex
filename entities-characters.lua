@@ -43,7 +43,7 @@ function MarkDead(entity)
     if IsEmpty(name) then
         LogError("Entity has no name: " .. DebugPrint(entity))
     elseif IsDead(entity) then
-        if GetProtectedField(entity, "shortname") == nil then
+        if IsEmpty(GetProtectedField(entity, "shortname")) then
             SetProtectedField(entity, "shortname", name)
         end
         SetProtectedField(entity, "name", name .. " " .. TexCmd("textdied"))

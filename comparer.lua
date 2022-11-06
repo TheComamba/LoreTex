@@ -1,11 +1,15 @@
-function CompareStrings(a, b)
+function CompareString(a, b)
+    if a:lower() == b:lower() then
+        return a < b
+    else
+        return a:lower() < b:lower()
+    end
+end
+
+function CompareAlphanumerical(a, b)
     if type(a) == "string" and type(b) == "string" then
-        if a:lower() == b:lower() then
-            return a < b
-        else
-            return a:lower() < b:lower()
-        end
-    elseif type(a) == type(b) then
+        return CompareString(a, b)
+    elseif type(a) == "number" and type(b) == "number" then
         return a < b
     elseif type(a) == "number" and type(b) == "string" then
         return true --numbers before strings
@@ -14,14 +18,14 @@ function CompareStrings(a, b)
     end
 
     LogError("Tried comparing " .. DebugPrint(a) .. " with " .. DebugPrint(b))
-    return true
+    return false
 end
 
 function CompareByName(entity1, entity2)
     if type(entity1) == "table" then
-        return CompareStrings(GetShortname(entity1), GetShortname(entity2))
+        return CompareString(GetShortname(entity1), GetShortname(entity2))
     elseif type(entity1) == "string" then
-        return CompareStrings(LabelToName(entity1), LabelToName(entity2))
+        return CompareString(LabelToName(entity1), LabelToName(entity2))
     end
 end
 
@@ -31,7 +35,7 @@ function CompareAffiliations(a, b)
     elseif #a ~= #b then
         return #a < #b
     elseif #a > 1 then
-        return CompareStrings(a[2], b[2])
+        return CompareString(a[2], b[2])
     else
         return false
     end
@@ -60,9 +64,9 @@ end
 function CompareLocationLabelsByName(label1, label2)
     local name1 = PlaceToName(label1)
     local name2 = PlaceToName(label2)
-    return CompareStrings(name1, name2)
+    return CompareString(name1, name2)
 end
 
 function CompareTranslation(a, b)
-    return CompareStrings(Tr(a), Tr(b))
+    return CompareString(Tr(a), Tr(b))
 end

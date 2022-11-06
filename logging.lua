@@ -33,7 +33,7 @@ function ResetErrors()
 end
 
 local function cleanedErrors()
-    table.sort(errorMessages, CompareStrings)
+    table.sort(errorMessages, CompareString)
     local out = {}
     local count = 1
     for i, mess in pairs(errorMessages) do
@@ -71,7 +71,7 @@ local function getKeysOfType(tableInput, keyType)
             Append(out, key)
         end
     end
-    table.sort(out, CompareStrings)
+    table.sort(out, CompareAlphanumerical)
     return out
 end
 

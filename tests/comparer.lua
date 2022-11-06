@@ -18,6 +18,6 @@ Append(expected, "aaa 9 bbb")
 Append(expected, "aaa 80")
 Append(expected, "bbb")
 
-table.sort(testList, CompareStrings)
+table.sort(testList, CompareAlphanumerical)
 
 Assert("CompareStrings", expected, testList)

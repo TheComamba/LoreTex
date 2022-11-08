@@ -100,8 +100,8 @@ function AddYearOffset(year, fmt)
 end
 
 local function daysAgo(historyItem)
-    local year = historyItem["year"]
-    local day = historyItem["day"]
+    local year = GetProtectedField(historyItem, "year")
+    local day = GetProtectedField(historyItem, "day")
     if isCurrentDaySet() and day ~= nil then
         return CurrentDay - day + (CurrentYear - year) * DaysPerYear
     else
@@ -110,8 +110,8 @@ local function daysAgo(historyItem)
 end
 
 local function timeDiffString(historyItem)
-    local year = historyItem["year"]
-    local day = historyItem["day"]
+    local year = GetProtectedField(historyItem, "year")
+    local day = GetProtectedField(historyItem, "day")
     local timeDiffInDays = daysAgo(historyItem)
     if not isDaysPerYearSet() then
         LogError("Cannot work with a year with 0 days.")
@@ -151,8 +151,8 @@ function IsFutureEvent(historyItem)
 end
 
 function YearAndDayString(historyItem)
-    local year = historyItem["year"]
-    local day = historyItem["day"]
+    local year = GetProtectedField(historyItem, "year")
+    local day = GetProtectedField(historyItem, "day")
     local out = {}
     Append(out, YearString(year))
     if day ~= nil then

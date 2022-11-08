@@ -1,9 +1,9 @@
 NewEntity("stories", "teststory", nil, "Teststory")
 if true then
     local hist = EmptyHistoryItem()
-    hist["originator"] = "teststory"
+    SetProtectedField(hist, "originator", "teststory")
     SetYear(hist, -10)
-    hist["event"] = [[Concerns \nameref{secret-item}.]]
+    SetProtectedField(hist, "event", [[Concerns \nameref{secret-item}.]])
     ProcessEvent(hist)
 end
 AddRef("teststory", PrimaryRefs)
@@ -35,7 +35,7 @@ local function generateExpected(isItemReferenced)
     if IsShowSecrets then
         Append(out, generateHistoryParagraph())
         if isItemReferenced then
-            Append(out, [[\chapter{]] .. CapFirst(Tr("items")) .. [[}]])
+            Append(out, [[\chapter{]] .. CapFirst(Tr("things")) .. [[}]])
             Append(out, [[\section{]] .. CapFirst(Tr("items")) .. [[}]])
             Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("items")) .. [[}]])
             Append(out, [[\begin{itemize}]])

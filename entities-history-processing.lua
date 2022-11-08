@@ -1,5 +1,5 @@
 local function isConcernsUnrevealed(historyItem)
-    for key, label in pairs(historyItem["concerns"]) do
+    for key, label in pairs(GetProtectedField(historyItem, "concerns")) do
         local entity = GetEntity(label)
         if IsEntitySecret(entity) and not IsRevealed(entity) then
             return true
@@ -9,7 +9,7 @@ local function isConcernsUnrevealed(historyItem)
 end
 
 local function isConcernsSecret(historyItem)
-    for key, label in pairs(historyItem["concerns"]) do
+    for key, label in pairs(GetProtectedField(historyItem, "concerns")) do
         local entity = GetEntity(label)
         if IsEntitySecret(entity) then
             return true
@@ -19,7 +19,7 @@ local function isConcernsSecret(historyItem)
 end
 
 local function isAllConcnernsShown(historyItem)
-    for key, label in pairs(historyItem["concerns"]) do
+    for key, label in pairs(GetProtectedField(historyItem, "concerns")) do
         if not IsEntityShown(GetEntity(label)) then
             return false
         end
@@ -49,9 +49,7 @@ local function isHistoryShown(historyItem)
 end
 
 local function historyItemToString(historyItem, isPrintDate)
-    local year = historyItem["year"]
-    local day = historyItem["day"]
-    local event = historyItem["event"]
+    local event = GetProtectedField(historyItem, "event")
     local isSecret = GetProtectedField(historyItem, "isSecret") or isConcernsSecret(historyItem)
     local out = {}
     if isPrintDate then
@@ -68,16 +66,19 @@ local function historyItemToString(historyItem, isPrintDate)
 end
 
 local function isSameDate(item1, item2)
-    if item1["year"] ~= item2["year"] then
+    if GetProtectedField(item1, "year") ~= GetProtectedField(item2, "year") then
         return false
-    elseif item1["day"] == nil and item2["day"] == nil then
+    end
+    local day1 = GetProtectedField(item1, "day")
+    local day2 = GetProtectedField(item2, "day")
+    if day1 == nil and day2 == nil then
         return true
-    elseif item1["day"] == nil then
+    elseif day1 == nil then
         return false
-    elseif item2["day"] == nil then
+    elseif day2 == nil then
         return false
     else
-        return item1["day"] == item2["day"]
+        return day1 == day2
     end
 end
 

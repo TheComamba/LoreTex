@@ -72,22 +72,28 @@ function CompareAffiliations(a, b)
 end
 
 function CompareHistoryItems(a, b)
-    if a["year"] ~= b["year"] then
-        return a["year"] < b["year"]
-    elseif a["day"] == nil and b["day"] == nil then
-        if a["counter"] == nil or b["counter"] == nil then
+    local yearA = GetProtectedField(a, "year")
+    local yearB = GetProtectedField(b, "year")
+    local dayA = GetProtectedField(a, "day")
+    local dayB = GetProtectedField(b, "day")
+    local counterA = GetProtectedField(a, "counter")
+    local counterB = GetProtectedField(b, "counter")
+    if yearA ~= yearB then
+        return yearA < yearB
+    elseif dayA == nil and dayB == nil then
+        if counterA == nil or counterB == nil then
             LogError("TODO: Properly process lifestage history items.")
             return false
         end
-        return a["counter"] < b["counter"]
-    elseif b["day"] == nil then
+        return counterA < counterB
+    elseif dayB == nil then
         return false
-    elseif a["day"] == nil then
+    elseif dayA == nil then
         return true
-    elseif a["day"] ~= b["day"] then
-        return a["day"] < b["day"]
+    elseif dayA ~= dayB then
+        return dayA < dayB
     else
-        return a["counter"] < b["counter"]
+        return counterA < counterB
     end
 end
 

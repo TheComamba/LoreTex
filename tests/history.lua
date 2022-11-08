@@ -1,24 +1,24 @@
 NewEntity("places", "test-1", nil, "Test 1")
 if true then
     local hist = EmptyHistoryItem()
-    hist["originator"] = "test-1"
+    SetProtectedField(hist, "originator", "test-1")
     SetYear(hist, -10)
-    hist["event"] = [[Event that concerns \reference{test-1}, but not \reference{test-2}.]]
-    hist["isConcernsOthers"] = false
+    SetProtectedField(hist, "event", [[Event that concerns \reference{test-1}, but not \reference{test-2}.]])
+    SetProtectedField(hist, "isConcernsOthers", false)
     ProcessEvent(hist)
 end
 if true then
     local hist = EmptyHistoryItem()
-    hist["originator"] = "test-1"
+    SetProtectedField(hist, "originator", "test-1")
     SetYear(hist, -20)
-    hist["event"] = [[Some event.]]
+    SetProtectedField(hist, "event", [[Some event.]])
     ProcessEvent(hist)
 end
 if true then
     local hist = EmptyHistoryItem()
-    hist["originator"] = "test-1"
+    SetProtectedField(hist, "originator", "test-1")
     SetYear(hist, 5)
-    hist["event"] = [[Event in the future.]]
+    SetProtectedField(hist, "event", [[Event in the future.]])
     ProcessEvent(hist)
 end
 
@@ -26,131 +26,132 @@ NewEntity("places", "test-2", nil, "Test 2")
 if true then
     local hist = EmptyHistoryItem()
     SetYear(hist, -5)
-    hist["event"] = [[Event that concerns \reference{test-1}, but not \reference{test-2}.\notconcerns{test-2}]]
+    SetProtectedField(hist, "event",
+        [[Event that concerns \reference{test-1}, but not \reference{test-2}.\notconcerns{test-2}]])
     ProcessEvent(hist)
 end
 
 if true then
     local hist = EmptyHistoryItem()
-    hist["originator"] = "test-1"
+    SetProtectedField(hist, "originator", "test-1")
     SetYear(hist, -987654321)
-    hist["event"] = [[Long time ago.]]
+    SetProtectedField(hist, "event", [[Long time ago.]])
     ProcessEvent(hist)
 end
 if true then
     local hist = EmptyHistoryItem()
-    hist["originator"] = "test-1"
+    SetProtectedField(hist, "originator", "test-1")
     SetYear(hist, -2)
     SetDay(hist, 5)
-    hist["event"] = [[Event with day.]]
+    SetProtectedField(hist, "event", [[Event with day.]])
     ProcessEvent(hist)
 end
 if true then
     local hist = EmptyHistoryItem()
-    hist["originator"] = "test-1"
+    SetProtectedField(hist, "originator", "test-1")
     SetYear(hist, -2)
     SetDay(hist, 5)
-    hist["event"] = [[Event on same day.]]
+    SetProtectedField(hist, "event", [[Event on same day.]])
     ProcessEvent(hist)
 end
 if true then
     local hist = EmptyHistoryItem()
-    hist["originator"] = "test-1"
+    SetProtectedField(hist, "originator", "test-1")
     SetYear(hist, -20)
-    hist["event"] = [[Event same year as another.]]
+    SetProtectedField(hist, "event", [[Event same year as another.]])
     ProcessEvent(hist)
 end
 if true then
     local hist = EmptyHistoryItem()
-    hist["originator"] = "test-1"
+    SetProtectedField(hist, "originator", "test-1")
     SetYear(hist, -1)
-    hist["event"] = [[Event last year.]]
+    SetProtectedField(hist, "event", [[Event last year.]])
     ProcessEvent(hist)
 end
 if true then
     local hist = EmptyHistoryItem()
-    hist["originator"] = "test-1"
+    SetProtectedField(hist, "originator", "test-1")
     SetYear(hist, -1)
     SetDay(hist, 1)
-    hist["event"] = [[Event last year, with day.]]
+    SetProtectedField(hist, "event", [[Event last year, with day.]])
     ProcessEvent(hist)
 end
 if true then
     local hist = EmptyHistoryItem()
-    hist["originator"] = "test-1"
+    SetProtectedField(hist, "originator", "test-1")
     SetYear(hist, -1)
     SetDay(hist, 100)
-    hist["event"] = [[Event less than a year ago.]]
+    SetProtectedField(hist, "event", [[Event less than a year ago.]])
     ProcessEvent(hist)
 end
 if true then
     local hist = EmptyHistoryItem()
-    hist["originator"] = "test-1"
+    SetProtectedField(hist, "originator", "test-1")
     SetYear(hist, 0)
-    hist["event"] = [[Event this year.]]
+    SetProtectedField(hist, "event", [[Event this year.]])
     ProcessEvent(hist)
 end
 if true then
     local hist = EmptyHistoryItem()
-    hist["originator"] = "test-1"
+    SetProtectedField(hist, "originator", "test-1")
     SetYear(hist, 0)
     SetDay(hist, 5)
-    hist["event"] = [[Event this year, with day.]]
+    SetProtectedField(hist, "event", [[Event this year, with day.]])
     ProcessEvent(hist)
 end
 if true then
     local hist = EmptyHistoryItem()
-    hist["originator"] = "test-1"
+    SetProtectedField(hist, "originator", "test-1")
     SetYear(hist, 0)
     SetDay(hist, 9)
-    hist["event"] = [[Event yesterday.]]
+    SetProtectedField(hist, "event", [[Event yesterday.]])
     ProcessEvent(hist)
 end
 if true then
     local hist = EmptyHistoryItem()
-    hist["originator"] = "test-1"
+    SetProtectedField(hist, "originator", "test-1")
     SetYear(hist, 0)
     SetDay(hist, 10)
-    hist["event"] = [[Event today.]]
+    SetProtectedField(hist, "event", [[Event today.]])
     ProcessEvent(hist)
 end
 if true then
     local hist = EmptyHistoryItem()
-    hist["originator"] = "test-1"
+    SetProtectedField(hist, "originator", "test-1")
     SetYear(hist, 0)
     SetDay(hist, 11)
-    hist["event"] = [[Event tomorrow.]]
+    SetProtectedField(hist, "event", [[Event tomorrow.]])
     ProcessEvent(hist)
 end
 if true then
     local hist = EmptyHistoryItem()
-    hist["originator"] = "test-1"
+    SetProtectedField(hist, "originator", "test-1")
     SetYear(hist, 0)
     SetDay(hist, 15)
-    hist["event"] = [[Event this year, with day in future.]]
+    SetProtectedField(hist, "event", [[Event this year, with day in future.]])
     ProcessEvent(hist)
 end
 if true then
     local hist = EmptyHistoryItem()
-    hist["originator"] = "test-1"
+    SetProtectedField(hist, "originator", "test-1")
     SetYear(hist, 1)
     SetDay(hist, 5)
-    hist["event"] = [[Event in less than a year.]]
+    SetProtectedField(hist, "event", [[Event in less than a year.]])
     ProcessEvent(hist)
 end
 if true then
     local hist = EmptyHistoryItem()
-    hist["originator"] = "test-1"
+    SetProtectedField(hist, "originator", "test-1")
     SetYear(hist, 1)
-    hist["event"] = [[Event next year.]]
+    SetProtectedField(hist, "event", [[Event next year.]])
     ProcessEvent(hist)
 end
 if true then
     local hist = EmptyHistoryItem()
-    hist["originator"] = "test-1"
+    SetProtectedField(hist, "originator", "test-1")
     SetYear(hist, 1)
     SetDay(hist, 15)
-    hist["event"] = [[Event next year, with day.]]
+    SetProtectedField(hist, "event", [[Event next year, with day.]])
     ProcessEvent(hist)
 end
 

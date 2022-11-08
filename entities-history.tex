@@ -2,10 +2,10 @@
 	\directlua{
 		if true then
 			local item = EmptyHistoryItem()
-			item["originator"] = GetMainLabel(CurrentEntity())
+			SetProtectedField(item, "originator", GetMainLabel(CurrentEntity()))
 			SetDay(item, "#1")
 			SetYear(item, "#2")
-			item["event"] = [[\detokenize{#3}]]
+			SetProtectedField(item, "event", [[\detokenize{#3}]] )
 			ProcessEvent(item)
 		end
 	}
@@ -14,10 +14,10 @@
 	\directlua{
 		if true then
 			local item = EmptyHistoryItem()
-			item["originator"] = GetMainLabel(CurrentEntity())
+			SetProtectedField(item, "originator", GetMainLabel(CurrentEntity()))
 			SetDay(item, "#1")
 			SetYear(item, "#2")
-			item["event"] = [[\detokenize{#3}]]
+			SetProtectedField(item, "event", [[\detokenize{#3}]] )
 			SetProtectedField(item, "isSecret", true)
 			ProcessEvent(item)
 		end
@@ -27,11 +27,11 @@
 	\directlua{
 		if true then
 			local item = EmptyHistoryItem()
-			item["originator"] = GetMainLabel(CurrentEntity())
+			SetProtectedField(item, "originator", GetMainLabel(CurrentEntity()))
 			SetDay(item, "#1")
 			SetYear(item, "#2")
-			item["event"] = [[\detokenize{#3}]]
-			item["isConcernsOthers"] = false
+			SetProtectedField(item, "event", [[\detokenize{#3}]] )
+			SetProtectedField(item, "isConcernsOthers", false)
 			ProcessEvent(item)
 		end
 	}
@@ -40,11 +40,11 @@
 	\directlua{
 		if true then
 			local item = EmptyHistoryItem()
-			item["originator"] = GetMainLabel(CurrentEntity())
+			SetProtectedField(item, "originator", GetMainLabel(CurrentEntity()))
 			SetDay(item, "#1")
 			SetYearFmt(item, #2)
 			SetYear(item, "#3")
-			item["event"] = [[\detokenize{#4}]]
+			SetProtectedField(item, "event", [[\detokenize{#4}]] )
 			ProcessEvent(item)
 		end
 	}
@@ -53,11 +53,11 @@
 	\directlua{
 		if true then
 			local item = EmptyHistoryItem()
-			item["originator"] = GetMainLabel(CurrentEntity())
+			SetProtectedField(item, "originator", GetMainLabel(CurrentEntity()))
 			SetDay(item, "#1")
 			SetYearFmt(item, #2)
 			SetYear(item, "#3")
-			item["event"] = [[\detokenize{#4}]]
+			SetProtectedField(item, "event", [[\detokenize{#4}]] )
 			SetProtectedField(item, "isSecret", true)
 			ProcessEvent(item)
 		end
@@ -67,12 +67,12 @@
 	\directlua{
 		if true then
 			local item = EmptyHistoryItem()
-			item["originator"] = GetMainLabel(CurrentEntity())
+			SetProtectedField(item, "originator", GetMainLabel(CurrentEntity()))
 			SetDay(item, "#1")
 			SetYearFmt(item, #2)
 			SetYear(item, "#3")
-			item["event"] = [[\detokenize{#4}]]
-			item["isConcernsOthers"] = false
+			SetProtectedField(item, "event", [[\detokenize{#4}]] )
+			SetProtectedField(item, "isConcernsOthers", false)
 			ProcessEvent(item)
 		end
 	}

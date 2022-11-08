@@ -19,9 +19,9 @@ function CreateBenchmarkingTest(sizeStr)
         NewEntity("places", "place-" .. i, nil, "Place " .. i)
         if true then
             local hist = EmptyHistoryItem()
-            hist["originator"] = "place-" .. i
+            SetProtectedField(hist, "originator", "place-" .. i)
             SetYear(hist, -i)
-            hist["event"] = [[Birth of \reference{char-]] .. i .. [[} \birthof{char-]] .. i .. [[}]]
+            SetProtectedField(hist, "event", [[Birth of \reference{char-]] .. i .. [[} \birthof{char-]] .. i .. [[}]])
             ProcessEvent(hist)
         end
         AddRef("place-" .. i, PrimaryRefs)

@@ -5,30 +5,30 @@ AddParent(CurrentEntity(), "revealed-orga")
 AddParent(CurrentEntity(), "unborn-orga")
 if true then
     local hist = EmptyHistoryItem()
-    hist["originator"] = "normal"
+    SetProtectedField(hist, "originator", "normal")
     SetYear(hist, -10)
-    hist["event"] = [[Normal event]]
+    SetProtectedField(hist, "event", [[Normal event]])
     ProcessEvent(hist)
 end
 if true then
     local hist = EmptyHistoryItem()
-    hist["originator"] = "normal"
+    SetProtectedField(hist, "originator", "normal")
     SetYear(hist, -9)
-    hist["event"] = [[Concerns \reference{secret}]]
+    SetProtectedField(hist, "event", [[Concerns \reference{secret}]])
     ProcessEvent(hist)
 end
 if true then
     local hist = EmptyHistoryItem()
-    hist["originator"] = "normal"
+    SetProtectedField(hist, "originator", "normal")
     SetYear(hist, -8)
-    hist["event"] = [[Concerns \reference{revealed}]]
+    SetProtectedField(hist, "event", [[Concerns \reference{revealed}]])
     ProcessEvent(hist)
 end
 if true then
     local hist = EmptyHistoryItem()
-    hist["originator"] = "normal"
+    SetProtectedField(hist, "originator", "normal")
     SetYear(hist, -5)
-    hist["event"] = [[Secret event]]
+    SetProtectedField(hist, "event", [[Secret event]])
     SetProtectedField(hist, "isSecret", true)
     ProcessEvent(hist)
 end
@@ -42,9 +42,9 @@ AddParent(CurrentEntity(), "revealed-orga")
 AddParent(CurrentEntity(), "unborn-orga")
 if true then
     local hist = EmptyHistoryItem()
-    hist["originator"] = "secret"
+    SetProtectedField(hist, "originator", "secret")
     SetYear(hist, -7)
-    hist["event"] = [[Concerns \reference{normal}]]
+    SetProtectedField(hist, "event", [[Concerns \reference{normal}]])
     ProcessEvent(hist)
 end
 
@@ -56,9 +56,9 @@ AddParent(CurrentEntity(), "revealed-orga")
 AddParent(CurrentEntity(), "unborn-orga")
 if true then
     local hist = EmptyHistoryItem()
-    hist["originator"] = "revealed"
+    SetProtectedField(hist, "originator", "revealed")
     SetYear(hist, -6)
-    hist["event"] = [[Concerns \reference{normal}]]
+    SetProtectedField(hist, "event", [[Concerns \reference{normal}]])
     ProcessEvent(hist)
 end
 Reveal("revealed")
@@ -66,9 +66,9 @@ Reveal("revealed")
 NewEntity("items", "unborn", nil, "Unborn")
 if true then
     local hist = EmptyHistoryItem()
-    hist["originator"] = "unborn"
+    SetProtectedField(hist, "originator", "unborn")
     SetYear(hist, 10)
-    hist["event"] = [[Created.\birthof{unborn}]]
+    SetProtectedField(hist, "event", [[Created.\birthof{unborn}]])
     ProcessEvent(hist)
 end
 AddParent(CurrentEntity(), "normal-orga")
@@ -101,9 +101,9 @@ Reveal("revealed-orga")
 NewEntity("organisations", "unborn-orga", nil, "Unborn Organisation")
 if true then
     local hist = EmptyHistoryItem()
-    hist["originator"] = "unborn-orga"
+    SetProtectedField(hist, "originator", "unborn-orga")
     SetYear(hist, 10)
-    hist["event"] = [[Founded.\birthof{unborn-orga}]]
+    SetProtectedField(hist, "event", [[Founded.\birthof{unborn-orga}]])
     ProcessEvent(hist)
 end
 AddRef("unborn-orga", PrimaryRefs)
@@ -180,7 +180,7 @@ local function generateExpected()
         Append(out, [[\end{itemize}]])
     end
 
-    Append(out, [[\chapter{]] .. CapFirst(Tr("items")) .. [[}]])
+    Append(out, [[\chapter{]] .. CapFirst(Tr("things")) .. [[}]])
     Append(out, [[\section{]] .. CapFirst(Tr("items")) .. [[}]])
     Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("items")) .. [[}]])
     Append(out, [[\begin{itemize}]])

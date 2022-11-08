@@ -13,7 +13,7 @@ NewEntity("items", "not-mentioned-item", nil, "Not mentioned Item")
 NewEntity("organisations", "some-organisation", nil, "Some Organisation")
 
 local expected = {}
-Append(expected, [[\chapter{]] .. CapFirst(Tr("items")) .. [[}]])
+Append(expected, [[\chapter{]] .. CapFirst(Tr("things")) .. [[}]])
 Append(expected, [[\section{]] .. CapFirst(Tr("items")) .. [[}]])
 Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("items")) .. [[}]])
 Append(expected, [[\begin{itemize}]])

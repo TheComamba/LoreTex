@@ -1,14 +1,9 @@
 local historyItemCounter = 1
 function EmptyHistoryItem()
 	local item = {}
-	item["originator"] = nil
-	item["day"] = nil
-	item["year"] = nil
-	item["yearFormat"] = nil
-	item["event"] = ""
 	SetProtectedField(item, "isSecret", false)
-	item["isConcernsOthers"] = true
-	item["counter"] = historyItemCounter
+	SetProtectedField(item, "isConcernsOthers", true)
+	SetProtectedField(item, "counter", historyItemCounter)
 	historyItemCounter = historyItemCounter + 1
 	return item
 end
@@ -21,7 +16,7 @@ function SetDay(historyItem, day)
 	if dayNumber == nil then
 		LogError("Could not convert to number:" .. DebugPrint(day))
 	else
-		historyItem["day"] = dayNumber
+		SetProtectedField(historyItem, "day", dayNumber)
 	end
 end
 
@@ -30,11 +25,11 @@ function SetYear(historyItem, year)
 	if yearNumber == nil then
 		LogError("Could not convert to number:" .. DebugPrint(year))
 	else
-		local yearFmt = historyItem["yearFormat"]
-		historyItem["year"] = yearNumber
+		local yearFmt = GetProtectedField(historyItem, "yearFormat")
 		if not IsEmpty(yearFmt) then
-			historyItem["year"] = RemoveYearOffset(yearNumber, yearFmt)
+			yearNumber = RemoveYearOffset(yearNumber, yearFmt)
 		end
+		SetProtectedField(historyItem, "year", yearNumber)
 	end
 end
 
@@ -42,27 +37,28 @@ function SetYearFmt(historyItem, fmt)
 	if IsEmpty(fmt) then
 		LogError("Called with unknown year format for history item:" .. DebugPrint(historyItem))
 	else
-		historyItem["yearFormat"] = fmt
+		SetProtectedField(historyItem, "yearFormat", fmt)
 	end
 end
 
 local function collectConcerns(item)
 	local concernsPrelim = {}
-	UniqueAppend(concernsPrelim, ScanForCmd(item["event"], "concerns"))
-	UniqueAppend(concernsPrelim, item["birthof"])
-	UniqueAppend(concernsPrelim, item["deathof"])
-	UniqueAppend(concernsPrelim, item["originator"])
+	local event = GetProtectedField(item, "event")
+	UniqueAppend(concernsPrelim, ScanForCmd(event, "concerns"))
+	UniqueAppend(concernsPrelim, GetProtectedField(item, "birthof"))
+	UniqueAppend(concernsPrelim, GetProtectedField(item, "deathof"))
+	UniqueAppend(concernsPrelim, GetProtectedField(item, "originator"))
 	for key1, refType in pairs(RefTypes) do
-		UniqueAppend(concernsPrelim, ScanForCmd(item["event"], refType))
+		UniqueAppend(concernsPrelim, ScanForCmd(event, refType))
 	end
-	local notConcerns = ScanForCmd(item["event"], "notconcerns")
+	local notConcerns = ScanForCmd(event, "notconcerns")
 	local concerns = {}
 	for key, concerned in pairs(concernsPrelim) do
 		if not IsIn(concerned, notConcerns) then
 			Append(concerns, concerned)
 		end
 	end
-	item["concerns"] = concerns
+	SetProtectedField(item, "concerns", concerns)
 end
 
 local function addSpecialyearsToEntities(field, year, labels)
@@ -75,37 +71,40 @@ end
 function ProcessEvent(item)
 	StartBenchmarking("ProcessEvent")
 
-	item["birthof"] = ScanForCmd(item["event"], "birthof")
-	item["deathof"] = ScanForCmd(item["event"], "deathof")
-	if item["isConcernsOthers"] then
+	local event = GetProtectedField(item, "event")
+	SetProtectedField(item, "birthof", ScanForCmd(event, "birthof"))
+	SetProtectedField(item, "deathof", ScanForCmd(event, "deathof"))
+	if GetProtectedField(item, "isConcernsOthers") then
 		collectConcerns(item)
 	else
-		item["concerns"] = { item["originator"] }
+		local originator = GetProtectedField(item, "originator")
+		AddToProtectedField(item, "concerns", originator)
 	end
 
-	for key, concernedLabel in pairs(item["concerns"]) do
+	for key, concernedLabel in pairs(GetProtectedField(item, "concerns")) do
 		local entity = GetMutableEntityFromAll(concernedLabel)
 		AddToProtectedField(entity, "historyItems", item)
 	end
 
-	addSpecialyearsToEntities("born", item["year"], item["birthof"])
-	addSpecialyearsToEntities("died", item["year"], item["deathof"])
+	local year = GetProtectedField(item, "year")
+	addSpecialyearsToEntities("born", year, GetProtectedField(item, "birthof"))
+	addSpecialyearsToEntities("died", year, GetProtectedField(item, "deathof"))
 
 
-	if IsEmpty(item["year"]) then
+	if IsEmpty(year) then
 		LogError("This event has no year:" .. DebugPrint(item))
-		item["year"] = 1e6
+		SetProtectedField(item, "year", 1e6)
 	end
-	if IsEmpty(item["day"]) then
-		item["day"] = nil
+	if IsEmpty(GetProtectedField(item, "day")) then
+		SetProtectedField(item, "day", nil)
 	end
-	if IsEmpty(item["birthof"]) then
-		item["birthof"] = nil
+	if IsEmpty(GetProtectedField(item, "birthof")) then
+		SetProtectedField(item, "birthof", nil)
 	end
-	if IsEmpty(item["deathof"]) then
-		item["deathof"] = nil
+	if IsEmpty(GetProtectedField(item, "deathof")) then
+		SetProtectedField(item, "deathof", nil)
 	end
-	if IsEmpty(item["concerns"]) then
+	if IsEmpty(GetProtectedField(item, "concerns")) then
 		LogError("This history item concerns nobody:" .. DebugPrint(item))
 	end
 

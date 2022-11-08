@@ -13,30 +13,30 @@ local expected = {}
 local out = {}
 
 expected = { Tr("day") .. [[ 17]] }
-out = { Date(17) }
+out = { DayString(17) }
 Assert("no-format-specified-for-day", expected, out)
 
 
-AddDateFmt("test-1")
+AddDayFmt("test-1")
 expected = { Tr("day") .. [[ 17 / 17.Primus]] }
-out = { Date(17) }
+out = { DayString(17) }
 Assert("one-format-specified-for-day", expected, out)
 
-AddDateFmt("test-2")
+AddDayFmt("test-2")
 expected = { Tr("day") .. [[ 17 / 17.Primus / 82.Wimmel]] }
-out = { Date(17) }
+out = { DayString(17) }
 Assert("two-formats-specified-for-day", expected, out)
 
 expected = { [[1801]] }
-out = { Anno(1801) }
+out = { YearString(1801) }
 Assert("no-format-specified-for-year", expected, out)
 
 AddYearFmt("test-1")
 expected = { [[1801 QT]] }
-out = { Anno(1801) }
+out = { YearString(1801) }
 Assert("one-format-specified-for-year", expected, out)
 
 AddYearFmt("test-2")
 expected = { [[1801 QT / 2001 WX]] }
-out = { Anno(1801) }
+out = { YearString(1801) }
 Assert("two-formats-specified-for-year", expected, out)

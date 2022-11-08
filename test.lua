@@ -24,7 +24,7 @@ local numSucceeded = 0
 local numFailed = 0
 
 local function resetEnvironment()
-    ResetDateFmt()
+    ResetDateFormats()
     ResetEntities()
     ResetRefs()
     CurrentYear = 0

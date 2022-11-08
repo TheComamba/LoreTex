@@ -55,7 +55,7 @@ local function historyItemToString(historyItem, isPrintDate)
     local isSecret = GetProtectedField(historyItem, "isSecret") or isConcernsSecret(historyItem)
     local out = {}
     if isPrintDate then
-        Append(out, YearAndDateString(historyItem))
+        Append(out, YearAndDayString(historyItem))
         Append(out, [[:\\]])
     end
     if isSecret ~= nil and isSecret then

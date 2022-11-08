@@ -4,14 +4,14 @@ DaysPerYear = 364
 IsShowFuture = true
 
 YearFmt = {}
-DateFmt = {}
+DayFmt = {}
 
-function ResetDateFmt()
-    DateFmt = {}
-    YearFmtTMP = {}
+function ResetDateFormats()
+    DayFmt = {}
+    YearFmt = {}
 end
 
-function AddDateFmt(label)
+function AddDayFmt(label)
     local calendar = GetEntity(label)
     if IsEmpty(calendar) then
         LogError("Could not find a calendar for label \"" .. label .. "\"")
@@ -21,7 +21,7 @@ function AddDateFmt(label)
         LogError("Calendar \"" .. label .. "\" has no months defined.")
         return
     end
-    DateFmt[#DateFmt + 1] = calendar
+    DayFmt[#DayFmt + 1] = calendar
 end
 
 function AddYearFmt(label)
@@ -30,7 +30,7 @@ function AddYearFmt(label)
         LogError("Could not find a calendar for label \"" .. label .. "\"")
         return
     end
-    YearFmtTMP[#YearFmtTMP + 1] = calendar
+    YearFmt[#YearFmt + 1] = calendar
 end
 
 function SetYearAbbreviation(entity, abbr)
@@ -43,6 +43,18 @@ function SetYearAbbreviation(entity, abbr)
         return
     end
     SetProtectedField(entity, "yearAbbreviation", abbr)
+end
+
+function SetYearOffset(entity, offset)
+    if IsEmpty(entity) then
+        LogError("Called with empty entity!")
+        return
+    end
+    if IsEmpty(offset) or type(offset) ~= "number" then
+        LogError("Called with invalid offset for entity:" .. DebugPrint(entity))
+        return
+    end
+    SetProtectedField(entity, "yearOffset", offset)
 end
 
 function AddMonth(entity, month, firstDay)
@@ -138,14 +150,14 @@ function IsFutureEvent(historyItem)
     return daysAgo(historyItem) < 0
 end
 
-function YearAndDateString(historyItem)
+function YearAndDayString(historyItem)
     local year = historyItem["year"]
     local day = historyItem["day"]
     local out = {}
-    Append(out, Anno(year))
+    Append(out, YearString(year))
     if day ~= nil then
         Append(out, ", ")
-        Append(out, Date(day))
+        Append(out, DayString(day))
     end
     Append(out, " (")
     Append(out, timeDiffString(historyItem))
@@ -178,9 +190,9 @@ local function monthAndDay(day, namesAndFirstDays)
     return month, dayOfMonth
 end
 
-function Date(day, fmt)
+function DayString(day, fmt)
     if fmt == nil then
-        fmt = DateFmt
+        fmt = DayFmt
     end
     local out = {}
     Append(out, Tr("day") .. " ")
@@ -196,9 +208,9 @@ function Date(day, fmt)
     return table.concat(out)
 end
 
-function Anno(year, fmt)
+function YearString(year, fmt)
     if fmt == nil then
-        fmt = YearFmtTMP
+        fmt = YearFmt
     end
     if IsEmpty(fmt) then
         return tostring(year)

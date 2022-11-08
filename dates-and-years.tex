@@ -2,9 +2,11 @@
 \newcommand{\setCurrentDay}[1]{\directlua{CurrentDay = #1}}
 \newcommand{\setDaysPerYear}[1]{\directlua{DaysPerYear = #1}}
 
-\newcommand{\datefmt}[1]{\directlua{tex.print(Date(#1))}}
-\newcommand{\resetDateFmt}{\directlua{ResetDateFmt()}}
-\newcommand{\addDateFmt}[1]{\directlua{AddDateFmt("#1")}}
+\newcommand{\addDayFmt}[1]{\directlua{AddDayFmt("#1")}}
+\newcommand{\addYearFmt}[1]{\directlua{AddYearFmt("#1")}}
+\newcommand{\printDay}[1]{\directlua{tex.print(DayString(#1))}}
+\newcommand{\printYear}[1]{\directlua{tex.print(YearString(#1))}}
 
 \newcommand{\setYearAbbreviation}[1]{\directlua{SetYearAbbreviation(CurrentEntity(), [[#1]])}}
+\newcommand{\setYearOffset}[1]{\directlua{SetYearOffset(CurrentEntity(), #1)}}
 \newcommand{\addMonth}[2]{\directlua{AddMonth(CurrentEntity(), [[#1]], #2)}}

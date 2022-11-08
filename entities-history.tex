@@ -42,7 +42,7 @@
 			local item = EmptyHistoryItem()
 			SetProtectedField(item, "originator", GetMainLabel(CurrentEntity()))
 			SetDay(item, "#1")
-			SetYearFmt(item, #2)
+			SetYearFmt(item, "#2")
 			SetYear(item, "#3")
 			SetProtectedField(item, "event", [[\detokenize{#4}]] )
 			ProcessEvent(item)
@@ -55,7 +55,7 @@
 			local item = EmptyHistoryItem()
 			SetProtectedField(item, "originator", GetMainLabel(CurrentEntity()))
 			SetDay(item, "#1")
-			SetYearFmt(item, #2)
+			SetYearFmt(item, "#2")
 			SetYear(item, "#3")
 			SetProtectedField(item, "event", [[\detokenize{#4}]] )
 			SetProtectedField(item, "isSecret", true)
@@ -69,7 +69,7 @@
 			local item = EmptyHistoryItem()
 			SetProtectedField(item, "originator", GetMainLabel(CurrentEntity()))
 			SetDay(item, "#1")
-			SetYearFmt(item, #2)
+			SetYearFmt(item, "#2")
 			SetYear(item, "#3")
 			SetProtectedField(item, "event", [[\detokenize{#4}]] )
 			SetProtectedField(item, "isConcernsOthers", false)
@@ -93,11 +93,19 @@
 }
 \newcommand{\bornInFmt}[4][]{
 	\addHistoryInFmt[#1]{#2}{#3}{#4}
-	%\directlua{SetProtectedField(CurrentEntity(), "born", RemoveYearOffset(#3, #2))}
-	\directlua{LogError("TODO: Implement bornInFmt")}
+	\directlua{
+		if true then
+			local fmt = GetEntity("#2")
+			SetProtectedField(CurrentEntity(), "born", RemoveYearOffset(#3, fmt))
+		end
+		}
 }
 \newcommand{\diedInFmt}[4][]{
 	\addHistoryInFmt[#1]{#2}{#3}{#4}
-	%\directlua{SetProtectedField(CurrentEntity(), "died", RemoveYearOffset(#3, #2))}
-	\directlua{LogError("TODO: Implement diedInFmt")}
+	\directlua{
+		if true then
+			local fmt = GetEntity("#2")
+			SetProtectedField(CurrentEntity(), "died", RemoveYearOffset(#3, fmt))
+		end
+		}
 }

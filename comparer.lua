@@ -81,10 +81,6 @@ function CompareHistoryItems(a, b)
     if yearA ~= yearB then
         return yearA < yearB
     elseif dayA == nil and dayB == nil then
-        if counterA == nil or counterB == nil then
-            LogError("TODO: Properly process lifestage history items.")
-            return false
-        end
         return counterA < counterB
     elseif dayB == nil then
         return false

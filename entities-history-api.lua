@@ -33,12 +33,18 @@ function SetYear(historyItem, year)
 	end
 end
 
-function SetYearFmt(historyItem, fmt)
-	if IsEmpty(fmt) then
-		LogError("Called with unknown year format for history item:" .. DebugPrint(historyItem))
-	else
-		SetProtectedField(historyItem, "yearFormat", fmt)
+function SetYearFmt(historyItem, label)
+	if IsEmpty(label) then
+		LogError("Called with empty year format for history item:" .. DebugPrint(historyItem))
+		return
 	end
+	local fmt = GetEntity(label)
+	if IsEmpty(fmt) then
+		LogError("No format entity with label \"" ..
+			label .. "\" was found. Note that currently the format entity has to be defined before it is used.")
+		return
+	end
+	SetProtectedField(historyItem, "yearFormat", fmt)
 end
 
 local function collectConcerns(item)

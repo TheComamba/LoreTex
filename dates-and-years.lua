@@ -3,12 +3,7 @@ CurrentDay = 0
 DaysPerYear = 364
 IsShowFuture = true
 
-YearFmtVin = "Vin"
-YearFmtDjo = [[\'Et]]
-YearFmtNar = "NM"
-YearFmt = YearFmtVin
-
-YearFmtTMP = {}
+YearFmt = {}
 DateFmt = {}
 
 function ResetDateFmt()
@@ -74,29 +69,21 @@ local function isDaysPerYearSet()
     return DaysPerYear > 0
 end
 
-function ConvertYearToVin(year, fmt)
-    if fmt == YearFmtVin then
+function RemoveYearOffset(year, fmt)
+    local offset = GetProtectedField(fmt, "yearOffset")
+    if offset == nil then
         return year
-    elseif fmt == YearFmtDjo then
-        return year - 1566
-    elseif fmt == YearFmtNar then
-        return year - 5077
     else
-        LogError("Called with fmt " .. DebugPrint(fmt))
-        return 0
+        return year - offset
     end
 end
 
-function ConvertYearFromVin(year, fmt)
-    if fmt == YearFmtVin then
+function AddYearOffset(year, fmt)
+    local offset = GetProtectedField(fmt, "yearOffset")
+    if offset == nil then
         return year
-    elseif fmt == YearFmtDjo then
-        return year + 1566
-    elseif fmt == YearFmtNar then
-        return year + 5077
     else
-        LogError("Called with fmt " .. DebugPrint(fmt))
-        return 0
+        return year + offset
     end
 end
 
@@ -151,18 +138,11 @@ function IsFutureEvent(historyItem)
     return daysAgo(historyItem) < 0
 end
 
-function YearAndDateString(historyItem, fmt)
+function YearAndDateString(historyItem)
     local year = historyItem["year"]
     local day = historyItem["day"]
-    if fmt == nil then
-        fmt = YearFmt
-    end
-    year = ConvertYearFromVin(year, fmt)
-
     local out = {}
-    Append(out, tostring(year))
-    Append(out, " ")
-    Append(out, fmt)
+    Append(out, Anno(year))
     if day ~= nil then
         Append(out, ", ")
         Append(out, Date(day))
@@ -171,39 +151,6 @@ function YearAndDateString(historyItem, fmt)
     Append(out, timeDiffString(historyItem))
     Append(out, ")")
     return table.concat(out)
-end
-
-function AnnoVin(yearIn)
-    local year = tonumber(yearIn)
-    if year == nil then
-        LogError("Could  not convert year string \"" .. yearIn .. "\" to number.")
-        return
-    end
-    local item = {}
-    item["year"] = year
-    tex.print(YearAndDateString(item))
-end
-
-function AnnoDjo(yearIn)
-    local year = tonumber(yearIn)
-    if year == nil then
-        LogError("Could  not convert year string \"" .. yearIn .. "\" to number.")
-        return
-    end
-    local item = {}
-    item["year"] = ConvertYearToVin(year, YearFmtDjo)
-    tex.print(YearAndDateString(item))
-end
-
-function AnnoNar(yearIn)
-    local year = tonumber(yearIn)
-    if year == nil then
-        LogError("Could  not convert year string \"" .. yearIn .. "\" to number.")
-        return
-    end
-    local item = {}
-    item["year"] = ConvertYearToVin(year, YearFmtNar)
-    tex.print(YearAndDateString(item))
 end
 
 local function monthAndDay(day, namesAndFirstDays)

@@ -33,7 +33,7 @@ function SetYear(historyItem, year)
 		local yearFmt = historyItem["yearFormat"]
 		historyItem["year"] = yearNumber
 		if not IsEmpty(yearFmt) then
-			historyItem["year"] = ConvertYearToVin(yearNumber, yearFmt)
+			historyItem["year"] = RemoveYearOffset(yearNumber, yearFmt)
 		end
 	end
 end

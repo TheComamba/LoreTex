@@ -171,71 +171,71 @@ local function generateExpected()
     Append(out, [[\paragraph{]] .. CapFirst(Tr("history")) .. [[}]])
     Append(out, [[\begin{itemize}]])
 
-    Append(out, [[\item{} -987654321 Vin (]] .. Tr("years-ago", { 987654321 }) .. [[):\\Long time ago.]])
-    Append(out, [[\item{} -20 Vin (]] .. Tr("years-ago", { 20 }) .. [[):\\Some event.]])
+    Append(out, [[\item{} -987654321 (]] .. Tr("years-ago", { 987654321 }) .. [[):\\Long time ago.]])
+    Append(out, [[\item{} -20 (]] .. Tr("years-ago", { 20 }) .. [[):\\Some event.]])
     Append(out, [[\item{} Event same year as another.]])
     Append(out,
-        [[\item{} -10 Vin (]] ..
+        [[\item{} -10 (]] ..
         Tr("years-ago", { 10 }) ..
         [[):\\Event that concerns \nameref{test-1}, but not \nameref{test-2}.]])
     Append(out,
-        [[\item{} -5 Vin (]] ..
+        [[\item{} -5 (]] ..
         Tr("years-ago", { 5 }) ..
         [[):\\Event that concerns \nameref{test-1}, but not \nameref{test-2}.\notconcerns{test-2}]])
 
 
-    Append(out, [[\item{} -2 Vin, ]] .. Tr("day") .. [[ 5 (]] .. Tr("years-ago", { 2 }) .. [[):\\Event with day.]])
+    Append(out, [[\item{} -2, ]] .. Tr("day") .. [[ 5 (]] .. Tr("years-ago", { 2 }) .. [[):\\Event with day.]])
     Append(out, [[\item{} Event on same day.]])
 
-    Append(out, [[\item{} -1 Vin (]] .. Tr("last-year") .. [[):\\ Event last year.]])
-    Append(out, [[\item{} -1 Vin, ]] .. Tr("day") .. [[ 1 (]] .. Tr("last-year") .. [[):\\Event last year, with day.]])
+    Append(out, [[\item{} -1 (]] .. Tr("last-year") .. [[):\\ Event last year.]])
+    Append(out, [[\item{} -1, ]] .. Tr("day") .. [[ 1 (]] .. Tr("last-year") .. [[):\\Event last year, with day.]])
 
     if CurrentDay == 0 then
         Append(out,
-            [[\item{} -1 Vin, ]] .. Tr("day") .. [[ 100 (]] .. Tr("last-year") .. [[):\\Event less than a year ago.]])
-        Append(out, [[\item{} 0 Vin (]] .. Tr("this-year") .. [[):\\Event this year.]])
+            [[\item{} -1, ]] .. Tr("day") .. [[ 100 (]] .. Tr("last-year") .. [[):\\Event less than a year ago.]])
+        Append(out, [[\item{} 0 (]] .. Tr("this-year") .. [[):\\Event this year.]])
         Append(out,
-            [[\item{} 0 Vin, ]] .. Tr("day") .. [[ 5 (]] .. Tr("this-year") .. [[):\\Event this year, with day.]])
-        Append(out, [[\item{} 0 Vin, ]] .. Tr("day") .. [[ 9 (]] .. Tr("this-year") .. [[):\\Event yesterday.]])
-        Append(out, [[\item{} 0 Vin, ]] .. Tr("day") .. [[ 10 (]] .. Tr("this-year") .. [[):\\Event today.]])
-        Append(out, [[\item{} 0 Vin, ]] .. Tr("day") .. [[ 11 (]] .. Tr("this-year") .. [[):\\Event tomorrow.]])
+            [[\item{} 0, ]] .. Tr("day") .. [[ 5 (]] .. Tr("this-year") .. [[):\\Event this year, with day.]])
+        Append(out, [[\item{} 0, ]] .. Tr("day") .. [[ 9 (]] .. Tr("this-year") .. [[):\\Event yesterday.]])
+        Append(out, [[\item{} 0, ]] .. Tr("day") .. [[ 10 (]] .. Tr("this-year") .. [[):\\Event today.]])
+        Append(out, [[\item{} 0, ]] .. Tr("day") .. [[ 11 (]] .. Tr("this-year") .. [[):\\Event tomorrow.]])
         Append(out,
-            [[\item{} 0 Vin, ]] ..
+            [[\item{} 0, ]] ..
             Tr("day") .. [[ 15 (]] .. Tr("this-year") .. [[):\\Event this year, with day in future.]])
     else
         Append(out,
-            [[\item{} -1 Vin, ]] ..
+            [[\item{} -1, ]] ..
             Tr("day") .. [[ 100 (]] .. Tr("days-ago", { 274 }) .. [[):\\Event less than a year ago.]])
-        Append(out, [[\item{} 0 Vin (]] .. Tr("this-year") .. [[):\\Event this year.]])
+        Append(out, [[\item{} 0 (]] .. Tr("this-year") .. [[):\\Event this year.]])
         Append(out,
-            [[\item{} 0 Vin, ]] .. Tr("day") .. [[ 5 (]] .. Tr("days-ago", { 5 }) .. [[):\\Event this year, with day.]])
-        Append(out, [[\item{} 0 Vin, ]] .. Tr("day") .. [[ 9 (]] .. Tr("yesterday") .. [[):\\Event yesterday.]])
-        Append(out, [[\item{} 0 Vin, ]] .. Tr("day") .. [[ 10 (]] .. Tr("today") .. [[):\\Event today.]])
+            [[\item{} 0, ]] .. Tr("day") .. [[ 5 (]] .. Tr("days-ago", { 5 }) .. [[):\\Event this year, with day.]])
+        Append(out, [[\item{} 0, ]] .. Tr("day") .. [[ 9 (]] .. Tr("yesterday") .. [[):\\Event yesterday.]])
+        Append(out, [[\item{} 0, ]] .. Tr("day") .. [[ 10 (]] .. Tr("today") .. [[):\\Event today.]])
 
         if IsShowFuture then
-            Append(out, [[\item{} 0 Vin, ]] .. Tr("day") .. [[ 11 (]] .. Tr("tomorrow") .. [[):\\Event tomorrow.]])
+            Append(out, [[\item{} 0, ]] .. Tr("day") .. [[ 11 (]] .. Tr("tomorrow") .. [[):\\Event tomorrow.]])
             Append(out,
-                [[\item{} 0 Vin, ]] ..
+                [[\item{} 0, ]] ..
                 Tr("day") .. [[ 15 (]] .. Tr("in-days", { 5 }) .. [[):\\Event this year, with day in future.]])
         end
     end
 
 
     if IsShowFuture then
-        Append(out, [[\item{} 1 Vin (]] .. Tr("next-year") .. [[):\\Event next year.]])
+        Append(out, [[\item{} 1 (]] .. Tr("next-year") .. [[):\\Event next year.]])
         if CurrentDay == 0 then
             Append(out,
-                [[\item{} 1 Vin, ]] ..
+                [[\item{} 1, ]] ..
                 Tr("day") .. [[ 5 (]] .. Tr("next-year") .. [[):\\Event in less than a year.]])
         else
             Append(out,
-                [[\item{} 1 Vin, ]] ..
+                [[\item{} 1, ]] ..
                 Tr("day") .. [[ 5 (]] .. Tr("in-days", { 359 }) .. [[):\\Event in less than a year.]])
         end
         Append(out,
-            [[\item{} 1 Vin, ]] ..
+            [[\item{} 1, ]] ..
             Tr("day") .. [[ 15 (]] .. Tr("next-year") .. [[):\\Event next year, with day.]])
-        Append(out, [[\item{} 5 Vin (]] .. Tr("in-years", { 5 }) .. [[):\\Event in the future.]])
+        Append(out, [[\item{} 5 (]] .. Tr("in-years", { 5 }) .. [[):\\Event in the future.]])
     end
     Append(out, [[\end{itemize}]])
     Append(out, [[\chapter{]] .. CapFirst(Tr("only-mentioned")) .. [[}]])

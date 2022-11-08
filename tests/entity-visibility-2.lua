@@ -15,7 +15,7 @@ local function generateHistoryParagraph()
     Append(out, [[\paragraph{]] .. CapFirst(Tr("history")) .. [[}]])
     Append(out, [[\begin{itemize}]])
     Append(out,
-        [[\item{} -10 Vin (]] ..
+        [[\item{} -10 (]] ..
         Tr("years-ago", { 10 }) .. [[):\\ (]] .. CapFirst(Tr("secret")) .. [[) Concerns \nameref{secret-item}.]])
     Append(out, [[\end{itemize}]])
     return out

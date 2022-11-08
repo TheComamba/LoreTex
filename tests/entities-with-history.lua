@@ -35,7 +35,7 @@ local function generateExpected(isSecondAdded)
     Append(out, [[\paragraph{]] .. CapFirst(Tr("history")) .. [[}]])
     Append(out, [[\begin{itemize}]])
     Append(out,
-        [[\item{} -10 Vin (]] ..
+        [[\item{} -10 (]] ..
         Tr("years-ago", { 10 }) .. [[):\\ Event that concerns \nameref{test-1} and \itref{test-2}.]])
     Append(out, [[\end{itemize}]])
     if isSecondAdded then
@@ -44,7 +44,7 @@ local function generateExpected(isSecondAdded)
         Append(out, [[\paragraph{]] .. CapFirst(Tr("history")) .. [[}]])
         Append(out, [[\begin{itemize}]])
         Append(out,
-            [[\item{} -10 Vin (]] ..
+            [[\item{} -10 (]] ..
             Tr("years-ago", { 10 }) .. [[):\\ Event that concerns \nameref{test-1} and \itref{test-2}.]])
         Append(out, [[\end{itemize}]])
     else

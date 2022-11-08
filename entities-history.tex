@@ -93,9 +93,11 @@
 }
 \newcommand{\bornInFmt}[4][]{
 	\addHistoryInFmt[#1]{#2}{#3}{#4}
-	\directlua{SetProtectedField(CurrentEntity(), "born", ConvertYearToVin(#3, #2))}
+	%\directlua{SetProtectedField(CurrentEntity(), "born", RemoveYearOffset(#3, #2))}
+	\directlua{LogError("TODO: Implement bornInFmt")}
 }
 \newcommand{\diedInFmt}[4][]{
 	\addHistoryInFmt[#1]{#2}{#3}{#4}
-	\directlua{SetProtectedField(CurrentEntity(), "died", ConvertYearToVin(#3, #2))}
+	%\directlua{SetProtectedField(CurrentEntity(), "died", RemoveYearOffset(#3, #2))}
+	\directlua{LogError("TODO: Implement diedInFmt")}
 }

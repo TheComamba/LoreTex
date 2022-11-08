@@ -22,6 +22,7 @@ addProtectedDescriptor("species")
 addProtectedDescriptor("shortname")
 addProtectedDescriptor("type")
 addProtectedDescriptor("yearAbbreviation")
+addProtectedDescriptor("yearOffset")
 
 function IsProtectedDescriptor(descriptor)
     for key, protectedDescriptor in pairs(protectedDescriptors) do

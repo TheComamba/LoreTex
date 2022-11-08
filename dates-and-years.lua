@@ -8,10 +8,12 @@ YearFmtDjo = [[\'Et]]
 YearFmtNar = "NM"
 YearFmt = YearFmtVin
 
+YearFmtTMP = {}
 DateFmt = {}
 
 function ResetDateFmt()
     DateFmt = {}
+    YearFmtTMP = {}
 end
 
 function AddDateFmt(label)
@@ -25,6 +27,15 @@ function AddDateFmt(label)
         return
     end
     DateFmt[#DateFmt + 1] = calendar
+end
+
+function AddYearFmt(label)
+    local calendar = GetEntity(label)
+    if IsEmpty(calendar) then
+        LogError("Could not find a calendar for label \"" .. label .. "\"")
+        return
+    end
+    YearFmtTMP[#YearFmtTMP + 1] = calendar
 end
 
 function SetYearAbbreviation(entity, abbr)
@@ -234,6 +245,32 @@ function Date(day, fmt)
         Append(out, dayOfMonth)
         Append(out, [[.]])
         Append(out, month)
+    end
+    return table.concat(out)
+end
+
+function Anno(year, fmt)
+    if fmt == nil then
+        fmt = YearFmtTMP
+    end
+    if IsEmpty(fmt) then
+        return tostring(year)
+    end
+    local out = {}
+    for key, calendar in pairs(fmt) do
+        if key > 1 then
+            Append(out, [[ / ]])
+        end
+        local offset = GetProtectedField(calendar, "yearOffset")
+        if offset == nil then
+            offset = 0
+        end
+        Append(out, year + offset)
+        local abbr = GetProtectedField(calendar, "yearAbbreviation")
+        if abbr ~= nil then
+            Append(out, " ")
+            Append(out, abbr)
+        end
     end
     return table.concat(out)
 end

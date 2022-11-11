@@ -44,18 +44,14 @@ This means that the mixed species ages somewhere in between the two parent speci
 
 If you want to tell \RpgTex{} what species a character has, you can do so using the setSpecies command with the label of the species as an argument. Their corresponding human age is then calculated and displayed, and them reaching certain life stages is added to their history.
 
-If desired, you can specify the gender of a character with the setGender command. It takes any text as input and adds it to the appearance description.
-
 \setCurrentYear{3019}
 
 \newEntity{npcs}{aragorn}{}{Aragorn}
 \setSpecies{dunedain}
-\setGender{male}
 \born{2931}{Birth of \nameref{aragorn}.}
 
 \newEntity{npcs}{arwen}{}{Arwen}
 \setSpecies{elf}
-\setGender{female}
 \born{241}{Birth of \nameref{arwen}.}
 
 \newEntity{npcs}{boromir}{}{Boromir}

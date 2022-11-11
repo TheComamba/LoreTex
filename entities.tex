@@ -40,12 +40,6 @@
 	}
 }
 
-\newcommand{\setGender}[1]{
-	\directlua{
-		SetGender(CurrentEntity(), [[\detokenize{#1}]])
-	}
-}
-
 \newcommand{\setAgeFactor}[1]{
 	\directlua{
 		SetAgeFactor(CurrentEntity(), #1)

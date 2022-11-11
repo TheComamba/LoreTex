@@ -20,15 +20,6 @@ local function getSpeciesRef(entity)
 	end
 end
 
-local function getGender(entity)
-	local gender = GetProtectedField(entity, "gender")
-	if IsEmpty(gender) then
-		return ""
-	else
-		return gender
-	end
-end
-
 local function ageToYears(age, factor, exponent)
 	return factor * age ^ exponent
 end
@@ -124,10 +115,6 @@ function SpeciesAndAgeString(entity, year)
 	local speciesRef = getSpeciesRef(entity)
 	if not IsEmpty(speciesRef) then
 		Append(parts, TexCmd("nameref ", speciesRef))
-	end
-	local gender = getGender(entity)
-	if not IsEmpty(gender) then
-		Append(parts, gender)
 	end
 	local ageDescription = ageString(entity, year)
 	if not IsEmpty(ageDescription) then

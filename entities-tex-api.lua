@@ -85,10 +85,6 @@ function SetSpecies(entity, species)
     SetProtectedField(entity, "species", species)
 end
 
-function SetGender(entity, gender)
-    SetProtectedField(entity, "gender", gender)
-end
-
 function MakePrimaryIf(condition)
     StartBenchmarking("MakePrimaryIf")
     for key, entity in pairs(AllEntities) do

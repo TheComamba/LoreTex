@@ -11,7 +11,7 @@ function ResetDateFormats()
     YearFmt = {}
 end
 
-function AddDayFmt(label)
+local function addDayFmt(label)
     local calendar = GetEntity(label)
     if IsEmpty(calendar) then
         LogError("Could not find a calendar for label \"" .. label .. "\"")
@@ -24,7 +24,9 @@ function AddDayFmt(label)
     DayFmt[#DayFmt + 1] = calendar
 end
 
-function AddYearFmt(label)
+TexApi.addDayFmt = addDayFmt
+
+local function addYearFmt(label)
     local calendar = GetEntity(label)
     if IsEmpty(calendar) then
         LogError("Could not find a calendar for label \"" .. label .. "\"")
@@ -33,7 +35,9 @@ function AddYearFmt(label)
     YearFmt[#YearFmt + 1] = calendar
 end
 
-function SetYearAbbreviation(entity, abbr)
+TexApi.addYearFmt = addYearFmt
+
+local function setYearAbbreviation(entity, abbr)
     if IsEmpty(entity) then
         LogError("Called with empty entity and abbreviation:" .. DebugPrint(abbr))
         return
@@ -45,7 +49,11 @@ function SetYearAbbreviation(entity, abbr)
     SetProtectedField(entity, "yearAbbreviation", abbr)
 end
 
-function SetYearOffset(entity, offset)
+TexApi.setYearAbbreviation = function(abbr)
+    setYearAbbreviation(CurrentEntity(), abbr)
+end
+
+local function setYearOffset(entity, offset)
     if IsEmpty(entity) then
         LogError("Called with empty entity!")
         return
@@ -57,20 +65,20 @@ function SetYearOffset(entity, offset)
     SetProtectedField(entity, "yearOffset", offset)
 end
 
-function AddMonth(entity, month, firstDay)
-    if IsEmpty(entity) then
-        LogError("Called with empty entity and month:" .. DebugPrint(month))
+TexApi.setYearOffset = function(offset)
+    setYearOffset(CurrentEntity(), offset)
+end
+
+local function addMonth(arg)
+    if not IsArgOk("addMonth", arg, { "entity", "month", "firstDay" }) then
         return
     end
-    if IsEmpty(month) then
-        LogError("Called with empty month for enitty:" .. DebugPrint(entity))
-        return
-    end
-    if IsEmpty(firstDay) or type(firstDay) ~= "number" then
-        LogError("Called without first day of month:" .. DebugPrint(month))
-        return
-    end
-    AddToProtectedField(entity, "monthsAndFirstDays", { month, firstDay })
+    AddToProtectedField(arg.entity, "monthsAndFirstDays", { arg.month, arg.firstDay })
+end
+
+TexApi.addMonth = function(arg)
+    arg.entity = CurrentEntity()
+    addMonth(arg)
 end
 
 local function isCurrentDaySet()

@@ -1,13 +1,13 @@
 TexApi.newEntity { type = "calendars", label = "test-1", name = "Test 1" }
-AddMonth(CurrentEntity(), "Primus", 1)
-AddMonth(CurrentEntity(), "Secundus", 100)
-SetProtectedField(CurrentEntity(), "yearAbbreviation", "QT")
+TexApi.addMonth { month = "Primus", firstDay = 1 }
+TexApi.addMonth { month = "Secundus", firstDay = 100 }
+TexApi.setYearAbbreviation("QT")
 
 TexApi.newEntity { type = "calendars", label = "test-2", name = "Test 2" }
-AddMonth(CurrentEntity(), "Knulch", 20)
-AddMonth(CurrentEntity(), "Wimmel", 300)
-SetProtectedField(CurrentEntity(), "yearAbbreviation", "WX")
-SetProtectedField(CurrentEntity(), "yearOffset", 200)
+TexApi.addMonth { month = "Knulch", firstDay = 20 }
+TexApi.addMonth { month = "Wimmel", firstDay = 300 }
+TexApi.setYearAbbreviation("WX")
+TexApi.setYearOffset(200)
 
 local expected = {}
 local out = {}
@@ -17,12 +17,12 @@ out = { DayString(17) }
 Assert("no-format-specified-for-day", expected, out)
 
 
-AddDayFmt("test-1")
+TexApi.addDayFmt("test-1")
 expected = { Tr("day") .. [[ 17 / 17.Primus]] }
 out = { DayString(17) }
 Assert("one-format-specified-for-day", expected, out)
 
-AddDayFmt("test-2")
+TexApi.addDayFmt("test-2")
 expected = { Tr("day") .. [[ 17 / 17.Primus / 82.Wimmel]] }
 out = { DayString(17) }
 Assert("two-formats-specified-for-day", expected, out)
@@ -31,12 +31,12 @@ expected = { [[1801]] }
 out = { YearString(1801) }
 Assert("no-format-specified-for-year", expected, out)
 
-AddYearFmt("test-1")
+TexApi.addYearFmt("test-1")
 expected = { [[1801 QT]] }
 out = { YearString(1801) }
 Assert("one-format-specified-for-year", expected, out)
 
-AddYearFmt("test-2")
+TexApi.addYearFmt("test-2")
 expected = { [[1801 QT / 2001 WX]] }
 out = { YearString(1801) }
 Assert("two-formats-specified-for-year", expected, out)

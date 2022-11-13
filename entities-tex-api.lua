@@ -1,5 +1,3 @@
-TexApi = {}
-
 function SetDescriptor(arg)
     if not IsArgOk("SetDescriptor", arg, { "entity", "descriptor", "description" }, { "subdescriptor" }) then
         return

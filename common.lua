@@ -1,4 +1,5 @@
 RelativePath = ""
+TexApi = {}
 
 local function logErrorOnModify(table, key, value)
 	LogError("Attempted to set key " .. key .. " to value " .. value .. " in read-only table " .. DebugPrint(table))

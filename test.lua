@@ -22,6 +22,7 @@ Append(allTestFiles, "species-at-location")
 Append(allTestFiles, "sub-label")
 local numSucceeded = 0
 local numFailed = 0
+local apiFunctionUsage = {}
 
 local function resetEnvironment()
     ResetDateFormats()
@@ -163,11 +164,21 @@ function Assert(caller, expected, received)
     end
 end
 
-function RunTests(testFiles)
+local function prepareApiFunctions()
+    for key, fun in pairs(TexApi) do
+        apiFunctionUsage[key] = 0
+        local actualFunction = TexApi[key]
+        TexApi[key] = function(arg)
+            apiFunctionUsage[key] = apiFunctionUsage[key] + 1
+            return actualFunction(arg)
+        end
+    end
+end
+
+local function runTests(testFiles)
     if IsEmpty(testFiles) then
         testFiles = allTestFiles
     end
-    local out = {}
 
     for key, testfile in pairs(testFiles) do
         resetEnvironment()
@@ -185,7 +196,10 @@ function RunTests(testFiles)
             PopScopedVariables()
         end
     end
+end
 
+local function printResults()
+    local out = {}
     Append(out, TexCmd("section*", "Results"))
     Append(out, TexCmd("RpgTex"))
     Append(out, " ran ")
@@ -193,5 +207,26 @@ function RunTests(testFiles)
     Append(out, " tests, ")
     Append(out, numFailed)
     Append(out, " of which failed.")
-    tex.print(out)
+    Append(out, [[\newline]])
+    Append(out, "Usage of TexApi functions:")
+    local apiFunctionUsageStr = {}
+    for key, usage in pairs(apiFunctionUsage) do
+        local usageStr = ""
+        if usage == 0 then
+            usageStr = " was not called!!!"
+        elseif usage == 1 then
+            usageStr = " was called only once!"
+        else
+            usageStr = " was called " .. usage .. " times."
+        end
+        Append(apiFunctionUsageStr, key .. usageStr)
+    end
+    table.sort(apiFunctionUsageStr)
+    Append(out, ListAll(apiFunctionUsageStr))
+end
+
+function RpgTexTests(testFiles)
+    prepareApiFunctions()
+    runTests(testFiles)
+    tex.print(printResults())
 end

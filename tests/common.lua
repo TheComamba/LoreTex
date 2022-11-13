@@ -1,8 +1,8 @@
 local list = { "a", "b", "c" }
 local expected = { [[\begin{itemize}]],
-    [[\item{} a]],
-    [[\item{} b]],
-    [[\item{} c]],
+    [[\item a]],
+    [[\item b]],
+    [[\item c]],
     [[\end{itemize}]] }
 Assert("ListAll", expected, ListAll(list))
 

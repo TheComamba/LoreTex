@@ -15,9 +15,9 @@ local expected = {
     [[\section{]] .. CapFirst(Tr("places")) .. [[}]],
     [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("places")) .. [[}]],
     [[\begin{itemize}]],
-    [[\item{} \nameref{test-city}]],
-    [[\item{} \nameref{test-continent}]],
-    [[\item{} \nameref{test-region}]],
+    [[\item \nameref{test-city}]],
+    [[\item \nameref{test-continent}]],
+    [[\item \nameref{test-region}]],
     [[\end{itemize}]],
 
     [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]],
@@ -25,7 +25,7 @@ local expected = {
     [[\label{test-continent}]],
     [[\paragraph{]] .. CapFirst(Tr("affiliated")) .. [[ ]] .. Tr("places") .. [[}]],
     [[\begin{itemize}]],
-    [[\item{} \nameref {test-region}]],
+    [[\item \nameref {test-region}]],
     [[\end{itemize}]],
 
     [[\subsection{]] .. CapFirst(Tr("in")) .. [[ Test Continent}]],
@@ -33,7 +33,7 @@ local expected = {
     [[\label{test-region}]],
     [[\paragraph{]] .. CapFirst(Tr("affiliated")) .. [[ ]] .. Tr("places") .. [[}]],
     [[\begin{itemize}]],
-    [[\item{} \nameref {test-city}]],
+    [[\item \nameref {test-city}]],
     [[\end{itemize}]],
 
     [[\subsection{]] .. CapFirst(Tr("in")) .. [[ Test Continent - Test Region}]],

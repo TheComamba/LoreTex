@@ -223,6 +223,7 @@ local function printResults()
     end
     table.sort(apiFunctionUsageStr)
     Append(out, ListAll(apiFunctionUsageStr))
+    return out
 end
 
 function RpgTexTests(testFiles)

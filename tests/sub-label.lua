@@ -36,7 +36,7 @@ local expected = {
     [[\section{]] .. CapFirst(Tr("npcs")) .. [[}]],
     [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("npcs")) .. [[}]],
     [[\begin{itemize}]],
-    [[\item{} \nameref{some-npc}]],
+    [[\item \nameref{some-npc}]],
     [[\end{itemize}]],
     [[\subsection{]] .. CapFirst(Tr("in")) .. [[ Subplace 1}]],
     [[\subsubsection{Some NPC}]],

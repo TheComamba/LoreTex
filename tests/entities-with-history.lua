@@ -24,9 +24,9 @@ local function generateExpected(isSecondAdded)
     Append(out, [[\section{]] .. CapFirst(Tr("places")) .. [[}]])
     Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("places")) .. [[}]])
     Append(out, [[\begin{itemize}]])
-    Append(out, [[\item{} \nameref{test-1}]])
+    Append(out, [[\item \nameref{test-1}]])
     if isSecondAdded then
-        Append(out, [[\item{} \nameref{test-2}]])
+        Append(out, [[\item \nameref{test-2}]])
     end
     Append(out, [[\end{itemize}]])
     Append(out, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
@@ -35,7 +35,7 @@ local function generateExpected(isSecondAdded)
     Append(out, [[\paragraph{]] .. CapFirst(Tr("history")) .. [[}]])
     Append(out, [[\begin{itemize}]])
     Append(out,
-        [[\item{} -10 (]] ..
+        [[\item -10 (]] ..
         Tr("years-ago", { 10 }) .. [[):\\ Event that concerns \nameref{test-1} and \itref{test-2}.]])
     Append(out, [[\end{itemize}]])
     if isSecondAdded then
@@ -44,7 +44,7 @@ local function generateExpected(isSecondAdded)
         Append(out, [[\paragraph{]] .. CapFirst(Tr("history")) .. [[}]])
         Append(out, [[\begin{itemize}]])
         Append(out,
-            [[\item{} -10 (]] ..
+            [[\item -10 (]] ..
             Tr("years-ago", { 10 }) .. [[):\\ Event that concerns \nameref{test-1} and \itref{test-2}.]])
         Append(out, [[\end{itemize}]])
     else

@@ -117,7 +117,7 @@ function ListAll(list, processor)
 		if type(content) ~= "string" then
 			LogError("Trying to concat " .. DebugPrint(content))
 		else
-			Append(out, TexCmd("item") .. " " .. content)
+			Append(out, [[\item ]] .. content)
 		end
 	end
 	Append(out, TexCmd("end", "itemize"))

@@ -17,13 +17,9 @@ function CreateBenchmarkingTest(sizeStr)
     end
     for i = 1, size do
         TexApi.newEntity { type = "places", label = "place-" .. i, name = "Place " .. i }
-        if true then
-            local hist = EmptyHistoryItem()
-            SetProtectedField(hist, "originator", "place-" .. i)
-            SetYear(hist, -i)
-            SetProtectedField(hist, "event", [[Birth of \reference{char-]] .. i .. [[} \birthof{char-]] .. i .. [[}]])
-            ProcessEvent(hist)
-        end
+        TexApi.addHistory { originator = "place-" .. i,
+            year = -i,
+            event = [[Birth of \reference{char-]] .. i .. [[} \birthof{char-]] .. i .. [[}]] }
         AddRef("place-" .. i, PrimaryRefs)
 
         TexApi.newEntity { type = "species", label = "species-" .. i, name = "Species " .. i }

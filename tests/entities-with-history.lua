@@ -1,21 +1,8 @@
 TexApi.newEntity { type = "places", label = "test-1", name = "Test 1" }
 
 TexApi.newEntity { type = "places", label = "test-2", name = "Test 2" }
-if true then
-    local hist = EmptyHistoryItem()
-    SetProtectedField(hist, "originator", "test-2")
-    SetYear(hist, -10)
-    SetProtectedField(hist, "event", [[Event that concerns \reference{test-1} and \itref{test-2}.]])
-    ProcessEvent(hist)
-end
-if true then
-    local hist = EmptyHistoryItem()
-    SetProtectedField(hist, "originator", "test-2")
-    SetYear(hist, 10)
-    SetProtectedField(hist, "event", [[Event in the future.]])
-    ProcessEvent(hist)
-end
-
+TexApi.addHistory { year = -10, event = [[Event that concerns \reference{test-1} and \itref{test-2}.]] }
+TexApi.addHistory { year = 10, event = [[Event in the future.]] }
 AddRef("test-1", PrimaryRefs)
 
 local function generateExpected(isSecondAdded)

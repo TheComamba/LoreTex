@@ -1,18 +1,7 @@
 TexApi.newEntity { type = "npcs", label = "flora", shortname = "", name = "Flora" }
-if true then
-    local hist = EmptyHistoryItem()
-    SetProtectedField(hist, "originator", "flora")
-    SetYear(hist, -10)
-    SetProtectedField(hist, "event", [[\nameref{flora} is born.\birthof{flora}]])
-    ProcessEvent(hist)
-end
-if true then
-    local hist = EmptyHistoryItem()
-    SetProtectedField(hist, "originator", "flora")
-    SetYear(hist, -5)
-    SetProtectedField(hist, "event", [[\nameref{flora} dies.\deathof{flora}]])
-    ProcessEvent(hist)
-end
+TexApi.born { year = -10, event = [[\nameref{flora} is born.\birthof{flora}]] }
+TexApi.died { year = -5, event = [[\nameref{flora} dies.\deathof{flora}]] }
+
 AddRef("flora", PrimaryRefs)
 
 TexApi.newEntity { type = "npcs", label = "ramona", name = "Ramona" }

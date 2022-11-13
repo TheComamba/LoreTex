@@ -1,5 +1,20 @@
 local historyItemCounter = 1
-function EmptyHistoryItem()
+
+local function IsHistoryItemOk(caller, item)
+	local required = {}
+	Append(required, GetProtectedDescriptor("counter"))
+	Append(required, GetProtectedDescriptor("event"))
+	Append(required, GetProtectedDescriptor("isConcernsOthers"))
+	Append(required, GetProtectedDescriptor("isSecret"))
+	Append(required, GetProtectedDescriptor("year"))
+	local optional = {}
+	Append(optional, GetProtectedDescriptor("day"))
+	Append(optional, GetProtectedDescriptor("originator"))
+	Append(optional, GetProtectedDescriptor("yearFormat"))
+	return IsArgOk(caller, item, required, optional)
+end
+
+function NewHistoryItem()
 	local item = {}
 	SetProtectedField(item, "isSecret", false)
 	SetProtectedField(item, "isConcernsOthers", true)
@@ -8,7 +23,7 @@ function EmptyHistoryItem()
 	return item
 end
 
-function SetDay(historyItem, day)
+local function setDay(historyItem, day)
 	if IsEmpty(day) then
 		return
 	end
@@ -33,7 +48,7 @@ function SetYear(historyItem, year)
 	end
 end
 
-function SetYearFmt(historyItem, label)
+local function setYearFmt(historyItem, label)
 	if IsEmpty(label) then
 		LogError("Called with empty year format for history item:" .. DebugPrint(historyItem))
 		return
@@ -74,7 +89,10 @@ local function addSpecialyearsToEntities(field, year, labels)
 	end
 end
 
-function ProcessEvent(item)
+local function processEvent(item)
+	if not IsHistoryItemOk("ProcessEvent", item) then
+		return
+	end
 	StartBenchmarking("ProcessEvent")
 
 	local event = GetProtectedField(item, "event")
@@ -96,11 +114,6 @@ function ProcessEvent(item)
 	addSpecialyearsToEntities("born", year, GetProtectedField(item, "birthof"))
 	addSpecialyearsToEntities("died", year, GetProtectedField(item, "deathof"))
 
-
-	if IsEmpty(year) then
-		LogError("This event has no year:" .. DebugPrint(item))
-		SetProtectedField(item, "year", 1e6)
-	end
 	if IsEmpty(GetProtectedField(item, "day")) then
 		SetProtectedField(item, "day", nil)
 	end
@@ -115,4 +128,57 @@ function ProcessEvent(item)
 	end
 
 	StopBenchmarking("ProcessEvent")
+end
+
+local function addHistory(arg)
+	if not IsArgOk("addHistory", arg, { "year", "event" }, { "day", "isConcernsOthers", "isSecret", "yearFmt" }) then
+		return
+	end
+	local item = NewHistoryItem()
+	SetProtectedField(item, "originator", GetMainLabel(CurrentEntity()))
+	setDay(item, arg.day)
+	SetYear(item, arg.year)
+	SetProtectedField(item, "event", arg.event)
+	if not IsEmpty(arg.isConcernsOthers) then
+		SetProtectedField(item, "isConcernsOthers", arg.isConcernsOthers)
+	end
+	if not IsEmpty(arg.isSecret) then
+		SetProtectedField(item, "isSecret", arg.isSecret)
+	end
+	if not IsEmpty(arg.yearFmt) then
+		setYearFmt(item, arg.yearFmt)
+	end
+	processEvent(item)
+end
+
+TexApi.addHistory = function(arg)
+	addHistory(arg)
+end
+
+TexApi.addSecretHistory = function(arg)
+	arg.isSecret = true
+	addHistory(arg)
+end
+
+TexApi.addHistoryOnlyHere = function(arg)
+	arg.isConcernsOthers = false
+	addHistory(arg)
+end
+
+TexApi.born = function (arg)
+	addHistory(arg)
+	if not IsEmpty(arg.yearFmt ) then
+		local fmt = GetEntity(arg.yearFmt)
+		arg.year = RemoveYearOffset(arg.year, fmt)
+	end
+	SetProtectedField(CurrentEntity(), "born", arg.year)
+end
+
+TexApi.died = function (arg)
+	addHistory(arg)
+	if not IsEmpty(arg.yearFmt ) then
+		local fmt = GetEntity(arg.yearFmt)
+		arg.year = RemoveYearOffset(arg.year, fmt)
+	end
+	SetProtectedField(CurrentEntity(), "died", arg.year)
 end

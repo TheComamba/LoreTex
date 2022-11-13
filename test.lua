@@ -64,6 +64,8 @@ local function areEqual(obj1, obj2, elementNum, currentObj1, currentObj2)
         obj2 = Replace(" ", "", obj2)
         obj1 = Replace("\n", "", obj1)
         obj2 = Replace("\n", "", obj2)
+        obj1 = Replace([[_]], [[\_]], obj1)
+        obj2 = Replace([[_]], [[\_]], obj2)
         return obj1 == obj2
     end
 end

@@ -1,12 +1,7 @@
 TexApi.newEntity { type = "stories", label = "teststory", name = "Teststory" }
-if true then
-    local hist = EmptyHistoryItem()
-    SetProtectedField(hist, "originator", "teststory")
-    SetYear(hist, -10)
-    SetProtectedField(hist, "event", [[Concerns \nameref{secret-item}.]])
-    ProcessEvent(hist)
-end
 AddRef("teststory", PrimaryRefs)
+TexApi.addHistory { year = -10, event = [[Concerns \nameref{secret-item}.]] }
+
 TexApi.newEntity { type = "items", label = "secret-item", name = "Secret Item" }
 SetSecret(CurrentEntity())
 

@@ -3,36 +3,11 @@ AddParent(CurrentEntity(), "normal-orga")
 AddParent(CurrentEntity(), "secret-orga")
 AddParent(CurrentEntity(), "revealed-orga")
 AddParent(CurrentEntity(), "unborn-orga")
-if true then
-    local hist = EmptyHistoryItem()
-    SetProtectedField(hist, "originator", "normal")
-    SetYear(hist, -10)
-    SetProtectedField(hist, "event", [[Normal event]])
-    ProcessEvent(hist)
-end
-if true then
-    local hist = EmptyHistoryItem()
-    SetProtectedField(hist, "originator", "normal")
-    SetYear(hist, -9)
-    SetProtectedField(hist, "event", [[Concerns \reference{secret}]])
-    ProcessEvent(hist)
-end
-if true then
-    local hist = EmptyHistoryItem()
-    SetProtectedField(hist, "originator", "normal")
-    SetYear(hist, -8)
-    SetProtectedField(hist, "event", [[Concerns \reference{revealed}]])
-    ProcessEvent(hist)
-end
-if true then
-    local hist = EmptyHistoryItem()
-    SetProtectedField(hist, "originator", "normal")
-    SetYear(hist, -5)
-    SetProtectedField(hist, "event", [[Secret event]])
-    SetProtectedField(hist, "isSecret", true)
-    ProcessEvent(hist)
-end
 AddRef("normal", PrimaryRefs)
+TexApi.addHistory { year = -10, event = [[Normal event]] }
+TexApi.addHistory { year = -9, event = [[Concerns \reference{secret}]] }
+TexApi.addHistory { year = -8, event = [[Concerns \reference{revealed}]] }
+TexApi.addSecretHistory { year = -5, event = [[Secret event]] }
 
 TexApi.newEntity { type = "items", label = "secret", name = "Secret" }
 SetSecret(CurrentEntity())
@@ -40,13 +15,7 @@ AddParent(CurrentEntity(), "normal-orga")
 AddParent(CurrentEntity(), "secret-orga")
 AddParent(CurrentEntity(), "revealed-orga")
 AddParent(CurrentEntity(), "unborn-orga")
-if true then
-    local hist = EmptyHistoryItem()
-    SetProtectedField(hist, "originator", "secret")
-    SetYear(hist, -7)
-    SetProtectedField(hist, "event", [[Concerns \reference{normal}]])
-    ProcessEvent(hist)
-end
+TexApi.addHistory { year = -7, event = [[Concerns \reference{normal}]] }
 
 TexApi.newEntity { type = "items", label = "revealed", name = "Revealed" }
 SetSecret(CurrentEntity())
@@ -54,28 +23,16 @@ AddParent(CurrentEntity(), "normal-orga")
 AddParent(CurrentEntity(), "secret-orga")
 AddParent(CurrentEntity(), "revealed-orga")
 AddParent(CurrentEntity(), "unborn-orga")
-if true then
-    local hist = EmptyHistoryItem()
-    SetProtectedField(hist, "originator", "revealed")
-    SetYear(hist, -6)
-    SetProtectedField(hist, "event", [[Concerns \reference{normal}]])
-    ProcessEvent(hist)
-end
 TexApi.reveal("revealed")
+TexApi.addHistory { year = -6, event = [[Concerns \reference{normal}]] }
 
 TexApi.newEntity { type = "items", label = "unborn", name = "Unborn" }
-if true then
-    local hist = EmptyHistoryItem()
-    SetProtectedField(hist, "originator", "unborn")
-    SetYear(hist, 10)
-    SetProtectedField(hist, "event", [[Created.\birthof{unborn}]])
-    ProcessEvent(hist)
-end
 AddParent(CurrentEntity(), "normal-orga")
 AddParent(CurrentEntity(), "secret-orga")
 AddParent(CurrentEntity(), "revealed-orga")
 AddParent(CurrentEntity(), "unborn-orga")
 AddRef("unborn", PrimaryRefs)
+TexApi.addHistory { year = 10, event = [[Created.\birthof{unborn}]] }
 
 TexApi.newEntity { type = "items", label = "at-secret-location", name = "At secret Location" }
 SetLocation(CurrentEntity(), "eldorado")
@@ -99,14 +56,8 @@ SetSecret(CurrentEntity())
 TexApi.reveal("revealed-orga")
 
 TexApi.newEntity { type = "organisations", label = "unborn-orga", name = "Unborn Organisation" }
-if true then
-    local hist = EmptyHistoryItem()
-    SetProtectedField(hist, "originator", "unborn-orga")
-    SetYear(hist, 10)
-    SetProtectedField(hist, "event", [[Founded.\birthof{unborn-orga}]])
-    ProcessEvent(hist)
-end
 AddRef("unborn-orga", PrimaryRefs)
+TexApi.born { year = 10, event = [[Founded.\birthof{unborn-orga}]] }
 
 local function itemsParagraph()
     local out = {}

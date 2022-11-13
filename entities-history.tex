@@ -1,111 +1,16 @@
-\newcommand{\addHistory}[3][]{
-	\directlua{
-		if true then
-			local item = EmptyHistoryItem()
-			SetProtectedField(item, "originator", GetMainLabel(CurrentEntity()))
-			SetDay(item, "#1")
-			SetYear(item, "#2")
-			SetProtectedField(item, "event", [[\detokenize{#3}]] )
-			ProcessEvent(item)
-		end
-	}
-}
-\newcommand{\addSecretHistory}[3][]{
-	\directlua{
-		if true then
-			local item = EmptyHistoryItem()
-			SetProtectedField(item, "originator", GetMainLabel(CurrentEntity()))
-			SetDay(item, "#1")
-			SetYear(item, "#2")
-			SetProtectedField(item, "event", [[\detokenize{#3}]] )
-			SetProtectedField(item, "isSecret", true)
-			ProcessEvent(item)
-		end
-	}
-}
-\newcommand{\addHistoryOnlyHere}[3][]{
-	\directlua{
-		if true then
-			local item = EmptyHistoryItem()
-			SetProtectedField(item, "originator", GetMainLabel(CurrentEntity()))
-			SetDay(item, "#1")
-			SetYear(item, "#2")
-			SetProtectedField(item, "event", [[\detokenize{#3}]] )
-			SetProtectedField(item, "isConcernsOthers", false)
-			ProcessEvent(item)
-		end
-	}
-}
-\newcommand{\addHistoryInFmt}[4][]{
-	\directlua{
-		if true then
-			local item = EmptyHistoryItem()
-			SetProtectedField(item, "originator", GetMainLabel(CurrentEntity()))
-			SetDay(item, "#1")
-			SetYearFmt(item, "#2")
-			SetYear(item, "#3")
-			SetProtectedField(item, "event", [[\detokenize{#4}]] )
-			ProcessEvent(item)
-		end
-	}
-}
-\newcommand{\addSecretHistoryInFmt}[4][]{
-	\directlua{
-		if true then
-			local item = EmptyHistoryItem()
-			SetProtectedField(item, "originator", GetMainLabel(CurrentEntity()))
-			SetDay(item, "#1")
-			SetYearFmt(item, "#2")
-			SetYear(item, "#3")
-			SetProtectedField(item, "event", [[\detokenize{#4}]] )
-			SetProtectedField(item, "isSecret", true)
-			ProcessEvent(item)
-		end
-	}
-}
-\newcommand{\addHistoryInFmtOnlyHere}[4][]{
-	\directlua{
-		if true then
-			local item = EmptyHistoryItem()
-			SetProtectedField(item, "originator", GetMainLabel(CurrentEntity()))
-			SetDay(item, "#1")
-			SetYearFmt(item, "#2")
-			SetYear(item, "#3")
-			SetProtectedField(item, "event", [[\detokenize{#4}]] )
-			SetProtectedField(item, "isConcernsOthers", false)
-			ProcessEvent(item)
-		end
-	}
-}
+\newcommand{\addHistory}[3][]{\directlua{TexApi.addHistory{day = #1, year = #2, event = [[\detokenize{#3}]]} }}
+\newcommand{\addSecretHistory}[3][]{\directlua{TexApi.addSecretHistory{day = #1, year = #2, event = [[\detokenize{#3}]]} }}
+\newcommand{\addHistoryOnlyHere}[3][]{\directlua{TexApi.addHistoryOnlyHere{day = #1, year = #2, event = [[\detokenize{#3}]]} }}
+\newcommand{\addHistoryInFmt}[4][]{\directlua{TexApi.addHistory{day = #1, yearFmt = "#2", year = #3, event = [[\detokenize{#4}]]} }}
+\newcommand{\addSecretHistoryInFmt}[4][]{\directlua{TexApi.addSecretHistory{day = #1, yearFmt = "#2", year = #3, event = [[\detokenize{#4}]]} }}
+\newcommand{\addHistoryInFmtOnlyHere}[4][]{\directlua{TexApi.addHistoryOnlyHere{day = #1, yearFmt = "#2", year = #3, event = [[\detokenize{#4}]]} }}
 
 \newcommand{\concerns}[1]{}
 \newcommand{\notconcerns}[1]{}
 \newcommand{\birthof}[1]{}
 \newcommand{\deathof}[1]{}
 
-\newcommand{\born}[3][]{
-	\addHistory[#1]{#2}{#3}
-	\directlua{SetProtectedField(CurrentEntity(), "born", #2)}
-}
-\newcommand{\died}[3][]{
-	\addHistory[#1]{#2}{#3}
-	\directlua{SetProtectedField(CurrentEntity(), "died", #2)}
-}
-\newcommand{\bornInFmt}[4][]{
-	\addHistoryInFmt[#1]{#2}{#3}{#4}
-	\directlua{
-		if true then
-			local fmt = GetEntity("#2")
-			SetProtectedField(CurrentEntity(), "born", RemoveYearOffset(#3, fmt))
-		end
-		}
-}
-\newcommand{\diedInFmt}[4][]{
-	\addHistoryInFmt[#1]{#2}{#3}{#4}
-	\directlua{
-		if true then
-			local fmt = GetEntity("#2")
-			SetProtectedField(CurrentEntity(), "died", RemoveYearOffset(#3, fmt))
-		end
-		}
-}
+\newcommand{\born}[3][]{\directlua{TexApi.born{day = #1, year = #2, event = [[\detokenize{#3}]]} }}
+\newcommand{\died}[3][]{\directlua{TexApi.died{day = #1, year = #2, event = [[\detokenize{#3}]]} }}
+\newcommand{\bornInFmt}[4][]{\directlua{TexApi.born{day = #1, yearFmt = #2, year = #3, event = [[\detokenize{#4}]]} }}
+\newcommand{\diedInFmt}[4][]{\directlua{TexApi.died{day = #1, yearFmt = #2, year = #3, event = [[\detokenize{#4}]]} }}

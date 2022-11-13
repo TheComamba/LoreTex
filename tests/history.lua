@@ -1,162 +1,29 @@
 TexApi.newEntity { type = "places", label = "test-1", name = "Test 1" }
-if true then
-    local hist = EmptyHistoryItem()
-    SetProtectedField(hist, "originator", "test-1")
-    SetYear(hist, -10)
-    SetProtectedField(hist, "event", [[Event that concerns \reference{test-1}, but not \reference{test-2}.]])
-    SetProtectedField(hist, "isConcernsOthers", false)
-    ProcessEvent(hist)
-end
-if true then
-    local hist = EmptyHistoryItem()
-    SetProtectedField(hist, "originator", "test-1")
-    SetYear(hist, -20)
-    SetProtectedField(hist, "event", [[Some event.]])
-    ProcessEvent(hist)
-end
-if true then
-    local hist = EmptyHistoryItem()
-    SetProtectedField(hist, "originator", "test-1")
-    SetYear(hist, 5)
-    SetProtectedField(hist, "event", [[Event in the future.]])
-    ProcessEvent(hist)
-end
-
-TexApi.newEntity { type = "places", label = "test-2", name = "Test 2" }
-if true then
-    local hist = EmptyHistoryItem()
-    SetYear(hist, -5)
-    SetProtectedField(hist, "event",
-        [[Event that concerns \reference{test-1}, but not \reference{test-2}.\notconcerns{test-2}]])
-    ProcessEvent(hist)
-end
-
-if true then
-    local hist = EmptyHistoryItem()
-    SetProtectedField(hist, "originator", "test-1")
-    SetYear(hist, -987654321)
-    SetProtectedField(hist, "event", [[Long time ago.]])
-    ProcessEvent(hist)
-end
-if true then
-    local hist = EmptyHistoryItem()
-    SetProtectedField(hist, "originator", "test-1")
-    SetYear(hist, -2)
-    SetDay(hist, 5)
-    SetProtectedField(hist, "event", [[Event with day.]])
-    ProcessEvent(hist)
-end
-if true then
-    local hist = EmptyHistoryItem()
-    SetProtectedField(hist, "originator", "test-1")
-    SetYear(hist, -2)
-    SetDay(hist, 5)
-    SetProtectedField(hist, "event", [[Event on same day.]])
-    ProcessEvent(hist)
-end
-if true then
-    local hist = EmptyHistoryItem()
-    SetProtectedField(hist, "originator", "test-1")
-    SetYear(hist, -20)
-    SetProtectedField(hist, "event", [[Event same year as another.]])
-    ProcessEvent(hist)
-end
-if true then
-    local hist = EmptyHistoryItem()
-    SetProtectedField(hist, "originator", "test-1")
-    SetYear(hist, -1)
-    SetProtectedField(hist, "event", [[Event last year.]])
-    ProcessEvent(hist)
-end
-if true then
-    local hist = EmptyHistoryItem()
-    SetProtectedField(hist, "originator", "test-1")
-    SetYear(hist, -1)
-    SetDay(hist, 1)
-    SetProtectedField(hist, "event", [[Event last year, with day.]])
-    ProcessEvent(hist)
-end
-if true then
-    local hist = EmptyHistoryItem()
-    SetProtectedField(hist, "originator", "test-1")
-    SetYear(hist, -1)
-    SetDay(hist, 100)
-    SetProtectedField(hist, "event", [[Event less than a year ago.]])
-    ProcessEvent(hist)
-end
-if true then
-    local hist = EmptyHistoryItem()
-    SetProtectedField(hist, "originator", "test-1")
-    SetYear(hist, 0)
-    SetProtectedField(hist, "event", [[Event this year.]])
-    ProcessEvent(hist)
-end
-if true then
-    local hist = EmptyHistoryItem()
-    SetProtectedField(hist, "originator", "test-1")
-    SetYear(hist, 0)
-    SetDay(hist, 5)
-    SetProtectedField(hist, "event", [[Event this year, with day.]])
-    ProcessEvent(hist)
-end
-if true then
-    local hist = EmptyHistoryItem()
-    SetProtectedField(hist, "originator", "test-1")
-    SetYear(hist, 0)
-    SetDay(hist, 9)
-    SetProtectedField(hist, "event", [[Event yesterday.]])
-    ProcessEvent(hist)
-end
-if true then
-    local hist = EmptyHistoryItem()
-    SetProtectedField(hist, "originator", "test-1")
-    SetYear(hist, 0)
-    SetDay(hist, 10)
-    SetProtectedField(hist, "event", [[Event today.]])
-    ProcessEvent(hist)
-end
-if true then
-    local hist = EmptyHistoryItem()
-    SetProtectedField(hist, "originator", "test-1")
-    SetYear(hist, 0)
-    SetDay(hist, 11)
-    SetProtectedField(hist, "event", [[Event tomorrow.]])
-    ProcessEvent(hist)
-end
-if true then
-    local hist = EmptyHistoryItem()
-    SetProtectedField(hist, "originator", "test-1")
-    SetYear(hist, 0)
-    SetDay(hist, 15)
-    SetProtectedField(hist, "event", [[Event this year, with day in future.]])
-    ProcessEvent(hist)
-end
-if true then
-    local hist = EmptyHistoryItem()
-    SetProtectedField(hist, "originator", "test-1")
-    SetYear(hist, 1)
-    SetDay(hist, 5)
-    SetProtectedField(hist, "event", [[Event in less than a year.]])
-    ProcessEvent(hist)
-end
-if true then
-    local hist = EmptyHistoryItem()
-    SetProtectedField(hist, "originator", "test-1")
-    SetYear(hist, 1)
-    SetProtectedField(hist, "event", [[Event next year.]])
-    ProcessEvent(hist)
-end
-if true then
-    local hist = EmptyHistoryItem()
-    SetProtectedField(hist, "originator", "test-1")
-    SetYear(hist, 1)
-    SetDay(hist, 15)
-    SetProtectedField(hist, "event", [[Event next year, with day.]])
-    ProcessEvent(hist)
-end
-
+TexApi.addHistoryOnlyHere { year = -10, event = [[Event that concerns \reference{test-1}, but not \reference{test-2}.]] }
+TexApi.addHistory { year = -20, event = [[Some event.]] }
+TexApi.addHistory { year = 5, event = [[Event in the future.]] }
+TexApi.addHistory { year = -987654321, event = [[Long time ago.]] }
+TexApi.addHistory { year = -2, day = 5, event = [[Event with day.]] }
+TexApi.addHistory { year = -2, day = 5, event = [[Event on same day.]] }
+TexApi.addHistory { year = -20, event = [[Event same year as another.]] }
+TexApi.addHistory { year = -1, event = [[Event last year.]] }
+TexApi.addHistory { year = -1, day = 1, event = [[Event last year, with day.]] }
+TexApi.addHistory { year = -1, day = 100, event = [[Event less than a year ago.]] }
+TexApi.addHistory { year = 0, event = [[Event this year.]] }
+TexApi.addHistory { year = 0, day = 5, event = [[Event this year, with day.]] }
+TexApi.addHistory { year = 0, day = 9, event = [[Event yesterday.]] }
+TexApi.addHistory { year = 0, day = 10, event = [[Event today.]] }
+TexApi.addHistory { year = 0, day = 11, event = [[Event tomorrow.]] }
+TexApi.addHistory { year = 0, day = 15, event = [[Event this year, with day in future.]] }
+TexApi.addHistory { year = 1, day = 5, event = [[Event in less than a year.]] }
+TexApi.addHistory { year = 1, event = [[Event next year.]] }
+TexApi.addHistory { year = 1, day = 15, event = [[Event next year, with day.]] }
 
 AddRef("test-1", PrimaryRefs)
+
+TexApi.newEntity { type = "places", label = "test-2", name = "Test 2" }
+TexApi.addHistory { year = -5,
+    event = [[Event that concerns \reference{test-1}, but not \reference{test-2}.\notconcerns{test-2}]] }
 
 local function generateExpected()
     local out = {}

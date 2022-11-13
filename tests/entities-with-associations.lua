@@ -1,19 +1,19 @@
-NewEntity("organisations", "orga", nil, "Orga")
+TexApi.newEntity { type = "organisations", label = "orga", name = "Orga" }
 local orga = CurrentEntity()
 
-NewEntity("places", "place-1", nil, "Place 1")
+TexApi.newEntity { type = "places", label = "place-1", name = "Place 1" }
 AddParent(CurrentEntity(), "orga")
 
-NewEntity("places", "place-2", nil, "Place 2")
+TexApi.newEntity { type = "places", label = "place-2", name = "Place 2" }
 local place2 = CurrentEntity()
 AddParent(place2, "orga", "Hometown")
 
-NewEntity("organisations", "orga-2", nil, "Orga 2")
+TexApi.newEntity { type = "organisations", label = "orga-2", name = "Orga 2" }
 local orga2 = CurrentEntity()
 AddParent(orga2, "place-1", "Rulers")
 
 AddAllEntitiesToPrimaryRefs()
-local out = AutomatedChapters()
+local out = TexApi.automatedChapters()
 
 local function generateOrga1(areLocationsSet)
     local out = {}
@@ -103,13 +103,13 @@ end
 local expected = generateExpected(false)
 Assert("entities-with-associations", expected, out)
 
-NewEntity("places", "place-3", nil, "Place 3")
-NewEntity("places", "place-4", nil, "Place 4")
+TexApi.newEntity { type = "places", label = "place-3", name = "Place 3" }
+TexApi.newEntity { type = "places", label = "place-4", name = "Place 4" }
 SetLocation(orga, "place-3")
 SetLocation(orga2, "place-1")
 SetLocation(place2, "place-4")
 
-out = AutomatedChapters()
+out = TexApi.automatedChapters()
 
 local expected = generateExpected(true)
 Assert("entities-with-associations-and-locations", expected, out)

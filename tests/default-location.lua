@@ -1,17 +1,17 @@
-NewEntity("places", "test-place-1", nil, "Test Place 1")
+TexApi.newEntity { type = "places", label = "test-place-1", name = "Test Place 1" }
 Assert("Default Location Place 1", nil, GetProtectedField(CurrentEntity(), "location"))
-NewCharacter("test-char-1", nil, "Test Char 1")
+TexApi.newCharacter { label = "test-char-1", name = "Test Char 1" }
 Assert("Default Location Char 1", nil, GetProtectedField(CurrentEntity(), "location"))
 
 PushScopedVariables()
 SetScopedVariable("DefaultLocation", "lalaland")
-NewEntity("places", "test-place-2", nil, "Test Place 2")
+TexApi.newEntity { type = "places", label = "test-place-2", name = "Test Place 2" }
 Assert("Default Location Place 2", "lalaland", GetProtectedField(CurrentEntity(), "location"))
-NewCharacter("test-char-2", nil, "Test Char 2")
+TexApi.newCharacter { label = "test-char-2", name = "Test Char 2" }
 Assert("Default Location Char 2", "lalaland", GetProtectedField(CurrentEntity(), "location"))
 PopScopedVariables()
 
-NewEntity("places", "test-place-3", nil, "Test Place 3")
+TexApi.newEntity { type = "places", label = "test-place-3", name = "Test Place 3" }
 Assert("Default Location Place 3", nil, GetProtectedField(CurrentEntity(), "location"))
-NewCharacter("test-char-3", nil, "Test Char 3")
+TexApi.newCharacter { label = "test-char-3", name = "Test Char 3" }
 Assert("Default Location Char 3", nil, GetProtectedField(CurrentEntity(), "location"))

@@ -1,14 +1,14 @@
-NewEntity("places", "test-continent", nil, "Test Continent")
+TexApi.newEntity { type = "places", label = "test-continent", name = "Test Continent" }
 
-NewEntity("places", "test-region", nil, "Test Region")
+TexApi.newEntity { type = "places", label = "test-region", name = "Test Region" }
 SetLocation(CurrentEntity(), "test-continent")
 
-NewEntity("places", "test-city", nil, "Test City")
+TexApi.newEntity { type = "places", label = "test-city", name = "Test City" }
 SetLocation(CurrentEntity(), "test-region")
 
 AddAllEntitiesToPrimaryRefs()
 
-local out = AutomatedChapters()
+local out = TexApi.automatedChapters()
 
 local expected = {
     [[\chapter{]] .. CapFirst(Tr("places")) .. [[}]],

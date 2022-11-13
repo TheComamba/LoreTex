@@ -1,9 +1,9 @@
-NewEntity("places", "tattooine", nil, "Tattooine")
+TexApi.newEntity { type = "places", label = "tattooine", name = "Tattooine" }
 
-NewEntity("species", "tusken", nil, "Tusken")
+TexApi.newEntity { type = "species", label = "tusken", name = "Tusken" }
 SetLocation(CurrentEntity(), "tattooine")
 
-NewEntity("species", "jawa", nil, "Jawa")
+TexApi.newEntity { type = "species", label = "jawa", name = "Jawa" }
 SetLocation(CurrentEntity(), "tattooine")
 
 AddRef("tattooine", PrimaryRefs)
@@ -32,5 +32,5 @@ Append(expected, [[\label{tusken}]])
 Append(expected, [[\hspace{1cm}]])
 
 
-local out = AutomatedChapters()
+local out = TexApi.automatedChapters()
 Assert("species-at-location", expected, out)

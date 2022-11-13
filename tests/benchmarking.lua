@@ -16,7 +16,7 @@ function CreateBenchmarkingTest(sizeStr)
         size = numcast
     end
     for i = 1, size do
-        NewEntity("places", "place-" .. i, nil, "Place " .. i)
+        TexApi.newEntity { type = "places", label = "place-" .. i, name = "Place " .. i }
         if true then
             local hist = EmptyHistoryItem()
             SetProtectedField(hist, "originator", "place-" .. i)
@@ -26,22 +26,24 @@ function CreateBenchmarkingTest(sizeStr)
         end
         AddRef("place-" .. i, PrimaryRefs)
 
-        NewEntity("species", "species-" .. i, nil, "Species " .. i)
+        TexApi.newEntity { type = "species", label = "species-" .. i, name = "Species " .. i }
         SetAgeFactor(CurrentEntity(), i)
         AddRef("species-" .. i, PrimaryRefs)
 
-        NewEntity("organisations", "organisation-" .. i, nil, "Organisation " .. i)
+        TexApi.newEntity { type = "organisations", label = "organisation-" .. i, name = "Organisation " .. i }
         AddRef("organisation-" .. i, PrimaryRefs)
 
-        NewCharacter("char-" .. i, nil, "Character " .. i)
+        TexApi.newCharacter { label = "char-" .. i, name = "Character " .. i }
         SetSpecies(CurrentEntity(), "species-" .. i)
         SetLocation(CurrentEntity(), "place-" .. i)
         AddParent(CurrentEntity(), "organisation-" .. i)
-        SetDescriptor(CurrentEntity(), "Best Friend", [[\nameref{mentioned-char-]] .. i .. [[}]])
+        TexApi.setDescriptor { entity = CurrentEntity(),
+            descriptor = "Best Friend",
+            description = [[\nameref{mentioned-char-]] .. i .. [[}]] }
         AddRef("char-" .. i, PrimaryRefs)
 
-        NewCharacter("mentioned-char-" .. i, nil, "Mentioned Character " .. i)
+        TexApi.newCharacter { label = "mentioned-char-" .. i, name = "Mentioned Character " .. i }
     end
 
-    return AutomatedChapters()
+    return TexApi.automatedChapters()
 end

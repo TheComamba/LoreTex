@@ -1,4 +1,4 @@
-NewEntity("places", "test-1", nil, "Test 1")
+TexApi.newEntity { type = "places", label = "test-1", name = "Test 1" }
 if true then
     local hist = EmptyHistoryItem()
     SetProtectedField(hist, "originator", "test-1")
@@ -22,7 +22,7 @@ if true then
     ProcessEvent(hist)
 end
 
-NewEntity("places", "test-2", nil, "Test 2")
+TexApi.newEntity { type = "places", label = "test-2", name = "Test 2" }
 if true then
     local hist = EmptyHistoryItem()
     SetYear(hist, -5)
@@ -250,12 +250,12 @@ CurrentYear = 0
 CurrentDay = 0
 
 IsShowFuture = false
-local out = AutomatedChapters()
+local out = TexApi.automatedChapters()
 local expected = generateExpected()
 Assert("history-events-no-future-day-not-set", expected, out)
 
 IsShowFuture = true
-out = AutomatedChapters()
+out = TexApi.automatedChapters()
 expected = generateExpected()
 Assert("history-events-with-future-day-not-set", expected, out)
 
@@ -263,11 +263,11 @@ Assert("history-events-with-future-day-not-set", expected, out)
 CurrentDay = 10
 
 IsShowFuture = false
-local out = AutomatedChapters()
+local out = TexApi.automatedChapters()
 local expected = generateExpected()
 Assert("history-events-no-future-day-set", expected, out)
 
 IsShowFuture = true
-out = AutomatedChapters()
+out = TexApi.automatedChapters()
 expected = generateExpected()
 Assert("history-events-with-future-day-set", expected, out)

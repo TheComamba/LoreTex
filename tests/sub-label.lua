@@ -1,22 +1,35 @@
-NewEntity("npcs", "some-npc", nil, "Some NPC")
+TexApi.newEntity { type = "npcs", label = "some-npc", name = "Some NPC" }
 SetSpecies(CurrentEntity(), "subspecies")
 SetLocation(CurrentEntity(), "subplace-1")
-SetDescriptor(CurrentEntity(), "Info 1", [[Refers to \nameref{subplace-2}.]])
-SetDescriptor(CurrentEntity(), "Info 2", [[Refers to \nameref{subplace-3}.]])
-SetDescriptor(CurrentEntity(), "Info 3", [[Refers to \nameref{subplace-4}.]])
-NewEntity("places", "place-1", nil, "Place 1")
-SetDescriptor(CurrentEntity(), "Subplace 1", [[\label{subplace-1}]])
-NewEntity("places", "place-2", nil, "Place 2")
-SetDescriptor(CurrentEntity(), "Subplace 2", [[\label{subplace-2}]])
-SetDescriptor(CurrentEntity(), "More Subplaces",
-    [[\subparagraph{Subplace 3} \label{subplace-3}
-\subparagraph{Subplace 4} \label{subplace-4}]])
-NewEntity("species", "species", nil, "Species")
-SetDescriptor(CurrentEntity(), "Subspecies", [[\label{subspecies}]])
+TexApi.setDescriptor { entity = CurrentEntity(),
+    descriptor = "Info 1",
+    description = [[Refers to \nameref{subplace-2}.]] }
+TexApi.setDescriptor { entity = CurrentEntity(),
+    descriptor = "Info 2",
+    description = [[Refers to \nameref{subplace-3}.]] }
+TexApi.setDescriptor { entity = CurrentEntity(),
+    descriptor = "Info 3",
+    description = [[Refers to \nameref{subplace-4}.]] }
+TexApi.newEntity { type = "places", label = "place-1", name = "Place 1" }
+TexApi.setDescriptor { entity = CurrentEntity(),
+    descriptor = "Subplace 1",
+    description = [[\label{subplace-1}]] }
+TexApi.newEntity { type = "places", label = "place-2", name = "Place 2" }
+TexApi.setDescriptor { entity = CurrentEntity(),
+    descriptor = "Subplace 2",
+    description = [[\label{subplace-2}]] }
+TexApi.setDescriptor { entity = CurrentEntity(),
+    descriptor = "More Subplaces",
+    description = [[\subparagraph{Subplace 3} \label{subplace-3}
+\subparagraph{Subplace 4} \label{subplace-4}]] }
+TexApi.newEntity { type = "species", label = "species", name = "Species" }
+TexApi.setDescriptor { entity = CurrentEntity(),
+    descriptor = "Subspecies",
+    description = [[\label{subspecies}]] }
 
 AddRef("some-npc", PrimaryRefs)
 
-local out = AutomatedChapters()
+local out = TexApi.automatedChapters()
 
 local expected = {
     [[\chapter{]] .. CapFirst(Tr("characters")) .. [[}]],

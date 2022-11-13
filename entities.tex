@@ -1,7 +1,7 @@
-\newcommand{\newEntity}[4]{\directlua{NewEntity("#1","#2", [[\detokenize{#3}]], [[\detokenize{#4}]])}}
-\newcommand{\newNPC}[3]{\directlua{NewCharacter("#1", [[\detokenize{#2}]], [[\detokenize{#3}]])}}
-\newcommand{\declarePC}[1]{\directlua{DeclarePC("#1")}}
-\newcommand{\addDescriptor}[3][]{\directlua{SetDescriptor(CurrentEntity(),[[\detokenize{#2}]],[[\detokenize{#3}]], [[\detokenize{#1}]])}}
+\newcommand{\newEntity}[4]{\directlua{TexApi.newEntity{ type = "#1", label = "#2", shortname = [[\detokenize{#3}]], name = [[\detokenize{#4}]] }}}
+\newcommand{\newNPC}[3]{\directlua{TexApi.newCharacter{ label = "#1", shortname = [[\detokenize{#2}]], name = [[\detokenize{#3}]] }}}
+\newcommand{\declarePC}[1]{\directlua{TexApi.declarePC("#1")}}
+\newcommand{\addDescriptor}[3][]{\directlua{TexApi.setDescriptor{ entity = CurrentEntity(), descriptor = [[\detokenize{#2}]], description = [[\detokenize{#3}]], subdescriptor = [[\detokenize{#1}]] }}}
 
 \newcommand{\setHeight}[1]{
 	\directlua{
@@ -9,19 +9,15 @@
 	}
 }
 
-\newcommand{\reveal}[1]{\directlua{Reveal("#1")}}
+\newcommand{\reveal}[1]{\directlua{TexApi.reveal("#1")}}
 \newcommand{\showSecrets}{\directlua{IsShowSecrets = true}}
 
-\newcommand{\automatedChapters}{
-	\directlua{
-		tex.print(AutomatedChapters())
-	}
-}
+\newcommand{\automatedChapters}{\directlua{tex.print(TexApi.automatedChapters())}}
 
 \newcommand{\automatedChaptersFUCKINGEVERYTHING}{
 	\directlua{
 		AddAllEntitiesToPrimaryRefs()
-		tex.print(AutomatedChapters())
+		tex.print(TexApi.automatedChapters())
 	}
 }
 

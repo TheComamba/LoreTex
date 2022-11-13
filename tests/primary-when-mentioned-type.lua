@@ -1,9 +1,11 @@
-NewEntity("npcs", "karl", nil, "Karl")
+TexApi.newEntity { type = "npcs", label = "karl", name = "Karl" }
 SetSpecies(CurrentEntity(), "human")
-SetDescriptor(CurrentEntity(), "Friend", [[\nameref{peter}]])
-NewEntity("npcs", "peter", nil, "Peter")
+TexApi.setDescriptor { entity = CurrentEntity(),
+    descriptor = "Friend",
+    description = [[\nameref{peter}]] }
+TexApi.newEntity { type = "npcs", label = "peter", name = "Peter" }
 SetSpecies(CurrentEntity(), "human")
-NewEntity("species", "human", nil, "Human")
+TexApi.newEntity { type = "species", label = "human", name = "Human" }
 SetAgeFactor(CurrentEntity(), 0)
 AddRef("karl", MentionedRefs)
 
@@ -75,37 +77,37 @@ local out = {}
 local expected = {}
 
 PrimaryRefWhenMentionedTypes = {}
-out = AutomatedChapters()
+out = TexApi.automatedChapters()
 expected = generateExpected(nil, false)
 Assert("one-only-mentioned-npc", expected, out)
 
 PrimaryRefWhenMentionedTypes = {}
 MakeTypePrimaryWhenMentioned("species")
-out = AutomatedChapters()
+out = TexApi.automatedChapters()
 expected = generateExpected("species")
 Assert("species-are-primary-types-npc-is-only-mentioned", expected, out)
 
 PrimaryRefWhenMentionedTypes = {}
 MakeTypePrimaryWhenMentioned("npcs")
-out = AutomatedChapters()
+out = TexApi.automatedChapters()
 expected = generateExpected("npcs", false)
 Assert("npcs-are-primary-types-one-is-only-mentioned", expected, out)
 
 AddRef("karl", PrimaryRefs)
 
 PrimaryRefWhenMentionedTypes = {}
-out = AutomatedChapters()
+out = TexApi.automatedChapters()
 expected = generateExpected(nil, true)
 Assert("two-npcs-one-primary", expected, out)
 
 PrimaryRefWhenMentionedTypes = {}
 MakeTypePrimaryWhenMentioned("species")
-out = AutomatedChapters()
+out = TexApi.automatedChapters()
 expected = generateExpected("species", true)
 Assert("species-are-primary-types-one-npc-explicitly-referenced", expected, out)
 
 PrimaryRefWhenMentionedTypes = {}
 MakeTypePrimaryWhenMentioned("npcs")
-out = AutomatedChapters()
+out = TexApi.automatedChapters()
 expected = generateExpected("npcs", true)
 Assert("npcs-are-primary-types-one-explicitly-referenced", expected, out)

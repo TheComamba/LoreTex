@@ -1,6 +1,6 @@
-NewEntity("places", "test-1", nil, "Test 1")
+TexApi.newEntity { type = "places", label = "test-1", name = "Test 1" }
 
-NewEntity("places", "test-2", nil, "Test 2")
+TexApi.newEntity { type = "places", label = "test-2", name = "Test 2" }
 if true then
     local hist = EmptyHistoryItem()
     SetProtectedField(hist, "originator", "test-2")
@@ -58,7 +58,7 @@ end
 
 IsShowFuture = false
 
-local out = AutomatedChapters()
+local out = TexApi.automatedChapters()
 
 local expected = generateExpected(false)
 
@@ -66,7 +66,7 @@ Assert("one-entity-with-history", expected, out)
 
 AddRef("test-2", PrimaryRefs)
 
-out = AutomatedChapters()
+out = TexApi.automatedChapters()
 
 expected = generateExpected(true)
 

@@ -1,16 +1,18 @@
-NewEntity("items", "primary-item", nil, "Primary Item")
+TexApi.newEntity { type = "items", label = "primary-item", name = "Primary Item" }
 AddRef("primary-item", PrimaryRefs)
-SetDescriptor(CurrentEntity(), "Description", [[Different than \nameref{other-item}.]])
+TexApi.setDescriptor { entity = CurrentEntity(),
+    descriptor = "Description",
+    description = [[Different than \nameref{other-item}.]] }
 AddParent(CurrentEntity(), "some-organisation")
 
-NewEntity("items", "mentioned-item", nil, "Mentioned Item")
+TexApi.newEntity { type = "items", label = "mentioned-item", name = "Mentioned Item" }
 AddRef("mentioned-item", MentionedRefs)
 
-NewEntity("items", "other-item", nil, "Other Item")
+TexApi.newEntity { type = "items", label = "other-item", name = "Other Item" }
 
-NewEntity("items", "not-mentioned-item", nil, "Not mentioned Item")
+TexApi.newEntity { type = "items", label = "not-mentioned-item", name = "Not mentioned Item" }
 
-NewEntity("organisations", "some-organisation", nil, "Some Organisation")
+TexApi.newEntity { type = "organisations", label = "some-organisation", name = "Some Organisation" }
 
 local expected = {}
 Append(expected, [[\chapter{]] .. CapFirst(Tr("things")) .. [[}]])
@@ -40,6 +42,6 @@ Append(expected, [[\subparagraph{Some Organisation}]])
 Append(expected, [[\label{some-organisation}]])
 Append(expected, [[\hspace{1cm}]])
 
-local out = AutomatedChapters()
+local out = TexApi.automatedChapters()
 
 Assert("mentioned-refs", expected, out)

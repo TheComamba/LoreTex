@@ -1,4 +1,4 @@
-NewEntity("stories", "teststory", nil, "Teststory")
+TexApi.newEntity { type = "stories", label = "teststory", name = "Teststory" }
 if true then
     local hist = EmptyHistoryItem()
     SetProtectedField(hist, "originator", "teststory")
@@ -7,7 +7,7 @@ if true then
     ProcessEvent(hist)
 end
 AddRef("teststory", PrimaryRefs)
-NewEntity("items", "secret-item", "", "Secret Item")
+TexApi.newEntity { type = "items", label = "secret-item", name = "Secret Item" }
 SetSecret(CurrentEntity())
 
 local function generateHistoryParagraph()
@@ -60,21 +60,21 @@ local received = {}
 
 IsShowSecrets = false
 expected = generateExpected(false)
-received = AutomatedChapters()
+received = TexApi.automatedChapters()
 Assert("entity-secrecey-two-do-not-show-secrets", expected, received)
 
 IsShowSecrets = true
 expected = generateExpected(false)
-received = AutomatedChapters()
+received = TexApi.automatedChapters()
 Assert("entity-secrecey-two-show-secrets", expected, received)
 
 AddRef("secret-item", PrimaryRefs)
 IsShowSecrets = false
 expected = generateExpected(true)
-received = AutomatedChapters()
+received = TexApi.automatedChapters()
 Assert("entity-secrecey-two-do-not-show-secrets", expected, received)
 
 IsShowSecrets = true
 expected = generateExpected(true)
-received = AutomatedChapters()
+received = TexApi.automatedChapters()
 Assert("entity-secrecey-two-show-secrets", expected, received)

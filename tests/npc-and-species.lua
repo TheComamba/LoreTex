@@ -1,13 +1,13 @@
-NewEntity("species", "test-species", nil, "Test Species")
+TexApi.newEntity { type = "species", label = "test-species", name = "Test Species" }
 
-NewEntity("npcs", "test-npc", nil, "Test NPC")
+TexApi.newEntity { type = "npcs", label = "test-npc", name = "Test NPC" }
 SetSpecies(CurrentEntity(), "test-species")
 SetProtectedField(CurrentEntity(), "born", -20)
 
 AddAllEntitiesToPrimaryRefs()
 
 IsShowFuture = false
-local out = AutomatedChapters()
+local out = TexApi.automatedChapters()
 
 local expected = {
     [[\chapter{]] .. CapFirst(Tr("characters")) .. [[}]],

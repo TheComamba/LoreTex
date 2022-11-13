@@ -1,56 +1,64 @@
-function SetDescriptor(entity, descriptor, description, subdescriptor)
-    if IsEmpty(entity) then
-        LogError("Called with empty entity. Descriptor is " .. DebugPrint(descriptor))
+TexApi = {}
+
+function SetDescriptor(arg)
+    if IsEmpty(arg.entity) then
+        LogError("Called with empty entity. Descriptor is " .. DebugPrint(arg.descriptor))
         return
-    elseif IsEmpty(descriptor) then
-        LogError("Called with empty descriptor for entity with label " .. GetMainLabel(entity) .. "\"")
+    elseif IsEmpty(arg.descriptor) then
+        LogError("Called with empty descriptor for entity with label " .. GetMainLabel(arg.entity) .. "\"")
         return
-    elseif IsEmpty(description) then
+    elseif IsEmpty(arg.description) then
         return
-    elseif IsProtectedDescriptor(descriptor) then
+    elseif IsProtectedDescriptor(arg.descriptor) then
         LogError("Called with protected descriptor \"" ..
-            descriptor .. "\" for entity with label \"" .. GetMainLabel(entity) .. "\"")
+            arg.descriptor .. "\" for entity with label \"" .. GetMainLabel(arg.entity) .. "\"")
         return
     end
 
     StartBenchmarking("SetDescriptor")
-    Replace([[\reference]], [[\nameref]], description)
+    Replace([[\reference]], [[\nameref]], arg.description)
 
-    if IsEmpty(subdescriptor) then
-        entity[descriptor] = description
+    if IsEmpty(arg.subdescriptor) then
+        arg.entity[arg.descriptor] = arg.description
     else
-        if entity[descriptor] == nil then
-            entity[descriptor] = {}
+        if arg.entity[arg.descriptor] == nil then
+            arg.entity[arg.descriptor] = {}
         end
-        if type(entity[descriptor]) ~= "table" then
+        if type(arg.entity[arg.descriptor]) ~= "table" then
             local error = {}
             Append(error, "Trying to add subdescriptor \"")
-            Append(error, subdescriptor)
+            Append(error, arg.subdescriptor)
             Append(error, "\" to descriptor \"")
-            Append(error, descriptor)
+            Append(error, arg.descriptor)
             Append(error, "\" of an entity which already contains a string content: ")
-            Append(error, DebugPrint(entity))
+            Append(error, DebugPrint(arg.entity))
             LogError(table.concat(error))
         end
-        entity[descriptor][subdescriptor] = description
+        arg.entity[arg.descriptor][arg.subdescriptor] = arg.description
     end
-    local labels = GetLabels(entity)
-    local additionalLabels = ScanForCmd(description, "label")
+    local labels = GetLabels(arg.entity)
+    local additionalLabels = ScanForCmd(arg.description, "label")
     UniqueAppend(labels, additionalLabels)
-    RegisterEntityLabels(additionalLabels, entity)
-    AddDescriptorsFromNotYetFound(entity)
+    RegisterEntityLabels(additionalLabels, arg.entity)
+    AddDescriptorsFromNotYetFound(arg.entity)
     StopBenchmarking("SetDescriptor")
 end
 
-function DeclarePC(label)
+TexApi.setDescriptor = SetDescriptor
+
+local function declarePC(label)
     PCs[#PCs + 1] = label
     AddRef(label, PrimaryRefs)
 end
 
-function Reveal(label)
+TexApi.declarePC = declarePC
+
+local function reveal(label)
     AddRef(label, RevealedLabels)
     AddRef(label, PrimaryRefs)
 end
+
+TexApi.reveal = reveal
 
 function MakePrimaryIf(condition)
     StartBenchmarking("MakePrimaryIf")
@@ -63,45 +71,51 @@ function MakePrimaryIf(condition)
     StopBenchmarking("MakePrimaryIf")
 end
 
-function NewEntity(type, label, shortname, name)
-    if IsEmpty(type) then
-        LogError("Entity " .. label .. " has no type!")
+local function newEntity(arg)
+    if IsEmpty(arg.type) then
+        LogError("Entity " .. arg.label .. " has no type!")
         return
-    elseif not IsTypeKnown(type) then
-        LogError("Trying to create entity with unkown type \"" .. type .. "\"")
+    elseif not IsTypeKnown(arg.type) then
+        LogError("Trying to create entity with unkown type \"" .. arg.type .. "\"")
         return
-    elseif IsEmpty(label) then
+    elseif IsEmpty(arg.label) then
         LogError("Called with no label!")
         return
-    elseif IsEmpty(name) then
-        LogError("Entity " .. name .. " has no name!")
+    elseif IsEmpty(arg.name) then
+        LogError("Entity " .. arg.name .. " has no name!")
         return
     end
     StartBenchmarking("NewEntity")
     local entity = {}
-    SetProtectedField(entity, "type", type)
-    SetProtectedField(entity, "labels", { label })
-    SetProtectedField(entity, "shortname", shortname)
-    SetProtectedField(entity, "name", name)
+    SetProtectedField(entity, "type", arg.type)
+    SetProtectedField(entity, "labels", { arg.label })
+    SetProtectedField(entity, "shortname", arg.shortname)
+    SetProtectedField(entity, "name", arg.name)
     local defaultLocation = GetScopedVariable("DefaultLocation")
     if not IsEmpty(defaultLocation) then
         SetLocation(entity, defaultLocation)
     end
-    RegisterEntityLabels(label, entity)
+    RegisterEntityLabels(arg.label, entity)
     AddDescriptorsFromNotYetFound(entity)
     AllEntities[#AllEntities + 1] = entity
     StopBenchmarking("NewEntity")
 end
 
-function NewCharacter(label, shortname, name)
-    if IsIn(label, PCs) then
-        NewEntity("pcs", label, shortname, name)
+TexApi.newEntity = newEntity
+
+local function newCharacter(arg)
+    if IsIn(arg.label, PCs) then
+        arg.type = "pcs"
+        newEntity(arg)
     else
-        NewEntity("npcs", label, shortname, name)
+        arg.type = "npcs"
+        newEntity(arg)
     end
 end
 
-function AutomatedChapters()
+TexApi.newCharacter = newCharacter
+
+local function automatedChapters()
     if not IsEmpty(NotYetFoundEntities) then
         ComplainAboutNotYetFoundEntities()
     end
@@ -120,3 +134,5 @@ function AutomatedChapters()
     StopBenchmarking("AutomatedChapters")
     return output
 end
+
+TexApi.automatedChapters = automatedChapters

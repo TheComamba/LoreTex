@@ -1,4 +1,4 @@
-NewEntity("npcs", "flora", "", "Flora")
+TexApi.newEntity { type = "npcs", label = "flora", shortname = "", name = "Flora" }
 if true then
     local hist = EmptyHistoryItem()
     SetProtectedField(hist, "originator", "flora")
@@ -15,9 +15,9 @@ if true then
 end
 AddRef("flora", PrimaryRefs)
 
-NewEntity("npcs", "ramona", "", "Ramona")
+TexApi.newEntity { type = "npcs", label = "ramona", name = "Ramona" }
 SetSecret(CurrentEntity())
-Reveal("ramona")
+TexApi.reveal("ramona")
 AddRef("ramona", PrimaryRefs)
 
 local expected = {}
@@ -43,5 +43,5 @@ Append(expected, [[\subsubsection[Ramona]{(]] .. CapFirst(Tr("secret")) .. [[) R
 Append(expected, [[\label{ramona}]])
 
 
-local out = AutomatedChapters()
+local out = TexApi.automatedChapters()
 Assert("Dead entity", expected, out)

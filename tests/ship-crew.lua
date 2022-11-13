@@ -1,18 +1,18 @@
-NewEntity("places", "ocean", "", "Ocean")
+TexApi.newEntity { type = "places", label = "ocean", name = "Ocean" }
 
-NewEntity("vehicles", "aurora", "", "Aurora")
+TexApi.newEntity { type = "vehicles", label = "aurora", name = "Aurora" }
 SetLocation(CurrentEntity(), "ocean")
 
 SetScopedVariable("DefaultLocation", "aurora")
 
-NewEntity("npcs", "haldora", "", "Haldora")
+TexApi.newEntity { type = "npcs", label = "haldora", name = "Haldora" }
 AddParent(CurrentEntity(), "aurora", "Captain")
 
-NewEntity("npcs", "balagog", "", "Balagog")
+TexApi.newEntity { type = "npcs", label = "balagog", name = "Balagog" }
 AddParent(CurrentEntity(), "aurora", "First Mate")
 AddParent(CurrentEntity(), "aurora", "Cook")
 
-NewEntity("npcs", "cuen", "", "Cuen")
+TexApi.newEntity { type = "npcs", label = "cuen", name = "Cuen" }
 AddParent(CurrentEntity(), "aurora")
 
 AddAllEntitiesToPrimaryRefs()
@@ -41,7 +41,7 @@ Append(expected, [[\item{} \nameref{haldora}]])
 Append(expected, [[\end{itemize}]])
 Append(expected, [[\subsection{]] .. CapFirst(Tr("in")) .. [[ Ocean - Aurora}]])
 Append(expected, generateCrewMember("balagog", { "Cook", "First Mate" }))
-Append(expected, generateCrewMember("cuen", {CapFirst(Tr("member"))}))
+Append(expected, generateCrewMember("cuen", { CapFirst(Tr("member")) }))
 Append(expected, generateCrewMember("haldora", { "Captain" }))
 
 Append(expected, [[\chapter{]] .. CapFirst(Tr("places")) .. [[}]])
@@ -74,5 +74,5 @@ Append(expected, [[\item{} \nameref{cuen}]])
 Append(expected, [[\item{} \nameref{haldora} (Captain)]])
 Append(expected, [[\end{itemize}]])
 
-local out = AutomatedChapters()
+local out = TexApi.automatedChapters()
 Assert("Example Ship Crew", expected, out)

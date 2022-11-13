@@ -96,7 +96,7 @@ local function addHistoryDescriptors(entity)
             Append(processedHistory, historyItemToString(historyItem, isPrintDate))
         end
     end
-    SetDescriptor(entity, Tr("history"), processedHistory)
+    SetDescriptor { entity = entity, descriptor = Tr("history"), description = processedHistory }
     StopBenchmarking("addHistoryDescriptors")
 end
 

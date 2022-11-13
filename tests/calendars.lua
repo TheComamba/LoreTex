@@ -1,9 +1,9 @@
-NewEntity("calendars", "test-1", nil, "Test 1")
+TexApi.newEntity { type = "calendars", label = "test-1", name = "Test 1" }
 AddMonth(CurrentEntity(), "Primus", 1)
 AddMonth(CurrentEntity(), "Secundus", 100)
 SetProtectedField(CurrentEntity(), "yearAbbreviation", "QT")
 
-NewEntity("calendars", "test-2", nil, "Test 2")
+TexApi.newEntity { type = "calendars", label = "test-2", name = "Test 2" }
 AddMonth(CurrentEntity(), "Knulch", 20)
 AddMonth(CurrentEntity(), "Wimmel", 300)
 SetProtectedField(CurrentEntity(), "yearAbbreviation", "WX")

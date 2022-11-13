@@ -29,7 +29,7 @@ function AddParentDescriptorsToChild(child)
             end
         end
         if not IsEmpty(parentList) then
-            SetDescriptor(child, Tr("affiliations"), parentList)
+            SetDescriptor { entity = child, descriptor = Tr("affiliations"), description = parentList }
         end
     end
     StopBenchmarking("AddParentDescriptorsToChild")

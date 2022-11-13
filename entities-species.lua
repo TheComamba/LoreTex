@@ -217,7 +217,7 @@ function AddLifeStagesToSpecies(entity)
 		if isAges(entity) then
 			local lifestages = lifestagesDescription(entity)
 			if not IsEmpty(lifestages) then
-				SetDescriptor(entity, Tr("lifestages"), lifestages)
+				SetDescriptor { entity = entity, descriptor = Tr("lifestages"), description = lifestages }
 			end
 		end
 	end

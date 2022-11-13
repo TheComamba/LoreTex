@@ -1,4 +1,4 @@
-NewEntity("items", "normal", nil, "Normal")
+TexApi.newEntity { type = "items", label = "normal", name = "Normal" }
 AddParent(CurrentEntity(), "normal-orga")
 AddParent(CurrentEntity(), "secret-orga")
 AddParent(CurrentEntity(), "revealed-orga")
@@ -34,7 +34,7 @@ if true then
 end
 AddRef("normal", PrimaryRefs)
 
-NewEntity("items", "secret", nil, "Secret")
+TexApi.newEntity { type = "items", label = "secret", name = "Secret" }
 SetSecret(CurrentEntity())
 AddParent(CurrentEntity(), "normal-orga")
 AddParent(CurrentEntity(), "secret-orga")
@@ -48,7 +48,7 @@ if true then
     ProcessEvent(hist)
 end
 
-NewEntity("items", "revealed", nil, "Revealed")
+TexApi.newEntity { type = "items", label = "revealed", name = "Revealed" }
 SetSecret(CurrentEntity())
 AddParent(CurrentEntity(), "normal-orga")
 AddParent(CurrentEntity(), "secret-orga")
@@ -61,9 +61,9 @@ if true then
     SetProtectedField(hist, "event", [[Concerns \reference{normal}]])
     ProcessEvent(hist)
 end
-Reveal("revealed")
+TexApi.reveal("revealed")
 
-NewEntity("items", "unborn", nil, "Unborn")
+TexApi.newEntity { type = "items", label = "unborn", name = "Unborn" }
 if true then
     local hist = EmptyHistoryItem()
     SetProtectedField(hist, "originator", "unborn")
@@ -77,7 +77,7 @@ AddParent(CurrentEntity(), "revealed-orga")
 AddParent(CurrentEntity(), "unborn-orga")
 AddRef("unborn", PrimaryRefs)
 
-NewEntity("items", "at-secret-location", nil, "At secret Location")
+TexApi.newEntity { type = "items", label = "at-secret-location", name = "At secret Location" }
 SetLocation(CurrentEntity(), "eldorado")
 AddParent(CurrentEntity(), "normal-orga")
 AddParent(CurrentEntity(), "secret-orga")
@@ -85,20 +85,20 @@ AddParent(CurrentEntity(), "revealed-orga")
 AddParent(CurrentEntity(), "unborn-orga")
 AddRef("at-secret-location", PrimaryRefs)
 
-NewEntity("places", "eldorado", nil, "Eldorado")
+TexApi.newEntity { type = "places", label = "eldorado", name = "Eldorado" }
 SetSecret(CurrentEntity())
 
-NewEntity("organisations", "normal-orga", nil, "Normal Organisation")
+TexApi.newEntity { type = "organisations", label = "normal-orga", name = "Normal Organisation" }
 AddRef("normal-orga", PrimaryRefs)
 
-NewEntity("organisations", "secret-orga", nil, "Secret Organisation")
+TexApi.newEntity { type = "organisations", label = "secret-orga", name = "Secret Organisation" }
 SetSecret(CurrentEntity())
 
-NewEntity("organisations", "revealed-orga", nil, "Revealed Organisation")
+TexApi.newEntity { type = "organisations", label = "revealed-orga", name = "Revealed Organisation" }
 SetSecret(CurrentEntity())
-Reveal("revealed-orga")
+TexApi.reveal("revealed-orga")
 
-NewEntity("organisations", "unborn-orga", nil, "Unborn Organisation")
+TexApi.newEntity { type = "organisations", label = "unborn-orga", name = "Unborn Organisation" }
 if true then
     local hist = EmptyHistoryItem()
     SetProtectedField(hist, "originator", "unborn-orga")
@@ -275,24 +275,24 @@ local expected = {}
 
 IsShowSecrets = false
 IsShowFuture = false
-out = AutomatedChapters()
+out = TexApi.automatedChapters()
 expected = generateExpected()
 Assert("entity-visibility-no-secrets-no-future", expected, out)
 
 IsShowSecrets = true
 IsShowFuture = false
-out = AutomatedChapters()
+out = TexApi.automatedChapters()
 expected = generateExpected()
 Assert("entity-visibility-with-secrets-no-future", expected, out)
 
 IsShowSecrets = false
 IsShowFuture = true
-out = AutomatedChapters()
+out = TexApi.automatedChapters()
 expected = generateExpected()
 Assert("entity-visibility-no-secrets-with-future", expected, out)
 
 IsShowSecrets = true
 IsShowFuture = true
-out = AutomatedChapters()
+out = TexApi.automatedChapters()
 expected = generateExpected()
 Assert("entity-visibility-with-secrets-with-future", expected, out)

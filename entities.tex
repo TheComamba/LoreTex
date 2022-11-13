@@ -3,11 +3,7 @@
 \newcommand{\declarePC}[1]{\directlua{TexApi.declarePC("#1")}}
 \newcommand{\addDescriptor}[3][]{\directlua{TexApi.setDescriptor{ descriptor = [[\detokenize{#2}]], description = [[\detokenize{#3}]], subdescriptor = [[\detokenize{#1}]] }}}
 
-\newcommand{\setHeight}[1]{
-	\directlua{
-		SetDescriptor(CurrentEntity(),HeightCaption,[[\detokenize{#1}]])
-	}
-}
+\newcommand{\setHeight}[1]{\directlua{TexApi.setDescriptor{ descriptor = HeightCaption, description = [[\detokenize{#1}]] }}}
 
 \newcommand{\reveal}[1]{\directlua{TexApi.reveal("#1")}}
 \newcommand{\showSecrets}{\directlua{IsShowSecrets = true}}

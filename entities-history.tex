@@ -1,16 +1,16 @@
-\newcommand{\addHistory}[3][]{\directlua{TexApi.addHistory{day = #1, year = #2, event = [[\detokenize{#3}]]} }}
-\newcommand{\addSecretHistory}[3][]{\directlua{TexApi.addSecretHistory{day = #1, year = #2, event = [[\detokenize{#3}]]} }}
-\newcommand{\addHistoryOnlyHere}[3][]{\directlua{TexApi.addHistoryOnlyHere{day = #1, year = #2, event = [[\detokenize{#3}]]} }}
-\newcommand{\addHistoryInFmt}[4][]{\directlua{TexApi.addHistory{day = #1, yearFmt = "#2", year = #3, event = [[\detokenize{#4}]]} }}
-\newcommand{\addSecretHistoryInFmt}[4][]{\directlua{TexApi.addSecretHistory{day = #1, yearFmt = "#2", year = #3, event = [[\detokenize{#4}]]} }}
-\newcommand{\addHistoryInFmtOnlyHere}[4][]{\directlua{TexApi.addHistoryOnlyHere{day = #1, yearFmt = "#2", year = #3, event = [[\detokenize{#4}]]} }}
+\newcommand{\addHistory}[3][nil]{\directlua{TexApi.addHistory{day = #1, year = #2, event = [[\detokenize{#3}]]} }}
+\newcommand{\addSecretHistory}[3][nil]{\directlua{TexApi.addSecretHistory{day = #1, year = #2, event = [[\detokenize{#3}]]} }}
+\newcommand{\addHistoryOnlyHere}[3][nil]{\directlua{TexApi.addHistoryOnlyHere{day = #1, year = #2, event = [[\detokenize{#3}]]} }}
+\newcommand{\addHistoryInFmt}[4][nil]{\directlua{TexApi.addHistory{day = #1, yearFmt = "#2", year = #3, event = [[\detokenize{#4}]]} }}
+\newcommand{\addSecretHistoryInFmt}[4][nil]{\directlua{TexApi.addSecretHistory{day = #1, yearFmt = "#2", year = #3, event = [[\detokenize{#4}]]} }}
+\newcommand{\addHistoryInFmtOnlyHere}[4][nil]{\directlua{TexApi.addHistoryOnlyHere{day = #1, yearFmt = "#2", year = #3, event = [[\detokenize{#4}]]} }}
 
 \newcommand{\concerns}[1]{}
 \newcommand{\notconcerns}[1]{}
 \newcommand{\birthof}[1]{}
 \newcommand{\deathof}[1]{}
 
-\newcommand{\born}[3][]{\directlua{TexApi.born{day = #1, year = #2, event = [[\detokenize{#3}]]} }}
-\newcommand{\died}[3][]{\directlua{TexApi.died{day = #1, year = #2, event = [[\detokenize{#3}]]} }}
-\newcommand{\bornInFmt}[4][]{\directlua{TexApi.born{day = #1, yearFmt = #2, year = #3, event = [[\detokenize{#4}]]} }}
-\newcommand{\diedInFmt}[4][]{\directlua{TexApi.died{day = #1, yearFmt = #2, year = #3, event = [[\detokenize{#4}]]} }}
+\newcommand{\born}[3][nil]{\directlua{TexApi.born{day = #1, year = #2, event = [[\detokenize{#3}]]} }}
+\newcommand{\died}[3][nil]{\directlua{TexApi.died{day = #1, year = #2, event = [[\detokenize{#3}]]} }}
+\newcommand{\bornInFmt}[4][nil]{\directlua{TexApi.born{day = #1, yearFmt = "#2", year = #3, event = [[\detokenize{#4}]]} }}
+\newcommand{\diedInFmt}[4][nil]{\directlua{TexApi.died{day = #1, yearFmt = "#2", year = #3, event = [[\detokenize{#4}]]} }}

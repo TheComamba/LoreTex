@@ -68,3 +68,36 @@ function GetProtectedDescriptor(key)
     end
     return descriptor
 end
+
+function SetAgeExponent(entity, exponent)
+    SetProtectedField(entity, "ageExponent", exponent)
+end
+
+function SetAgeFactor(entity, factor)
+    SetProtectedField(entity, "ageFactor", factor)
+end
+
+function SetAgeModifierMixing(entity, species1, species2)
+    SetProtectedField(entity, "ageMixing", { species1, species2 })
+end
+
+function SetLocation(entity, location)
+    SetProtectedField(entity, "location", location)
+    AddParent(entity, location, GetProtectedDescriptor("location"))
+end
+
+function AddParent(entity, parentLabel, relationship)
+    if entity ~= nil then
+        AddToProtectedField(entity, "parents", { parentLabel, relationship })
+    end
+    local parent = GetMutableEntityFromAll(parentLabel)
+    AddToProtectedField(parent, "children", GetMainLabel(entity))
+end
+
+function SetSecret(entity)
+    SetProtectedField(entity, "isSecret", true)
+end
+
+function SetSpecies(entity, species)
+    SetProtectedField(entity, "species", species)
+end

@@ -1,24 +1,7 @@
-\newcommand{\newEntity}[4]{
-	\directlua{
-		NewEntity("#1","#2", [[\detokenize{#3}]], [[\detokenize{#4}]])
-	}
-}
-
-\newcommand{\newNPC}[3]{
-	\directlua{
-		NewCharacter("#1", [[\detokenize{#2}]], [[\detokenize{#3}]])
-	}
-}
-
-\newcommand{\declarePC}[1]{
-	\directlua{DeclarePC("#1")}
-}
-
-\newcommand{\addDescriptor}[3][]{
-	\directlua{
-		SetDescriptor(CurrentEntity(),[[\detokenize{#2}]],[[\detokenize{#3}]], [[\detokenize{#1}]])
-	}
-}
+\newcommand{\newEntity}[4]{\directlua{NewEntity("#1","#2", [[\detokenize{#3}]], [[\detokenize{#4}]])}}
+\newcommand{\newNPC}[3]{\directlua{NewCharacter("#1", [[\detokenize{#2}]], [[\detokenize{#3}]])}}
+\newcommand{\declarePC}[1]{\directlua{DeclarePC("#1")}}
+\newcommand{\addDescriptor}[3][]{\directlua{SetDescriptor(CurrentEntity(),[[\detokenize{#2}]],[[\detokenize{#3}]], [[\detokenize{#1}]])}}
 
 \newcommand{\setHeight}[1]{
 	\directlua{
@@ -26,55 +9,8 @@
 	}
 }
 
-\newcommand{\setLocation}[1]{
-	\directlua{SetLocation(CurrentEntity(), "#1")}
-}
-
-\newcommand{\setAssociation}[2][]{
-	\directlua{AddParent(CurrentEntity(), "#2", [[\detokenize{#1}]])}
-}
-
-\newcommand{\setSpecies}[1]{
-	\directlua{
-		SetSpecies(CurrentEntity(), [[\detokenize{#1}]])
-	}
-}
-
-\newcommand{\setAgeFactor}[1]{
-	\directlua{
-		SetAgeFactor(CurrentEntity(), #1)
-	}
-}
-
-\newcommand{\setAgeExponent}[1]{
-	\directlua{
-		SetAgeExponent(CurrentEntity(), #1)
-	}
-}
-
-\newcommand{\setAgeModifierMixing}[2]{
-	\directlua{
-		SetAgeModifierMixing(CurrentEntity(),"#1","#2")
-	}
-}
-
-\newcommand{\setMorphs}[1]{
-	\directlua{
-		SetDescriptor(CurrentEntity(),[[Morphen]],[[\detokenize{#1}]])
-	}
-}
-
-\newcommand{\setSecret}{
-	\directlua{SetSecret(CurrentEntity())}
-}
-
-\newcommand{\reveal}[1]{
-	\directlua{Reveal("#1")}
-}
-
-\newcommand{\showSecrets}{
-	\directlua{IsShowSecrets = true}
-}
+\newcommand{\reveal}[1]{\directlua{Reveal("#1")}}
+\newcommand{\showSecrets}{\directlua{IsShowSecrets = true}}
 
 \newcommand{\automatedChapters}{
 	\directlua{

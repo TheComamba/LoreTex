@@ -42,47 +42,14 @@ function SetDescriptor(entity, descriptor, description, subdescriptor)
     StopBenchmarking("SetDescriptor")
 end
 
-function SetSecret(entity)
-    SetProtectedField(entity, "isSecret", true)
-end
-
-function Reveal(label)
-    AddRef(label, RevealedLabels)
-    AddRef(label, PrimaryRefs)
-end
-
-function AddParent(entity, parentLabel, relationship)
-    if entity ~= nil then
-        AddToProtectedField(entity, "parents", { parentLabel, relationship })
-    end
-    local parent = GetMutableEntityFromAll(parentLabel)
-    AddToProtectedField(parent, "children", GetMainLabel(entity))
-end
-
 function DeclarePC(label)
     PCs[#PCs + 1] = label
     AddRef(label, PrimaryRefs)
 end
 
-function SetAgeFactor(entity, factor)
-    SetProtectedField(entity, "ageFactor", factor)
-end
-
-function SetAgeExponent(entity, exponent)
-    SetProtectedField(entity, "ageExponent", exponent)
-end
-
-function SetAgeModifierMixing(entity, species1, species2)
-    SetProtectedField(entity, "ageMixing", { species1, species2 })
-end
-
-function SetLocation(entity, location)
-    SetProtectedField(entity, "location", location)
-    AddParent(entity, location, GetProtectedDescriptor("location"))
-end
-
-function SetSpecies(entity, species)
-    SetProtectedField(entity, "species", species)
+function Reveal(label)
+    AddRef(label, RevealedLabels)
+    AddRef(label, PrimaryRefs)
 end
 
 function MakePrimaryIf(condition)

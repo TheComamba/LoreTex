@@ -1,31 +1,17 @@
 TexApi.newEntity { type = "npcs", label = "some-npc", name = "Some NPC" }
 SetSpecies(CurrentEntity(), "subspecies")
 SetLocation(CurrentEntity(), "subplace-1")
-TexApi.setDescriptor { entity = CurrentEntity(),
-    descriptor = "Info 1",
-    description = [[Refers to \nameref{subplace-2}.]] }
-TexApi.setDescriptor { entity = CurrentEntity(),
-    descriptor = "Info 2",
-    description = [[Refers to \nameref{subplace-3}.]] }
-TexApi.setDescriptor { entity = CurrentEntity(),
-    descriptor = "Info 3",
-    description = [[Refers to \nameref{subplace-4}.]] }
+TexApi.setDescriptor { descriptor = "Info 1", description = [[Refers to \nameref{subplace-2}.]] }
+TexApi.setDescriptor { descriptor = "Info 2", description = [[Refers to \nameref{subplace-3}.]] }
+TexApi.setDescriptor { descriptor = "Info 3", description = [[Refers to \nameref{subplace-4}.]] }
 TexApi.newEntity { type = "places", label = "place-1", name = "Place 1" }
-TexApi.setDescriptor { entity = CurrentEntity(),
-    descriptor = "Subplace 1",
-    description = [[\label{subplace-1}]] }
+TexApi.setDescriptor { descriptor = "Subplace 1", description = [[\label{subplace-1}]] }
 TexApi.newEntity { type = "places", label = "place-2", name = "Place 2" }
-TexApi.setDescriptor { entity = CurrentEntity(),
-    descriptor = "Subplace 2",
-    description = [[\label{subplace-2}]] }
-TexApi.setDescriptor { entity = CurrentEntity(),
-    descriptor = "More Subplaces",
-    description = [[\subparagraph{Subplace 3} \label{subplace-3}
+TexApi.setDescriptor { descriptor = "Subplace 2", description = [[\label{subplace-2}]] }
+TexApi.setDescriptor { descriptor = "More Subplaces", description = [[\subparagraph{Subplace 3} \label{subplace-3}
 \subparagraph{Subplace 4} \label{subplace-4}]] }
 TexApi.newEntity { type = "species", label = "species", name = "Species" }
-TexApi.setDescriptor { entity = CurrentEntity(),
-    descriptor = "Subspecies",
-    description = [[\label{subspecies}]] }
+TexApi.setDescriptor { descriptor = "Subspecies", description = [[\label{subspecies}]] }
 
 AddRef("some-npc", PrimaryRefs)
 

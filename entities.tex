@@ -1,7 +1,7 @@
 \newcommand{\newEntity}[4]{\directlua{TexApi.newEntity{ type = "#1", label = "#2", shortname = [[\detokenize{#3}]], name = [[\detokenize{#4}]] }}}
 \newcommand{\newNPC}[3]{\directlua{TexApi.newCharacter{ label = "#1", shortname = [[\detokenize{#2}]], name = [[\detokenize{#3}]] }}}
 \newcommand{\declarePC}[1]{\directlua{TexApi.declarePC("#1")}}
-\newcommand{\addDescriptor}[3][]{\directlua{TexApi.setDescriptor{ entity = CurrentEntity(), descriptor = [[\detokenize{#2}]], description = [[\detokenize{#3}]], subdescriptor = [[\detokenize{#1}]] }}}
+\newcommand{\addDescriptor}[3][]{\directlua{TexApi.setDescriptor{ descriptor = [[\detokenize{#2}]], description = [[\detokenize{#3}]], subdescriptor = [[\detokenize{#1}]] }}}
 
 \newcommand{\setHeight}[1]{
 	\directlua{

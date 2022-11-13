@@ -1,8 +1,6 @@
 TexApi.newEntity { type = "npcs", label = "karl", name = "Karl" }
 SetSpecies(CurrentEntity(), "human")
-TexApi.setDescriptor { entity = CurrentEntity(),
-    descriptor = "Friend",
-    description = [[\nameref{peter}]] }
+TexApi.setDescriptor { descriptor = "Friend", description = [[\nameref{peter}]] }
 TexApi.newEntity { type = "npcs", label = "peter", name = "Peter" }
 SetSpecies(CurrentEntity(), "human")
 TexApi.newEntity { type = "species", label = "human", name = "Human" }

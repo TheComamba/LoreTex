@@ -34,7 +34,10 @@ function SetDescriptor(arg)
     StopBenchmarking("SetDescriptor")
 end
 
-TexApi.setDescriptor = SetDescriptor
+TexApi.setDescriptor = function(arg)
+    arg.entity = CurrentEntity()
+    SetDescriptor(arg)
+end
 
 local function declarePC(label)
     PCs[#PCs + 1] = label

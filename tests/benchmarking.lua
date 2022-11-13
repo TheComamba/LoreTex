@@ -37,9 +37,7 @@ function CreateBenchmarkingTest(sizeStr)
         SetSpecies(CurrentEntity(), "species-" .. i)
         SetLocation(CurrentEntity(), "place-" .. i)
         AddParent(CurrentEntity(), "organisation-" .. i)
-        TexApi.setDescriptor { entity = CurrentEntity(),
-            descriptor = "Best Friend",
-            description = [[\nameref{mentioned-char-]] .. i .. [[}]] }
+        TexApi.setDescriptor { descriptor = "Best Friend", description = [[\nameref{mentioned-char-]] .. i .. [[}]] }
         AddRef("char-" .. i, PrimaryRefs)
 
         TexApi.newCharacter { label = "mentioned-char-" .. i, name = "Mentioned Character " .. i }

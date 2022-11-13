@@ -1,4 +1,5 @@
 \newcommand{\makeEntityPrimary}[1]{\directlua{AddRef("#1", PrimaryRefs)}}
+\newcommand{\makeEntityAndChildrenPrimary}[1]{\directlua{MakeEntityAndChildrenPrimary("#1")}}
 \newcommand{\makeAllEntitiesOfTypePrimary}[1]{\directlua{MakePrimaryIf(Bind(IsType, "#1"))}}
 \newcommand{\mention}[1]{\nameref{#1}\directlua{AddRef("#1", MentionedRefs)}}
 \newcommand{\reference}[1]{\nameref{#1}\makeEntityPrimary{#1}}

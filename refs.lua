@@ -131,3 +131,16 @@ end
 function MakeTypePrimaryWhenMentioned(type)
     UniqueAppend(PrimaryRefWhenMentionedTypes, type)
 end
+
+function MakeEntityAndChildrenPrimary(label)
+    AddRef(label, PrimaryRefs)
+    local entity = GetEntity(label)
+    if IsEmpty(entity) then
+        LogError("Entity with label \"" .. label .. "\" not found.")
+        return
+    end
+    local children = GetProtectedField(entity, "children")
+    if not IsEmpty(children) then
+        AddRef(children, PrimaryRefs)
+    end
+end

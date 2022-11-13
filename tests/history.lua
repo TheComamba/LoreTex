@@ -1,3 +1,6 @@
+TexApi.setCurrentYear(0)
+TexApi.setDaysPerYear(365)
+
 TexApi.newEntity { type = "places", label = "test-1", name = "Test 1" }
 TexApi.addHistoryOnlyHere { year = -10, event = [[Event that concerns \reference{test-1}, but not \reference{test-2}.]] }
 TexApi.addHistory { year = -20, event = [[Some event.]] }
@@ -25,7 +28,7 @@ TexApi.newEntity { type = "places", label = "test-2", name = "Test 2" }
 TexApi.addHistory { year = -5,
     event = [[Event that concerns \reference{test-1}, but not \reference{test-2}.\notconcerns{test-2}]] }
 
-local function generateExpected()
+local function generateExpected(isCurrentDaySet)
     local out = {}
     Append(out, [[\chapter{]] .. CapFirst(Tr("places")) .. [[}]])
     Append(out, [[\section{]] .. CapFirst(Tr("places")) .. [[}]])
@@ -58,22 +61,10 @@ local function generateExpected()
     Append(out, [[\item -1 (]] .. Tr("last-year") .. [[):\\ Event last year.]])
     Append(out, [[\item -1, ]] .. Tr("day") .. [[ 1 (]] .. Tr("last-year") .. [[):\\Event last year, with day.]])
 
-    if CurrentDay == 0 then
-        Append(out,
-            [[\item -1, ]] .. Tr("day") .. [[ 100 (]] .. Tr("last-year") .. [[):\\Event less than a year ago.]])
-        Append(out, [[\item 0 (]] .. Tr("this-year") .. [[):\\Event this year.]])
-        Append(out,
-            [[\item 0, ]] .. Tr("day") .. [[ 5 (]] .. Tr("this-year") .. [[):\\Event this year, with day.]])
-        Append(out, [[\item 0, ]] .. Tr("day") .. [[ 9 (]] .. Tr("this-year") .. [[):\\Event yesterday.]])
-        Append(out, [[\item 0, ]] .. Tr("day") .. [[ 10 (]] .. Tr("this-year") .. [[):\\Event today.]])
-        Append(out, [[\item 0, ]] .. Tr("day") .. [[ 11 (]] .. Tr("this-year") .. [[):\\Event tomorrow.]])
-        Append(out,
-            [[\item 0, ]] ..
-            Tr("day") .. [[ 15 (]] .. Tr("this-year") .. [[):\\Event this year, with day in future.]])
-    else
+    if isCurrentDaySet then
         Append(out,
             [[\item -1, ]] ..
-            Tr("day") .. [[ 100 (]] .. Tr("days-ago", { 274 }) .. [[):\\Event less than a year ago.]])
+            Tr("day") .. [[ 100 (]] .. Tr("days-ago", { 275 }) .. [[):\\Event less than a year ago.]])
         Append(out, [[\item 0 (]] .. Tr("this-year") .. [[):\\Event this year.]])
         Append(out,
             [[\item 0, ]] .. Tr("day") .. [[ 5 (]] .. Tr("days-ago", { 5 }) .. [[):\\Event this year, with day.]])
@@ -86,19 +77,31 @@ local function generateExpected()
                 [[\item 0, ]] ..
                 Tr("day") .. [[ 15 (]] .. Tr("in-days", { 5 }) .. [[):\\Event this year, with day in future.]])
         end
+    else
+        Append(out,
+            [[\item -1, ]] .. Tr("day") .. [[ 100 (]] .. Tr("last-year") .. [[):\\Event less than a year ago.]])
+        Append(out, [[\item 0 (]] .. Tr("this-year") .. [[):\\Event this year.]])
+        Append(out,
+            [[\item 0, ]] .. Tr("day") .. [[ 5 (]] .. Tr("this-year") .. [[):\\Event this year, with day.]])
+        Append(out, [[\item 0, ]] .. Tr("day") .. [[ 9 (]] .. Tr("this-year") .. [[):\\Event yesterday.]])
+        Append(out, [[\item 0, ]] .. Tr("day") .. [[ 10 (]] .. Tr("this-year") .. [[):\\Event today.]])
+        Append(out, [[\item 0, ]] .. Tr("day") .. [[ 11 (]] .. Tr("this-year") .. [[):\\Event tomorrow.]])
+        Append(out,
+            [[\item 0, ]] ..
+            Tr("day") .. [[ 15 (]] .. Tr("this-year") .. [[):\\Event this year, with day in future.]])
     end
 
 
     if IsShowFuture then
         Append(out, [[\item 1 (]] .. Tr("next-year") .. [[):\\Event next year.]])
-        if CurrentDay == 0 then
+        if isCurrentDaySet then
             Append(out,
                 [[\item 1, ]] ..
-                Tr("day") .. [[ 5 (]] .. Tr("next-year") .. [[):\\Event in less than a year.]])
+                Tr("day") .. [[ 5 (]] .. Tr("in-days", { 360 }) .. [[):\\Event in less than a year.]])
         else
             Append(out,
                 [[\item 1, ]] ..
-                Tr("day") .. [[ 5 (]] .. Tr("in-days", { 359 }) .. [[):\\Event in less than a year.]])
+                Tr("day") .. [[ 5 (]] .. Tr("next-year") .. [[):\\Event in less than a year.]])
         end
         Append(out,
             [[\item 1, ]] ..
@@ -113,28 +116,25 @@ local function generateExpected()
     return out
 end
 
-CurrentYear = 0
-CurrentDay = 0
-
 IsShowFuture = false
 local out = TexApi.automatedChapters()
-local expected = generateExpected()
+local expected = generateExpected(false)
 Assert("history-events-no-future-day-not-set", expected, out)
 
 IsShowFuture = true
 out = TexApi.automatedChapters()
-expected = generateExpected()
+expected = generateExpected(false)
 Assert("history-events-with-future-day-not-set", expected, out)
 
 
-CurrentDay = 10
+TexApi.setCurrentDay(10)
 
 IsShowFuture = false
 local out = TexApi.automatedChapters()
-local expected = generateExpected()
+local expected = generateExpected(true)
 Assert("history-events-no-future-day-set", expected, out)
 
 IsShowFuture = true
 out = TexApi.automatedChapters()
-expected = generateExpected()
+expected = generateExpected(true)
 Assert("history-events-with-future-day-set", expected, out)

@@ -19,13 +19,13 @@ local function entityQualifiersString(child, parent, relationships)
     end
     local birthyearstr = GetProtectedField(child, "born")
     local birthyear = tonumber(birthyearstr)
-    if not IsEmpty(birthyear) and birthyear <= CurrentYear then
+    if not IsEmpty(birthyear) and birthyear <= GetCurrentYear() then
         birthyear = AddYearOffset(birthyear, YearFmt)
         Append(content, TexCmd("textborn") .. birthyear)
     end
     local deathyearstr = GetProtectedField(child, "died")
     local deathyear = tonumber(deathyearstr)
-    if not IsEmpty(deathyear) and deathyear <= CurrentYear then
+    if not IsEmpty(deathyear) and deathyear <= GetCurrentYear() then
         deathyear = AddYearOffset(deathyear, YearFmt)
         Append(content, TexCmd("textdied") .. deathyear)
     end

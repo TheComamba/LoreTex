@@ -1,3 +1,5 @@
+TexApi.setCurrentYear(0)
+
 TexApi.newEntity { type = "species", label = "test-species", name = "Test Species" }
 
 TexApi.newEntity { type = "npcs", label = "test-npc", name = "Test NPC" }

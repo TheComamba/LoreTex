@@ -1,3 +1,5 @@
+TexApi.setDaysPerYear(200)
+
 TexApi.newEntity { type = "calendars", label = "test-1", name = "Test 1" }
 TexApi.addMonth { month = "Primus", firstDay = 1 }
 TexApi.addMonth { month = "Secundus", firstDay = 100 }
@@ -5,7 +7,7 @@ TexApi.setYearAbbreviation("QT")
 
 TexApi.newEntity { type = "calendars", label = "test-2", name = "Test 2" }
 TexApi.addMonth { month = "Knulch", firstDay = 20 }
-TexApi.addMonth { month = "Wimmel", firstDay = 300 }
+TexApi.addMonth { month = "Wimmel", firstDay = 150 }
 TexApi.setYearAbbreviation("WX")
 TexApi.setYearOffset(200)
 
@@ -23,7 +25,7 @@ out = { DayString(17) }
 Assert("one-format-specified-for-day", expected, out)
 
 TexApi.addDayFmt("test-2")
-expected = { Tr("day") .. [[ 17 / 17.Primus / 82.Wimmel]] }
+expected = { Tr("day") .. [[ 17 / 17.Primus / 68.Wimmel]] }
 out = { DayString(17) }
 Assert("two-formats-specified-for-day", expected, out)
 

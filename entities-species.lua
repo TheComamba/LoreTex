@@ -110,15 +110,17 @@ local function ageString(entity, year)
 	return table.concat(out)
 end
 
-function SpeciesAndAgeString(entity, year)
+function SpeciesAndAgeString(entity)
 	local parts = {}
 	local speciesRef = getSpeciesRef(entity)
 	if not IsEmpty(speciesRef) then
 		Append(parts, TexCmd("nameref ", speciesRef))
 	end
-	local ageDescription = ageString(entity, year)
-	if not IsEmpty(ageDescription) then
-		Append(parts, ageDescription)
+	if IsCurrentYearSet then
+		local ageDescription = ageString(entity, GetCurrentYear())
+		if not IsEmpty(ageDescription) then
+			Append(parts, ageDescription)
+		end
 	end
 	local out = {}
 	for i, elem in pairs(parts) do

@@ -1,14 +1,78 @@
-CurrentYear = 0
-CurrentDay = 0
-DaysPerYear = 364
 IsShowFuture = true
+
+local currentYear = 0
+IsCurrentYearSet = false
+local currentDay = 0
+IsCurrentDaySet = false
+local daysPerYear = 1
+IsDaysPerYearSet = false
 
 YearFmt = {}
 DayFmt = {}
 
-function ResetDateFormats()
+function ResetDates()
+    currentYear = 0
+    IsCurrentYearSet = false
+    currentDay = 0
+    IsCurrentDaySet = false
+    daysPerYear = 1
+    IsDaysPerYearSet = false
     DayFmt = {}
     YearFmt = {}
+end
+
+TexApi.setCurrentYear = function(year)
+    if year == nil or type(year) ~= "number" then
+        LogError("Called with " .. DebugPrint(year))
+        return
+    end
+    currentYear = year
+    IsCurrentYearSet = true
+end
+
+TexApi.setCurrentDay = function(day)
+    if day == nil or type(day) ~= "number" then
+        LogError("Called with " .. DebugPrint(day))
+        return
+    end
+    currentDay = day
+    IsCurrentDaySet = true
+end
+
+TexApi.setDaysPerYear = function(days)
+    if days == nil or type(days) ~= "number" then
+        LogError("Called with " .. DebugPrint(days))
+        return
+    end
+    daysPerYear = days
+    IsDaysPerYearSet = true
+end
+
+function GetCurrentYear()
+    if not IsCurrentYearSet then
+        LogError("Current year not set!")
+        return 0
+    else
+        return currentYear
+    end
+end
+
+function GetCurrentDay()
+    if not IsCurrentDaySet then
+        LogError("Current day not set!")
+        return 0
+    else
+        return currentDay
+    end
+end
+
+function GetDaysPerYear()
+    if not IsDaysPerYearSet then
+        LogError("Days per year not set!")
+        return 1
+    else
+        return daysPerYear
+    end
 end
 
 local function addDayFmt(label)
@@ -81,14 +145,6 @@ TexApi.addMonth = function(arg)
     addMonth(arg)
 end
 
-local function isCurrentDaySet()
-    return CurrentDay > 0
-end
-
-local function isDaysPerYearSet()
-    return DaysPerYear > 0
-end
-
 function RemoveYearOffset(year, fmt)
     local offset = GetProtectedField(fmt, "yearOffset")
     if offset == nil then
@@ -110,23 +166,27 @@ end
 local function daysAgo(historyItem)
     local year = GetProtectedField(historyItem, "year")
     local day = GetProtectedField(historyItem, "day")
-    if isCurrentDaySet() and day ~= nil then
-        return CurrentDay - day + (CurrentYear - year) * DaysPerYear
+    if IsCurrentDaySet and day ~= nil then
+        return GetCurrentDay() - day + (GetCurrentYear() - year) * GetDaysPerYear()
     else
-        return (CurrentYear - year) * DaysPerYear
+        return (GetCurrentYear() - year) * GetDaysPerYear()
+    end
+end
+
+local function yearsAgo(historyItem)
+    if IsCurrentDaySet then
+        return daysAgo(historyItem) / GetDaysPerYear()
+    else
+        return GetCurrentYear() - GetProtectedField(historyItem, "year")
     end
 end
 
 local function timeDiffString(historyItem)
     local year = GetProtectedField(historyItem, "year")
     local day = GetProtectedField(historyItem, "day")
-    local timeDiffInDays = daysAgo(historyItem)
-    if not isDaysPerYearSet() then
-        LogError("Cannot work with a year with 0 days.")
-        return
-    end
-    local timeDiffInYears = timeDiffInDays / DaysPerYear
-    if math.abs(timeDiffInYears) < 1 and isCurrentDaySet() and day ~= nil then
+    local timeDiffInYears = yearsAgo(historyItem)
+    if math.abs(timeDiffInYears) < 1 and IsCurrentDaySet and day ~= nil then
+        local timeDiffInDays = daysAgo(historyItem)
         if timeDiffInDays == 0 then
             return Tr("today")
         elseif timeDiffInDays == 1 then
@@ -155,7 +215,31 @@ local function timeDiffString(historyItem)
 end
 
 function IsFutureEvent(historyItem)
-    return daysAgo(historyItem) < 0
+    if IsCurrentDaySet then
+        return daysAgo(historyItem) < 0
+    else
+        return yearsAgo(historyItem) < 0
+    end
+end
+
+function IsHasHappened(entity, keyword, onNil)
+    if entity == nil then
+        return onNil
+    end
+    if not IsCurrentYearSet then
+        return onNil
+    end
+    local year = GetProtectedField(entity, keyword)
+    if year == nil then
+        return onNil
+    else
+        year = tonumber(year)
+        if year == nil then
+            LogError("Entry with key \"" .. keyword .. "\" of is not a number:" .. DebugPrint(entity))
+            return onNil
+        end
+        return year <= GetCurrentYear()
+    end
 end
 
 function YearAndDayString(historyItem)
@@ -177,9 +261,10 @@ local function monthAndDay(day, namesAndFirstDays)
     local firstDay = 1
     local month = "NoMonthFound"
     if day < namesAndFirstDays[1][2] then
+        --LogError("day " .. day .. ", first day " .. DebugPrint(namesAndFirstDays[1]))
         month = namesAndFirstDays[#namesAndFirstDays][1]
         firstDay = namesAndFirstDays[#namesAndFirstDays][2]
-        firstDay = firstDay - DaysPerYear
+        firstDay = firstDay - GetDaysPerYear()
     else
         for i = #(namesAndFirstDays), 1, -1 do
             local thisMonth = namesAndFirstDays[i][1]

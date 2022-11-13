@@ -1,6 +1,6 @@
-\newcommand{\setCurrentYear}[1]{\directlua{CurrentYear = #1}}
-\newcommand{\setCurrentDay}[1]{\directlua{CurrentDay = #1}}
-\newcommand{\setDaysPerYear}[1]{\directlua{DaysPerYear = #1}}
+\newcommand{\setCurrentYear}[1]{\directlua{TexApi.setCurrentYear(#1)}}
+\newcommand{\setCurrentDay}[1]{\directlua{TexApi.setCurrentDay(#1)}}
+\newcommand{\setDaysPerYear}[1]{\directlua{TexApi.setDaysPerYear(#1)}}
 
 \newcommand{\addDayFmt}[1]{\directlua{TexApi.addDayFmt("#1")}}
 \newcommand{\addYearFmt}[1]{\directlua{TexApi.addYearFmt("#1")}}

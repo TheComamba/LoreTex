@@ -1,3 +1,5 @@
+TexApi.setCurrentYear(0)
+
 TexApi.newEntity { type = "stories", label = "teststory", name = "Teststory" }
 AddRef("teststory", PrimaryRefs)
 TexApi.addHistory { year = -10, event = [[Concerns \nameref{secret-item}.]] }

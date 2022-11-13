@@ -3,7 +3,7 @@ PCs = {}
 function AddSpeciesAndAgeStringToNPC(entity)
     StartBenchmarking("AddSpeciesAndAgeStringToNPC")
     if IsType("characters", entity) then
-        local speciesAndAgeStr = SpeciesAndAgeString(entity, CurrentYear)
+        local speciesAndAgeStr = SpeciesAndAgeString(entity)
         if not IsEmpty(speciesAndAgeStr) then
             SetDescriptor { entity = entity,
                 descriptor = Tr("appearance"),
@@ -14,33 +14,12 @@ function AddSpeciesAndAgeStringToNPC(entity)
     StopBenchmarking("AddSpeciesAndAgeStringToNPC")
 end
 
-local function isHasHappened(entity, keyword, onNil)
-    if entity == nil then
-        return onNil
-    end
-    if type(entity) ~= "table" then
-        LogError("Called with: " .. DebugPrint(entity))
-        return onNil
-    end
-    local year = GetProtectedField(entity, keyword)
-    if year == nil then
-        return onNil
-    else
-        year = tonumber(year)
-        if year == nil then
-            LogError("Entry with key \"" .. keyword .. "\" of is not a number:" .. DebugPrint(entity))
-            return onNil
-        end
-        return year <= CurrentYear
-    end
-end
-
 function IsBorn(entity)
-    return isHasHappened(entity, "born", true)
+    return IsHasHappened(entity, "born", true)
 end
 
 function IsDead(entity)
-    return isHasHappened(entity, "died", false)
+    return IsHasHappened(entity, "died", false)
 end
 
 function MarkDead(entity)

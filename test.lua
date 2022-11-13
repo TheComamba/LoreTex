@@ -25,10 +25,9 @@ local numFailed = 0
 local apiFunctionUsage = {}
 
 local function resetEnvironment()
-    ResetDateFormats()
+    ResetDates()
     ResetEntities()
     ResetRefs()
-    CurrentYear = 0
     CurrentDay = 0
     IsShowFuture = true
     IsShowSecrets = false

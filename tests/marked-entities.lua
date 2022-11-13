@@ -1,3 +1,5 @@
+TexApi.setCurrentYear(0)
+
 TexApi.newEntity { type = "npcs", label = "flora", shortname = "", name = "Flora" }
 TexApi.born { year = -10, event = [[\nameref{flora} is born.\birthof{flora}]] }
 TexApi.died { year = -5, event = [[\nameref{flora} dies.\deathof{flora}]] }

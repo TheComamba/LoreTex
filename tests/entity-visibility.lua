@@ -1,3 +1,5 @@
+TexApi.setCurrentYear(0)
+
 TexApi.newEntity { type = "items", label = "normal", name = "Normal" }
 AddParent(CurrentEntity(), "normal-orga")
 AddParent(CurrentEntity(), "secret-orga")
@@ -220,7 +222,7 @@ local function generateExpected()
     return out
 end
 
-CurrentYear = 0
+currentYear = 0
 local out = {}
 local expected = {}
 

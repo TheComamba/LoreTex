@@ -3,10 +3,13 @@ PCs = {}
 function AddSpeciesAndAgeStringToNPC(entity)
     StartBenchmarking("AddSpeciesAndAgeStringToNPC")
     if IsType("characters", entity) then
-        SetDescriptor { entity = entity,
-            descriptor = Tr("appearance"),
-            subdescriptor = CapFirst(Tr("species-and-age")) .. ":",
-            description = SpeciesAndAgeString(entity, CurrentYear) }
+        local speciesAndAgeStr = SpeciesAndAgeString(entity, CurrentYear)
+        if not IsEmpty(speciesAndAgeStr) then
+            SetDescriptor { entity = entity,
+                descriptor = Tr("appearance"),
+                subdescriptor = CapFirst(Tr("species-and-age")) .. ":",
+                description = speciesAndAgeStr }
+        end
     end
     StopBenchmarking("AddSpeciesAndAgeStringToNPC")
 end

@@ -213,3 +213,22 @@ function DeepCopy(inp)
 	end
 	return out
 end
+
+function IsArgOk(caller, arg, required, optional)
+	if IsEmpty(arg) then
+		LogError("\"" .. caller .. "\" called without arguments.")
+		return false
+	end
+	for key, requiredArg in pairs(required) do
+		if IsEmpty(arg[requiredArg]) then
+			LogError("\"" .. caller .. "\" called without required argument \"" .. requiredArg .. "\".")
+			return false
+		end
+	end
+	for key, val in pairs(arg) do
+		if not IsIn(key, required) and not IsIn(key, optional) then
+			LogError("\"" .. caller .. "\" called with obsolete argument \"" .. key .. "\".")
+		end
+	end
+	return true
+end

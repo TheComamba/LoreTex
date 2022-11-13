@@ -1,17 +1,7 @@
 TexApi = {}
 
 function SetDescriptor(arg)
-    if IsEmpty(arg.entity) then
-        LogError("Called with empty entity. Descriptor is " .. DebugPrint(arg.descriptor))
-        return
-    elseif IsEmpty(arg.descriptor) then
-        LogError("Called with empty descriptor for entity with label " .. GetMainLabel(arg.entity) .. "\"")
-        return
-    elseif IsEmpty(arg.description) then
-        return
-    elseif IsProtectedDescriptor(arg.descriptor) then
-        LogError("Called with protected descriptor \"" ..
-            arg.descriptor .. "\" for entity with label \"" .. GetMainLabel(arg.entity) .. "\"")
+    if not IsArgOk("SetDescriptor", arg, { "entity", "descriptor", "description" }, { "subdescriptor" }) then
         return
     end
 
@@ -72,17 +62,11 @@ function MakePrimaryIf(condition)
 end
 
 local function newEntity(arg)
-    if IsEmpty(arg.type) then
-        LogError("Entity " .. arg.label .. " has no type!")
+    if not IsArgOk("newEntity", arg, { "type", "label", "name" }, { "shortname" }) then
         return
-    elseif not IsTypeKnown(arg.type) then
+    end
+    if not IsTypeKnown(arg.type) then
         LogError("Trying to create entity with unkown type \"" .. arg.type .. "\"")
-        return
-    elseif IsEmpty(arg.label) then
-        LogError("Called with no label!")
-        return
-    elseif IsEmpty(arg.name) then
-        LogError("Entity " .. arg.name .. " has no name!")
         return
     end
     StartBenchmarking("NewEntity")

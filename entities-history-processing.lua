@@ -96,7 +96,9 @@ local function addHistoryDescriptors(entity)
             Append(processedHistory, historyItemToString(historyItem, isPrintDate))
         end
     end
-    SetDescriptor { entity = entity, descriptor = Tr("history"), description = processedHistory }
+    if not IsEmpty(processedHistory) then
+        SetDescriptor { entity = entity, descriptor = Tr("history"), description = processedHistory }
+    end
     StopBenchmarking("addHistoryDescriptors")
 end
 

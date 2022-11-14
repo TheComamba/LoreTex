@@ -177,3 +177,9 @@ function IsEntityShown(entity)
         return true
     end
 end
+
+function JoinEntities(arg)
+    if not IsArgOk("JoinEntities", arg, { "main", "aliases" }) then
+        return
+    end
+end

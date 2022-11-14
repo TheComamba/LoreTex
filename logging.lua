@@ -112,7 +112,7 @@ function DebugPrint(entity)
     Append(out, TexCmd("begin", "verbatim"))
     Append(out, DebugPrintRaw(entity))
     Append(out, TexCmd("end", "verbatim"))
-    return out
+    return table.concat(out)
 end
 
 function StartBenchmarking(identifier)

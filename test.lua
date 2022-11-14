@@ -9,6 +9,7 @@ Append(allTestFiles, "entities-with-history")
 Append(allTestFiles, "entity-visibility")
 Append(allTestFiles, "entity-visibility-2")
 Append(allTestFiles, "history")
+Append(allTestFiles, "join-entities")
 Append(allTestFiles, "make-primary-if")
 Append(allTestFiles, "marked-entities")
 Append(allTestFiles, "mentioned-refs")
@@ -24,7 +25,9 @@ local numSucceeded = 0
 local numFailed = 0
 local apiFunctionUsage = {}
 
-local function resetEnvironment()
+local testFunctions = {}
+
+testFunctions.resetEnvironment = function()
     ResetDates()
     ResetEntities()
     ResetRefs()
@@ -33,7 +36,33 @@ local function resetEnvironment()
     IsShowSecrets = false
 end
 
-local function areEqual(obj1, obj2, elementNum, currentObj1, currentObj2)
+testFunctions.areTablesEqual = function(obj1, obj2, elementNum, currentObj1, currentObj2)
+    if #obj1 ~= #obj2 then
+        elementNum[1] = -1
+        currentObj1[1] = #obj1
+        currentObj2[1] = #obj2
+        return false
+    end
+    for i = 1, #obj1 do
+        if not testFunctions.areEqual(obj1[i], obj2[i], elementNum, currentObj1, currentObj2) then
+            elementNum[1] = i
+            currentObj1[1] = obj1[i]
+            currentObj2[1] = obj2[i]
+            return false
+        end
+    end
+    for key, value in pairs(obj1) do
+        if not testFunctions.areEqual(value, obj2[key], elementNum, currentObj1, currentObj2) then
+            elementNum[1] = key
+            currentObj1[1] = obj1[key]
+            currentObj2[1] = obj2[key]
+            return false
+        end
+    end
+    return true
+end
+
+testFunctions.areEqual = function(obj1, obj2, elementNum, currentObj1, currentObj2)
     if obj1 == nil or obj2 == nil then
         if obj1 == nil and obj2 == nil then
             return true
@@ -43,21 +72,7 @@ local function areEqual(obj1, obj2, elementNum, currentObj1, currentObj2)
     elseif type(obj1) ~= type(obj2) then
         return false
     elseif type(obj1) == "table" then
-        if #obj1 ~= #obj2 then
-            elementNum[1] = -1
-            currentObj1[1] = #obj1
-            currentObj2[1] = #obj2
-            return false
-        end
-        for i = 1, #obj1 do
-            if not areEqual(obj1[i], obj2[i], elementNum, currentObj1, currentObj2) then
-                elementNum[1] = i
-                currentObj1[1] = obj1[i]
-                currentObj2[1] = obj2[i]
-                return false
-            end
-        end
-        return true
+        return testFunctions.areTablesEqual(obj1, obj2, elementNum, currentObj1, currentObj2)
     else
         obj1 = Replace(" ", "", obj1)
         obj2 = Replace(" ", "", obj2)
@@ -69,7 +84,7 @@ local function areEqual(obj1, obj2, elementNum, currentObj1, currentObj2)
     end
 end
 
-local function printAllChars(str)
+testFunctions.printAllChars = function(str)
     local out = {}
     for i = 1, #str do
         Append(out, str:sub(i, i))
@@ -77,7 +92,7 @@ local function printAllChars(str)
     return out
 end
 
-local function splitStringInLinebreaks(str, maxWidth)
+testFunctions.splitStringInLinebreaks = function(str, maxWidth)
     local out = {}
     while string.len(str) > 0 do
         Append(out, string.sub(str, 1, maxWidth))
@@ -86,7 +101,7 @@ local function splitStringInLinebreaks(str, maxWidth)
     return out
 end
 
-local function printMinipage(caption, rows, i0, chunksize)
+testFunctions.printMinipage = function(caption, rows, i0, chunksize)
     local out = {}
     Append(out, [[\begin{minipage}[t]{.5\textwidth}]])
     if i0 == 1 then
@@ -96,7 +111,7 @@ local function printMinipage(caption, rows, i0, chunksize)
     for i = i0, (i0 + chunksize - 1) do
         if i <= #rows then
             local rowcounter = tostring(i) .. " - "
-            local splitRow = splitStringInLinebreaks(rows[i], 40)
+            local splitRow = testFunctions.splitStringInLinebreaks(rows[i], 40)
             for key, line in pairs(splitRow) do
                 if key == 1 then
                     line = rowcounter .. line
@@ -114,17 +129,31 @@ local function printMinipage(caption, rows, i0, chunksize)
     return out
 end
 
-local function printComparison(expected, received)
+testFunctions.printStringComparison = function(expected, received)
     local out = {}
     local chunksize = 40
     local startIndex = 1
     while startIndex <= math.max(#expected, #received) do
-        Append(out, printMinipage("Expected", expected, startIndex, chunksize))
-        Append(out, printMinipage("Received", received, startIndex, chunksize))
+        Append(out, testFunctions.printMinipage("Expected", expected, startIndex, chunksize))
+        Append(out, testFunctions.printMinipage("Received", received, startIndex, chunksize))
         Append(out, [[\newpage]])
         startIndex = startIndex + chunksize
     end
     return out
+end
+
+testFunctions.isListOfStrings = function(list)
+    if type(list) ~= "table" then
+        return false
+    elseif #list == 0 then
+        return false
+    end
+    for key, val in pairs(list) do
+        if type(key) ~= "number" or type(val) ~= "string" then
+            return false
+        end
+    end
+    return true
 end
 
 function Assert(caller, expected, received)
@@ -143,7 +172,7 @@ function Assert(caller, expected, received)
         Append(out, PrintErrors())
         tex.print(out)
         ResetErrors()
-    elseif areEqual(expected, received, failedIndex, failedItem1, failedItem2) then
+    elseif testFunctions.areEqual(expected, received, failedIndex, failedItem1, failedItem2) then
         numSucceeded = numSucceeded + 1
     else
         local out = {}
@@ -155,10 +184,17 @@ function Assert(caller, expected, received)
             Append(out, "but received output of type ")
             Append(out, type(received) .. [[.\\]])
         else
-            Append(out, printComparison(expected, received))
+            if testFunctions.isListOfStrings(expected) and testFunctions.isListOfStrings(received) then
+                Append(out, testFunctions.printStringComparison(expected, received))
+            else
+                Append(out, testFunctions.printStringComparison(DebugPrintRaw(expected), DebugPrintRaw(received)))
+            end
             if type(failedItem1[1]) == "string" and type(failedItem2[1]) == "string" then
                 Append(out, "At Element " .. failedIndex[1] .. [[:\\]])
-                Append(out, printComparison(printAllChars(failedItem1[1]), printAllChars(failedItem2[1])))
+                local allCharsObj1 = testFunctions.printAllChars(failedItem1[1])
+                local allCharsObj2 = testFunctions.printAllChars(failedItem2[1])
+                Append(out, testFunctions.printStringComparison(allCharsObj1, allCharsObj2))
+            else
             end
         end
         tex.print(out)
@@ -182,7 +218,7 @@ local function runTests(testFiles)
     end
 
     for key, testfile in pairs(testFiles) do
-        resetEnvironment()
+        testFunctions.resetEnvironment()
         PushScopedVariables()
         SelectLanguage("english")
         local currentlyFailed = numFailed
@@ -190,7 +226,7 @@ local function runTests(testFiles)
         PopScopedVariables()
 
         if currentlyFailed == numFailed then
-            resetEnvironment()
+            testFunctions.resetEnvironment()
             PushScopedVariables()
             RandomiseDictionary()
             dofile(RelativePath .. "/tests/" .. testfile .. ".lua")

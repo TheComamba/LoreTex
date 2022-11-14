@@ -82,15 +82,15 @@ local function getSortedKeys(tableInput)
     return out
 end
 
-local function debugPrintRaw(entity)
+function DebugPrintRaw(entity)
     if entity == nil then
-        return "nil"
+        return { "nil" }
     elseif type(entity) == "number" then
-        return tostring(entity)
+        return { tostring(entity) }
     elseif type(entity) == "string" then
-        return " \"" .. entity .. "\" "
+        return { " \"" .. entity .. "\" " }
     elseif type(entity) ~= "table" then
-        return tostring(entity)
+        return { tostring(entity) }
     end
     local out = {}
     local keys = getSortedKeys(entity)
@@ -99,20 +99,20 @@ local function debugPrintRaw(entity)
         if i > 1 then
             Append(out, ",	")
         end
-        Append(out, debugPrintRaw(key))
+        Append(out, DebugPrintRaw(key))
         Append(out, "=")
-        Append(out, debugPrintRaw(entity[key]))
+        Append(out, DebugPrintRaw(entity[key]))
     end
     Append(out, [[}	]])
-    return table.concat(out)
+    return out
 end
 
 function DebugPrint(entity)
     local out = {}
     Append(out, TexCmd("begin", "verbatim"))
-    Append(out, debugPrintRaw(entity))
+    Append(out, DebugPrintRaw(entity))
     Append(out, TexCmd("end", "verbatim"))
-    return table.concat(out)
+    return out
 end
 
 function StartBenchmarking(identifier)

@@ -3,8 +3,8 @@ TexApi.setCurrentYear(0)
 TexApi.newEntity { type = "species", label = "test-species", name = "Test Species" }
 
 TexApi.newEntity { type = "npcs", label = "test-npc", name = "Test NPC" }
-SetSpecies(CurrentEntity(), "test-species")
-SetProtectedField(CurrentEntity(), "born", -20)
+TexApi.setSpecies("test-species")
+TexApi.born { year = -20, event = "Birth." }
 
 AddAllEntitiesToPrimaryRefs()
 
@@ -26,6 +26,7 @@ local expected = {
         CapFirst(Tr("species-and-age")) .. [[:}\nameref {test-species}, 20 ]] .. Tr("years-old") .. [[.]],
     [[\paragraph{]] .. CapFirst(Tr("history")) .. [[}]],
     [[\begin{itemize}]],
+    [[\item -20 (]] .. Tr("years-ago", { 20 }) .. [[):\\Birth.]],
     [[\item -8 (]] ..
         Tr("years-ago", { 8 }) .. [[):\\ \nameref{test-npc} ]] .. Tr("is") .. [[ ]] .. Tr("juvenile") .. [[.]],
     [[\item 0 (]] .. Tr("this-year") .. [[):\\ \nameref{test-npc} ]] .. Tr("is") .. [[ ]] .. Tr("young") .. [[.]],

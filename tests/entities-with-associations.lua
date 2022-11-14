@@ -2,15 +2,15 @@ TexApi.newEntity { type = "organisations", label = "orga", name = "Orga" }
 local orga = CurrentEntity()
 
 TexApi.newEntity { type = "places", label = "place-1", name = "Place 1" }
-AddParent(CurrentEntity(), "orga")
+TexApi.addParent { parentLabel = "orga" }
 
 TexApi.newEntity { type = "places", label = "place-2", name = "Place 2" }
+TexApi.addParent { parentLabel = "orga", relationship = "Hometown" }
 local place2 = CurrentEntity()
-AddParent(place2, "orga", "Hometown")
 
 TexApi.newEntity { type = "organisations", label = "orga-2", name = "Orga 2" }
+TexApi.addParent { parentLabel = "place-1", relationship = "Rulers" }
 local orga2 = CurrentEntity()
-AddParent(orga2, "place-1", "Rulers")
 
 AddAllEntitiesToPrimaryRefs()
 local out = TexApi.automatedChapters()

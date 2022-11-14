@@ -1,10 +1,10 @@
 TexApi.setCurrentYear(0)
 
 TexApi.newEntity { type = "items", label = "normal", name = "Normal" }
-AddParent(CurrentEntity(), "normal-orga")
-AddParent(CurrentEntity(), "secret-orga")
-AddParent(CurrentEntity(), "revealed-orga")
-AddParent(CurrentEntity(), "unborn-orga")
+TexApi.addParent { parentLabel = "normal-orga" }
+TexApi.addParent { parentLabel = "secret-orga" }
+TexApi.addParent { parentLabel = "revealed-orga" }
+TexApi.addParent { parentLabel = "unborn-orga" }
 AddRef("normal", PrimaryRefs)
 TexApi.addHistory { year = -10, event = [[Normal event]] }
 TexApi.addHistory { year = -9, event = [[Concerns \reference{secret}]] }
@@ -12,49 +12,49 @@ TexApi.addHistory { year = -8, event = [[Concerns \reference{revealed}]] }
 TexApi.addSecretHistory { year = -5, event = [[Secret event]] }
 
 TexApi.newEntity { type = "items", label = "secret", name = "Secret" }
-SetSecret(CurrentEntity())
-AddParent(CurrentEntity(), "normal-orga")
-AddParent(CurrentEntity(), "secret-orga")
-AddParent(CurrentEntity(), "revealed-orga")
-AddParent(CurrentEntity(), "unborn-orga")
+TexApi.setSecret()
+TexApi.addParent { parentLabel = "normal-orga" }
+TexApi.addParent { parentLabel = "secret-orga" }
+TexApi.addParent { parentLabel = "revealed-orga" }
+TexApi.addParent { parentLabel = "unborn-orga" }
 TexApi.addHistory { year = -7, event = [[Concerns \reference{normal}]] }
 
 TexApi.newEntity { type = "items", label = "revealed", name = "Revealed" }
-SetSecret(CurrentEntity())
-AddParent(CurrentEntity(), "normal-orga")
-AddParent(CurrentEntity(), "secret-orga")
-AddParent(CurrentEntity(), "revealed-orga")
-AddParent(CurrentEntity(), "unborn-orga")
+TexApi.setSecret()
+TexApi.addParent { parentLabel = "normal-orga" }
+TexApi.addParent { parentLabel = "secret-orga" }
+TexApi.addParent { parentLabel = "revealed-orga" }
+TexApi.addParent { parentLabel = "unborn-orga" }
 TexApi.reveal("revealed")
 TexApi.addHistory { year = -6, event = [[Concerns \reference{normal}]] }
 
 TexApi.newEntity { type = "items", label = "unborn", name = "Unborn" }
-AddParent(CurrentEntity(), "normal-orga")
-AddParent(CurrentEntity(), "secret-orga")
-AddParent(CurrentEntity(), "revealed-orga")
-AddParent(CurrentEntity(), "unborn-orga")
+TexApi.addParent { parentLabel = "normal-orga" }
+TexApi.addParent { parentLabel = "secret-orga" }
+TexApi.addParent { parentLabel = "revealed-orga" }
+TexApi.addParent { parentLabel = "unborn-orga" }
 AddRef("unborn", PrimaryRefs)
 TexApi.addHistory { year = 10, event = [[Created.\birthof{unborn}]] }
 
 TexApi.newEntity { type = "items", label = "at-secret-location", name = "At secret Location" }
-SetLocation(CurrentEntity(), "eldorado")
-AddParent(CurrentEntity(), "normal-orga")
-AddParent(CurrentEntity(), "secret-orga")
-AddParent(CurrentEntity(), "revealed-orga")
-AddParent(CurrentEntity(), "unborn-orga")
+TexApi.setLocation("eldorado")
+TexApi.addParent { parentLabel = "normal-orga" }
+TexApi.addParent { parentLabel = "secret-orga" }
+TexApi.addParent { parentLabel = "revealed-orga" }
+TexApi.addParent { parentLabel = "unborn-orga" }
 AddRef("at-secret-location", PrimaryRefs)
 
 TexApi.newEntity { type = "places", label = "eldorado", name = "Eldorado" }
-SetSecret(CurrentEntity())
+TexApi.setSecret()
 
 TexApi.newEntity { type = "organisations", label = "normal-orga", name = "Normal Organisation" }
 AddRef("normal-orga", PrimaryRefs)
 
 TexApi.newEntity { type = "organisations", label = "secret-orga", name = "Secret Organisation" }
-SetSecret(CurrentEntity())
+TexApi.setSecret()
 
 TexApi.newEntity { type = "organisations", label = "revealed-orga", name = "Revealed Organisation" }
-SetSecret(CurrentEntity())
+TexApi.setSecret()
 TexApi.reveal("revealed-orga")
 
 TexApi.newEntity { type = "organisations", label = "unborn-orga", name = "Unborn Organisation" }
@@ -222,7 +222,6 @@ local function generateExpected()
     return out
 end
 
-currentYear = 0
 local out = {}
 local expected = {}
 

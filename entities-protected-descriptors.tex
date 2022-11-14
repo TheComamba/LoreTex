@@ -1,7 +1,7 @@
-\newcommand{\setAgeExponent}[1]{\directlua{SetAgeExponent(CurrentEntity(), #1)}}
-\newcommand{\setAgeFactor}[1]{\directlua{SetAgeFactor(CurrentEntity(), #1)}}
-\newcommand{\setAgeModifierMixing}[2]{\directlua{SetAgeModifierMixing(CurrentEntity(),"#1","#2")}}
-\newcommand{\setAssociation}[2][]{\directlua{AddParent(CurrentEntity(), "#2", [[\detokenize{#1}]])}}
-\newcommand{\setLocation}[1]{\directlua{SetLocation(CurrentEntity(), "#1")}}
-\newcommand{\setSecret}{\directlua{SetSecret(CurrentEntity())}}
-\newcommand{\setSpecies}[1]{\directlua{SetSpecies(CurrentEntity(), [[\detokenize{#1}]])}}
+\newcommand{\setAgeExponent}[1]{\directlua{TexApi.setAgeExponent(#1)}}
+\newcommand{\setAgeFactor}[1]{\directlua{TexApi.setAgeFactor(#1)}}
+\newcommand{\setAgeModifierMixing}[2]{\directlua{TexApi.setAgeModifierMixing("#1","#2")}}
+\newcommand{\setAssociation}[2][]{\directlua{TexApi.addParent{ parentLabel = "#2", relationship = [[\detokenize{#1}]] }}}
+\newcommand{\setLocation}[1]{\directlua{TexApi.setLocation("#1")}}
+\newcommand{\setSecret}{\directlua{TexApi.setSecret()}}
+\newcommand{\setSpecies}[1]{\directlua{TexApi.setSpecies([[\detokenize{#1}]])}}

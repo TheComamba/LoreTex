@@ -1,6 +1,6 @@
 TexApi.newEntity { type = "npcs", label = "some-npc", name = "Some NPC" }
-SetSpecies(CurrentEntity(), "subspecies")
-SetLocation(CurrentEntity(), "subplace-1")
+TexApi.setSpecies("subspecies")
+TexApi.setLocation("subplace-1")
 TexApi.setDescriptor { descriptor = "Info 1", description = [[Refers to \nameref{subplace-2}.]] }
 TexApi.setDescriptor { descriptor = "Info 2", description = [[Refers to \nameref{subplace-3}.]] }
 TexApi.setDescriptor { descriptor = "Info 3", description = [[Refers to \nameref{subplace-4}.]] }

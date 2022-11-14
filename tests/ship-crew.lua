@@ -6,14 +6,14 @@ SetLocation(CurrentEntity(), "ocean")
 SetScopedVariable("DefaultLocation", "aurora")
 
 TexApi.newEntity { type = "npcs", label = "haldora", name = "Haldora" }
-AddParent(CurrentEntity(), "aurora", "Captain")
+TexApi.addParent { parentLabel = "aurora", relationship = "Captain" }
 
 TexApi.newEntity { type = "npcs", label = "balagog", name = "Balagog" }
-AddParent(CurrentEntity(), "aurora", "First Mate")
-AddParent(CurrentEntity(), "aurora", "Cook")
+TexApi.addParent { parentLabel = "aurora", relationship = "First Mate" }
+TexApi.addParent { parentLabel = "aurora", relationship = "Cook" }
 
 TexApi.newEntity { type = "npcs", label = "cuen", name = "Cuen" }
-AddParent(CurrentEntity(), "aurora")
+TexApi.addParent { parentLabel = "aurora" }
 
 AddAllEntitiesToPrimaryRefs()
 

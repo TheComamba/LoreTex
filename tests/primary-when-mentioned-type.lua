@@ -1,10 +1,10 @@
 TexApi.newEntity { type = "npcs", label = "karl", name = "Karl" }
-SetSpecies(CurrentEntity(), "human")
+TexApi.setSpecies("human")
 TexApi.setDescriptor { descriptor = "Friend", description = [[\nameref{peter}]] }
 TexApi.newEntity { type = "npcs", label = "peter", name = "Peter" }
-SetSpecies(CurrentEntity(), "human")
+TexApi.setSpecies("human")
 TexApi.newEntity { type = "species", label = "human", name = "Human" }
-SetAgeFactor(CurrentEntity(), 0)
+TexApi.setAgeFactor(0)
 AddRef("karl", MentionedRefs)
 
 local function generateExpected(primaryType, isKarlReferenced)

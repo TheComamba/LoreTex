@@ -7,7 +7,7 @@ TexApi.died { year = -5, event = [[\nameref{flora} dies.\deathof{flora}]] }
 AddRef("flora", PrimaryRefs)
 
 TexApi.newEntity { type = "npcs", label = "ramona", name = "Ramona" }
-SetSecret(CurrentEntity())
+TexApi.setSecret()
 TexApi.reveal("ramona")
 AddRef("ramona", PrimaryRefs)
 

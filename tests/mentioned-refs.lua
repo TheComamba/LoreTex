@@ -1,7 +1,7 @@
 TexApi.newEntity { type = "items", label = "primary-item", name = "Primary Item" }
 AddRef("primary-item", PrimaryRefs)
 TexApi.setDescriptor { descriptor = "Description", description = [[Different than \nameref{other-item}.]] }
-AddParent(CurrentEntity(), "some-organisation")
+TexApi.addParent{ parentLabel =  "some-organisation"}
 
 TexApi.newEntity { type = "items", label = "mentioned-item", name = "Mentioned Item" }
 AddRef("mentioned-item", MentionedRefs)

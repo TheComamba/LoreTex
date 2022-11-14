@@ -5,7 +5,7 @@ AddRef("teststory", PrimaryRefs)
 TexApi.addHistory { year = -10, event = [[Concerns \nameref{secret-item}.]] }
 
 TexApi.newEntity { type = "items", label = "secret-item", name = "Secret Item" }
-SetSecret(CurrentEntity())
+TexApi.setSecret()
 
 local function generateHistoryParagraph()
     local out = {}

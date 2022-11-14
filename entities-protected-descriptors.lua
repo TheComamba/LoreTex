@@ -69,35 +69,45 @@ function GetProtectedDescriptor(key)
     return descriptor
 end
 
-function SetAgeExponent(entity, exponent)
-    SetProtectedField(entity, "ageExponent", exponent)
+TexApi.setAgeExponent = function(exponent)
+    SetProtectedField(CurrentEntity(), "ageExponent", exponent)
 end
 
-function SetAgeFactor(entity, factor)
-    SetProtectedField(entity, "ageFactor", factor)
+TexApi.setAgeFactor = function(factor)
+    SetProtectedField(CurrentEntity(), "ageFactor", factor)
 end
 
-function SetAgeModifierMixing(entity, species1, species2)
-    SetProtectedField(entity, "ageMixing", { species1, species2 })
+TexApi.setAgeModifierMixing = function(species1, species2)
+    SetProtectedField(CurrentEntity(), "ageMixing", { species1, species2 })
+end
+
+local function addParent(arg)
+    if not IsArgOk("addParent", arg, { "entity", "parentLabel" }, { "relationship" }) then
+        return
+    end
+    AddToProtectedField(arg.entity, "parents", { arg.parentLabel, arg.relationship })
+    local parent = GetMutableEntityFromAll(arg.parentLabel)
+    AddToProtectedField(parent, "children", GetMainLabel(arg.entity))
+end
+
+TexApi.addParent = function(arg)
+    arg.entity = CurrentEntity()
+    addParent(arg)
 end
 
 function SetLocation(entity, location)
     SetProtectedField(entity, "location", location)
-    AddParent(entity, location, GetProtectedDescriptor("location"))
+    addParent { entity = entity, parentLabel = location, relationship = GetProtectedDescriptor("location") }
 end
 
-function AddParent(entity, parentLabel, relationship)
-    if entity ~= nil then
-        AddToProtectedField(entity, "parents", { parentLabel, relationship })
-    end
-    local parent = GetMutableEntityFromAll(parentLabel)
-    AddToProtectedField(parent, "children", GetMainLabel(entity))
+TexApi.setLocation = function(location)
+    SetLocation(CurrentEntity(), location)
 end
 
-function SetSecret(entity)
-    SetProtectedField(entity, "isSecret", true)
+TexApi.setSecret = function()
+    SetProtectedField(CurrentEntity(), "isSecret", true)
 end
 
-function SetSpecies(entity, species)
-    SetProtectedField(entity, "species", species)
+TexApi.setSpecies = function(species)
+    SetProtectedField(CurrentEntity(), "species", species)
 end

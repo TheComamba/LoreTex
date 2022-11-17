@@ -197,6 +197,7 @@ function Assert(caller, expected, received)
             else
             end
         end
+        Append(out, [[\newpage]])
         tex.print(out)
     end
 end

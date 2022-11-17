@@ -114,7 +114,7 @@ local function setYearAbbreviation(entity, abbr)
 end
 
 TexApi.setYearAbbreviation = function(abbr)
-    setYearAbbreviation(CurrentEntity(), abbr)
+    setYearAbbreviation(CurrentEntity, abbr)
 end
 
 local function setYearOffset(entity, offset)
@@ -130,7 +130,7 @@ local function setYearOffset(entity, offset)
 end
 
 TexApi.setYearOffset = function(offset)
-    setYearOffset(CurrentEntity(), offset)
+    setYearOffset(CurrentEntity, offset)
 end
 
 local function addMonth(arg)
@@ -141,7 +141,7 @@ local function addMonth(arg)
 end
 
 TexApi.addMonth = function(arg)
-    arg.entity = CurrentEntity()
+    arg.entity = CurrentEntity
     addMonth(arg)
 end
 

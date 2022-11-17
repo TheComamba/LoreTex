@@ -135,7 +135,7 @@ local function addHistory(arg)
 		return
 	end
 	local item = NewHistoryItem()
-	SetProtectedField(item, "originator", GetMainLabel(CurrentEntity()))
+	SetProtectedField(item, "originator", GetMainLabel(CurrentEntity))
 	setDay(item, arg.day)
 	SetYear(item, arg.year)
 	SetProtectedField(item, "event", arg.event)
@@ -171,7 +171,7 @@ TexApi.born = function (arg)
 		local fmt = GetEntity(arg.yearFmt)
 		arg.year = RemoveYearOffset(arg.year, fmt)
 	end
-	SetProtectedField(CurrentEntity(), "born", arg.year)
+	SetProtectedField(CurrentEntity, "born", arg.year)
 end
 
 TexApi.died = function (arg)
@@ -180,5 +180,5 @@ TexApi.died = function (arg)
 		local fmt = GetEntity(arg.yearFmt)
 		arg.year = RemoveYearOffset(arg.year, fmt)
 	end
-	SetProtectedField(CurrentEntity(), "died", arg.year)
+	SetProtectedField(CurrentEntity, "died", arg.year)
 end

@@ -24,16 +24,20 @@ function SetDescriptor(arg)
         end
         arg.entity[arg.descriptor][arg.subdescriptor] = arg.description
     end
-    local labels = GetLabels(arg.entity)
+    local knownLabels = GetLabels(arg.entity)
     local additionalLabels = ScanForCmd(arg.description, "label")
-    UniqueAppend(labels, additionalLabels)
-    RegisterEntityLabels(additionalLabels, arg.entity)
-    AddDescriptorsFromNotYetFound(arg.entity)
+    for key, label in pairs(additionalLabels) do
+        if not IsIn(label, knownLabels) then
+            Append(knownLabels, label)
+            RegisterEntityLabel(label, arg.entity)
+            MergeWithAlias(arg.entity, label)
+        end
+    end
     StopBenchmarking("SetDescriptor")
 end
 
 TexApi.setDescriptor = function(arg)
-    arg.entity = CurrentEntity()
+    arg.entity = CurrentEntity
     SetDescriptor(arg)
 end
 
@@ -71,18 +75,14 @@ local function newEntity(arg)
         return
     end
     StartBenchmarking("NewEntity")
-    local entity = {}
-    SetProtectedField(entity, "type", arg.type)
-    SetProtectedField(entity, "labels", { arg.label })
-    SetProtectedField(entity, "shortname", arg.shortname)
-    SetProtectedField(entity, "name", arg.name)
+    CurrentEntity = GetMutableEntityFromAll(arg.label)
+    SetProtectedField(CurrentEntity, "type", arg.type)
+    SetProtectedField(CurrentEntity, "shortname", arg.shortname)
+    SetProtectedField(CurrentEntity, "name", arg.name)
     local defaultLocation = GetScopedVariable("DefaultLocation")
     if not IsEmpty(defaultLocation) then
-        SetLocation(entity, defaultLocation)
+        SetLocation(CurrentEntity, defaultLocation)
     end
-    RegisterEntityLabels(arg.label, entity)
-    AddDescriptorsFromNotYetFound(entity)
-    AllEntities[#AllEntities + 1] = entity
     StopBenchmarking("NewEntity")
 end
 
@@ -101,9 +101,6 @@ end
 TexApi.newCharacter = newCharacter
 
 local function automatedChapters()
-    if not IsEmpty(NotYetFoundEntities) then
-        ComplainAboutNotYetFoundEntities()
-    end
     StartBenchmarking("AutomatedChapters")
     local processedEntities, mentionedRefs = ProcessEntities(AllEntities)
     local output = {}

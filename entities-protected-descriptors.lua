@@ -70,15 +70,15 @@ function GetProtectedDescriptor(key)
 end
 
 TexApi.setAgeExponent = function(exponent)
-    SetProtectedField(CurrentEntity(), "ageExponent", exponent)
+    SetProtectedField(CurrentEntity, "ageExponent", exponent)
 end
 
 TexApi.setAgeFactor = function(factor)
-    SetProtectedField(CurrentEntity(), "ageFactor", factor)
+    SetProtectedField(CurrentEntity, "ageFactor", factor)
 end
 
 TexApi.setAgeModifierMixing = function(species1, species2)
-    SetProtectedField(CurrentEntity(), "ageMixing", { species1, species2 })
+    SetProtectedField(CurrentEntity, "ageMixing", { species1, species2 })
 end
 
 local function addParent(arg)
@@ -91,7 +91,7 @@ local function addParent(arg)
 end
 
 TexApi.addParent = function(arg)
-    arg.entity = CurrentEntity()
+    arg.entity = CurrentEntity
     addParent(arg)
 end
 
@@ -101,13 +101,13 @@ function SetLocation(entity, location)
 end
 
 TexApi.setLocation = function(location)
-    SetLocation(CurrentEntity(), location)
+    SetLocation(CurrentEntity, location)
 end
 
 TexApi.setSecret = function()
-    SetProtectedField(CurrentEntity(), "isSecret", true)
+    SetProtectedField(CurrentEntity, "isSecret", true)
 end
 
 TexApi.setSpecies = function(species)
-    SetProtectedField(CurrentEntity(), "species", species)
+    SetProtectedField(CurrentEntity, "species", species)
 end

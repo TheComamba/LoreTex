@@ -1,31 +1,18 @@
 AllEntities = {}
-NotYetFoundEntities = {}
+CurrentEntity = nil
 local labelToEntity = {}
 IsShowSecrets = false
 RevealedLabels = {}
 
 function ResetEntities()
     AllEntities = {}
-    NotYetFoundEntities = {}
+    CurrentEntity = nil
     labelToEntity = {}
     IsShowSecrets = false
     RevealedLabels = {}
 end
 
 ResetEntities()
-
-function ComplainAboutNotYetFoundEntities()
-    for label, entity in pairs(NotYetFoundEntities) do
-        if not IsIn(label, UnfoundRefs) then
-            LogError("Entity with label \"" .. label .. "\" was mentioned, but not created.")
-            Append(UnfoundRefs, label)
-        end
-    end
-end
-
-function CurrentEntity()
-    return AllEntities[#AllEntities]
-end
 
 function GetLabels(entity)
     local labels = GetProtectedField(entity, "labels")
@@ -86,22 +73,18 @@ function GetEntitiesOfType(type, list)
     return out
 end
 
-function RegisterEntityLabels(labels, entity)
-    if type(labels) ~= "table" then
-        labels = { labels }
-    end
-    for key, label in pairs(labels) do
-        labelToEntity[label] = entity
-    end
+function RegisterEntityLabel(label, entity)
+    labelToEntity[label] = entity
 end
 
 function GetMutableEntityFromAll(label)
     local entity = labelToEntity[label]
     if entity == nil then
-        if NotYetFoundEntities[label] == nil then
-            NotYetFoundEntities[label] = {}
-        end
-        entity = NotYetFoundEntities[label]
+        local newEntity = {}
+        AddToProtectedField(newEntity, "labels", label)
+        AllEntities[#AllEntities + 1] = newEntity
+        RegisterEntityLabel(label, newEntity)
+        entity = labelToEntity[label]
     end
     return entity
 end
@@ -116,34 +99,6 @@ function GetEntity(label)
     end
     StopBenchmarking("GetEntity")
     return entity
-end
-
-function AddDescriptorsFromNotYetFound(entity)
-    for key, label in pairs(GetLabels(entity)) do
-        local preliminaryEntity = NotYetFoundEntities[label]
-        if preliminaryEntity ~= nil then
-            for field, value in pairs(preliminaryEntity) do
-                if entity[field] == nil then
-                    entity[field] = value
-                elseif type(entity[field]) == "table" and type(value) == "table" then
-                    for key, subvalue in pairs(value) do
-                        if type(key) == "number" then
-                            entity[field][#entity[field] + 1] = subvalue
-                        else
-                            if entity[field][key] == nil then
-                                entity[field][key] = subvalue
-                            else
-                                LogError("Tried to add already existing field " .. DebugPrint(key))
-                            end
-                        end
-                    end
-                else
-                    LogError("Tried to add already existing field " .. DebugPrint(field))
-                end
-            end
-            NotYetFoundEntities[label] = nil
-        end
-    end
 end
 
 function IsEntitySecret(entity)
@@ -197,7 +152,7 @@ local function joinEntitiesError(arg)
     LogError(errorMessage)
 end
 
-local function joinEntities(mainEntity, aliasEntity)
+local function mergeEntities(mainEntity, aliasEntity)
     for key, val in pairs(aliasEntity) do
         if IsEmpty(mainEntity[key]) then
             mainEntity[key] = val
@@ -217,13 +172,11 @@ local function joinEntities(mainEntity, aliasEntity)
     end
 end
 
-function JoinEntityabels(mainLabel, aliases)
-    local mainEntity = GetMutableEntityFromAll(mainLabel)
-    for unused, alias in pairs(aliases) do
-        local aliasEntity = labelToEntity[alias]
-        if not IsEmpty(aliasEntity) then
-            joinEntities(mainEntity, aliasEntity)
-        end
-        labelToEntity[alias] = labelToEntity[mainLabel]
+function MergeWithAlias(mainEntity, alias)
+    local aliasEntity = labelToEntity[alias]
+    if not IsEmpty(aliasEntity) then
+        mergeEntities(mainEntity, aliasEntity)
     end
+    local mainLabel = GetMainLabel(mainEntity)
+    labelToEntity[alias] = labelToEntity[mainLabel]
 end

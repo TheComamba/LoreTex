@@ -177,6 +177,5 @@ function MergeWithAlias(mainEntity, alias)
     if not IsEmpty(aliasEntity) then
         mergeEntities(mainEntity, aliasEntity)
     end
-    local mainLabel = GetMainLabel(mainEntity)
-    labelToEntity[alias] = labelToEntity[mainLabel]
+    RegisterEntityLabel(alias, mainEntity)
 end

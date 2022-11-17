@@ -29,7 +29,6 @@ function SetDescriptor(arg)
     for key, label in pairs(additionalLabels) do
         if not IsIn(label, knownLabels) then
             Append(knownLabels, label)
-            RegisterEntityLabel(label, arg.entity)
             MergeWithAlias(arg.entity, label)
         end
     end

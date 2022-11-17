@@ -182,4 +182,5 @@ function JoinEntities(arg)
     if not IsArgOk("JoinEntities", arg, { "main", "aliases" }) then
         return
     end
+    
 end

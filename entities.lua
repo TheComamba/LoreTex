@@ -178,4 +178,9 @@ function MergeWithAlias(mainEntity, alias)
         mergeEntities(mainEntity, aliasEntity)
     end
     RegisterEntityLabel(alias, mainEntity)
+    for key, entity in pairs(AllEntities) do
+        if entity == aliasEntity then
+            AllEntities[key] = mainEntity
+        end
+    end
 end

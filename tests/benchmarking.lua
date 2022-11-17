@@ -15,11 +15,10 @@ function CreateBenchmarkingTest(sizeStr)
     else
         size = numcast
     end
+    TexApi.setCurrentYear(1400)
     for i = 1, size do
         TexApi.newEntity { type = "places", label = "place-" .. i, name = "Place " .. i }
-        TexApi.addHistory { originator = "place-" .. i,
-            year = -i,
-            event = [[Birth of \reference{char-]] .. i .. [[} \birthof{char-]] .. i .. [[}]] }
+        TexApi.addHistory { year = -i, event = [[Birth of \reference{char-]] .. i .. [[} \birthof{char-]] .. i .. [[}]] }
         AddRef("place-" .. i, PrimaryRefs)
 
         TexApi.newEntity { type = "species", label = "species-" .. i, name = "Species " .. i }

@@ -5,7 +5,7 @@ TexApi.newEntity { type = "places", label = "test-1", name = "Test 1" }
 TexApi.newEntity { type = "places", label = "test-2", name = "Test 2" }
 TexApi.addHistory { year = -10, event = [[Event that concerns \reference{test-1} and \itref{test-2}.]] }
 TexApi.addHistory { year = 10, event = [[Event in the future.]] }
-AddRef("test-1", PrimaryRefs)
+TexApi.makeEntityPrimary("test-1")
 
 local function generateExpected(isSecondAdded)
     local out = {}
@@ -53,7 +53,7 @@ local expected = generateExpected(false)
 
 Assert("one-entity-with-history", expected, out)
 
-AddRef("test-2", PrimaryRefs)
+TexApi.makeEntityPrimary("test-2")
 
 out = TexApi.automatedChapters()
 

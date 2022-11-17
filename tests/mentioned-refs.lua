@@ -1,10 +1,10 @@
 TexApi.newEntity { type = "items", label = "primary-item", name = "Primary Item" }
-AddRef("primary-item", PrimaryRefs)
+TexApi.makeEntityPrimary("primary-item")
 TexApi.setDescriptor { descriptor = "Description", description = [[Different than \nameref{other-item}.]] }
-TexApi.addParent{ parentLabel =  "some-organisation"}
+TexApi.addParent { parentLabel = "some-organisation" }
 
 TexApi.newEntity { type = "items", label = "mentioned-item", name = "Mentioned Item" }
-AddRef("mentioned-item", MentionedRefs)
+TexApi.mention("mentioned-item")
 
 TexApi.newEntity { type = "items", label = "other-item", name = "Other Item" }
 

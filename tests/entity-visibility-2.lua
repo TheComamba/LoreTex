@@ -1,7 +1,7 @@
 TexApi.setCurrentYear(0)
 
 TexApi.newEntity { type = "stories", label = "teststory", name = "Teststory" }
-AddRef("teststory", PrimaryRefs)
+TexApi.makeEntityPrimary("teststory")
 TexApi.addHistory { year = -10, event = [[Concerns \nameref{secret-item}.]] }
 
 TexApi.newEntity { type = "items", label = "secret-item", name = "Secret Item" }
@@ -65,7 +65,7 @@ expected = generateExpected(false)
 received = TexApi.automatedChapters()
 Assert("entity-secrecey-two-show-secrets", expected, received)
 
-AddRef("secret-item", PrimaryRefs)
+TexApi.makeEntityPrimary("secret-item")
 IsShowSecrets = false
 expected = generateExpected(true)
 received = TexApi.automatedChapters()

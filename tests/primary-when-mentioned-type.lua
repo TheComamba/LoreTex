@@ -5,7 +5,7 @@ TexApi.newEntity { type = "npcs", label = "peter", name = "Peter" }
 TexApi.setSpecies("human")
 TexApi.newEntity { type = "species", label = "human", name = "Human" }
 TexApi.setAgeFactor(0)
-AddRef("karl", MentionedRefs)
+TexApi.mention("karl")
 
 local function generateExpected(primaryType, isKarlReferenced)
     local out = {}
@@ -91,7 +91,7 @@ out = TexApi.automatedChapters()
 expected = generateExpected("npcs", false)
 Assert("npcs-are-primary-types-one-is-only-mentioned", expected, out)
 
-AddRef("karl", PrimaryRefs)
+TexApi.makeEntityPrimary("karl")
 
 PrimaryRefWhenMentionedTypes = {}
 out = TexApi.automatedChapters()

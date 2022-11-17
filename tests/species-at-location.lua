@@ -6,7 +6,7 @@ TexApi.setLocation("tattooine")
 TexApi.newEntity { type = "species", label = "jawa", name = "Jawa" }
 TexApi.setLocation("tattooine")
 
-AddRef("tattooine", PrimaryRefs)
+TexApi.makeEntityPrimary("tattooine")
 
 local expected = {}
 Append(expected, [[\chapter{]] .. CapFirst(Tr("places")) .. [[}]])

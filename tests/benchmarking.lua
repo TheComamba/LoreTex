@@ -19,21 +19,21 @@ function CreateBenchmarkingTest(sizeStr)
     for i = 1, size do
         TexApi.newEntity { type = "places", label = "place-" .. i, name = "Place " .. i }
         TexApi.addHistory { year = -i, event = [[Birth of \reference{char-]] .. i .. [[} \birthof{char-]] .. i .. [[}]] }
-        AddRef("place-" .. i, PrimaryRefs)
+        TexApi.makeEntityPrimary("place-" .. i)
 
         TexApi.newEntity { type = "species", label = "species-" .. i, name = "Species " .. i }
         TexApi.setAgeFactor(i)
-        AddRef("species-" .. i, PrimaryRefs)
+        TexApi.makeEntityPrimary("species-" .. i)
 
         TexApi.newEntity { type = "organisations", label = "organisation-" .. i, name = "Organisation " .. i }
-        AddRef("organisation-" .. i, PrimaryRefs)
+        TexApi.makeEntityPrimary("organisation-" .. i)
 
         TexApi.newCharacter { label = "char-" .. i, name = "Character " .. i }
         TexApi.setSpecies("species-" .. i)
         TexApi.setLocation("place-" .. i)
         TexApi.addParent { parentLabel = "organisation-" .. i }
         TexApi.setDescriptor { descriptor = "Best Friend", description = [[\nameref{mentioned-char-]] .. i .. [[}]] }
-        AddRef("char-" .. i, PrimaryRefs)
+        TexApi.makeEntityPrimary("char-" .. i)
 
         TexApi.newCharacter { label = "mentioned-char-" .. i, name = "Mentioned Character " .. i }
     end

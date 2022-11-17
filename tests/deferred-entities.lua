@@ -5,8 +5,8 @@ TexApi.addHistory { year = 0, event = [[Mentions \nameref{deferred-entity-2-alia
 TexApi.newEntity { label = "deferred-entity-1", type = "places", name = "Deferred 1" }
 TexApi.newEntity { label = "deferred-entity-2", type = "places", name = "Deferred 2" }
 TexApi.setDescriptor { descriptor = "Alias", description = [[\label{deferred-entity-2-alias}]] }
-AddRef("deferred-entity-1", PrimaryRefs)
-AddRef("deferred-entity-2", PrimaryRefs)
+TexApi.makeEntityPrimary("deferred-entity-1")
+TexApi.makeEntityPrimary("deferred-entity-2")
 local expected = {}
 Append(expected, [[\chapter{]] .. CapFirst(Tr("places")) .. [[}]])
 Append(expected, [[\section{]] .. CapFirst(Tr("places")) .. [[}]])
@@ -40,13 +40,13 @@ Assert("Deferred Entities", expected, out)
 
 ResetEntities()
 
-TexApi.newEntity{type = "npcs", label = "some-npc", name = "Some NPC"}
+TexApi.newEntity { type = "npcs", label = "some-npc", name = "Some NPC" }
 TexApi.setLocation("some-place")
-TexApi.addParent{parentLabel = "orga-sublabel", relationship = "Code-Cleaner"}
-AddRef("some-npc", PrimaryRefs)
-TexApi.newEntity{type = "places", label = "some-place", name = "Some Place"}
-TexApi.newEntity{type = "organisations", label = "some-orga", name = "Some Orga"}
-TexApi.setDescriptor{descriptor = "Orga Sublabel", description = [[\label{orga-sublabel}]]}
+TexApi.addParent { parentLabel = "orga-sublabel", relationship = "Code-Cleaner" }
+TexApi.makeEntityPrimary("some-npc")
+TexApi.newEntity { type = "places", label = "some-place", name = "Some Place" }
+TexApi.newEntity { type = "organisations", label = "some-orga", name = "Some Orga" }
+TexApi.setDescriptor { descriptor = "Orga Sublabel", description = [[\label{orga-sublabel}]] }
 
 expected = {}
 Append(expected, [[\chapter{]] .. CapFirst(Tr("characters")) .. [[}]])

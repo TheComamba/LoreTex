@@ -13,7 +13,7 @@ TexApi.setDescriptor { descriptor = "More Subplaces", description = [[\subparagr
 TexApi.newEntity { type = "species", label = "species", name = "Species" }
 TexApi.setDescriptor { descriptor = "Subspecies", description = [[\label{subspecies}]] }
 
-AddRef("some-npc", PrimaryRefs)
+TexApi.makeEntityPrimary("some-npc")
 
 local out = TexApi.automatedChapters()
 
@@ -54,18 +54,19 @@ Assert("sub-label", expected, out)
 
 ResetEnvironment()
 
-TexApi.newEntity{type = "npcs", label = "also-primary", name = "Also Primary"}
-TexApi.setDescriptor{descriptor = "Sublabel 1", description = [[\label{sublabel-1}]]}
-TexApi.setDescriptor{descriptor = "Some Paragraph", description = [[\subparagraph{Sublabel 2}\label{sublabel-2}]]}
-AddRef("sublabel-1", MentionedRefs)
-AddRef("sublabel-2", MentionedRefs)
-AddRef("also-primary", PrimaryRefs)
+TexApi.newEntity { type = "npcs", label = "also-primary", name = "Also Primary" }
+TexApi.setDescriptor { descriptor = "Sublabel 1", description = [[\label{sublabel-1}]] }
+TexApi.setDescriptor { descriptor = "Some Paragraph", description = [[\subparagraph{Sublabel 2}\label{sublabel-2}]] }
+TexApi.mention("sublabel-1")
+TexApi.mention("sublabel-2")
+TexApi.makeEntityPrimary("also-primary")
 
-TexApi.newEntity{type = "npcs", label = "not-primary", name = "Not Primary"}
-TexApi.setDescriptor{descriptor = "Sublabel 3", description = [[\label{sublabel-3}]]}
-TexApi.setDescriptor{descriptor = "Some ignored Paragraph", description = [[\subparagraph{Some ignored paragraph}\label{ignored-label}\subparagraph{Sublabel 4}\label{sublabel-4}]]}
-AddRef("sublabel-3", MentionedRefs)
-AddRef("sublabel-4", MentionedRefs)
+TexApi.newEntity { type = "npcs", label = "not-primary", name = "Not Primary" }
+TexApi.setDescriptor { descriptor = "Sublabel 3", description = [[\label{sublabel-3}]] }
+TexApi.setDescriptor { descriptor = "Some ignored Paragraph",
+    description = [[\subparagraph{Some ignored paragraph}\label{ignored-label}\subparagraph{Sublabel 4}\label{sublabel-4}]] }
+TexApi.mention("sublabel-3")
+TexApi.mention("sublabel-4")
 
 local expected = {
     [[\chapter{]] .. CapFirst(Tr("characters")) .. [[}]],

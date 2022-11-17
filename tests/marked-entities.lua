@@ -4,12 +4,12 @@ TexApi.newEntity { type = "npcs", label = "flora", shortname = "", name = "Flora
 TexApi.born { year = -10, event = [[\nameref{flora} is born.\birthof{flora}]] }
 TexApi.died { year = -5, event = [[\nameref{flora} dies.\deathof{flora}]] }
 
-AddRef("flora", PrimaryRefs)
+TexApi.makeEntityPrimary("flora")
 
 TexApi.newEntity { type = "npcs", label = "ramona", name = "Ramona" }
 TexApi.setSecret()
 TexApi.reveal("ramona")
-AddRef("ramona", PrimaryRefs)
+TexApi.makeEntityPrimary("ramona")
 
 local expected = {}
 Append(expected, [[\chapter{]] .. CapFirst(Tr("characters")) .. [[}]])

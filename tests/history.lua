@@ -22,7 +22,7 @@ TexApi.addHistory { year = 1, day = 5, event = [[Event in less than a year.]] }
 TexApi.addHistory { year = 1, event = [[Event next year.]] }
 TexApi.addHistory { year = 1, day = 15, event = [[Event next year, with day.]] }
 
-AddRef("test-1", PrimaryRefs)
+TexApi.makeEntityPrimary("test-1")
 
 TexApi.newEntity { type = "places", label = "test-2", name = "Test 2" }
 TexApi.addHistory { year = -5,

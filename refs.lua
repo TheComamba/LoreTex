@@ -14,22 +14,6 @@ end
 
 ResetRefs()
 
-local function addSingleRef(label, refs)
-    if label ~= nil and not IsIn(label, refs) then
-        refs[#refs + 1] = label
-    end
-end
-
-function AddRef(labels, refs)
-    if type(labels) == "string" then
-        addSingleRef(labels, refs)
-    elseif type(labels) == "table" then
-        for key, label in pairs(labels) do
-            AddRef(label, refs)
-        end
-    end
-end
-
 function IsContainsPrimary(list)
     for key, label in pairs(list) do
         if IsIn(label, PrimaryRefs) then
@@ -124,7 +108,7 @@ end
 
 function AddAllEntitiesToPrimaryRefs()
     for key, entity in pairs(AllEntities) do
-        AddRef(GetLabels(entity), PrimaryRefs)
+        UniqueAppend(PrimaryRefs, GetLabels(entity))
     end
 end
 
@@ -133,7 +117,7 @@ function MakeTypePrimaryWhenMentioned(type)
 end
 
 function MakeEntityAndChildrenPrimary(label)
-    AddRef(label, PrimaryRefs)
+    UniqueAppend(PrimaryRefs, label)
     local entity = GetEntity(label)
     if IsEmpty(entity) then
         LogError("Entity with label \"" .. label .. "\" not found.")
@@ -141,6 +125,14 @@ function MakeEntityAndChildrenPrimary(label)
     end
     local children = GetProtectedField(entity, "children")
     if not IsEmpty(children) then
-        AddRef(children, PrimaryRefs)
+        UniqueAppend(PrimaryRefs, children)
     end
+end
+
+TexApi.makeEntityPrimary = function(label)
+    UniqueAppend(PrimaryRefs, label)
+end
+
+TexApi.mention = function(label)
+    UniqueAppend(MentionedRefs, label)
 end

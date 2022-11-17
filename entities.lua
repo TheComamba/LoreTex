@@ -94,7 +94,7 @@ function GetEntity(label)
     local entity = ReadonlyTable(labelToEntity[label])
     if IsEmpty(entity) and not IsIn(label, UnfoundRefs) then
         LogError("Entity with label \"" .. label .. "\" not found.")
-        AddRef(label, UnfoundRefs)
+        Append(UnfoundRefs, label)
         entity = {}
     end
     StopBenchmarking("GetEntity")

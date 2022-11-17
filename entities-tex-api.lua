@@ -42,14 +42,14 @@ end
 
 local function declarePC(label)
     PCs[#PCs + 1] = label
-    AddRef(label, PrimaryRefs)
+    UniqueAppend(PrimaryRefs, label)
 end
 
 TexApi.declarePC = declarePC
 
 local function reveal(label)
-    AddRef(label, RevealedLabels)
-    AddRef(label, PrimaryRefs)
+    UniqueAppend(RevealedLabels, label)
+    UniqueAppend(PrimaryRefs, label)
 end
 
 TexApi.reveal = reveal
@@ -59,7 +59,7 @@ function MakePrimaryIf(condition)
     for key, entity in pairs(AllEntities) do
         if (condition(entity)) then
             local label = GetMainLabel(entity)
-            AddRef(label, PrimaryRefs)
+            UniqueAppend(PrimaryRefs, label)
         end
     end
     StopBenchmarking("MakePrimaryIf")

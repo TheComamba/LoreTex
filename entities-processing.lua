@@ -100,7 +100,7 @@ function AddAutomatedDescriptors(entity)
     StopBenchmarking("AddAutomatedDescriptors")
 end
 
-function IsEntityInProcessed(label)
+local function isEntityInProcessed(label)
     return labelToProcessedEntity[label] ~= nil
 end
 
@@ -115,7 +115,7 @@ local function addPrimariesWhenMentioned(entities, mentionedRefsHere, allMention
 end
 
 function AddProcessedEntity(entities, entity, allMentionedRefs)
-    if IsEntityShown(entity) and not IsEntityInProcessed(GetMainLabel(entity)) then
+    if IsEntityShown(entity) and not isEntityInProcessed(GetMainLabel(entity)) then
         local newEntity = DeepCopy(entity)
         MarkDead(newEntity)
         MarkSecret(newEntity)
@@ -126,6 +126,16 @@ function AddProcessedEntity(entities, entity, allMentionedRefs)
         addPrimariesWhenMentioned(entities, mentionedRefsHere, allMentionedRefs)
         UniqueAppend(allMentionedRefs, mentionedRefsHere)
     end
+end
+
+local function removeProcessedEntities(mentionedRefs)
+    local onlyMentioned = {}
+    for key, label in pairs(mentionedRefs) do
+        if not isEntityInProcessed(label) then
+            UniqueAppend(onlyMentioned, label)
+        end
+    end
+    return onlyMentioned
 end
 
 function ProcessEntities(entitiesIn)
@@ -140,6 +150,7 @@ function ProcessEntities(entitiesIn)
         AddProcessedEntity(entitiesOut, entity, mentionedRefsHere)
         StopBenchmarking("addProcessedEntity")
     end
+    mentionedRefsHere = removeProcessedEntities(mentionedRefsHere)
     StopBenchmarking("ProcessEntities")
     return entitiesOut, mentionedRefsHere
 end

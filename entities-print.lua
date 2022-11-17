@@ -131,13 +131,11 @@ function PrintOnlyMentionedChapter(mentionedRefs)
         if key == 1 then
             Append(out, TexCmd("chapter", CapFirst(Tr("only-mentioned"))))
         end
-        if not IsEntityInProcessed(label) then
-            local name = LabelToName(label)
-            if not IsEmpty(name) then
-                Append(out, TexCmd("subparagraph", name))
-                Append(out, TexCmd("label", label))
-                Append(out, TexCmd("hspace", "1cm"))
-            end
+        local name = LabelToName(label)
+        if not IsEmpty(name) then
+            Append(out, TexCmd("subparagraph", name))
+            Append(out, TexCmd("label", label))
+            Append(out, TexCmd("hspace", "1cm"))
         end
     end
     StopBenchmarking("PrintOnlyMentionedChapter")

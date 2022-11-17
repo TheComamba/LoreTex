@@ -51,3 +51,47 @@ local expected = {
 }
 
 Assert("sub-label", expected, out)
+
+ResetEnvironment()
+
+TexApi.newEntity{type = "npcs", label = "also-primary", name = "Also Primary"}
+TexApi.setDescriptor{descriptor = "Sublabel 1", description = [[\label{sublabel-1}]]}
+TexApi.setDescriptor{descriptor = "Some Paragraph", description = [[\subparagraph{Sublabel 2}\label{sublabel-2}]]}
+AddRef("sublabel-1", MentionedRefs)
+AddRef("sublabel-2", MentionedRefs)
+AddRef("also-primary", PrimaryRefs)
+
+TexApi.newEntity{type = "npcs", label = "not-primary", name = "Not Primary"}
+TexApi.setDescriptor{descriptor = "Sublabel 3", description = [[\label{sublabel-3}]]}
+TexApi.setDescriptor{descriptor = "Some ignored Paragraph", description = [[\subparagraph{Some ignored paragraph}\label{ignored-label}\subparagraph{Sublabel 4}\label{sublabel-4}]]}
+AddRef("sublabel-3", MentionedRefs)
+AddRef("sublabel-4", MentionedRefs)
+
+local expected = {
+    [[\chapter{]] .. CapFirst(Tr("characters")) .. [[}]],
+    [[\section{]] .. CapFirst(Tr("npcs")) .. [[}]],
+    [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("npcs")) .. [[}]],
+    [[\begin{itemize}]],
+    [[\item \nameref{also-primary}]],
+    [[\item \nameref{sublabel-1}]],
+    [[\item \nameref{sublabel-2}]],
+    [[\end{itemize}]],
+    [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]],
+    [[\subsubsection{Also Primary}]],
+    [[\label{also-primary}]],
+    [[\paragraph{Some Paragraph}]],
+    [[\subparagraph{Sublabel 2}\label{sublabel-2}]],
+    [[\paragraph{Sublabel 1}]],
+    [[\label{sublabel-1}]],
+    [[\chapter{]] .. CapFirst(Tr("only-mentioned")) .. [[}]],
+    [[\subparagraph{Sublabel 3}]],
+    [[\label{sublabel-3}]],
+    [[\hspace{1cm}]],
+    [[\subparagraph{Sublabel 4}]],
+    [[\label{sublabel-4}]],
+    [[\hspace{1cm}]],
+}
+
+local out = TexApi.automatedChapters()
+
+Assert("Only sublabel mentioned", expected, out)

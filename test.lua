@@ -28,7 +28,7 @@ local apiFunctionUsage = {}
 
 local testFunctions = {}
 
-testFunctions.resetEnvironment = function()
+function ResetEnvironment()
     ResetDates()
     ResetEntities()
     ResetRefs()
@@ -219,7 +219,7 @@ local function runTests(testFiles)
     end
 
     for key, testfile in pairs(testFiles) do
-        testFunctions.resetEnvironment()
+        ResetEnvironment()
         PushScopedVariables()
         SelectLanguage("english")
         local currentlyFailed = numFailed
@@ -227,7 +227,7 @@ local function runTests(testFiles)
         PopScopedVariables()
 
         if currentlyFailed == numFailed then
-            testFunctions.resetEnvironment()
+            ResetEnvironment()
             PushScopedVariables()
             RandomiseDictionary()
             dofile(RelativePath .. "/tests/" .. testfile .. ".lua")

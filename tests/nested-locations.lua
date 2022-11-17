@@ -1,13 +1,13 @@
 TexApi.newEntity { type = "places", label = "place-1", name = "Place 1" }
 TexApi.newEntity { type = "places", label = "place-2", name = "Place 2" }
-SetLocation(CurrentEntity(), "place-1")
+TexApi.setLocation("place-1")
 TexApi.newEntity { type = "places", label = "place-3", name = "Place 3" }
-SetLocation(CurrentEntity(), "place-2")
+TexApi.setLocation("place-2")
 TexApi.newEntity { type = "classes", label = "class-1", name = "Class 1" }
 TexApi.newEntity { type = "classes", label = "class-2", name = "Class 2" }
-SetLocation(CurrentEntity(), "class-1")
+TexApi.setLocation("class-1")
 TexApi.newEntity { type = "classes", label = "class-3", name = "Class 3" }
-SetLocation(CurrentEntity(), "class-2")
+TexApi.setLocation("class-2")
 AddAllEntitiesToPrimaryRefs()
 
 local expected = {}

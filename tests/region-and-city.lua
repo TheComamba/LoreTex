@@ -1,10 +1,10 @@
 TexApi.newEntity { type = "places", label = "test-continent", name = "Test Continent" }
 
 TexApi.newEntity { type = "places", label = "test-region", name = "Test Region" }
-SetLocation(CurrentEntity(), "test-continent")
+TexApi.setLocation("test-continent")
 
 TexApi.newEntity { type = "places", label = "test-city", name = "Test City" }
-SetLocation(CurrentEntity(), "test-region")
+TexApi.setLocation("test-region")
 
 AddAllEntitiesToPrimaryRefs()
 

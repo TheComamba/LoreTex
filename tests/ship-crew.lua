@@ -1,7 +1,7 @@
 TexApi.newEntity { type = "places", label = "ocean", name = "Ocean" }
 
 TexApi.newEntity { type = "vehicles", label = "aurora", name = "Aurora" }
-SetLocation(CurrentEntity(), "ocean")
+TexApi.setLocation("ocean")
 
 SetScopedVariable("DefaultLocation", "aurora")
 

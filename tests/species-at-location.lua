@@ -1,10 +1,10 @@
 TexApi.newEntity { type = "places", label = "tattooine", name = "Tattooine" }
 
 TexApi.newEntity { type = "species", label = "tusken", name = "Tusken" }
-SetLocation(CurrentEntity(), "tattooine")
+TexApi.setLocation("tattooine")
 
 TexApi.newEntity { type = "species", label = "jawa", name = "Jawa" }
-SetLocation(CurrentEntity(), "tattooine")
+TexApi.setLocation("tattooine")
 
 AddRef("tattooine", PrimaryRefs)
 

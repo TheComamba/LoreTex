@@ -181,9 +181,49 @@ function IsEntityShown(entity)
     end
 end
 
-function JoinEntities(arg)
-    if not IsArgOk("JoinEntities", arg, { "main", "aliases" }) then
-        return
-    end
+local function joinEntitiesError(arg)
+    local mainLabel = GetMainLabel(arg.main)
+    local alias = GetMainLabel(arg.aliasEntity)
+    local errorMessage = {}
+    Append(errorMessage, "Collision while joining entities \"")
+    Append(errorMessage, mainLabel)
+    Append(errorMessage, "\" and \"")
+    Append(errorMessage, alias)
+    Append(errorMessage, "\": Key \"")
+    Append(errorMessage, arg.key)
+    Append(errorMessage, "\" defined with different ")
+    Append(errorMessage, arg.errorType)
+    Append(errorMessage, ".")
+    LogError(errorMessage)
+end
 
+local function joinEntities(mainEntity, aliasEntity)
+    for key, val in pairs(aliasEntity) do
+        if IsEmpty(mainEntity[key]) then
+            mainEntity[key] = val
+        else
+            if type(val) ~= type(mainEntity[key]) then
+                joinEntitiesError { main = mainEntity, aliasEntity = aliasEntity, key = key, errorType = "types" }
+                return
+            elseif type(val) ~= "table" then
+                if val ~= mainEntity[key] then
+                    joinEntitiesError { main = mainEntity, aliasEntity = aliasEntity, key = key, errorType = "values" }
+                    return
+                end
+            else
+                JoinTables(val, mainEntity[key])
+            end
+        end
+    end
+end
+
+function JoinEntityabels(mainLabel, aliases)
+    local mainEntity = GetMutableEntityFromAll(mainLabel)
+    for unused, alias in pairs(aliases) do
+        local aliasEntity = labelToEntity[alias]
+        if not IsEmpty(aliasEntity) then
+            joinEntities(mainEntity, aliasEntity)
+        end
+        labelToEntity[alias] = labelToEntity[mainLabel]
+    end
 end

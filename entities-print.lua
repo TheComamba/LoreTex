@@ -51,7 +51,10 @@ function LabelToName(label)
             end
         end
     end
-    LogError("Label \"" .. label .. "\" not found.")
+    if not IsIn(label, UnfoundRefs) then
+        LogError("Label \"" .. label .. "\" not found.")
+        Append(UnfoundRefs, label)
+    end
     return label:upper()
 end
 

@@ -6,6 +6,9 @@ local function logErrorOnModify(table, key, value)
 end
 
 function ReadonlyTable(table)
+	if table == nil then
+		table = {}
+	end
 	local proxy = {}
 	local metaTable = {}
 	metaTable.__index = table

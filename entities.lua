@@ -16,7 +16,10 @@ ResetEntities()
 
 function ComplainAboutNotYetFoundEntities()
     for label, entity in pairs(NotYetFoundEntities) do
-        LogError("Entity with label \"" .. label .. "\" was mentioned, but not created.")
+        if not IsIn(label, UnfoundRefs) then
+            LogError("Entity with label \"" .. label .. "\" was mentioned, but not created.")
+            Append(UnfoundRefs, label)
+        end
     end
 end
 
@@ -105,7 +108,7 @@ end
 
 function GetEntity(label)
     StartBenchmarking("GetEntity")
-    local entity = ReadonlyTable(GetMutableEntityFromAll(label))
+    local entity = ReadonlyTable(labelToEntity[label])
     if IsEmpty(entity) and not IsIn(label, UnfoundRefs) then
         LogError("Entity with label \"" .. label .. "\" not found.")
         AddRef(label, UnfoundRefs)
@@ -182,5 +185,5 @@ function JoinEntities(arg)
     if not IsArgOk("JoinEntities", arg, { "main", "aliases" }) then
         return
     end
-    
+
 end

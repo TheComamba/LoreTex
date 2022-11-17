@@ -38,7 +38,7 @@ local emptyThings = {
     nil, {}, { {}, { { {}, {} } } }, "", " \t \n ", [[ 
 
 
-    ]]
+    ]], ReadonlyTable({}), ReadonlyTable(nil)
 }
 for key, thing in pairs(emptyThings) do
     Assert("IsEmpty", true, IsEmpty(thing))

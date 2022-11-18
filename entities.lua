@@ -173,15 +173,16 @@ local function mergeEntities(mainEntity, aliasEntity)
 end
 
 function MergeWithAlias(mainEntity, alias)
-    local aliasEntity = labelToEntity[alias]
-    if not IsEmpty(aliasEntity) then
+    local aliasEntity = GetMutableEntityFromAll(alias)
+    if not IsEmpty(aliasEntity) then --TODO: This is currently always true
         mergeEntities(mainEntity, aliasEntity)
-    end
-    RegisterEntityLabel(alias, mainEntity)
-    for key, entity in pairs(AllEntities) do
-        if entity == aliasEntity then
-            AllEntities[key] = mainEntity
-        end
+        RegisterEntityLabel(alias, mainEntity)
+        local mt = {}
+        mt.__index = mainEntity
+        mt.__newindex = mainEntity
+        mt.__pairs = function() return pairs(mainEntity) end
+        mt.__ipairs = function() return ipairs(mainEntity) end
+        setmetatable(aliasEntity, mt)
     end
 end
 

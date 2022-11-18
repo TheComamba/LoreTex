@@ -3,21 +3,15 @@ function AddParentDescriptorsToChild(child)
     local parentList = {}
     local parentsAndRelationships = GetProtectedField(child, "parents")
     if parentsAndRelationships ~= nil then
-        if type(parentsAndRelationships) == "string" then
-            parentsAndRelationships = { parentsAndRelationships }
-        end
         table.sort(parentsAndRelationships, CompareAffiliations)
         for key, parentAndRelationship in pairs(parentsAndRelationships) do
-            if type(parentAndRelationship) == "string" then
-                parentAndRelationship = { parentAndRelationship }
-            end
             local parent = parentAndRelationship[1]
             local relationship = parentAndRelationship[2]
             if GetProtectedDescriptor("location") ~= relationship then
                 if IsEmpty(relationship) then
                     relationship = CapFirst(Tr("member"))
-                    if not IsEmpty(parent) and IsEntityShown(parent) then
-                    end
+                end
+                if not IsEmpty(parent) and IsEntityShown(parent) then
                     local parentLabel = GetMainLabel(parent)
                     local description = relationship ..
                         " " .. Tr("of") .. " " .. TexCmd("nameref ", parentLabel) .. "."

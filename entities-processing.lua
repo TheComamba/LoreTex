@@ -57,11 +57,11 @@ local function addSingleChildDescriptorToParent(child, parent, relationships)
     UniqueAppend(parent[descriptor], table.concat(content))
 end
 
-local function getRelationships(child, parentLabels)
+local function getRelationships(child, parent)
     local parents = GetProtectedField(child, "parents")
     local relationships = {}
     for key, parentAndRelationship in pairs(parents) do
-        if IsIn(parentAndRelationship[1], parentLabels) then
+        if GetMainLabel(parentAndRelationship[1]) == GetMainLabel(parent) then
             local relationship = parentAndRelationship[2]
             if not IsEmpty(relationship) and not IsProtectedDescriptor(relationship) then
                 UniqueAppend(relationships, parentAndRelationship[2])
@@ -79,10 +79,9 @@ local function addChildrenDescriptorsToParent(parent)
         children = {}
     end
     table.sort(children, CompareByName)
-    local parentLabels = GetLabels(parent)
     for key, child in pairs(children) do
         if IsEntityShown(child) then
-            local relationships = getRelationships(child, parentLabels)
+            local relationships = getRelationships(child, parent)
             addSingleChildDescriptorToParent(child, parent, relationships)
         end
     end

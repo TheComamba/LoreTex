@@ -1,9 +1,11 @@
-local function extractEntitiesAtLocation(list, location)
+local function extractEntitiesAtLocation(list, locationLabel)
     StartBenchmarking("extractEntitiesAtLocation")
     local out = {}
     for key, entity in pairs(list) do
         local entityLocation = GetProtectedField(entity, "location")
-        if entityLocation == location or (IsEmpty(entityLocation) and IsEmpty(location)) then
+        if IsEmpty(entityLocation) and IsEmpty(locationLabel) then
+            out[#out + 1] = entity
+        elseif not IsEmpty(entityLocation) and GetMainLabel(entityLocation) == locationLabel then
             out[#out + 1] = entity
         end
     end
@@ -167,11 +169,9 @@ end
 local function getAllLocationLabelsSorted(entities)
     local locationLabels = {}
     for key, entity in pairs(entities) do
-        local locationLabel = GetProtectedField(entity, "location")
-        if not IsEmpty(locationLabel) then
-            if IsEntityShown(GetEntity(locationLabel)) then
-                UniqueAppend(locationLabels, locationLabel)
-            end
+        local location = GetProtectedField(entity, "location")
+        if not IsEmpty(location) and IsEntityShown(location) then
+            UniqueAppend(locationLabels, GetMainLabel(location))
         end
     end
     table.sort(locationLabels, CompareLocationLabelsByName)
@@ -196,10 +196,6 @@ local function printEntityChapterSortedByLocation(entities)
     local sectionname = Tr("at-secret-locations")
     local entitiesAtSecretLocations = GetEntitiesIf(IsLocationUnrevealed, entities)
     Append(out, printEntities(sectionname, entitiesAtSecretLocations))
-
-    local sectionname = Tr("at-unfound-locations")
-    local entitiesAtUnfoundLocations = GetEntitiesIf(IsLocationUnknown, entities)
-    Append(out, printEntities(sectionname, entitiesAtUnfoundLocations))
 
     StopBenchmarking("printEntityChapterSortedByLocation")
     return out

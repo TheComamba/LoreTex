@@ -3,7 +3,7 @@ TexApi.newEntity { type = "places", label = "ocean", name = "Ocean" }
 TexApi.newEntity { type = "vehicles", label = "aurora", name = "Aurora" }
 TexApi.setLocation("ocean")
 
-SetScopedVariable("DefaultLocation", "aurora")
+SetScopedVariable("DefaultLocation", GetMutableEntityFromAll("aurora"))
 
 TexApi.newEntity { type = "npcs", label = "haldora", name = "Haldora" }
 TexApi.addParent { parentLabel = "aurora", relationship = "Captain" }

@@ -29,12 +29,19 @@ local function entityQualifiersString(child, parent, relationships)
         deathyear = AddYearOffset(deathyear, YearFmt)
         Append(content, TexCmd("textdied") .. deathyear)
     end
-    local location = GetProtectedField(child, "location")
-    local targetLocation = GetProtectedField(parent, "location")
+    local childLocation = GetProtectedField(child, "location")
+    local parentLocation = GetProtectedField(parent, "location")
     if IsLocationUnrevealed(child) then
         Append(content, Tr("at-secret-location"))
-    elseif not IsEmpty(location) and location ~= targetLocation and not IsIn(location, GetLabels(parent)) then
-        Append(content, Tr("in") .. " " .. TexCmd("nameref", location))
+    elseif not IsEmpty(childLocation) then
+        local childLocationLabel = GetMainLabel(childLocation)
+        local parentLocationLabel = ""
+        if not IsEmpty(parentLocation) then
+            parentLocationLabel = GetMainLabel(parentLocation)
+        end
+        if childLocationLabel ~= parentLocationLabel and not IsIn(childLocationLabel, GetLabels(parent)) then
+            Append(content, Tr("in") .. " " .. TexCmd("nameref", childLocationLabel))
+        end
     end
     if not IsEmpty(content) then
         return "(" .. table.concat(content, ", ") .. ")"

@@ -105,9 +105,9 @@ Assert("entities-with-associations", expected, out)
 
 TexApi.newEntity { type = "places", label = "place-3", name = "Place 3" }
 TexApi.newEntity { type = "places", label = "place-4", name = "Place 4" }
-SetLocation(orga, "place-3")
-SetLocation(orga2, "place-1")
-SetLocation(place2, "place-4")
+SetLocation(orga, GetEntity("place-3"))
+SetLocation(orga2, GetEntity("place-1"))
+SetLocation(place2, GetEntity("place-4"))
 
 out = TexApi.automatedChapters()
 

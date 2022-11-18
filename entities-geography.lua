@@ -1,39 +1,8 @@
-function IsLocationUnknown(entity)
-    local locationLabel = GetProtectedField(entity, "location")
-    if IsEmpty(locationLabel) then
-        return false
-    end
-    local location = GetEntity(locationLabel)
-    if IsEmpty(location) then
-        local err = {}
-        Append(err, "Location\"")
-        Append(err, locationLabel)
-        Append(err, "\" of entity \"")
-        Append(err, GetMainLabel(entity))
-        Append(err, "\" not found.")
-        LogError(table.concat(err))
-        return true
-    end
-    return false
-end
-
-local function getLocation(entity)
-    local locationLabel = GetProtectedField(entity, "location")
-    if IsEmpty(locationLabel) then
-        return {}
-    elseif IsIn(locationLabel, GetLabels(entity)) then
-        LogError(locationLabel .. " is listed as location of " .. GetMainLabel(entity) .. " itself!")
-        return {}
-    else
-        return GetEntity(locationLabel)
-    end
-end
-
 function IsLocationUnrevealed(entity)
     if IsShowSecrets then
         return false
     end
-    local location = getLocation(entity)
+    local location = GetProtectedField(entity, "location")
     return IsEntitySecret(location) and (not IsRevealed(location))
 end
 
@@ -41,7 +10,9 @@ function PlaceToName(locationLabel)
     StartBenchmarking("PlaceToName")
     local name = ""
     local locationLabels = {}
-    while not IsEmpty(locationLabel) do
+    local location = GetEntity(locationLabel)
+    while not IsEmpty(location) do
+        locationLabel = GetMainLabel(location)
         if name == "" then
             name = LabelToName(locationLabel)
         else
@@ -60,9 +31,7 @@ function PlaceToName(locationLabel)
         else
             Append(locationLabels, locationLabel)
         end
-
-        local place = GetEntity(locationLabel)
-        locationLabel = GetProtectedField(place, "location")
+        location = GetProtectedField(location, "location")
     end
     StopBenchmarking("PlaceToName")
     return name

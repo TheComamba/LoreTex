@@ -97,10 +97,11 @@ end
 
 function SetLocation(entity, location)
     SetProtectedField(entity, "location", location)
-    addParent { entity = entity, parentLabel = location, relationship = GetProtectedDescriptor("location") }
+    addParent { entity = entity, parentLabel = GetMainLabel(location), relationship = GetProtectedDescriptor("location") }
 end
 
-TexApi.setLocation = function(location)
+TexApi.setLocation = function(locationLabel)
+    local location = GetMutableEntityFromAll(locationLabel)
     SetLocation(CurrentEntity, location)
 end
 

@@ -5,4 +5,4 @@
     \directlua{ PopScopedVariables() }
 }
 
-\newcommand{\setDefaultLocation}[1]{ \directlua{ SetScopedVariable( "DefaultLocation", "#1" ) } }
+\newcommand{\setDefaultLocation}[1]{ \directlua{ SetScopedVariable( "DefaultLocation", GetMutableEntityFromAll("#1") ) } }

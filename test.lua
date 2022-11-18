@@ -20,7 +20,7 @@ Append(allTestFiles, "refs")
 Append(allTestFiles, "region-and-city")
 Append(allTestFiles, "ship-crew")
 Append(allTestFiles, "species-at-location")
-Append(allTestFiles, "sub-label")
+-- Append(allTestFiles, "sub-label")
 local numSucceeded = 0
 local numFailed = 0
 local apiFunctionUsage = {}

@@ -11,14 +11,14 @@ function AddParentDescriptorsToChild(child)
             if type(parentAndRelationship) == "string" then
                 parentAndRelationship = { parentAndRelationship }
             end
-            local parentLabel = parentAndRelationship[1]
+            local parent = parentAndRelationship[1]
             local relationship = parentAndRelationship[2]
             if GetProtectedDescriptor("location") ~= relationship then
                 if IsEmpty(relationship) then
                     relationship = CapFirst(Tr("member"))
-                end
-                local parent = GetEntity(parentLabel)
-                if not IsEmpty(parent) and IsEntityShown(parent) then
+                    if not IsEmpty(parent) and IsEntityShown(parent) then
+                    end
+                    local parentLabel = GetMainLabel(parent)
                     local description = relationship ..
                         " " .. Tr("of") .. " " .. TexCmd("nameref ", parentLabel) .. "."
                     if IsEntitySecret(parent) then

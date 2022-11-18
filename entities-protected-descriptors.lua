@@ -85,9 +85,9 @@ local function addParent(arg)
     if not IsArgOk("addParent", arg, { "entity", "parentLabel" }, { "relationship" }) then
         return
     end
-    AddToProtectedField(arg.entity, "parents", { arg.parentLabel, arg.relationship })
     local parent = GetMutableEntityFromAll(arg.parentLabel)
-    AddToProtectedField(parent, "children", GetMainLabel(arg.entity))
+    AddToProtectedField(arg.entity, "parents", { parent, arg.relationship })
+    AddToProtectedField(parent, "children", arg.entity)
 end
 
 TexApi.addParent = function(arg)

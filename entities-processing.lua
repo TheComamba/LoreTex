@@ -74,14 +74,13 @@ end
 
 local function addChildrenDescriptorsToParent(parent)
     StartBenchmarking("addChildrenDescriptorsToParent")
-    local childrenLabels = GetProtectedField(parent, "children")
-    if childrenLabels == nil then
-        childrenLabels = {}
+    local children = GetProtectedField(parent, "children")
+    if children == nil then
+        children = {}
     end
-    table.sort(childrenLabels, CompareByName)
+    table.sort(children, CompareByName)
     local parentLabels = GetLabels(parent)
-    for key, childLabel in pairs(childrenLabels) do
-        local child = GetEntity(childLabel)
+    for key, child in pairs(children) do
         if IsEntityShown(child) then
             local relationships = getRelationships(child, parentLabels)
             addSingleChildDescriptorToParent(child, parent, relationships)

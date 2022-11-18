@@ -184,3 +184,13 @@ function MergeWithAlias(mainEntity, alias)
         end
     end
 end
+
+function IsEntity(inp)
+    if type(inp) ~= "table" then
+        return false
+    elseif IsEmpty(GetProtectedField(inp, "labels")) then
+        return false
+    else
+        return true
+    end
+end

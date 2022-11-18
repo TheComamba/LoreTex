@@ -82,7 +82,10 @@ local function getSortedKeys(tableInput)
     return out
 end
 
-function DebugPrintRaw(entity)
+function DebugPrintRaw(entity, depth)
+    if depth == nil then
+        depth = 1
+    end
     if entity == nil then
         return { "nil" }
     elseif type(entity) == "number" then
@@ -91,6 +94,8 @@ function DebugPrintRaw(entity)
         return { " \"" .. entity .. "\" " }
     elseif type(entity) ~= "table" then
         return { tostring(entity) }
+    elseif depth > 3 then
+        return { "[table]" }
     end
     local out = {}
     local keys = getSortedKeys(entity)
@@ -99,9 +104,9 @@ function DebugPrintRaw(entity)
         if i > 1 then
             Append(out, ",	")
         end
-        Append(out, DebugPrintRaw(key))
+        Append(out, DebugPrintRaw(key, depth + 1))
         Append(out, "=")
-        Append(out, DebugPrintRaw(entity[key]))
+        Append(out, DebugPrintRaw(entity[key], depth + 1))
     end
     Append(out, [[}	]])
     return out

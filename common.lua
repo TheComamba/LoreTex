@@ -223,7 +223,13 @@ end
 function DeepCopy(inp)
 	local out = {}
 	if type(inp) == "table" then
-		for k, v in pairs(inp) do out[k] = DeepCopy(v) end
+		for k, v in pairs(inp) do
+			if IsEntity(v) then
+				out[k] = v
+			else
+				out[k] = DeepCopy(v)
+			end
+		end
 	else
 		out = inp
 	end

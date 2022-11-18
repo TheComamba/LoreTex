@@ -58,23 +58,22 @@ local function setYearFmt(historyItem, label)
 end
 
 local function collectConcerns(item)
-	local concernsPrelim = {}
+	local concernesLabels = {}
 	local event = GetProtectedField(item, "event")
-	UniqueAppend(concernsPrelim, ScanForCmd(event, "concerns"))
-	UniqueAppend(concernsPrelim, GetProtectedField(item, "birthof"))
-	UniqueAppend(concernsPrelim, GetProtectedField(item, "deathof"))
-	UniqueAppend(concernsPrelim, GetProtectedField(item, "originator"))
+	UniqueAppend(concernesLabels, ScanForCmd(event, "concerns"))
+	UniqueAppend(concernesLabels, GetProtectedField(item, "birthof"))
+	UniqueAppend(concernesLabels, GetProtectedField(item, "deathof"))
+	UniqueAppend(concernesLabels, GetProtectedField(item, "originator"))
 	for key1, refType in pairs(RefTypes) do
-		UniqueAppend(concernsPrelim, ScanForCmd(event, refType))
+		UniqueAppend(concernesLabels, ScanForCmd(event, refType))
 	end
 	local notConcerns = ScanForCmd(event, "notconcerns")
-	local concerns = {}
-	for key, concerned in pairs(concernsPrelim) do
-		if not IsIn(concerned, notConcerns) then
-			Append(concerns, concerned)
+	for key, concernedLabel in pairs(concernesLabels) do
+		if not IsIn(concernedLabel, notConcerns) then
+			local concernedEntity = GetMutableEntityFromAll(concernedLabel)
+			AddToProtectedField(item, "concerns", concernedEntity)
 		end
 	end
-	SetProtectedField(item, "concerns", concerns)
 end
 
 local function addSpecialyearsToEntities(field, year, labels)
@@ -97,11 +96,10 @@ local function processEvent(item)
 		collectConcerns(item)
 	else
 		local originator = GetProtectedField(item, "originator")
-		AddToProtectedField(item, "concerns", originator)
+		AddToProtectedField(item, "concerns", GetMutableEntityFromAll(originator))
 	end
 
-	for key, concernedLabel in pairs(GetProtectedField(item, "concerns")) do
-		local entity = GetMutableEntityFromAll(concernedLabel)
+	for key, entity in pairs(GetProtectedField(item, "concerns")) do
 		AddToProtectedField(entity, "historyItems", item)
 	end
 
@@ -160,18 +158,18 @@ TexApi.addHistoryOnlyHere = function(arg)
 	addHistory(arg)
 end
 
-TexApi.born = function (arg)
+TexApi.born = function(arg)
 	addHistory(arg)
-	if not IsEmpty(arg.yearFmt ) then
+	if not IsEmpty(arg.yearFmt) then
 		local fmt = GetEntity(arg.yearFmt)
 		arg.year = RemoveYearOffset(arg.year, fmt)
 	end
 	SetProtectedField(CurrentEntity, "born", arg.year)
 end
 
-TexApi.died = function (arg)
+TexApi.died = function(arg)
 	addHistory(arg)
-	if not IsEmpty(arg.yearFmt ) then
+	if not IsEmpty(arg.yearFmt) then
 		local fmt = GetEntity(arg.yearFmt)
 		arg.year = RemoveYearOffset(arg.year, fmt)
 	end

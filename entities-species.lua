@@ -170,7 +170,7 @@ local function addLifestageHistoryItems(entity)
 			local item = NewHistoryItem()
 			SetYear(item, year)
 			SetProtectedField(item, "event", table.concat(event))
-			AddToProtectedField(item, "concerns", label)
+			AddToProtectedField(item, "concerns", entity)
 			AddToProtectedField(entity, "historyItems", item)
 		end
 	end

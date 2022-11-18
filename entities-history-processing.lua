@@ -1,6 +1,5 @@
 local function isConcernsUnrevealed(historyItem)
-    for key, label in pairs(GetProtectedField(historyItem, "concerns")) do
-        local entity = GetEntity(label)
+    for key, entity in pairs(GetProtectedField(historyItem, "concerns")) do
         if IsEntitySecret(entity) and not IsRevealed(entity) then
             return true
         end
@@ -9,8 +8,7 @@ local function isConcernsUnrevealed(historyItem)
 end
 
 local function isConcernsSecret(historyItem)
-    for key, label in pairs(GetProtectedField(historyItem, "concerns")) do
-        local entity = GetEntity(label)
+    for key, entity in pairs(GetProtectedField(historyItem, "concerns")) do
         if IsEntitySecret(entity) then
             return true
         end
@@ -19,8 +17,8 @@ local function isConcernsSecret(historyItem)
 end
 
 local function isAllConcnernsShown(historyItem)
-    for key, label in pairs(GetProtectedField(historyItem, "concerns")) do
-        if not IsEntityShown(GetEntity(label)) then
+    for key, entity in pairs(GetProtectedField(historyItem, "concerns")) do
+        if not IsEntityShown(entity) then
             return false
         end
     end

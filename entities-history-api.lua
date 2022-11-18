@@ -53,12 +53,7 @@ local function setYearFmt(historyItem, label)
 		LogError("Called with empty year format for history item:" .. DebugPrint(historyItem))
 		return
 	end
-	local fmt = GetEntity(label)
-	if IsEmpty(fmt) then
-		LogError("No format entity with label \"" ..
-			label .. "\" was found. Note that currently the format entity has to be defined before it is used.")
-		return
-	end
+	local fmt = GetMutableEntityFromAll(label)
 	SetProtectedField(historyItem, "yearFormat", fmt)
 end
 

@@ -76,26 +76,14 @@ function GetDaysPerYear()
 end
 
 local function addDayFmt(label)
-    local calendar = GetEntity(label)
-    if IsEmpty(calendar) then
-        LogError("Could not find a calendar for label \"" .. label .. "\"")
-        return
-    end
-    if IsEmpty(GetProtectedField(calendar, "monthsAndFirstDays")) then
-        LogError("Calendar \"" .. label .. "\" has no months defined.")
-        return
-    end
+    local calendar = GetMutableEntityFromAll(label)
     DayFmt[#DayFmt + 1] = calendar
 end
 
 TexApi.addDayFmt = addDayFmt
 
 local function addYearFmt(label)
-    local calendar = GetEntity(label)
-    if IsEmpty(calendar) then
-        LogError("Could not find a calendar for label \"" .. label .. "\"")
-        return
-    end
+    local calendar = GetMutableEntityFromAll(label)
     YearFmt[#YearFmt + 1] = calendar
 end
 

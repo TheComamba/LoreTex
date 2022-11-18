@@ -11,15 +11,6 @@ local function isAges(species)
 	return factor ~= 0 and exponent ~= 0
 end
 
-local function getSpeciesRef(entity)
-	local species = GetProtectedField(entity, "species")
-	if IsEmpty(species) then
-		return ""
-	else
-		return species
-	end
-end
-
 local function ageToYears(age, factor, exponent)
 	return factor * age ^ exponent
 end
@@ -78,11 +69,7 @@ local function correspondingHumanAgeString(species, age)
 end
 
 local function specificAgeString(entity, age)
-	local speciesRef = getSpeciesRef(entity)
-	if IsEmpty(speciesRef) then
-		return ""
-	end
-	local species = GetEntity(speciesRef)
+	local species = GetProtectedField(entity, "species")
 	if IsEmpty(species) then
 		return ""
 	end
@@ -112,9 +99,9 @@ end
 
 function SpeciesAndAgeString(entity)
 	local parts = {}
-	local speciesRef = getSpeciesRef(entity)
-	if not IsEmpty(speciesRef) then
-		Append(parts, TexCmd("nameref ", speciesRef))
+	local species = GetProtectedField(entity, "species")
+	if not IsEmpty(species) then
+		Append(parts, TexCmd("nameref ", GetMainLabel(species)))
 	end
 	if IsCurrentYearSet then
 		local ageDescription = ageString(entity, GetCurrentYear())
@@ -143,11 +130,7 @@ local function addLifestageHistoryItems(entity)
 	if IsEmpty(birthyear) then
 		return
 	end
-	local speciesRef = getSpeciesRef(entity)
-	if IsEmpty(speciesRef) then
-		return
-	end
-	local species = GetEntity(speciesRef)
+	local species = GetProtectedField(entity, "species")
 	if IsEmpty(species) then
 		return
 	end

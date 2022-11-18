@@ -161,8 +161,7 @@ end
 TexApi.born = function(arg)
 	addHistory(arg)
 	if not IsEmpty(arg.yearFmt) then
-		local fmt = GetEntity(arg.yearFmt)
-		arg.year = RemoveYearOffset(arg.year, fmt)
+		arg.year = RemoveYearOffset(arg.year, arg.yearFmt)
 	end
 	SetProtectedField(CurrentEntity, "born", arg.year)
 end
@@ -170,8 +169,7 @@ end
 TexApi.died = function(arg)
 	addHistory(arg)
 	if not IsEmpty(arg.yearFmt) then
-		local fmt = GetEntity(arg.yearFmt)
-		arg.year = RemoveYearOffset(arg.year, fmt)
+		arg.year = RemoveYearOffset(arg.year, arg.yearFmt)
 	end
 	SetProtectedField(CurrentEntity, "died", arg.year)
 end

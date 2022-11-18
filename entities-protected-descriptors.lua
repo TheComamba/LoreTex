@@ -109,6 +109,7 @@ TexApi.setSecret = function()
     SetProtectedField(CurrentEntity, "isSecret", true)
 end
 
-TexApi.setSpecies = function(species)
+TexApi.setSpecies = function(speciesLabel)
+    local species = GetMutableEntityFromAll(speciesLabel)
     SetProtectedField(CurrentEntity, "species", species)
 end

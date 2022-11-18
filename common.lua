@@ -131,6 +131,8 @@ end
 function IsEmpty(obj)
 	if obj == nil then
 		return true
+	elseif IsEntity(obj) then
+		return false
 	elseif type(obj) == "table" then
 		for key, val in pairs(obj) do
 			if not IsEmpty(val) then

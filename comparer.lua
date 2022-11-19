@@ -72,12 +72,12 @@ function CompareAffiliations(a, b)
 end
 
 function CompareHistoryItems(a, b)
-    local yearA = GetProtectedField(a, "year")
-    local yearB = GetProtectedField(b, "year")
-    local dayA = GetProtectedField(a, "day")
-    local dayB = GetProtectedField(b, "day")
-    local counterA = GetProtectedField(a, "counter")
-    local counterB = GetProtectedField(b, "counter")
+    local yearA = GetProtectedNullableField(a, "year")
+    local yearB = GetProtectedNullableField(b, "year")
+    local dayA = GetProtectedNullableField(a, "day")
+    local dayB = GetProtectedNullableField(b, "day")
+    local counterA = GetProtectedNullableField(a, "counter")
+    local counterB = GetProtectedNullableField(b, "counter")
     if yearA ~= yearB then
         return yearA < yearB
     elseif dayA == nil and dayB == nil then

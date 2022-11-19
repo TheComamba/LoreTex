@@ -23,11 +23,11 @@ function IsDead(entity)
 end
 
 function MarkDead(entity)
-    local name = GetProtectedField(entity, "name")
+    local name = GetProtectedStringField(entity, "name")
     if IsEmpty(name) then
         LogError("Entity has no name: " .. DebugPrint(entity))
     elseif IsDead(entity) then
-        if IsEmpty(GetProtectedField(entity, "shortname")) then
+        if IsEmpty(GetProtectedStringField(entity, "shortname")) then
             SetProtectedField(entity, "shortname", name)
         end
         SetProtectedField(entity, "name", name .. " " .. TexCmd("textdied"))
@@ -35,7 +35,7 @@ function MarkDead(entity)
 end
 
 local function getYear(entity, key)
-    local value = GetProtectedField(entity, key)
+    local value = GetProtectedNullableField(entity, key)
     if value == nil then
         return nil
     end

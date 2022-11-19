@@ -17,20 +17,20 @@ local function entityQualifiersString(child, parent, relationships)
     for key, relationship in pairs(relationships) do
         Append(content, relationship)
     end
-    local birthyearstr = GetProtectedField(child, "born")
+    local birthyearstr = GetProtectedNullableField(child, "born")
     local birthyear = tonumber(birthyearstr)
     if not IsEmpty(birthyear) and birthyear <= GetCurrentYear() then
         birthyear = AddYearOffset(birthyear, YearFmt)
         Append(content, TexCmd("textborn") .. birthyear)
     end
-    local deathyearstr = GetProtectedField(child, "died")
+    local deathyearstr = GetProtectedNullableField(child, "died")
     local deathyear = tonumber(deathyearstr)
     if not IsEmpty(deathyear) and deathyear <= GetCurrentYear() then
         deathyear = AddYearOffset(deathyear, YearFmt)
         Append(content, TexCmd("textdied") .. deathyear)
     end
-    local childLocation = GetProtectedField(child, "location")
-    local parentLocation = GetProtectedField(parent, "location")
+    local childLocation = GetProtectedNullableField(child, "location")
+    local parentLocation = GetProtectedNullableField(parent, "location")
     if IsLocationUnrevealed(child) then
         Append(content, Tr("at-secret-location"))
     elseif not IsEmpty(childLocation) then
@@ -39,7 +39,7 @@ local function entityQualifiersString(child, parent, relationships)
         if not IsEmpty(parentLocation) then
             parentLocationLabel = GetMainLabel(parentLocation)
         end
-        if childLocationLabel ~= parentLocationLabel and not IsIn(childLocationLabel, GetLabels(parent)) then
+        if childLocationLabel ~= parentLocationLabel and not IsIn(childLocationLabel, GetProtectedTableField(parent, "labels")) then
             Append(content, Tr("in") .. " " .. TexCmd("nameref", childLocationLabel))
         end
     end
@@ -51,7 +51,7 @@ local function entityQualifiersString(child, parent, relationships)
 end
 
 local function addSingleChildDescriptorToParent(child, parent, relationships)
-    local childType = GetProtectedField(child, "type")
+    local childType = GetProtectedStringField(child, "type")
     local descriptor = Tr("affiliated") .. " " .. Tr(childType)
     if parent[descriptor] == nil then
         parent[descriptor] = {}
@@ -65,7 +65,7 @@ local function addSingleChildDescriptorToParent(child, parent, relationships)
 end
 
 local function getRelationships(child, parent)
-    local parents = GetProtectedField(child, "parents")
+    local parents = GetProtectedTableField(child, "parents")
     local relationships = {}
     for key, parentAndRelationship in pairs(parents) do
         if GetMainLabel(parentAndRelationship[1]) == GetMainLabel(parent) then
@@ -81,10 +81,7 @@ end
 
 local function addChildrenDescriptorsToParent(parent)
     StartBenchmarking("addChildrenDescriptorsToParent")
-    local children = GetProtectedField(parent, "children")
-    if children == nil then
-        children = {}
-    end
+    local children = GetProtectedTableField(parent, "children")
     table.sort(children, CompareByName)
     for key, child in pairs(children) do
         if IsEntityShown(child) then
@@ -112,7 +109,7 @@ end
 local function addPrimariesWhenMentioned(entities, mentionedRefsHere, allMentionedRefs)
     for key, label in pairs(mentionedRefsHere) do
         local mentionedEntity = GetEntity(label)
-        local typeName = GetProtectedField(mentionedEntity, "type")
+        local typeName = GetProtectedStringField(mentionedEntity, "type")
         if IsIn(typeName, PrimaryRefWhenMentionedTypes) then
             AddProcessedEntity(entities, mentionedEntity, allMentionedRefs)
         end
@@ -126,7 +123,7 @@ function AddProcessedEntity(entities, entity, allMentionedRefs)
         MarkSecret(newEntity)
         AddAutomatedDescriptors(newEntity)
         entities[#entities + 1] = newEntity
-        registerProcessedEntityLabels(GetLabels(newEntity), newEntity)
+        registerProcessedEntityLabels(GetProtectedTableField(newEntity, "labels"), newEntity)
         local mentionedRefsHere = ScanContentForMentionedRefs(newEntity)
         addPrimariesWhenMentioned(entities, mentionedRefsHere, allMentionedRefs)
         UniqueAppend(allMentionedRefs, mentionedRefsHere)

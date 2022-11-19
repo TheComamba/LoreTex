@@ -2,7 +2,7 @@ function IsLocationUnrevealed(entity)
     if IsShowSecrets then
         return false
     end
-    local location = GetProtectedField(entity, "location")
+    local location = GetProtectedNullableField(entity, "location")
     return IsEntitySecret(location) and (not IsRevealed(location))
 end
 
@@ -31,7 +31,7 @@ function PlaceToName(locationLabel)
         else
             Append(locationLabels, locationLabel)
         end
-        location = GetProtectedField(location, "location")
+        location = GetProtectedNullableField(location, "location")
     end
     StopBenchmarking("PlaceToName")
     return name

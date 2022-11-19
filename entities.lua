@@ -14,21 +14,12 @@ end
 
 ResetEntities()
 
-function GetLabels(entity)
-    local labels = GetProtectedField(entity, "labels")
-    if labels == nil then
-        return {}
-    else
-        return labels
-    end
-end
-
 function GetMainLabel(entity)
     if type(entity) ~= "table" then
         LogError("Called with " .. DebugPrint(entity))
         return "CALLED WITH WRONG TYPE"
     end
-    local labels = GetLabels(entity)
+    local labels = GetProtectedTableField(entity, "labels")
     if IsEmpty(labels) then
         return "MAIN LABEL NOT FOUND"
     else
@@ -37,7 +28,7 @@ function GetMainLabel(entity)
 end
 
 function IsPrimary(entity)
-    local labels = GetLabels(entity)
+    local labels = GetProtectedTableField(entity, "labels")
     return IsAnyElemIn(labels, PrimaryRefs)
 end
 
@@ -65,7 +56,7 @@ function GetEntitiesOfType(type, list)
         list = AllEntities
     end
     for key, entity in pairs(list) do
-        if GetProtectedField(entity, "type") == type then
+        if GetProtectedStringField(entity, "type") == type then
             out[#out + 1] = entity
         end
     end
@@ -97,7 +88,7 @@ function GetEntity(label)
         Append(UnfoundRefs, label)
         entity = {}
     end
-    local superEntity = GetProtectedField(entity, "partOf")
+    local superEntity = GetProtectedNullableField(entity, "partOf")
     if superEntity ~= nil then
         entity = superEntity
     end
@@ -110,7 +101,7 @@ function IsEntitySecret(entity)
     if entity == nil then
         return false
     end
-    local isSecret = GetProtectedField(entity, "isSecret")
+    local isSecret = GetProtectedNullableField(entity, "isSecret")
     if isSecret == nil then
         return false
     end
@@ -122,7 +113,7 @@ function IsEntitySecret(entity)
 end
 
 function IsRevealed(entity)
-    return IsAnyElemIn(GetLabels(entity), RevealedLabels)
+    return IsAnyElemIn(GetProtectedTableField(entity, "labels"), RevealedLabels)
 end
 
 function IsEntityShown(entity)
@@ -194,7 +185,7 @@ end
 function IsEntity(inp)
     if type(inp) ~= "table" then
         return false
-    elseif IsEmpty(GetProtectedField(inp, "labels")) then
+    elseif IsEmpty(GetProtectedTableField(inp, "labels")) then
         return false
     else
         return true

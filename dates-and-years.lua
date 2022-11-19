@@ -134,7 +134,7 @@ TexApi.addMonth = function(arg)
 end
 
 function RemoveYearOffset(year, fmt)
-    local offset = GetProtectedField(fmt, "yearOffset")
+    local offset = GetProtectedNullableField(fmt, "yearOffset")
     if offset == nil then
         return year
     else
@@ -143,7 +143,7 @@ function RemoveYearOffset(year, fmt)
 end
 
 function AddYearOffset(year, fmt)
-    local offset = GetProtectedField(fmt, "yearOffset")
+    local offset = GetProtectedNullableField(fmt, "yearOffset")
     if offset == nil then
         return year
     else
@@ -152,8 +152,8 @@ function AddYearOffset(year, fmt)
 end
 
 local function daysAgo(historyItem)
-    local year = GetProtectedField(historyItem, "year")
-    local day = GetProtectedField(historyItem, "day")
+    local year = GetProtectedNullableField(historyItem, "year")
+    local day = GetProtectedNullableField(historyItem, "day")
     if IsCurrentDaySet and day ~= nil then
         return GetCurrentDay() - day + (GetCurrentYear() - year) * GetDaysPerYear()
     else
@@ -165,13 +165,12 @@ local function yearsAgo(historyItem)
     if IsCurrentDaySet then
         return daysAgo(historyItem) / GetDaysPerYear()
     else
-        return GetCurrentYear() - GetProtectedField(historyItem, "year")
+        return GetCurrentYear() - GetProtectedNullableField(historyItem, "year")
     end
 end
 
 local function timeDiffString(historyItem)
-    local year = GetProtectedField(historyItem, "year")
-    local day = GetProtectedField(historyItem, "day")
+    local day = GetProtectedNullableField(historyItem, "day")
     local timeDiffInYears = yearsAgo(historyItem)
     if math.abs(timeDiffInYears) < 1 and IsCurrentDaySet and day ~= nil then
         local timeDiffInDays = daysAgo(historyItem)
@@ -217,7 +216,7 @@ function IsHasHappened(entity, keyword, onNil)
     if not IsCurrentYearSet then
         return onNil
     end
-    local year = GetProtectedField(entity, keyword)
+    local year = GetProtectedNullableField(entity, keyword)
     if year == nil then
         return onNil
     else
@@ -231,8 +230,8 @@ function IsHasHappened(entity, keyword, onNil)
 end
 
 function YearAndDayString(historyItem)
-    local year = GetProtectedField(historyItem, "year")
-    local day = GetProtectedField(historyItem, "day")
+    local year = GetProtectedNullableField(historyItem, "year")
+    local day = GetProtectedNullableField(historyItem, "day")
     local out = {}
     Append(out, YearString(year))
     if day ~= nil then
@@ -249,7 +248,6 @@ local function monthAndDay(day, namesAndFirstDays)
     local firstDay = 1
     local month = "NoMonthFound"
     if day < namesAndFirstDays[1][2] then
-        --LogError("day " .. day .. ", first day " .. DebugPrint(namesAndFirstDays[1]))
         month = namesAndFirstDays[#namesAndFirstDays][1]
         firstDay = namesAndFirstDays[#namesAndFirstDays][2]
         firstDay = firstDay - GetDaysPerYear()
@@ -279,7 +277,7 @@ function DayString(day, fmt)
     Append(out, Tr("day") .. " ")
     Append(out, day)
     for key, calendar in pairs(fmt) do
-        local monthsAndDays = GetProtectedField(calendar, "monthsAndFirstDays")
+        local monthsAndDays = GetProtectedTableField(calendar, "monthsAndFirstDays")
         local month, dayOfMonth = monthAndDay(day, monthsAndDays)
         Append(out, [[ / ]])
         Append(out, dayOfMonth)
@@ -301,13 +299,13 @@ function YearString(year, fmt)
         if key > 1 then
             Append(out, [[ / ]])
         end
-        local offset = GetProtectedField(calendar, "yearOffset")
+        local offset = GetProtectedNullableField(calendar, "yearOffset")
         if offset == nil then
             offset = 0
         end
         Append(out, year + offset)
-        local abbr = GetProtectedField(calendar, "yearAbbreviation")
-        if abbr ~= nil then
+        local abbr = GetProtectedStringField(calendar, "yearAbbreviation")
+        if not IsEmpty(abbr) then
             Append(out, " ")
             Append(out, abbr)
         end

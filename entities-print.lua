@@ -2,7 +2,7 @@ local function extractEntitiesAtLocation(list, locationLabel)
     StartBenchmarking("extractEntitiesAtLocation")
     local out = {}
     for key, entity in pairs(list) do
-        local entityLocation = GetProtectedField(entity, "location")
+        local entityLocation = GetProtectedNullableField(entity, "location")
         if IsEmpty(entityLocation) and IsEmpty(locationLabel) then
             out[#out + 1] = entity
         elseif not IsEmpty(entityLocation) and GetMainLabel(entityLocation) == locationLabel then
@@ -19,10 +19,10 @@ function GetShortname(entity)
     end
     if IsEmpty(entity) then
         return "NIL"
-    elseif not IsEmpty(GetProtectedField(entity, "shortname")) then
-        return GetProtectedField(entity, "shortname")
-    elseif not IsEmpty(GetProtectedField(entity, "name")) then
-        return GetProtectedField(entity, "name")
+    elseif not IsEmpty(GetProtectedStringField(entity, "shortname")) then
+        return GetProtectedStringField(entity, "shortname")
+    elseif not IsEmpty(GetProtectedStringField(entity, "name")) then
+        return GetProtectedStringField(entity, "name")
     else
         LogError("Entity has no name:" .. DebugPrint(entity))
         return "NO NAME"
@@ -115,11 +115,11 @@ local function printEntities(sectionname, entitiesList)
     Append(out, TexCmd("subsection", CapFirst(sectionname)))
     table.sort(entitiesList, CompareByName)
     for key, entity in pairs(entitiesList) do
-        local shortname = GetProtectedField(entity, "shortname")
+        local shortname = GetProtectedStringField(entity, "shortname")
         if IsEmpty(shortname) then
-            Append(out, TexCmd("subsubsection", GetProtectedField(entity, "name")))
+            Append(out, TexCmd("subsubsection", GetProtectedStringField(entity, "name")))
         else
-            Append(out, TexCmd("subsubsection", GetProtectedField(entity, "name"), shortname))
+            Append(out, TexCmd("subsubsection", GetProtectedStringField(entity, "name"), shortname))
         end
         Append(out, TexCmd("label", GetMainLabel(entity)))
         Append(out, DescriptorsString(entity))
@@ -150,7 +150,7 @@ end
 local function getAllLabels(list)
     local out = {}
     for key, entity in pairs(list) do
-        Append(out, GetLabels(entity))
+        Append(out, GetProtectedTableField(entity, "labels"))
     end
     return out
 end
@@ -169,7 +169,7 @@ end
 local function getAllLocationLabelsSorted(entities)
     local locationLabels = {}
     for key, entity in pairs(entities) do
-        local location = GetProtectedField(entity, "location")
+        local location = GetProtectedNullableField(entity, "location")
         if not IsEmpty(location) and IsEntityShown(location) then
             UniqueAppend(locationLabels, GetMainLabel(location))
         end

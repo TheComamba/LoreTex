@@ -6,7 +6,7 @@ function SetDescriptor(arg)
     StartBenchmarking("SetDescriptor")
     Replace([[\reference]], [[\nameref]], arg.description)
 
-    local knownLabels = GetLabels(arg.entity)
+    local knownLabels = GetProtectedTableField(arg.entity, "labels")
     local additionalLabels = ScanForCmd(arg.description, "label")
     for key, label in pairs(additionalLabels) do
         if not IsIn(label, knownLabels) then

@@ -40,7 +40,7 @@ function SetYear(historyItem, year)
 	if yearNumber == nil then
 		LogError("Could not convert to number:" .. DebugPrint(year))
 	else
-		local yearFmt = GetProtectedField(historyItem, "yearFormat")
+		local yearFmt = GetProtectedNullableField(historyItem, "yearFormat")
 		if not IsEmpty(yearFmt) then
 			yearNumber = RemoveYearOffset(yearNumber, yearFmt)
 		end
@@ -59,11 +59,11 @@ end
 
 local function collectConcerns(item)
 	local concernesLabels = {}
-	local event = GetProtectedField(item, "content")
+	local event = GetProtectedStringField(item, "content")
 	UniqueAppend(concernesLabels, ScanForCmd(event, "concerns"))
-	UniqueAppend(concernesLabels, GetProtectedField(item, "birthof"))
-	UniqueAppend(concernesLabels, GetProtectedField(item, "deathof"))
-	UniqueAppend(concernesLabels, GetProtectedField(item, "originator"))
+	UniqueAppend(concernesLabels, GetProtectedTableField(item, "birthof"))
+	UniqueAppend(concernesLabels, GetProtectedTableField(item, "deathof"))
+	UniqueAppend(concernesLabels, GetProtectedTableField(item, "originator"))
 	for key1, refType in pairs(RefTypes) do
 		UniqueAppend(concernesLabels, ScanForCmd(event, refType))
 	end
@@ -89,34 +89,28 @@ local function processEvent(item)
 	end
 	StartBenchmarking("ProcessEvent")
 
-	local event = GetProtectedField(item, "content")
+	local event = GetProtectedStringField(item, "content")
 	SetProtectedField(item, "birthof", ScanForCmd(event, "birthof"))
 	SetProtectedField(item, "deathof", ScanForCmd(event, "deathof"))
-	if GetProtectedField(item, "isConcernsOthers") then
+	if GetProtectedNullableField(item, "isConcernsOthers") then
 		collectConcerns(item)
 	else
-		local originator = GetProtectedField(item, "originator")
+		local originator = GetProtectedNullableField(item, "originator")
 		AddToProtectedField(item, "concerns", GetMutableEntityFromAll(originator))
 	end
 
-	for key, entity in pairs(GetProtectedField(item, "concerns")) do
+	for key, entity in pairs(GetProtectedTableField(item, "concerns")) do
 		AddToProtectedField(entity, "historyItems", item)
 	end
 
-	local year = GetProtectedField(item, "year")
-	addSpecialyearsToEntities("born", year, GetProtectedField(item, "birthof"))
-	addSpecialyearsToEntities("died", year, GetProtectedField(item, "deathof"))
+	local year = GetProtectedNullableField(item, "year")
+	addSpecialyearsToEntities("born", year, GetProtectedTableField(item, "birthof"))
+	addSpecialyearsToEntities("died", year, GetProtectedTableField(item, "deathof"))
 
-	if IsEmpty(GetProtectedField(item, "day")) then
+	if IsEmpty(GetProtectedNullableField(item, "day")) then
 		SetProtectedField(item, "day", nil)
 	end
-	if IsEmpty(GetProtectedField(item, "birthof")) then
-		SetProtectedField(item, "birthof", nil)
-	end
-	if IsEmpty(GetProtectedField(item, "deathof")) then
-		SetProtectedField(item, "deathof", nil)
-	end
-	if IsEmpty(GetProtectedField(item, "concerns")) then
+	if IsEmpty(GetProtectedTableField(item, "concerns")) then
 		LogError("This history item concerns nobody:" .. DebugPrint(item))
 	end
 

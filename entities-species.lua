@@ -36,15 +36,15 @@ local function getMixedAgeFactorAndExponent(speciesMixing)
 end
 
 function GetAgeFactorAndExponent(species)
-	local speciesMixing = GetProtectedField(species, "ageMixing")
+	local speciesMixing = GetProtectedNullableField(species, "ageMixing")
 	if not IsEmpty(speciesMixing) then
 		return getMixedAgeFactorAndExponent(speciesMixing)
 	end
-	local factor = GetProtectedField(species, "ageFactor")
+	local factor = GetProtectedNullableField(species, "ageFactor")
 	if factor == nil then
 		factor = 1
 	end
-	local exponent = GetProtectedField(species, "ageExponent")
+	local exponent = GetProtectedNullableField(species, "ageExponent")
 	if exponent == nil then
 		exponent = 1
 	end
@@ -69,7 +69,7 @@ local function correspondingHumanAgeString(species, age)
 end
 
 local function specificAgeString(entity, age)
-	local species = GetProtectedField(entity, "species")
+	local species = GetProtectedNullableField(entity, "species")
 	if IsEmpty(species) then
 		return ""
 	end
@@ -99,7 +99,7 @@ end
 
 function SpeciesAndAgeString(entity)
 	local parts = {}
-	local species = GetProtectedField(entity, "species")
+	local species = GetProtectedNullableField(entity, "species")
 	if not IsEmpty(species) then
 		Append(parts, TexCmd("nameref ", GetMainLabel(species)))
 	end
@@ -126,15 +126,15 @@ local function addLifestageHistoryItems(entity)
 	if IsEmpty(label) then
 		return
 	end
-	local birthyear = GetProtectedField(entity, "born")
+	local birthyear = GetProtectedNullableField(entity, "born")
 	if IsEmpty(birthyear) then
 		return
 	end
-	local species = GetProtectedField(entity, "species")
+	local species = GetProtectedNullableField(entity, "species")
 	if IsEmpty(species) then
 		return
 	end
-	local deathyear = GetProtectedField(entity, "died")
+	local deathyear = GetProtectedNullableField(entity, "died")
 	local factor, exponent = GetAgeFactorAndExponent(species)
 	for i = 2, #lifestagesAndAges do
 		local lifestage = lifestagesAndAges[i][1]

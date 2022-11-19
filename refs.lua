@@ -108,7 +108,7 @@ end
 
 function AddAllEntitiesToPrimaryRefs()
     for key, entity in pairs(AllEntities) do
-        UniqueAppend(PrimaryRefs, GetLabels(entity))
+        UniqueAppend(PrimaryRefs, GetProtectedTableField(entity, "labels"))
     end
 end
 
@@ -123,10 +123,8 @@ function MakeEntityAndChildrenPrimary(label)
         LogError("Entity with label \"" .. label .. "\" not found.")
         return
     end
-    local children = GetProtectedField(entity, "children")
-    if not IsEmpty(children) then
-        UniqueAppend(PrimaryRefs, children)
-    end
+    local children = GetProtectedTableField(entity, "children")
+    UniqueAppend(PrimaryRefs, children)
 end
 
 TexApi.makeEntityPrimary = function(label)

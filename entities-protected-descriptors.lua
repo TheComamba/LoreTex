@@ -44,9 +44,31 @@ function IsProtectedDescriptor(descriptor)
     return false
 end
 
-function GetProtectedField(entity, key)
+local function getProtectedField(entity, key)
     local descriptor = GetProtectedDescriptor(key)
     return entity[descriptor]
+end
+
+function GetProtectedNullableField(entity, key)
+    return getProtectedField(entity, key)
+end
+
+function GetProtectedStringField(entity, key)
+    local out = getProtectedField(entity, key)
+    if out == nil then
+        return ""
+    else
+        return out
+    end
+end
+
+function GetProtectedTableField(entity, key)
+    local out = getProtectedField(entity, key)
+    if out == nil then
+        return {}
+    else
+        return out
+    end
 end
 
 function SetProtectedField(entity, key, value)

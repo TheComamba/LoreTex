@@ -1,5 +1,5 @@
 local function isConcernsUnrevealed(historyItem)
-    for key, entity in pairs(GetProtectedField(historyItem, "concerns")) do
+    for key, entity in pairs(GetProtectedTableField(historyItem, "concerns")) do
         if IsEntitySecret(entity) and not IsRevealed(entity) then
             return true
         end
@@ -8,7 +8,7 @@ local function isConcernsUnrevealed(historyItem)
 end
 
 local function isConcernsSecret(historyItem)
-    for key, entity in pairs(GetProtectedField(historyItem, "concerns")) do
+    for key, entity in pairs(GetProtectedTableField(historyItem, "concerns")) do
         if IsEntitySecret(entity) then
             return true
         end
@@ -17,7 +17,7 @@ local function isConcernsSecret(historyItem)
 end
 
 local function isAllConcnernsShown(historyItem)
-    for key, entity in pairs(GetProtectedField(historyItem, "concerns")) do
+    for key, entity in pairs(GetProtectedTableField(historyItem, "concerns")) do
         if not IsEntityShown(entity) then
             return false
         end
@@ -33,7 +33,7 @@ local function isHistoryShown(historyItem)
     elseif not IsShowFuture and IsFutureEvent(historyItem) then
         return false
     elseif not IsShowSecrets then
-        local isSecret = GetProtectedField(historyItem, "isSecret")
+        local isSecret = GetProtectedNullableField(historyItem, "isSecret")
         if isSecret ~= nil and isSecret then
             return false
         elseif isConcernsUnrevealed(historyItem) then
@@ -47,8 +47,8 @@ local function isHistoryShown(historyItem)
 end
 
 local function historyItemToString(historyItem, isPrintDate)
-    local event = GetProtectedField(historyItem, "content")
-    local isSecret = GetProtectedField(historyItem, "isSecret") or isConcernsSecret(historyItem)
+    local event = GetProtectedStringField(historyItem, "content")
+    local isSecret = GetProtectedNullableField(historyItem, "isSecret") or isConcernsSecret(historyItem)
     local out = {}
     if isPrintDate then
         Append(out, YearAndDayString(historyItem))
@@ -64,11 +64,11 @@ local function historyItemToString(historyItem, isPrintDate)
 end
 
 local function isSameDate(item1, item2)
-    if GetProtectedField(item1, "year") ~= GetProtectedField(item2, "year") then
+    if GetProtectedNullableField(item1, "year") ~= GetProtectedNullableField(item2, "year") then
         return false
     end
-    local day1 = GetProtectedField(item1, "day")
-    local day2 = GetProtectedField(item2, "day")
+    local day1 = GetProtectedNullableField(item1, "day")
+    local day2 = GetProtectedNullableField(item2, "day")
     if day1 == nil and day2 == nil then
         return true
     elseif day1 == nil then
@@ -82,19 +82,10 @@ end
 
 local function addHistoryDescriptors(entity)
     StartBenchmarking("addHistoryDescriptors")
-    local historyItems = GetProtectedField(entity, "historyItems")
-    if historyItems == nil then
-        historyItems = {}
-    end
-    local subEntities = GetProtectedField(entity, "subEntities")
-    if subEntities == nil then
-        subEntities = {}
-    end
+    local historyItems = GetProtectedTableField(entity, "historyItems")
+    local subEntities = GetProtectedTableField(entity, "subEntities")
     for key, subEntity in pairs(subEntities) do
-        local subHistoryItems = GetProtectedField(entity, "historyItems")
-        if subHistoryItems == nil then
-            subHistoryItems = {}
-        end
+        local subHistoryItems = GetProtectedTableField(entity, "historyItems")
         for key2, item in pairs(subHistoryItems) do
             historyItems[#historyItems + 1] = item
         end

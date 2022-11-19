@@ -135,16 +135,16 @@ local function PrintAllEntities(name, entities)
     return out
 end
 
-local function getAllLocationLabelsSorted(entities)
-    local locationLabels = {}
+local function getAllLocationsSorted(entities)
+    local locations = {}
     for key, entity in pairs(entities) do
         local location = GetProtectedNullableField(entity, "location")
         if not IsEmpty(location) and IsEntityShown(location) then
-            UniqueAppend(locationLabels, GetMainLabel(location))
+            locations[#locations + 1] = location
         end
     end
-    table.sort(locationLabels, CompareLocationLabelsByName)
-    return locationLabels
+    table.sort(locations, CompareLocationLabelsByName)
+    return locations
 end
 
 local function printEntityChapterSortedByLocation(entities)
@@ -154,11 +154,10 @@ local function printEntityChapterSortedByLocation(entities)
     local entitiesWorldwide = extractEntitiesAtLocation(entities, nil)
     local out = printEntities(sectionname, entitiesWorldwide)
 
-    local locationLabels = getAllLocationLabelsSorted(entities)
-    for index, locationLabel in pairs(locationLabels) do
-        local location = GetEntity(locationLabel)
-        local sectionname = CapFirst(Tr("in")) .. " " .. PlaceToName(locationLabel)
-        local entitiesHere = extractEntitiesAtLocation(entities, locationLabel)
+    local locations = getAllLocationsSorted(entities)
+    for index, location in pairs(locations) do
+        local sectionname = CapFirst(Tr("in")) .. " " .. PlaceToName(location)
+        local entitiesHere = extractEntitiesAtLocation(entities, location)
         Append(out, printEntities(sectionname, entitiesHere))
     end
 

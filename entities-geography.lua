@@ -6,13 +6,12 @@ function IsLocationUnrevealed(entity)
     return IsEntitySecret(location) and (not IsRevealed(location))
 end
 
-function PlaceToName(locationLabel)
+function PlaceToName(location)
     StartBenchmarking("PlaceToName")
     local name = ""
     local locationLabels = {}
-    local location = GetEntity(locationLabel)
     while not IsEmpty(location) do
-        locationLabel = GetMainLabel(location)
+        local locationLabel = GetMainLabel(location)
         if name == "" then
             name = LabelToName(locationLabel)
         else

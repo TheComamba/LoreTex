@@ -93,9 +93,9 @@ function CompareHistoryItems(a, b)
     end
 end
 
-function CompareLocationLabelsByName(label1, label2)
-    local name1 = PlaceToName(label1)
-    local name2 = PlaceToName(label2)
+function CompareLocationLabelsByName(location1, location2)
+    local name1 = PlaceToName(location1)
+    local name2 = PlaceToName(location2)
     return CompareString(name1, name2)
 end
 

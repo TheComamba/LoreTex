@@ -1,12 +1,14 @@
-local function extractEntitiesAtLocation(list, locationLabel)
+local function extractEntitiesAtLocation(list, location)
     StartBenchmarking("extractEntitiesAtLocation")
     local out = {}
     for key, entity in pairs(list) do
         local entityLocation = GetProtectedNullableField(entity, "location")
-        if IsEmpty(entityLocation) and IsEmpty(locationLabel) then
+        if IsEmpty(entityLocation) and IsEmpty(location) then
             out[#out + 1] = entity
-        elseif not IsEmpty(entityLocation) and GetMainLabel(entityLocation) == locationLabel then
-            out[#out + 1] = entity
+        elseif (not IsEmpty(entityLocation) and not IsEmpty(location)) then
+            if GetMainLabel(entityLocation) == GetMainLabel(location) then
+                out[#out + 1] = entity
+            end
         end
     end
     StopBenchmarking("extractEntitiesAtLocation")
@@ -137,10 +139,15 @@ end
 
 local function getAllLocationsSorted(entities)
     local locations = {}
+    local locationLabels = {}
     for key, entity in pairs(entities) do
         local location = GetProtectedNullableField(entity, "location")
         if not IsEmpty(location) and IsEntityShown(location) then
-            locations[#locations + 1] = location
+            local locationLabel = GetMainLabel(location)
+            if not IsIn(locationLabel, locationLabels) then
+                Append(locationLabels, locationLabel)
+                locations[#locations + 1] = location
+            end
         end
     end
     table.sort(locations, CompareLocationLabelsByName)

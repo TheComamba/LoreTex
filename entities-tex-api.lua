@@ -6,6 +6,17 @@ function SetDescriptor(arg)
     StartBenchmarking("SetDescriptor")
     Replace([[\reference]], [[\nameref]], arg.description)
 
+    local knownLabels = GetLabels(arg.entity)
+    local additionalLabels = ScanForCmd(arg.description, "label")
+    for key, label in pairs(additionalLabels) do
+        if not IsIn(label, knownLabels) then
+            Append(knownLabels, label)
+            --MergeWithAlias(arg.entity, label)
+            local alias = GetMutableEntityFromAll(label)
+            MakePartOf{subEntity = alias, mainEntity = arg.entity}
+        end
+    end
+
     if IsEmpty(arg.subdescriptor) then
         arg.entity[arg.descriptor] = arg.description
     else
@@ -23,14 +34,6 @@ function SetDescriptor(arg)
             LogError(table.concat(error))
         end
         arg.entity[arg.descriptor][arg.subdescriptor] = arg.description
-    end
-    local knownLabels = GetLabels(arg.entity)
-    local additionalLabels = ScanForCmd(arg.description, "label")
-    for key, label in pairs(additionalLabels) do
-        if not IsIn(label, knownLabels) then
-            Append(knownLabels, label)
-            MergeWithAlias(arg.entity, label)
-        end
     end
     StopBenchmarking("SetDescriptor")
 end

@@ -11,11 +11,11 @@ addProtectedDescriptor("birthof")
 addProtectedDescriptor("born")
 addProtectedDescriptor("children")
 addProtectedDescriptor("concerns")
+addProtectedDescriptor("content")
 addProtectedDescriptor("counter")
 addProtectedDescriptor("day")
 addProtectedDescriptor("deathof")
 addProtectedDescriptor("died")
-addProtectedDescriptor("event")
 addProtectedDescriptor("historyItems")
 addProtectedDescriptor("isConcernsOthers")
 addProtectedDescriptor("isSecret")
@@ -25,8 +25,10 @@ addProtectedDescriptor("monthsAndFirstDays")
 addProtectedDescriptor("name")
 addProtectedDescriptor("originator")
 addProtectedDescriptor("parents")
-addProtectedDescriptor("species")
+addProtectedDescriptor("partOf")
 addProtectedDescriptor("shortname")
+addProtectedDescriptor("species")
+addProtectedDescriptor("subEntities")
 addProtectedDescriptor("type")
 addProtectedDescriptor("year")
 addProtectedDescriptor("yearAbbreviation")
@@ -112,4 +114,13 @@ end
 TexApi.setSpecies = function(speciesLabel)
     local species = GetMutableEntityFromAll(speciesLabel)
     SetProtectedField(CurrentEntity, "species", species)
+end
+
+function MakePartOf(arg)
+    if not IsArgOk("MakePartOf", arg, { "subEntity", "mainEntity" }) then
+        return
+    end
+
+    SetProtectedField(arg.subEntity, "partOf", arg.mainEntity)
+    AddToProtectedField(arg.mainEntity, "subEntities", arg.subEntity)
 end

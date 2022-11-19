@@ -47,7 +47,7 @@ local function isHistoryShown(historyItem)
 end
 
 local function historyItemToString(historyItem, isPrintDate)
-    local event = GetProtectedField(historyItem, "event")
+    local event = GetProtectedField(historyItem, "content")
     local isSecret = GetProtectedField(historyItem, "isSecret") or isConcernsSecret(historyItem)
     local out = {}
     if isPrintDate then
@@ -85,6 +85,19 @@ local function addHistoryDescriptors(entity)
     local historyItems = GetProtectedField(entity, "historyItems")
     if historyItems == nil then
         historyItems = {}
+    end
+    local subEntities = GetProtectedField(entity, "subEntities")
+    if subEntities == nil then
+        subEntities = {}
+    end
+    for key, subEntity in pairs(subEntities) do
+        local subHistoryItems = GetProtectedField(entity, "historyItems")
+        if subHistoryItems == nil then
+            subHistoryItems = {}
+        end
+        for key2, item in pairs(subHistoryItems) do
+            historyItems[#historyItems + 1] = item
+        end
     end
     table.sort(historyItems, CompareHistoryItems)
     local processedHistory = {}

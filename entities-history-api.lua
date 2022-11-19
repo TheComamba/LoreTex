@@ -3,7 +3,7 @@ local historyItemCounter = 1
 local function IsHistoryItemOk(caller, item)
 	local required = {}
 	Append(required, GetProtectedDescriptor("counter"))
-	Append(required, GetProtectedDescriptor("event"))
+	Append(required, GetProtectedDescriptor("content"))
 	Append(required, GetProtectedDescriptor("isConcernsOthers"))
 	Append(required, GetProtectedDescriptor("isSecret"))
 	Append(required, GetProtectedDescriptor("year"))
@@ -59,7 +59,7 @@ end
 
 local function collectConcerns(item)
 	local concernesLabels = {}
-	local event = GetProtectedField(item, "event")
+	local event = GetProtectedField(item, "content")
 	UniqueAppend(concernesLabels, ScanForCmd(event, "concerns"))
 	UniqueAppend(concernesLabels, GetProtectedField(item, "birthof"))
 	UniqueAppend(concernesLabels, GetProtectedField(item, "deathof"))
@@ -89,7 +89,7 @@ local function processEvent(item)
 	end
 	StartBenchmarking("ProcessEvent")
 
-	local event = GetProtectedField(item, "event")
+	local event = GetProtectedField(item, "content")
 	SetProtectedField(item, "birthof", ScanForCmd(event, "birthof"))
 	SetProtectedField(item, "deathof", ScanForCmd(event, "deathof"))
 	if GetProtectedField(item, "isConcernsOthers") then
@@ -131,7 +131,7 @@ local function addHistory(arg)
 	SetProtectedField(item, "originator", GetMainLabel(CurrentEntity))
 	setDay(item, arg.day)
 	SetYear(item, arg.year)
-	SetProtectedField(item, "event", arg.event)
+	SetProtectedField(item, "content", arg.event)
 	if not IsEmpty(arg.isConcernsOthers) then
 		SetProtectedField(item, "isConcernsOthers", arg.isConcernsOthers)
 	end

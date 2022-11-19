@@ -91,12 +91,17 @@ end
 
 function GetEntity(label)
     StartBenchmarking("GetEntity")
-    local entity = ReadonlyTable(labelToEntity[label])
+    local entity = labelToEntity[label]
     if IsEmpty(entity) and not IsIn(label, UnfoundRefs) then
         LogError("Entity with label \"" .. label .. "\" not found.")
         Append(UnfoundRefs, label)
         entity = {}
     end
+    local superEntity = GetProtectedField(entity, "partOf")
+    if superEntity ~= nil then
+        entity = superEntity
+    end
+    entity = ReadonlyTable(entity)
     StopBenchmarking("GetEntity")
     return entity
 end

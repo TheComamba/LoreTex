@@ -24,7 +24,7 @@ function GetShortname(entity)
     elseif not IsEmpty(GetProtectedField(entity, "name")) then
         return GetProtectedField(entity, "name")
     else
-        LogError("Entity " .. DebugPrint(entity) .. " has no name.")
+        LogError("Entity has no name:" .. DebugPrint(entity))
         return "NO NAME"
     end
 end

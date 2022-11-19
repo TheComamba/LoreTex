@@ -39,7 +39,8 @@ local function entityQualifiersString(child, parent, relationships)
         if not IsEmpty(parentLocation) then
             parentLocationLabel = GetMainLabel(parentLocation)
         end
-        if childLocationLabel ~= parentLocationLabel and not IsIn(childLocationLabel, GetProtectedTableField(parent, "labels")) then
+        if childLocationLabel ~= parentLocationLabel and
+            not IsIn(childLocationLabel, GetProtectedTableField(parent, "labels")) then
             Append(content, Tr("in") .. " " .. TexCmd("nameref", childLocationLabel))
         end
     end
@@ -117,7 +118,10 @@ local function addPrimariesWhenMentioned(entities, mentionedRefsHere, allMention
 end
 
 function AddProcessedEntity(entities, entity, allMentionedRefs)
-    if IsEntityShown(entity) and not isEntityInProcessed(GetMainLabel(entity)) then
+    local superEntity = GetProtectedNullableField(entity, "partOf")
+    if superEntity ~= nil then
+        AddProcessedEntity(entities, superEntity, allMentionedRefs)
+    elseif IsEntityShown(entity) and not isEntityInProcessed(GetMainLabel(entity)) then
         local newEntity = DeepCopy(entity)
         MarkDead(newEntity)
         MarkSecret(newEntity)

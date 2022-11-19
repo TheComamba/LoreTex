@@ -11,9 +11,12 @@ function SetDescriptor(arg)
     for key, label in pairs(additionalLabels) do
         if not IsIn(label, knownLabels) then
             Append(knownLabels, label)
-            --MergeWithAlias(arg.entity, label)
             local alias = GetMutableEntityFromAll(label)
-            MakePartOf{subEntity = alias, mainEntity = arg.entity}
+            local aliasName = LabelToNameFromContent { label = label,
+                descriptor = arg.descriptor,
+                content = arg.description }
+            SetProtectedField(alias, "name", aliasName)
+            MakePartOf { subEntity = alias, mainEntity = arg.entity }
         end
     end
 

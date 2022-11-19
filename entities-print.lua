@@ -29,37 +29,6 @@ function GetShortname(entity)
     end
 end
 
-function LabelToName(label)
-    local entity = GetEntity(label)
-    if label == GetMainLabel(entity) then
-        return GetShortname(entity)
-    else
-        for paragraph, content in pairs(entity) do
-            local foundLabels = ScanForCmd(content, "label")
-            local labelIndex = nil
-            for ind, someLabel in pairs(foundLabels) do
-                if someLabel == label then
-                    labelIndex = ind
-                    break
-                end
-            end
-            if labelIndex ~= nil then
-                local subparagraphs = ScanForCmd(content, "subparagraph")
-                if #foundLabels == #subparagraphs then
-                    return subparagraphs[labelIndex]
-                else
-                    return paragraph
-                end
-            end
-        end
-    end
-    if not IsIn(label, UnfoundRefs) then
-        LogError("Label \"" .. label .. "\" not found.")
-        Append(UnfoundRefs, label)
-    end
-    return label:upper()
-end
-
 local function descritptorMapString(map)
     local keys = {}
     for key, elem in pairs(map) do

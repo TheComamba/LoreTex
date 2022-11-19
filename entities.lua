@@ -189,3 +189,45 @@ function IsEntity(inp)
     local labels = GetProtectedNullableField(inp, "labels")
     return not IsEmpty(labels)
 end
+
+function LabelToNameFromContent(arg)
+    if not IsArgOk("LabelToNameFromContent", arg, { "label", "descriptor", "content" }) then
+        return ""
+    end
+    local foundLabels = ScanForCmd(arg.content, "label")
+    local labelIndex = nil
+    for ind, someLabel in pairs(foundLabels) do
+        if someLabel == arg.label then
+            labelIndex = ind
+            break
+        end
+    end
+    if labelIndex == nil then
+        return ""
+    end
+    local subparagraphs = ScanForCmd(arg.content, "subparagraph")
+    if #foundLabels == #subparagraphs then
+        return subparagraphs[labelIndex]
+    else
+        return arg.descriptor
+    end
+end
+
+function LabelToName(label)
+    local entity = GetEntity(label)
+    if label == GetMainLabel(entity) then
+        return GetShortname(entity)
+    else
+        for paragraph, content in pairs(entity) do
+            local name = LabelToNameFromContent { label = label, descriptor = paragraph, content = content }
+            if not IsEmpty(name) then
+                return name
+            end
+        end
+    end
+    if not IsIn(label, UnfoundRefs) then
+        LogError("Label \"" .. label .. "\" not found.")
+        Append(UnfoundRefs, label)
+    end
+    return label:upper()
+end

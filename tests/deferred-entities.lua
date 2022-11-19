@@ -101,5 +101,5 @@ TexApi.newEntity { type = "places", label = "some-place", name = "Some Place" }
 TexApi.addHistory { yearFmt = "test-1", year = 0, event = "Some event." }
 defineCalendar()
 out = GetEntity("some-place")
-out = GetProtectedField(out, "historyItems")[1]
+out = GetProtectedTableField(out, "historyItems")[1]
 Assert("Deferred Calendar (History)", false, IsEmpty(out))

@@ -185,9 +185,7 @@ end
 function IsEntity(inp)
     if type(inp) ~= "table" then
         return false
-    elseif IsEmpty(GetProtectedTableField(inp, "labels")) then
-        return false
-    else
-        return true
     end
+    local labels = GetProtectedNullableField(inp, "labels")
+    return not IsEmpty(labels)
 end

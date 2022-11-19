@@ -57,6 +57,8 @@ function GetProtectedStringField(entity, key)
     local out = getProtectedField(entity, key)
     if out == nil then
         return ""
+    elseif type(out) ~= "string" then
+        LogError("Expected string, got " .. type(out) .. "!")
     else
         return out
     end
@@ -66,6 +68,8 @@ function GetProtectedTableField(entity, key)
     local out = getProtectedField(entity, key)
     if out == nil then
         return {}
+    elseif type(out) ~= "table" then
+        LogError("Expected table, got " .. type(out) .. "!")
     else
         return out
     end

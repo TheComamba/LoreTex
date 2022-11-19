@@ -85,7 +85,7 @@ local function addHistoryDescriptors(entity)
     local historyItems = GetProtectedTableField(entity, "historyItems")
     local subEntities = GetProtectedTableField(entity, "subEntities")
     for key, subEntity in pairs(subEntities) do
-        local subHistoryItems = GetProtectedTableField(entity, "historyItems")
+        local subHistoryItems = GetProtectedTableField(subEntity, "historyItems")
         for key2, item in pairs(subHistoryItems) do
             historyItems[#historyItems + 1] = item
         end

@@ -63,7 +63,7 @@ local function collectConcerns(item)
 	UniqueAppend(concernesLabels, ScanForCmd(event, "concerns"))
 	UniqueAppend(concernesLabels, GetProtectedTableField(item, "birthof"))
 	UniqueAppend(concernesLabels, GetProtectedTableField(item, "deathof"))
-	UniqueAppend(concernesLabels, GetProtectedTableField(item, "originator"))
+	UniqueAppend(concernesLabels, GetProtectedStringField(item, "originator"))
 	for key1, refType in pairs(RefTypes) do
 		UniqueAppend(concernesLabels, ScanForCmd(event, refType))
 	end
@@ -95,8 +95,10 @@ local function processEvent(item)
 	if GetProtectedNullableField(item, "isConcernsOthers") then
 		collectConcerns(item)
 	else
-		local originator = GetProtectedNullableField(item, "originator")
-		AddToProtectedField(item, "concerns", GetMutableEntityFromAll(originator))
+		local originator = GetProtectedStringField(item, "originator")
+		if not IsEmpty(originator) then
+			AddToProtectedField(item, "concerns", GetMutableEntityFromAll(originator))
+		end
 	end
 
 	for key, entity in pairs(GetProtectedTableField(item, "concerns")) do

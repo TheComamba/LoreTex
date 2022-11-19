@@ -138,6 +138,7 @@ local function PrintAllEntities(name, entities)
 end
 
 local function getAllLocationsSorted(entities)
+    StartBenchmarking("getAllLocationsSorted")
     local locations = {}
     local locationLabels = {}
     for key, entity in pairs(entities) do
@@ -151,6 +152,7 @@ local function getAllLocationsSorted(entities)
         end
     end
     table.sort(locations, CompareLocationLabelsByName)
+    StopBenchmarking("getAllLocationsSorted")
     return locations
 end
 

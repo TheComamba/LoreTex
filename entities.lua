@@ -88,9 +88,8 @@ function GetEntity(label)
         Append(UnfoundRefs, label)
         entity = {}
     end
-    local superEntity = GetProtectedNullableField(entity, "partOf")
-    if superEntity ~= nil then
-        entity = superEntity
+    while GetProtectedNullableField(entity, "partOf") ~= nil do
+        entity = GetProtectedNullableField(entity, "partOf")
     end
     entity = ReadonlyTable(entity)
     StopBenchmarking("GetEntity")

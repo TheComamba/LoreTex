@@ -204,10 +204,12 @@ local function removeProcessedEntities(mentionedRefs)
 end
 
 local function getPrimaryEntities()
+    StartBenchmarking("getPrimaryEntities")
     local out = {}
     for key, label in pairs(PrimaryRefs) do
         out[#out + 1] = GetEntity(label)
     end
+    StopBenchmarking("getPrimaryEntities")
     return out
 end
 

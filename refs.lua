@@ -69,23 +69,23 @@ local function scanStringFor(str, cmd)
 end
 
 function ScanForCmd(content, cmd)
+    StartBenchmarking("ScanForCmd")
+    local out = {}
     if content == nil or type(content) == "boolean" or type(content) == "number" then
-        return {}
     elseif type(content) == "string" then
-        return scanStringFor(content, cmd)
+        out = scanStringFor(content, cmd)
     elseif type(content) == "table" then
-        local out = {}
         for key, elem in pairs(content) do
             if not IsProtectedDescriptor(key) then
                 local commands = ScanForCmd(elem, cmd)
                 Append(out, commands)
             end
         end
-        return out
     else
         LogError("Tried to scan content of type " .. type(content) .. "!")
-        return {}
     end
+    StopBenchmarking("ScanForCmd")
+    return out
 end
 
 function ScanContentForMentionedRefs(content)

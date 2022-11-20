@@ -23,6 +23,7 @@ Append(allTestFiles, "species-at-location")
 Append(allTestFiles, "sub-label")
 local numSucceeded = 0
 local numFailed = 0
+local isContainedTranslation = false
 local apiFunctionUsage = {}
 
 local testFunctions = {}
@@ -202,7 +203,7 @@ function Assert(caller, expected, received)
     end
 end
 
-local function prepareApiFunctions()
+local function prepareFunctionsWrappers()
     for key, fun in pairs(TexApi) do
         apiFunctionUsage[key] = 0
         local actualFunction = TexApi[key]
@@ -210,6 +211,11 @@ local function prepareApiFunctions()
             apiFunctionUsage[key] = apiFunctionUsage[key] + 1
             return actualFunction(arg)
         end
+    end
+    local actualTr = Tr
+    Tr = function(a, b)
+        isContainedTranslation = true
+        return actualTr(a, b)
     end
 end
 
@@ -226,12 +232,13 @@ local function runTests(testFiles)
         dofile(RelativePath .. "/tests/" .. testfile .. ".lua")
         PopScopedVariables()
 
-        if currentlyFailed == numFailed then
+        if currentlyFailed == numFailed and isContainedTranslation then
             ResetEnvironment()
             PushScopedVariables()
             RandomiseDictionary()
             dofile(RelativePath .. "/tests/" .. testfile .. ".lua")
             PopScopedVariables()
+            isContainedTranslation = false
         end
     end
 end
@@ -265,7 +272,7 @@ local function printResults()
 end
 
 function RpgTexTests(testFiles)
-    prepareApiFunctions()
+    prepareFunctionsWrappers()
     runTests(testFiles)
     tex.print(printResults())
 end

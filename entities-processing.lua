@@ -93,6 +93,19 @@ local function addChildrenDescriptorsToParent(parent)
     StopBenchmarking("addChildrenDescriptorsToParent")
 end
 
+function AddSubEntitiesAsDescriptors(entity)
+    for key, sub in pairs(GetProtectedTableField(entity, "subEntities")) do
+        local descriptor = GetProtectedStringField(sub, "name")
+        local description = { GetProtectedStringField(sub, "content") }
+        local subsubs = GetProtectedTableField(sub, "subEntities")
+        for key2, subsub in pairs(subsubs) do
+            local content = GetProtectedStringField(subsub, "content")
+            Append(description, content)
+        end
+        entity[descriptor] = table.concat(description)
+    end
+end
+
 function AddAutomatedDescriptors(entity)
     StartBenchmarking("AddAutomatedDescriptors")
     AddParentDescriptorsToChild(entity)
@@ -100,6 +113,7 @@ function AddAutomatedDescriptors(entity)
     AddSpeciesAndAgeStringToNPC(entity)
     AddLifeStagesToSpecies(entity)
     ProcessHistory(entity)
+    AddSubEntitiesAsDescriptors(entity)
     StopBenchmarking("AddAutomatedDescriptors")
 end
 

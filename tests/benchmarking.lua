@@ -9,6 +9,7 @@ function SetBenchmarkingSize(num)
 end
 
 function CreateBenchmarkingTest(sizeStr)
+    StartBenchmarking("All")
     local numcast = tonumber(sizeStr)
     if numcast == nil then
         LogError("Called with " .. DebugPrint(sizeStr))
@@ -38,5 +39,7 @@ function CreateBenchmarkingTest(sizeStr)
         TexApi.newCharacter { label = "mentioned-char-" .. i, name = "Mentioned Character " .. i }
     end
 
-    return TexApi.automatedChapters()
+    local out = TexApi.automatedChapters()
+    StopBenchmarking("All")
+    return out
 end

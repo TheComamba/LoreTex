@@ -189,48 +189,86 @@ function IsEntity(inp)
     return not IsEmpty(labels)
 end
 
-function LabelToNameFromContent(arg)
-    if not IsArgOk("LabelToNameFromContent", arg, { "label", "descriptor", "content" }) then
-        return ""
+local function splitContentatSubparagraph(content)
+    local contentSplit = {}
+    local lastpos = 0
+    while lastpos >= 0 do
+        local nextpos = string.find(content, [[\subparagraph]], lastpos + 1)
+        local part = ""
+        if nextpos == nil then
+            part = string.sub(content, lastpos)
+            nextpos = -1
+        else
+            part = string.sub(content, lastpos, nextpos - 1)
+        end
+        Append(contentSplit, part)
+        lastpos = nextpos
     end
-    local foundLabels = ScanForCmd(arg.content, "label")
-    local labelIndex = nil
-    for ind, someLabel in pairs(foundLabels) do
-        if someLabel == arg.label then
-            labelIndex = ind
-            break
+    return contentSplit
+end
+
+local function mergePartsWithoutLabels(splitContent)
+    local out = { splitContent[1] }
+    for i = 2, #splitContent do
+        local part = splitContent[i]
+        local labels = ScanForCmd(part, "label")
+        if #labels == 0 then
+            out[#out] = out[#out] .. part
+        else
+            Append(out, part)
         end
     end
-    if labelIndex == nil then
+    return out
+end
+
+local function contentToEntityRaw(arg)
+    if not IsArgOk("contentToEntityRaw", arg, { "mainEntity", "name", }, { "content" }) then
+        return {}
+    end
+
+    local labels = ScanForCmd(arg.content, "label")
+    local newEntity = {}
+    if #labels > 0 then
+        newEntity = GetMutableEntityFromAll(labels[1])
+        for i = 2, #labels do
+            RegisterEntityLabel(labels[i], newEntity)
+        end
+    end
+    SetProtectedField(newEntity, "name", arg.name)
+    SetProtectedField(newEntity, "content", arg.content)
+    MakePartOf { subEntity = newEntity, mainEntity = arg.mainEntity }
+    return newEntity
+end
+
+function LabeledContentToEntity(arg)
+    if not IsArgOk("LabeledContentToEntity", arg, { "mainEntity", "name", "content" }) then
         return ""
     end
-    local subparagraphs = ScanForCmd(arg.content, "subparagraph")
-    if #foundLabels == #subparagraphs then
-        return subparagraphs[labelIndex]
-    else
-        return arg.descriptor
+
+    local contentSplit = splitContentatSubparagraph(arg.content)
+    contentSplit = mergePartsWithoutLabels(contentSplit)
+    local newEntity = contentToEntityRaw { mainEntity = arg.mainEntity,
+        name = arg.name,
+        content = contentSplit[1] }
+    for i = 2, #contentSplit do
+        local part = contentSplit[i]
+        local name = ScanForCmd(part, "subparagraph")[1]
+        contentToEntityRaw { mainEntity = newEntity, name = name, content = part }
     end
+    return newEntity
 end
 
 function LabelToName(label)
     StartBenchmarking("LabelToName")
-    local entity = GetEntity(label)
-    if label == GetMainLabel(entity) then
-        StopBenchmarking("LabelToName")
-        return GetShortname(entity)
-    else
-        for paragraph, content in pairs(entity) do
-            local name = LabelToNameFromContent { label = label, descriptor = paragraph, content = content }
-            if not IsEmpty(name) then
-                StopBenchmarking("LabelToName")
-                return name
-            end
-        end
-    end
-    if not IsIn(label, UnfoundRefs) then
+    local name = ""
+    local entity = labelToEntity[label]
+    if not IsEmpty(entity) then
+        name = GetProtectedStringField(entity, "name")
+    elseif not IsIn(label, UnfoundRefs) then
         LogError("Label \"" .. label .. "\" not found.")
         Append(UnfoundRefs, label)
+        name = label:upper()
     end
     StopBenchmarking("LabelToName")
-    return label:upper()
+    return name
 end

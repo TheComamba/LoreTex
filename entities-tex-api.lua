@@ -1,25 +1,5 @@
-function SetDescriptor(arg)
-    if not IsArgOk("SetDescriptor", arg, { "entity", "descriptor", "description" }, { "subdescriptor" }) then
-        return
-    end
-
-    StartBenchmarking("SetDescriptor")
-    Replace([[\reference]], [[\nameref]], arg.description)
-
-    local knownLabels = GetProtectedTableField(arg.entity, "labels")
-    local additionalLabels = ScanForCmd(arg.description, "label")
-    for key, label in pairs(additionalLabels) do
-        if not IsIn(label, knownLabels) then
-            Append(knownLabels, label)
-            local alias = GetMutableEntityFromAll(label)
-            local aliasName = LabelToNameFromContent { label = label,
-                descriptor = arg.descriptor,
-                content = arg.description }
-            SetProtectedField(alias, "name", aliasName)
-            MakePartOf { subEntity = alias, mainEntity = arg.entity }
-        end
-    end
-
+local function setDescriptorAsKeyValPair(arg)
+    StartBenchmarking("setDescriptorAsKeyValPair")
     if IsEmpty(arg.subdescriptor) then
         arg.entity[arg.descriptor] = arg.description
     else
@@ -38,6 +18,26 @@ function SetDescriptor(arg)
         end
         arg.entity[arg.descriptor][arg.subdescriptor] = arg.description
     end
+    StopBenchmarking("setDescriptorAsKeyValPair")
+end
+
+function SetDescriptor(arg)
+    if not IsArgOk("SetDescriptor", arg, { "entity", "descriptor", "description" }, { "subdescriptor" }) then
+        return
+    end
+
+    StartBenchmarking("SetDescriptor")
+    Replace([[\reference]], [[\nameref]], arg.description)
+
+    if IsEmpty(ScanForCmd(arg.description, "label")) then
+        setDescriptorAsKeyValPair(arg)
+    else
+        local alias = LabeledContentToEntity { mainEntity = arg.entity,
+            name = arg.descriptor,
+            content = arg.description }
+        MakePartOf { subEntity = alias, mainEntity = arg.entity }
+    end
+
     StopBenchmarking("SetDescriptor")
 end
 

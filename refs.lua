@@ -51,6 +51,8 @@ local function scanStringFor(str, cmd)
         LogError("Called with " .. DebugPrint(cmd))
         return {}
     end
+
+    StartBenchmarking("scanStringFor")
     local args = {}
     local cmdStr = [[\]] .. cmd
     local openStr = [[{]]
@@ -70,6 +72,7 @@ local function scanStringFor(str, cmd)
 
         posCmd = string.find(str, cmdStr, posClose)
     end
+    StopBenchmarking("scanStringFor")
     return args
 end
 

@@ -107,30 +107,30 @@ local function isEntityInProcessed(label)
     return labelToProcessedEntity[label] ~= nil
 end
 
-local function addPrimariesWhenMentioned(entities, mentionedRefsHere, allMentionedRefs)
+local function addPrimariesWhenMentioned(arg, mentionedRefsHere)
     for key, label in pairs(mentionedRefsHere) do
         local mentionedEntity = GetEntity(label)
         local typeName = GetProtectedStringField(mentionedEntity, "type")
         if IsIn(typeName, PrimaryRefWhenMentionedTypes) then
-            AddProcessedEntity(entities, mentionedEntity, allMentionedRefs)
+            AddProcessedEntity(arg, mentionedEntity)
         end
     end
 end
 
-function AddProcessedEntity(entities, entity, allMentionedRefs)
+function AddProcessedEntity(arg, entity)
     local superEntity = GetProtectedNullableField(entity, "partOf")
     if superEntity ~= nil then
-        AddProcessedEntity(entities, superEntity, allMentionedRefs)
+        AddProcessedEntity(arg, superEntity)
     elseif IsEntityShown(entity) and not isEntityInProcessed(GetMainLabel(entity)) then
         local newEntity = DeepCopy(entity)
         MarkDead(newEntity)
         MarkSecret(newEntity)
         AddAutomatedDescriptors(newEntity)
-        entities[#entities + 1] = newEntity
+        arg.entities[#arg.entities + 1] = newEntity
         registerProcessedEntityLabels(GetProtectedTableField(newEntity, "labels"), newEntity)
         local mentionedRefsHere = ScanContentForMentionedRefs(newEntity)
-        addPrimariesWhenMentioned(entities, mentionedRefsHere, allMentionedRefs)
-        UniqueAppend(allMentionedRefs, mentionedRefsHere)
+        addPrimariesWhenMentioned(arg, mentionedRefsHere)
+        UniqueAppend(arg.mentionedRefs, mentionedRefsHere)
     end
 end
 
@@ -144,19 +144,21 @@ local function removeProcessedEntities(mentionedRefs)
     return onlyMentioned
 end
 
-function ProcessEntities(entitiesIn)
+function ProcessEntities()
     StartBenchmarking("ProcessEntities")
     labelToProcessedEntity = {}
-    local entitiesOut = {}
-    local primaryEntities = GetEntitiesIf(IsPrimary, entitiesIn)
-    local mentionedRefsHere = DeepCopy(MentionedRefs)
-    addPrimariesWhenMentioned(entitiesOut, mentionedRefsHere, mentionedRefsHere)
+    local out = {}
+    out.entities = {}
+    out.mentionedRefs = DeepCopy(MentionedRefs)
+    out.locationNameToEntities = {}
+    local primaryEntities = GetEntitiesIf(IsPrimary, AllEntities)
+    addPrimariesWhenMentioned(out, out.mentionedRefs)
     for key, entity in pairs(primaryEntities) do
         StartBenchmarking("addProcessedEntity")
-        AddProcessedEntity(entitiesOut, entity, mentionedRefsHere)
+        AddProcessedEntity(out, entity)
         StopBenchmarking("addProcessedEntity")
     end
-    mentionedRefsHere = removeProcessedEntities(mentionedRefsHere)
+    out.mentionedRefs = removeProcessedEntities(out.mentionedRefs)
     StopBenchmarking("ProcessEntities")
-    return entitiesOut, mentionedRefsHere
+    return out
 end

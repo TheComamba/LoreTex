@@ -107,12 +107,12 @@ TexApi.newCharacter = newCharacter
 
 local function automatedChapters()
     StartBenchmarking("AutomatedChapters")
-    local processedEntities, mentionedRefs = ProcessEntities(AllEntities)
+    local processOut = ProcessEntities()
     local output = {}
     for key, metatype in pairs(SortedMetatypes()) do
-        Append(output, PrintEntityChapter(processedEntities, metatype))
+        Append(output, PrintEntityChapter(processOut, metatype))
     end
-    Append(output, PrintOnlyMentionedChapter(mentionedRefs))
+    Append(output, PrintOnlyMentionedChapter(processOut.mentionedRefs))
     if HasError() then
         Append(output, TexCmd("chapter", "Logging Messages"))
         Append(output, TexCmd("RpgTex"))

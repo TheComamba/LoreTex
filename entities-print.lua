@@ -178,10 +178,10 @@ local function printEntityChapterSortedByLocation(entities)
     return out
 end
 
-function PrintEntityChapter(primaryEntities, metatype)
+function PrintEntityChapter(processedOut, metatype)
     StartBenchmarking("PrintEntityChapter")
     local isOfFittingType = Bind(IsType, metatype)
-    local fittingEntities = GetEntitiesIf(isOfFittingType, primaryEntities)
+    local fittingEntities = GetEntitiesIf(isOfFittingType, processedOut.entities)
     local out = {}
     if IsEmpty(fittingEntities) then
         StopBenchmarking("PrintEntityChapter")

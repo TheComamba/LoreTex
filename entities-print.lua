@@ -101,20 +101,11 @@ function PrintOnlyMentionedChapter(mentionedRefs)
     return out
 end
 
-local function getAllLabels(list)
-    local out = {}
-    for key, entity in pairs(list) do
-        UniqueAppend(out, GetProtectedTableField(entity, "labels"))
-        UniqueAppend(out, getAllLabels(GetProtectedTableField(entity, "subEntities")))
-    end
-    return out
-end
-
 local function PrintAllEntities(name, entities)
     local out = {}
     local allLabels = {}
     for locationName, entity in pairs(entities) do
-        Append(allLabels, getAllLabels(entity))
+        Append(allLabels, GetAllLabels(entity))
     end
     Sort(allLabels, "compareByName")
     if not IsEmpty(allLabels) then

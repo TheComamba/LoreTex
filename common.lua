@@ -77,15 +77,6 @@ function IsIn(elem, list)
 	return false
 end
 
-function IsAnyElemIn(list1, list2)
-	for key, elem in pairs(list1) do
-		if IsIn(elem, list2) then
-			return true
-		end
-	end
-	return false
-end
-
 function IdentityProcessor(content, additionalContent)
 	return content
 end

@@ -19,17 +19,12 @@ function GetMainLabel(entity)
         LogError("Called with " .. DebugPrint(entity))
         return "CALLED WITH WRONG TYPE"
     end
-    local labels = GetProtectedTableField(entity, "labels")
-    if IsEmpty(labels) then
-        return "MAIN LABEL NOT FOUND"
-    else
-        return labels[1]
-    end
+    return GetProtectedStringField(entity, "label")
 end
 
 function IsPrimary(entity)
-    local labels = GetProtectedTableField(entity, "labels")
-    return IsAnyElemIn(labels, PrimaryRefs)
+    local label = GetProtectedStringField(entity, "label")
+    return IsIn(label, PrimaryRefs)
 end
 
 function GetEntitiesIf(condition, list)
@@ -72,7 +67,7 @@ function GetMutableEntityFromAll(label)
     local entity = labelToEntity[label]
     if entity == nil then
         local newEntity = {}
-        AddToProtectedField(newEntity, "labels", label)
+        SetProtectedField(newEntity, "label", label)
         AllEntities[#AllEntities + 1] = newEntity
         RegisterEntityLabel(label, newEntity)
         entity = labelToEntity[label]
@@ -112,7 +107,7 @@ function IsEntitySecret(entity)
 end
 
 function IsRevealed(entity)
-    return IsAnyElemIn(GetProtectedTableField(entity, "labels"), RevealedLabels)
+    return IsIn(GetProtectedStringField(entity, "label"), RevealedLabels)
 end
 
 function IsEntityShown(entity)
@@ -185,8 +180,12 @@ function IsEntity(inp)
     if type(inp) ~= "table" then
         return false
     end
-    local labels = GetProtectedNullableField(inp, "labels")
-    return not IsEmpty(labels)
+    for key, val in pairs(inp) do
+        if IsProtectedDescriptor(key) then
+            return true
+        end
+    end
+    return false
 end
 
 local function splitContentatSubparagraph(content)
@@ -231,7 +230,7 @@ local function contentToEntityRaw(arg)
     if #labels > 0 then
         newEntity = GetMutableEntityFromAll(labels[1])
         for i = 2, #labels do
-            RegisterEntityLabel(labels[i], newEntity)
+            LogError("Label \"" .. labels[i] .. "\" will be ignored.")
         end
     end
     SetProtectedField(newEntity, "name", arg.name)
@@ -259,6 +258,9 @@ function LabeledContentToEntity(arg)
 end
 
 function LabelToName(label)
+    if IsEmpty(label) then
+        return ""
+    end
     StartBenchmarking("LabelToName")
     local name = ""
     local entity = labelToEntity[label]
@@ -271,4 +273,21 @@ function LabelToName(label)
     end
     StopBenchmarking("LabelToName")
     return name
+end
+
+function GetAllLabels(list)
+    local out = {}
+    if IsEntity(list) then
+        list = { list }
+    end
+    for key, entry in pairs(list) do
+        if IsEntity(entry) then
+            local label = GetProtectedStringField(entry, "label")
+            if not IsEmpty(label) then
+                UniqueAppend(out, label)
+            end
+            UniqueAppend(out, GetAllLabels(GetProtectedTableField(entry, "subEntities")))
+        end
+    end
+    return out
 end

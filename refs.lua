@@ -111,7 +111,7 @@ end
 
 function AddAllEntitiesToPrimaryRefs()
     for key, entity in pairs(AllEntities) do
-        UniqueAppend(PrimaryRefs, GetProtectedTableField(entity, "labels"))
+        UniqueAppend(PrimaryRefs, GetAllLabels(entity))
     end
 end
 

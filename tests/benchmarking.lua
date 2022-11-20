@@ -17,9 +17,9 @@ function CreateBenchmarkingTest(sizeStr)
         size = numcast
     end
     TexApi.setCurrentYear(1400)
-    for i = 1, size do
+    for i = size, 1, -1 do
         TexApi.newEntity { type = "places", label = "place-" .. i, name = "Place " .. i }
-        TexApi.addHistory { year = -i, event = [[Birth of \reference{char-]] .. i .. [[} \birthof{char-]] .. i .. [[}]] }
+        TexApi.addHistory { year = -i, event = [[Birth of \reference{char-]] .. i .. [[} \birthof{char-]] .. i .. [[-1}]] }
         TexApi.makeEntityPrimary("place-" .. i)
 
         TexApi.newEntity { type = "species", label = "species-" .. i, name = "Species " .. i }
@@ -28,13 +28,19 @@ function CreateBenchmarkingTest(sizeStr)
 
         TexApi.newEntity { type = "organisations", label = "organisation-" .. i, name = "Organisation " .. i }
         TexApi.makeEntityPrimary("organisation-" .. i)
+        if i > 1 then
+            TexApi.setLocation("place-" .. (i - 1))
+        end
 
-        TexApi.newCharacter { label = "char-" .. i, name = "Character " .. i }
-        TexApi.setSpecies("species-" .. i)
-        TexApi.setLocation("place-" .. i)
-        TexApi.addParent { parentLabel = "organisation-" .. i }
-        TexApi.setDescriptor { descriptor = "Best Friend", description = [[\nameref{mentioned-char-]] .. i .. [[}]] }
-        TexApi.makeEntityPrimary("char-" .. i)
+        for j = 10, 1, -1 do
+            local label = "char-" .. i .. "-" .. j
+            TexApi.newCharacter { label = label, name = label }
+            TexApi.setSpecies("species-" .. i)
+            TexApi.setLocation("place-" .. i)
+            TexApi.addParent { parentLabel = "organisation-" .. i }
+            TexApi.setDescriptor { descriptor = "Best Friend", description = [[\nameref{mentioned-char-]] .. i .. [[}]] }
+            TexApi.makeEntityPrimary(label)
+        end
 
         TexApi.newCharacter { label = "mentioned-char-" .. i, name = "Mentioned Character " .. i }
     end

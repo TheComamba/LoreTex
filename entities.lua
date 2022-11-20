@@ -118,56 +118,6 @@ function IsEntityShown(entity)
     end
 end
 
-local function joinEntitiesError(arg)
-    local mainLabel = GetProtectedStringField(arg.main, "label")
-    local alias = GetProtectedStringField(arg.aliasEntity, "label")
-    local errorMessage = {}
-    Append(errorMessage, "Collision while joining entities \"")
-    Append(errorMessage, mainLabel)
-    Append(errorMessage, "\" and \"")
-    Append(errorMessage, alias)
-    Append(errorMessage, "\": Key \"")
-    Append(errorMessage, arg.key)
-    Append(errorMessage, "\" defined with different ")
-    Append(errorMessage, arg.errorType)
-    Append(errorMessage, ".")
-    LogError(errorMessage)
-end
-
-local function mergeEntities(mainEntity, aliasEntity)
-    for key, val in pairs(aliasEntity) do
-        if IsEmpty(mainEntity[key]) then
-            mainEntity[key] = val
-        else
-            if type(val) ~= type(mainEntity[key]) then
-                joinEntitiesError { main = mainEntity, aliasEntity = aliasEntity, key = key, errorType = "types" }
-                return
-            elseif type(val) ~= "table" then
-                if val ~= mainEntity[key] then
-                    joinEntitiesError { main = mainEntity, aliasEntity = aliasEntity, key = key, errorType = "values" }
-                    return
-                end
-            else
-                JoinTables(val, mainEntity[key])
-            end
-        end
-    end
-end
-
-function MergeWithAlias(mainEntity, alias)
-    local aliasEntity = GetMutableEntityFromAll(alias)
-    if not IsEmpty(aliasEntity) then --TODO: This is currently always true
-        mergeEntities(mainEntity, aliasEntity)
-        RegisterEntityLabel(alias, mainEntity)
-        local mt = {}
-        mt.__index = mainEntity
-        mt.__newindex = mainEntity
-        mt.__pairs = function() return pairs(mainEntity) end
-        mt.__ipairs = function() return ipairs(mainEntity) end
-        setmetatable(aliasEntity, mt)
-    end
-end
-
 function IsEntity(inp)
     if type(inp) ~= "table" then
         return false

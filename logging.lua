@@ -84,7 +84,8 @@ function DebugPrintRaw(entity)
         Append(out, DebugPrintRaw(key))
         Append(out, "=")
         if IsEntity(entity[key]) then
-            Append(out, "[Entity \"" .. GetMainLabel(entity[key]) .. "\"]")
+            local label = GetProtectedStringField(entity[key], "label")
+            Append(out, "[Entity \"" .. label .. "\"]")
         else
             Append(out, DebugPrintRaw(entity[key]))
         end

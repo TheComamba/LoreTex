@@ -6,9 +6,11 @@ Assert("Default Location Char 1", nil, GetProtectedNullableField(CurrentEntity, 
 PushScopedVariables()
 SetScopedVariable("DefaultLocation", GetMutableEntityFromAll("lalaland"))
 TexApi.newEntity { type = "places", label = "test-place-2", name = "Test Place 2" }
-Assert("Default Location Place 2", "lalaland", GetMainLabel(GetProtectedNullableField(CurrentEntity, "location")))
+local location = GetProtectedNullableField(CurrentEntity, "location")
+Assert("Default Location Place 2", "lalaland", GetProtectedStringField(location, "label"))
 TexApi.newCharacter { label = "test-char-2", name = "Test Char 2" }
-Assert("Default Location Char 2", "lalaland", GetMainLabel(GetProtectedNullableField(CurrentEntity, "location")))
+local location = GetProtectedNullableField(CurrentEntity, "location")
+Assert("Default Location Char 2", "lalaland", GetProtectedStringField(location, "label"))
 PopScopedVariables()
 
 TexApi.newEntity { type = "places", label = "test-place-3", name = "Test Place 3" }

@@ -101,7 +101,7 @@ function SpeciesAndAgeString(entity)
 	local parts = {}
 	local species = GetProtectedNullableField(entity, "species")
 	if not IsEmpty(species) then
-		Append(parts, TexCmd("nameref ", GetMainLabel(species)))
+		Append(parts, TexCmd("nameref ", GetProtectedStringField(species, "label")))
 	end
 	if IsCurrentYearSet then
 		local ageDescription = ageString(entity, GetCurrentYear())
@@ -122,7 +122,7 @@ function SpeciesAndAgeString(entity)
 end
 
 local function addLifestageHistoryItems(entity)
-	local label = GetMainLabel(entity)
+	local label = GetProtectedStringField(entity, "label")
 	if IsEmpty(label) then
 		return
 	end

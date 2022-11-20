@@ -75,7 +75,7 @@ local function printEntities(sectionname, entitiesList)
         else
             Append(out, TexCmd("subsubsection", GetProtectedStringField(entity, "name"), shortname))
         end
-        Append(out, TexCmd("label", GetMainLabel(entity)))
+        Append(out, TexCmd("label", GetProtectedStringField(entity, "label")))
         Append(out, descriptorsString(entity))
     end
     StopBenchmarking("printEntities")

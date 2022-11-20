@@ -11,7 +11,7 @@ function AddParentDescriptorsToChild(child)
                 relationship = CapFirst(Tr("member"))
             end
             if not IsEmpty(parent) and IsEntityShown(parent) then
-                local parentLabel = GetMainLabel(parent)
+                local parentLabel = GetProtectedStringField(parent, "label")
                 local description = relationship ..
                     " " .. Tr("of") .. " " .. TexCmd("nameref ", parentLabel) .. "."
                 if IsEntitySecret(parent) then

@@ -11,7 +11,7 @@ function PlaceToName(location)
     local name = ""
     local locationLabels = {}
     while not IsEmpty(location) do
-        local locationLabel = GetMainLabel(location)
+        local locationLabel = GetProtectedStringField(location, "label")
         if name == "" then
             name = LabelToName(locationLabel)
         else

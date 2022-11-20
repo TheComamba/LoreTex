@@ -125,7 +125,8 @@ end
 
 function SetLocation(entity, location)
     SetProtectedField(entity, "location", location)
-    addParent { entity = entity, parentLabel = GetMainLabel(location), relationship = GetProtectedDescriptor("location") }
+    local locationLabel = GetProtectedStringField(location, "label")
+    addParent { entity = entity, parentLabel = locationLabel, relationship = GetProtectedDescriptor("location") }
 end
 
 TexApi.setLocation = function(locationLabel)

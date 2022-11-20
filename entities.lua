@@ -14,14 +14,6 @@ end
 
 ResetEntities()
 
-function GetMainLabel(entity)
-    if type(entity) ~= "table" then
-        LogError("Called with " .. DebugPrint(entity))
-        return "CALLED WITH WRONG TYPE"
-    end
-    return GetProtectedStringField(entity, "label")
-end
-
 function IsPrimary(entity)
     local label = GetProtectedStringField(entity, "label")
     return IsIn(label, PrimaryRefs)
@@ -127,8 +119,8 @@ function IsEntityShown(entity)
 end
 
 local function joinEntitiesError(arg)
-    local mainLabel = GetMainLabel(arg.main)
-    local alias = GetMainLabel(arg.aliasEntity)
+    local mainLabel = GetProtectedStringField(arg.main, "label")
+    local alias = GetProtectedStringField(arg.aliasEntity, "label")
     local errorMessage = {}
     Append(errorMessage, "Collision while joining entities \"")
     Append(errorMessage, mainLabel)

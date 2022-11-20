@@ -124,7 +124,7 @@ local function addHistory(arg)
 		return
 	end
 	local item = NewHistoryItem()
-	SetProtectedField(item, "originator", GetMainLabel(CurrentEntity))
+	SetProtectedField(item, "originator", GetProtectedStringField(CurrentEntity, "label"))
 	setDay(item, arg.day)
 	SetYear(item, arg.year)
 	SetProtectedField(item, "content", arg.event)

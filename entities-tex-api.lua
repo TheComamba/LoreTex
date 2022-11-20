@@ -64,7 +64,7 @@ function MakePrimaryIf(condition)
     StartBenchmarking("MakePrimaryIf")
     for key, entity in pairs(AllEntities) do
         if (condition(entity)) then
-            local label = GetMainLabel(entity)
+            local label = GetProtectedStringField(entity, "label")
             UniqueAppend(PrimaryRefs, label)
         end
     end

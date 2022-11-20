@@ -34,10 +34,10 @@ local function entityQualifiersString(child, parent, relationships)
     if IsLocationUnrevealed(child) then
         Append(content, Tr("at-secret-location"))
     elseif not IsEmpty(childLocation) then
-        local childLocationLabel = GetMainLabel(childLocation)
+        local childLocationLabel = GetProtectedStringField(childLocation, "label")
         local parentLocationLabel = ""
         if not IsEmpty(parentLocation) then
-            parentLocationLabel = GetMainLabel(parentLocation)
+            parentLocationLabel = GetProtectedStringField(parentLocation, "label")
         end
         if childLocationLabel ~= parentLocationLabel and
             not IsIn(childLocationLabel, GetAllLabels(parent)) then
@@ -58,7 +58,7 @@ local function addSingleChildDescriptorToParent(child, parent, relationships)
         parent[descriptor] = {}
     end
     local content = {}
-    local srcLabel = GetMainLabel(child)
+    local srcLabel = GetProtectedStringField(child, "label")
     Append(content, TexCmd("nameref", srcLabel))
     Append(content, " ")
     Append(content, entityQualifiersString(child, parent, relationships))
@@ -69,7 +69,9 @@ local function getRelationships(child, parent)
     local parents = GetProtectedTableField(child, "parents")
     local relationships = {}
     for key, parentAndRelationship in pairs(parents) do
-        if GetMainLabel(parentAndRelationship[1]) == GetMainLabel(parent) then
+        local affiliationLabel = GetProtectedStringField(parentAndRelationship[1], "label")
+        local parentLabel = GetProtectedStringField(parent, "label")
+        if affiliationLabel == parentLabel then
             local relationship = parentAndRelationship[2]
             if not IsEmpty(relationship) and not IsProtectedDescriptor(relationship) then
                 UniqueAppend(relationships, parentAndRelationship[2])
@@ -174,7 +176,7 @@ function AddProcessedEntity(arg, entity)
     local superEntity = GetProtectedNullableField(entity, "partOf")
     if superEntity ~= nil then
         AddProcessedEntity(arg, superEntity)
-    elseif IsEntityShown(entity) and not isEntityInProcessed(GetMainLabel(entity)) then
+    elseif IsEntityShown(entity) and not isEntityInProcessed(GetProtectedStringField(entity, "label")) then
         processEntity(arg, entity)
     end
 end

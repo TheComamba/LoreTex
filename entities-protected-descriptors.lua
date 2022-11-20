@@ -1,7 +1,7 @@
 local protectedDescriptors = {}
 
 local function addProtectedDescriptor(descriptor)
-    protectedDescriptors[descriptor] = "_" .. descriptor .. "_"
+    protectedDescriptors[descriptor] = "_" .. descriptor
 end
 
 addProtectedDescriptor("ageExponent")
@@ -36,12 +36,7 @@ addProtectedDescriptor("yearFormat")
 addProtectedDescriptor("yearOffset")
 
 function IsProtectedDescriptor(descriptor)
-    for key, protectedDescriptor in pairs(protectedDescriptors) do
-        if protectedDescriptor == descriptor then
-            return true
-        end
-    end
-    return false
+    return string ~= "" and string.sub(descriptor, 1,1) == "_"
 end
 
 local function getProtectedField(entity, key)

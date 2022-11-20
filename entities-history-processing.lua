@@ -80,16 +80,35 @@ local function isSameDate(item1, item2)
     end
 end
 
-local function addHistoryDescriptors(entity)
-    StartBenchmarking("addHistoryDescriptors")
-    local historyItems = GetProtectedTableField(entity, "historyItems")
+local function collectHistoryItems(entity)
+    local out = GetProtectedTableField(entity, "historyItems")
     local subEntities = GetProtectedTableField(entity, "subEntities")
     for key, subEntity in pairs(subEntities) do
         local subHistoryItems = GetProtectedTableField(subEntity, "historyItems")
         for key2, item in pairs(subHistoryItems) do
-            historyItems[#historyItems + 1] = item
+            out[#out + 1] = item
         end
     end
+    return out
+end
+
+local function deleteDuplicateHistoryItems(items)
+    local out = {}
+    local counters = {}
+    for key, item in pairs(items) do
+        local counter = GetProtectedNullableField(item, "counter")
+        if not IsIn(counter, counters) then
+            out[#out + 1] = item
+            Append(counters, counter)
+        end
+    end
+    return out
+end
+
+local function addHistoryDescriptors(entity)
+    StartBenchmarking("addHistoryDescriptors")
+    local historyItems = collectHistoryItems(entity)
+    historyItems = deleteDuplicateHistoryItems(historyItems)
     Sort(historyItems, "compareHistoryItems")
     local processedHistory = {}
     for key, historyItem in pairs(historyItems) do

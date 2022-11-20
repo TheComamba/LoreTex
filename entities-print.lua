@@ -104,7 +104,8 @@ end
 local function getAllLabels(list)
     local out = {}
     for key, entity in pairs(list) do
-        Append(out, GetProtectedTableField(entity, "labels"))
+        UniqueAppend(out, GetProtectedTableField(entity, "labels"))
+        UniqueAppend(out, getAllLabels(GetProtectedTableField(entity, "subEntities")))
     end
     return out
 end

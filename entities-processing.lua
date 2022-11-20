@@ -9,6 +9,14 @@ local function registerProcessedEntityLabels(labels, entity)
     end
 end
 
+local function getAllLabels(entity)
+    local labels = GetProtectedTableField(entity, "labels")
+    for key, sub in pairs(GetProtectedTableField(entity, "subEntities")) do
+        UniqueAppend(labels, getAllLabels(sub))
+    end
+    return labels
+end
+
 local function entityQualifiersString(child, parent, relationships)
     local content = {}
     if IsEntitySecret(child) then
@@ -164,7 +172,7 @@ local function processEntity(arg, entity)
     MarkSecret(newEntity)
     AddAutomatedDescriptors(newEntity)
     addEntityToDict(arg, newEntity)
-    registerProcessedEntityLabels(GetProtectedTableField(newEntity, "labels"), newEntity)
+    registerProcessedEntityLabels(getAllLabels(newEntity), newEntity)
     local mentionedRefsHere = ScanContentForMentionedRefs(newEntity)
     addPrimariesWhenMentioned(arg, mentionedRefsHere)
     UniqueAppend(arg.mentionedRefs, mentionedRefsHere)

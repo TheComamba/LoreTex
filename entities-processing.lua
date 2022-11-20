@@ -117,20 +117,51 @@ local function addPrimariesWhenMentioned(arg, mentionedRefsHere)
     end
 end
 
+local function addEntityToDict(arg, newEntity)
+    if arg.entites == nil then
+        arg.entites = {}
+    end
+    local typename = GetProtectedStringField(newEntity, "type")
+    local metatype = GetMetatype(typename)
+    if arg.entities[metatype] == nil then
+        arg.entities[metatype] = {}
+    end
+    if arg.entities[metatype][typename] == nil then
+        arg.entities[metatype][typename] = {}
+    end
+    local locationName = ""
+    if IsLocationUnrevealed(newEntity) then
+        locationName = GetProtectedDescriptor("isSecret")
+    else
+        local location = GetProtectedNullableField(newEntity, "location")
+        if not IsEmpty(location) then
+            locationName = PlaceToName(location)
+        end
+    end
+    if arg.entities[metatype][typename][locationName] == nil then
+        arg.entities[metatype][typename][locationName] = {}
+    end
+    arg.entities[metatype][typename][locationName][#arg.entities[metatype][typename][locationName] + 1] = newEntity
+end
+
+local function processEntity(arg, entity)
+    local newEntity = DeepCopy(entity)
+    MarkDead(newEntity)
+    MarkSecret(newEntity)
+    AddAutomatedDescriptors(newEntity)
+    addEntityToDict(arg, newEntity)
+    registerProcessedEntityLabels(GetProtectedTableField(newEntity, "labels"), newEntity)
+    local mentionedRefsHere = ScanContentForMentionedRefs(newEntity)
+    addPrimariesWhenMentioned(arg, mentionedRefsHere)
+    UniqueAppend(arg.mentionedRefs, mentionedRefsHere)
+end
+
 function AddProcessedEntity(arg, entity)
     local superEntity = GetProtectedNullableField(entity, "partOf")
     if superEntity ~= nil then
         AddProcessedEntity(arg, superEntity)
     elseif IsEntityShown(entity) and not isEntityInProcessed(GetMainLabel(entity)) then
-        local newEntity = DeepCopy(entity)
-        MarkDead(newEntity)
-        MarkSecret(newEntity)
-        AddAutomatedDescriptors(newEntity)
-        arg.entities[#arg.entities + 1] = newEntity
-        registerProcessedEntityLabels(GetProtectedTableField(newEntity, "labels"), newEntity)
-        local mentionedRefsHere = ScanContentForMentionedRefs(newEntity)
-        addPrimariesWhenMentioned(arg, mentionedRefsHere)
-        UniqueAppend(arg.mentionedRefs, mentionedRefsHere)
+        processEntity(arg, entity)
     end
 end
 
@@ -150,7 +181,6 @@ function ProcessEntities()
     local out = {}
     out.entities = {}
     out.mentionedRefs = DeepCopy(MentionedRefs)
-    out.locationNameToEntities = {}
     local primaryEntities = GetEntitiesIf(IsPrimary, AllEntities)
     addPrimariesWhenMentioned(out, out.mentionedRefs)
     for key, entity in pairs(primaryEntities) do

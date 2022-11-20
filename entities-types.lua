@@ -35,6 +35,16 @@ function IsTypeKnown(queriedType)
     return false
 end
 
+function GetMetatype(typename)
+    for metatype, types in pairs(AllTypes) do
+        if IsIn(typename, types) then
+            return metatype
+        end
+    end
+    LogError("Type \"" .. typename .. "\" not found!")
+    return ""
+end
+
 function SortedMetatypes()
     local metatypes = {}
     for key, types in pairs(AllTypes) do

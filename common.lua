@@ -256,3 +256,21 @@ function IsArgOk(caller, arg, required, optional)
 	end
 	return true
 end
+
+local function getKeysOfType(tableInput, keyType)
+	local out = {}
+	for key, elem in pairs(tableInput) do
+		if type(key) == keyType then
+			Append(out, key)
+		end
+	end
+	table.sort(out, CompareAlphanumerical)
+	return out
+end
+
+function GetSortedKeys(tableInput)
+	local out = {}
+	Append(out, getKeysOfType(tableInput, "number"))
+	Append(out, getKeysOfType(tableInput, "string"))
+	return out
+end

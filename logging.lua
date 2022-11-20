@@ -64,24 +64,6 @@ function PrintErrors()
     return out
 end
 
-local function getKeysOfType(tableInput, keyType)
-    local out = {}
-    for key, elem in pairs(tableInput) do
-        if type(key) == keyType then
-            Append(out, key)
-        end
-    end
-    table.sort(out, CompareAlphanumerical)
-    return out
-end
-
-local function getSortedKeys(tableInput)
-    local out = {}
-    Append(out, getKeysOfType(tableInput, "number"))
-    Append(out, getKeysOfType(tableInput, "string"))
-    return out
-end
-
 function DebugPrintRaw(entity)
     if entity == nil then
         return { "nil" }
@@ -93,7 +75,7 @@ function DebugPrintRaw(entity)
         return { tostring(entity) }
     end
     local out = {}
-    local keys = getSortedKeys(entity)
+    local keys = GetSortedKeys(entity)
     Append(out, [[{	]])
     for i, key in pairs(keys) do
         if i > 1 then

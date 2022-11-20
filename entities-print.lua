@@ -1,20 +1,3 @@
-local function extractEntitiesAtLocation(list, location)
-    StartBenchmarking("extractEntitiesAtLocation")
-    local out = {}
-    for key, entity in pairs(list) do
-        local entityLocation = GetProtectedNullableField(entity, "location")
-        if IsEmpty(entityLocation) and IsEmpty(location) then
-            out[#out + 1] = entity
-        elseif (not IsEmpty(entityLocation) and not IsEmpty(location)) then
-            if GetMainLabel(entityLocation) == GetMainLabel(location) then
-                out[#out + 1] = entity
-            end
-        end
-    end
-    StopBenchmarking("extractEntitiesAtLocation")
-    return out
-end
-
 function GetShortname(entity)
     if type(entity) == "string" then
         entity = GetEntity(entity)
@@ -48,7 +31,7 @@ local function descritptorMapString(map)
     return table.concat(out)
 end
 
-function DescriptorsString(entity)
+local function descriptorsString(entity)
     StartBenchmarking("DescriptorsString")
     local out = {}
 
@@ -93,7 +76,7 @@ local function printEntities(sectionname, entitiesList)
             Append(out, TexCmd("subsubsection", GetProtectedStringField(entity, "name"), shortname))
         end
         Append(out, TexCmd("label", GetMainLabel(entity)))
-        Append(out, DescriptorsString(entity))
+        Append(out, descriptorsString(entity))
     end
     StopBenchmarking("printEntities")
     return out
@@ -128,7 +111,10 @@ end
 
 local function PrintAllEntities(name, entities)
     local out = {}
-    local allLabels = getAllLabels(entities)
+    local allLabels = {}
+    for locationName, entity in pairs(entities) do
+        Append(allLabels, getAllLabels(entity))
+    end
     table.sort(allLabels, CompareByName)
     if not IsEmpty(allLabels) then
         Append(out, TexCmd("subsection*", CapFirst(Tr("all")) .. " " .. CapFirst(name)))
@@ -137,41 +123,26 @@ local function PrintAllEntities(name, entities)
     return out
 end
 
-local function getAllLocationsSorted(entities)
-    StartBenchmarking("getAllLocationsSorted")
-    local locations = {}
-    local locationLabels = {}
-    for key, entity in pairs(entities) do
-        local location = GetProtectedNullableField(entity, "location")
-        if not IsEmpty(location) and IsEntityShown(location) then
-            local locationLabel = GetMainLabel(location)
-            if not IsIn(locationLabel, locationLabels) then
-                Append(locationLabels, locationLabel)
-                locations[#locations + 1] = location
-            end
-        end
-    end
-    table.sort(locations, CompareLocationLabelsByName)
-    StopBenchmarking("getAllLocationsSorted")
-    return locations
-end
-
 local function printEntityChapterSortedByLocation(entities)
     StartBenchmarking("printEntityChapterSortedByLocation")
+    local out = {}
 
-    local sectionname = Tr("in-whole-world")
-    local entitiesWorldwide = extractEntitiesAtLocation(entities, nil)
-    local out = printEntities(sectionname, entitiesWorldwide)
-
-    local locations = getAllLocationsSorted(entities)
-    for index, location in pairs(locations) do
-        local sectionname = CapFirst(Tr("in")) .. " " .. PlaceToName(location)
-        local entitiesHere = extractEntitiesAtLocation(entities, location)
-        Append(out, printEntities(sectionname, entitiesHere))
+    local locationNames = GetSortedKeys(entities)
+    for i, locationName in pairs(locationNames) do
+        if not IsProtectedDescriptor(locationName) then
+            local sectionname = ""
+            if IsEmpty(locationName) then
+                sectionname = Tr("in-whole-world")
+            else
+                sectionname = CapFirst(Tr("in")) .. " " .. locationName
+            end
+            local entitiesHere = entities[locationName]
+            Append(out, printEntities(sectionname, entitiesHere))
+        end
     end
 
     local sectionname = Tr("at-secret-locations")
-    local entitiesAtSecretLocations = GetEntitiesIf(IsLocationUnrevealed, entities)
+    local entitiesAtSecretLocations = GetProtectedTableField(entities, "isSecret")
     Append(out, printEntities(sectionname, entitiesAtSecretLocations))
 
     StopBenchmarking("printEntityChapterSortedByLocation")
@@ -179,20 +150,17 @@ local function printEntityChapterSortedByLocation(entities)
 end
 
 function PrintEntityChapter(processedOut, metatype)
-    StartBenchmarking("PrintEntityChapter")
-    local isOfFittingType = Bind(IsType, metatype)
-    local fittingEntities = GetEntitiesIf(isOfFittingType, processedOut.entities)
-    local out = {}
-    if IsEmpty(fittingEntities) then
-        StopBenchmarking("PrintEntityChapter")
-        return out
+    if IsEmpty(processedOut.entities[metatype]) then
+        return {}
     end
 
+    StartBenchmarking("PrintEntityChapter")
+    local out = {}
     Append(out, TexCmd("chapter", CapFirst(Tr(metatype))))
     local types = AllTypes[metatype]
     table.sort(types, CompareTranslation)
     for i, type in pairs(types) do
-        local entitiesOfType = GetEntitiesOfType(type, fittingEntities)
+        local entitiesOfType = processedOut.entities[metatype][type]
         if not IsEmpty(entitiesOfType) then
             Append(out, TexCmd("section", CapFirst(Tr(type))))
             Append(out, PrintAllEntities(Tr(type), entitiesOfType))

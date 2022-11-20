@@ -93,12 +93,6 @@ function CompareHistoryItems(a, b)
     end
 end
 
-function CompareLocationLabelsByName(location1, location2)
-    local name1 = PlaceToName(location1)
-    local name2 = PlaceToName(location2)
-    return CompareString(name1, name2)
-end
-
 function CompareTranslation(a, b)
     return CompareString(Tr(a), Tr(b))
 end

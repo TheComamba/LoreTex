@@ -28,16 +28,15 @@ function SetDescriptor(arg)
 
     StartBenchmarking("SetDescriptor")
     Replace([[\reference]], [[\nameref]], arg.description)
-
     if IsEmpty(ScanForCmd(arg.description, "label")) then
         setDescriptorAsKeyValPair(arg)
+        AddConcerns(arg.entity, arg.description)
     else
         local alias = LabeledContentToEntity { mainEntity = arg.entity,
             name = arg.descriptor,
             content = arg.description }
         MakePartOf { subEntity = alias, mainEntity = arg.entity }
     end
-
     StopBenchmarking("SetDescriptor")
 end
 
@@ -112,7 +111,7 @@ local function automatedChapters()
     for key, metatype in pairs(SortedMetatypes()) do
         Append(output, PrintEntityChapter(processOut, metatype))
     end
-    Append(output, PrintOnlyMentionedChapter(processOut.mentionedRefs))
+    Append(output, PrintOnlyMentionedChapter(processOut.mentioned))
     if HasError() then
         Append(output, TexCmd("chapter", "Logging Messages"))
         Append(output, TexCmd("RpgTex"))

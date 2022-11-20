@@ -79,15 +79,16 @@ local function printEntities(sectionname, entitiesList)
     return out
 end
 
-function PrintOnlyMentionedChapter(mentionedRefs)
+function PrintOnlyMentionedChapter(mentionedEntities)
     StartBenchmarking("PrintOnlyMentionedChapter")
     local out = {}
-    Sort(mentionedRefs, "compareByName")
-    for key, label in pairs(mentionedRefs) do
+    Sort(mentionedEntities, "compareByName")
+    for key, mentionedEntity in pairs(mentionedEntities) do
         if key == 1 then
             Append(out, TexCmd("chapter", CapFirst(Tr("only-mentioned"))))
         end
-        local name = LabelToName(label)
+        local name = GetProtectedStringField(mentionedEntity, "name")
+        local label = GetProtectedStringField(mentionedEntity, "label")
         if not IsEmpty(name) then
             Append(out, TexCmd("subparagraph", name))
             Append(out, TexCmd("label", label))

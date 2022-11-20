@@ -8,6 +8,23 @@ local function registerProcessedEntityLabels(entity)
     StopBenchmarking("registerProcessedEntityLabels")
 end
 
+local function collectConernedEntities(entity)
+    StartBenchmarking("collectConernedEntities")
+    local out = GetProtectedTableField(entity, "concerns")
+    for key, item in pairs(GetProtectedTableField(entity, "historyItems")) do
+        for key2, concern in pairs(GetProtectedTableField(item, "concerns")) do
+            out[#out + 1] = concern
+        end
+    end
+    for key, sub in pairs(GetProtectedTableField(entity, "subEntities")) do
+        for key2, concern in pairs(collectConernedEntities(sub)) do
+            out[#out + 1] = concern
+        end
+    end
+    StopBenchmarking("collectConernedEntities")
+    return out
+end
+
 local function entityQualifiersString(child, parent, relationships)
     local content = {}
     if IsEntitySecret(child) then
@@ -122,14 +139,15 @@ local function isEntityInProcessed(label)
     return labelToProcessedEntity[label] ~= nil
 end
 
-local function addPrimariesWhenMentioned(arg, mentionedRefsHere)
-    for key, label in pairs(mentionedRefsHere) do
-        local mentionedEntity = GetEntity(label)
-        local typeName = GetProtectedStringField(mentionedEntity, "type")
+local function addPrimariesWhenMentioned(arg, mentioned)
+    StartBenchmarking("addPrimariesWhenMentioned")
+    for key, entity in pairs(mentioned) do
+        local typeName = GetProtectedStringField(entity, "type")
         if IsIn(typeName, PrimaryRefWhenMentionedTypes) then
-            AddProcessedEntity(arg, mentionedEntity)
+            AddProcessedEntity(arg, entity)
         end
     end
+    StopBenchmarking("addPrimariesWhenMentioned")
 end
 
 local function addEntityToDict(arg, newEntity)
@@ -175,10 +193,20 @@ local function registerProcessedEntity(arg, newEntity)
     StartBenchmarking("registerProcessedEntity")
     addEntityToDict(arg, newEntity)
     registerProcessedEntityLabels(newEntity)
-    local mentionedRefsHere = ScanContentForMentionedRefs(newEntity)
-    addPrimariesWhenMentioned(arg, mentionedRefsHere)
-    UniqueAppend(arg.mentionedRefs, mentionedRefsHere)
     StopBenchmarking("registerProcessedEntity")
+end
+
+local function addFollowUpEntities(arg, newEntity)
+    StartBenchmarking("addFollowUpEntities")
+    local mentionedEntities = collectConernedEntities(newEntity)
+    addPrimariesWhenMentioned(arg, mentionedEntities)
+    for key, mentionedEntity in pairs(mentionedEntities) do
+        local label = GetProtectedStringField(mentionedEntity, "label")
+        if not isEntityInProcessed(label) then
+            arg.mentioned[#arg.mentioned + 1] = mentionedEntity
+        end
+    end
+    StopBenchmarking("addFollowUpEntities")
 end
 
 function AddProcessedEntity(arg, entity)
@@ -189,18 +217,9 @@ function AddProcessedEntity(arg, entity)
     elseif IsEntityShown(entity) and not isEntityInProcessed(GetProtectedStringField(entity, "label")) then
         local newEntity = processEntity(arg, entity)
         registerProcessedEntity(arg, newEntity)
+        addFollowUpEntities(arg, newEntity)
     end
     StopBenchmarking("AddProcessedEntity")
-end
-
-local function removeProcessedEntities(mentionedRefs)
-    local onlyMentioned = {}
-    for key, label in pairs(mentionedRefs) do
-        if not isEntityInProcessed(label) then
-            UniqueAppend(onlyMentioned, label)
-        end
-    end
-    return onlyMentioned
 end
 
 local function getPrimaryEntities()
@@ -218,13 +237,15 @@ function ProcessEntities()
     labelToProcessedEntity = {}
     local out = {}
     out.entities = {}
-    out.mentionedRefs = DeepCopy(MentionedRefs)
     local primaryEntities = getPrimaryEntities()
-    addPrimariesWhenMentioned(out, out.mentionedRefs)
+    out.mentioned = {}
+    for key, label in pairs(MentionedRefs) do
+        out.mentioned[#out.mentioned + 1] = GetEntity(label)
+    end
+    addPrimariesWhenMentioned(out, out.mentioned)
     for key, entity in pairs(primaryEntities) do
         AddProcessedEntity(out, entity)
     end
-    out.mentionedRefs = removeProcessedEntities(out.mentionedRefs)
     StopBenchmarking("ProcessEntities")
     return out
 end

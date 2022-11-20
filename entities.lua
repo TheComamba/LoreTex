@@ -51,6 +51,10 @@ function RegisterEntityLabel(label, entity)
 end
 
 function GetMutableEntityFromAll(label)
+    if label == "" then
+        LogError("Called with empty label!")
+        return {}
+    end
     local entity = labelToEntity[label]
     if entity == nil then
         local newEntity = {}
@@ -172,6 +176,7 @@ local function contentToEntityRaw(arg)
     end
     SetProtectedField(newEntity, "name", arg.name)
     SetProtectedField(newEntity, "content", arg.content)
+    AddConcerns(newEntity, arg.content)
     MakePartOf { subEntity = newEntity, mainEntity = arg.mainEntity }
     return newEntity
 end
@@ -181,6 +186,7 @@ function LabeledContentToEntity(arg)
         return ""
     end
 
+    StartBenchmarking("LabeledContentToEntity")
     local contentSplit = splitContentatSubparagraph(arg.content)
     contentSplit = mergePartsWithoutLabels(contentSplit)
     local newEntity = contentToEntityRaw { mainEntity = arg.mainEntity,
@@ -191,6 +197,7 @@ function LabeledContentToEntity(arg)
         local name = ScanStringForCmd(part, "subparagraph")[1]
         contentToEntityRaw { mainEntity = newEntity, name = name, content = part }
     end
+    StopBenchmarking("LabeledContentToEntity")
     return newEntity
 end
 

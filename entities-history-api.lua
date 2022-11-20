@@ -57,19 +57,20 @@ local function setYearFmt(historyItem, label)
 	SetProtectedField(historyItem, "yearFormat", fmt)
 end
 
-local function collectConcerns(item)
+function AddConcerns(entity, content)
 	local concernesLabels = {}
-	local event = GetProtectedStringField(item, "content")
-	UniqueAppend(concernesLabels, ScanStringForCmd(event, "concerns"))
-	UniqueAppend(concernesLabels, GetProtectedTableField(item, "birthof"))
-	UniqueAppend(concernesLabels, GetProtectedTableField(item, "deathof"))
-	UniqueAppend(concernesLabels, GetProtectedStringField(item, "originator"))
-	UniqueAppend(concernesLabels, ScanContentForMentionedRefs(event))
-	local notConcerns = ScanStringForCmd(event, "notconcerns")
+	if GetProtectedNullableField(entity, "year") ~= nil then
+		UniqueAppend(concernesLabels, ScanStringForCmd(content, "concerns"))
+		UniqueAppend(concernesLabels, GetProtectedTableField(entity, "birthof"))
+		UniqueAppend(concernesLabels, GetProtectedTableField(entity, "deathof"))
+		UniqueAppend(concernesLabels, GetProtectedStringField(entity, "originator"))
+	end
+	UniqueAppend(concernesLabels, ScanContentForMentionedRefs(content))
+	local notConcerns = ScanForCmd(content, "notconcerns")
 	for key, concernedLabel in pairs(concernesLabels) do
-		if not IsIn(concernedLabel, notConcerns) then
+		if not IsEmpty(concernedLabel) and not IsIn(concernedLabel, notConcerns) then
 			local concernedEntity = GetMutableEntityFromAll(concernedLabel)
-			AddToProtectedField(item, "concerns", concernedEntity)
+			AddToProtectedField(entity, "concerns", concernedEntity)
 		end
 	end
 end
@@ -91,7 +92,7 @@ local function processEvent(item)
 	SetProtectedField(item, "birthof", ScanStringForCmd(event, "birthof"))
 	SetProtectedField(item, "deathof", ScanStringForCmd(event, "deathof"))
 	if GetProtectedNullableField(item, "isConcernsOthers") then
-		collectConcerns(item)
+		AddConcerns(item, GetProtectedStringField(item, "content"))
 	else
 		local originator = GetProtectedStringField(item, "originator")
 		if not IsEmpty(originator) then

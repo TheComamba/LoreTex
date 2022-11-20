@@ -44,14 +44,6 @@ function ListAllRefs()
 end
 
 local function scanStringFor(str, cmd)
-    if type(str) ~= "string" then
-        LogError("Called with " .. DebugPrint(str))
-        return {}
-    elseif IsEmpty(cmd) or type(cmd) ~= "string" then
-        LogError("Called with " .. DebugPrint(cmd))
-        return {}
-    end
-
     StartBenchmarking("scanStringFor")
     local args = {}
     local cmdStr = [[\]] .. cmd
@@ -97,6 +89,7 @@ function ScanForCmd(content, cmd)
 end
 
 function ScanContentForMentionedRefs(content)
+    StartBenchmarking("ScanContentForMentionedRefs")
     local mentionedRefsHere = {}
     for key1, refType in pairs(RefTypes) do
         local refs = ScanForCmd(content, refType)
@@ -106,6 +99,7 @@ function ScanContentForMentionedRefs(content)
             end
         end
     end
+    StopBenchmarking("ScanContentForMentionedRefs")
     return mentionedRefsHere
 end
 

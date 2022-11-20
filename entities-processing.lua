@@ -1,12 +1,11 @@
 local labelToProcessedEntity = {}
 
-local function registerProcessedEntityLabels(labels, entity)
-    if type(labels) ~= "table" then
-        labels = { labels }
-    end
-    for key, label in pairs(labels) do
+local function registerProcessedEntityLabels(entity)
+    StartBenchmarking("registerProcessedEntityLabels")
+    for key, label in pairs(GetAllLabels(entity)) do
         labelToProcessedEntity[label] = entity
     end
+    StopBenchmarking("registerProcessedEntityLabels")
 end
 
 local function entityQualifiersString(child, parent, relationships)
@@ -134,6 +133,7 @@ local function addPrimariesWhenMentioned(arg, mentionedRefsHere)
 end
 
 local function addEntityToDict(arg, newEntity)
+    StartBenchmarking("addEntityToDict")
     if arg.entites == nil then
         arg.entites = {}
     end
@@ -158,27 +158,39 @@ local function addEntityToDict(arg, newEntity)
         arg.entities[metatype][typename][locationName] = {}
     end
     arg.entities[metatype][typename][locationName][#arg.entities[metatype][typename][locationName] + 1] = newEntity
+    StopBenchmarking("addEntityToDict")
 end
 
 local function processEntity(arg, entity)
+    StartBenchmarking("processEntity")
     local newEntity = DeepCopy(entity)
     MarkDead(newEntity)
     MarkSecret(newEntity)
     AddAutomatedDescriptors(newEntity)
+    StopBenchmarking("processEntity")
+    return newEntity
+end
+
+local function registerProcessedEntity(arg, newEntity)
+    StartBenchmarking("registerProcessedEntity")
     addEntityToDict(arg, newEntity)
-    registerProcessedEntityLabels(GetAllLabels(newEntity), newEntity)
+    registerProcessedEntityLabels(newEntity)
     local mentionedRefsHere = ScanContentForMentionedRefs(newEntity)
     addPrimariesWhenMentioned(arg, mentionedRefsHere)
     UniqueAppend(arg.mentionedRefs, mentionedRefsHere)
+    StopBenchmarking("registerProcessedEntity")
 end
 
 function AddProcessedEntity(arg, entity)
+    StartBenchmarking("AddProcessedEntity")
     local superEntity = GetProtectedNullableField(entity, "partOf")
     if superEntity ~= nil then
         AddProcessedEntity(arg, superEntity)
     elseif IsEntityShown(entity) and not isEntityInProcessed(GetProtectedStringField(entity, "label")) then
-        processEntity(arg, entity)
+        local newEntity = processEntity(arg, entity)
+        registerProcessedEntity(arg, newEntity)
     end
+    StopBenchmarking("AddProcessedEntity")
 end
 
 local function removeProcessedEntities(mentionedRefs)
@@ -200,9 +212,7 @@ function ProcessEntities()
     local primaryEntities = GetEntitiesIf(IsPrimary, AllEntities)
     addPrimariesWhenMentioned(out, out.mentionedRefs)
     for key, entity in pairs(primaryEntities) do
-        StartBenchmarking("addProcessedEntity")
         AddProcessedEntity(out, entity)
-        StopBenchmarking("addProcessedEntity")
     end
     out.mentionedRefs = removeProcessedEntities(out.mentionedRefs)
     StopBenchmarking("ProcessEntities")

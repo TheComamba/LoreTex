@@ -103,29 +103,23 @@ function DebugPrint(entity)
 end
 
 function StartBenchmarking(identifier)
-    if benchmarkingStartTimes[identifier] ~= nil then
-        local mess = {}
-        Append(mess, "Benchmarking for identifier \"")
-        Append(mess, identifier)
-        Append(mess, "\" has already begun. ")
-        Append(mess, "Benchmarking is not implemented for recursive functions!")
-        LogError(mess)
-        return
+    if benchmarkingStartTimes[identifier] == nil then
+        benchmarkingStartTimes[identifier] = {}
     end
-    benchmarkingStartTimes[identifier] = os.clock()
+    benchmarkingStartTimes[identifier][#benchmarkingStartTimes[identifier] + 1] = os.clock()
 end
 
 function StopBenchmarking(identifier)
-    if benchmarkingStartTimes[identifier] == nil then
+    if benchmarkingStartTimes[identifier] == nil or #benchmarkingStartTimes[identifier] == 0 then
         local mess = {}
         Append(mess, "Benchmarking for identifier \"")
         Append(mess, identifier)
-        Append(mess, "\" has never been started.")
+        Append(mess, "\" has not been started.")
         LogError(mess)
         return
     end
-    local time = os.clock() - benchmarkingStartTimes[identifier]
-    benchmarkingStartTimes[identifier] = nil
+    local time = os.clock() - benchmarkingStartTimes[identifier][#benchmarkingStartTimes[identifier]]
+    benchmarkingStartTimes[identifier][#benchmarkingStartTimes[identifier]] = nil
     if benchmarkingResults[identifier] == nil then
         benchmarkingResults[identifier] = {}
         benchmarkingResults[identifier]["calls"] = 0

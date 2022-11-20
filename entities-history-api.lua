@@ -60,14 +60,12 @@ end
 local function collectConcerns(item)
 	local concernesLabels = {}
 	local event = GetProtectedStringField(item, "content")
-	UniqueAppend(concernesLabels, ScanForCmd(event, "concerns"))
+	UniqueAppend(concernesLabels, ScanStringForCmd(event, "concerns"))
 	UniqueAppend(concernesLabels, GetProtectedTableField(item, "birthof"))
 	UniqueAppend(concernesLabels, GetProtectedTableField(item, "deathof"))
 	UniqueAppend(concernesLabels, GetProtectedStringField(item, "originator"))
-	for key1, refType in pairs(RefTypes) do
-		UniqueAppend(concernesLabels, ScanForCmd(event, refType))
-	end
-	local notConcerns = ScanForCmd(event, "notconcerns")
+	UniqueAppend(concernesLabels, ScanContentForMentionedRefs(event))
+	local notConcerns = ScanStringForCmd(event, "notconcerns")
 	for key, concernedLabel in pairs(concernesLabels) do
 		if not IsIn(concernedLabel, notConcerns) then
 			local concernedEntity = GetMutableEntityFromAll(concernedLabel)
@@ -90,8 +88,8 @@ local function processEvent(item)
 	StartBenchmarking("ProcessEvent")
 
 	local event = GetProtectedStringField(item, "content")
-	SetProtectedField(item, "birthof", ScanForCmd(event, "birthof"))
-	SetProtectedField(item, "deathof", ScanForCmd(event, "deathof"))
+	SetProtectedField(item, "birthof", ScanStringForCmd(event, "birthof"))
+	SetProtectedField(item, "deathof", ScanStringForCmd(event, "deathof"))
 	if GetProtectedNullableField(item, "isConcernsOthers") then
 		collectConcerns(item)
 	else

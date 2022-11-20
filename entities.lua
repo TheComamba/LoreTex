@@ -147,7 +147,7 @@ local function mergePartsWithoutLabels(splitContent)
     local out = { splitContent[1] }
     for i = 2, #splitContent do
         local part = splitContent[i]
-        local labels = ScanForCmd(part, "label")
+        local labels = ScanStringForCmd(part, "label")
         if #labels == 0 then
             out[#out] = out[#out] .. part
         else
@@ -162,7 +162,7 @@ local function contentToEntityRaw(arg)
         return {}
     end
 
-    local labels = ScanForCmd(arg.content, "label")
+    local labels = ScanStringForCmd(arg.content, "label")
     local newEntity = {}
     if #labels > 0 then
         newEntity = GetMutableEntityFromAll(labels[1])
@@ -188,7 +188,7 @@ function LabeledContentToEntity(arg)
         content = contentSplit[1] }
     for i = 2, #contentSplit do
         local part = contentSplit[i]
-        local name = ScanForCmd(part, "subparagraph")[1]
+        local name = ScanStringForCmd(part, "subparagraph")[1]
         contentToEntityRaw { mainEntity = newEntity, name = name, content = part }
     end
     return newEntity

@@ -3,7 +3,7 @@ MentionedRefs = {}
 UnfoundRefs = {}
 PrimaryRefWhenMentionedTypes = {}
 IsAppendix = false
-RefTypes = { "reference", "nameref", "itref", "ref" }
+local refTypes = { "reference", "nameref", "itref", "ref" }
 
 function ResetRefs()
     PrimaryRefs = {}
@@ -43,8 +43,8 @@ function ListAllRefs()
     tex.print(ListAll(MentionedRefs, namerefDebugString))
 end
 
-local function scanStringFor(str, cmd)
-    StartBenchmarking("scanStringFor")
+function ScanStringForCmd(str, cmd)
+    StartBenchmarking("ScanStringForCommand")
     local args = {}
     local cmdStr = [[\]] .. cmd
     local openStr = [[{]]
@@ -64,16 +64,15 @@ local function scanStringFor(str, cmd)
 
         posCmd = string.find(str, cmdStr, posClose)
     end
-    StopBenchmarking("scanStringFor")
+    StopBenchmarking("ScanStringForCommand")
     return args
 end
 
 function ScanForCmd(content, cmd)
     StartBenchmarking("ScanForCmd")
     local out = {}
-    if content == nil or type(content) == "boolean" or type(content) == "number" then
-    elseif type(content) == "string" then
-        out = scanStringFor(content, cmd)
+    if type(content) == "string" then
+        out = ScanStringForCmd(content, cmd)
     elseif type(content) == "table" then
         for key, elem in pairs(content) do
             if not IsProtectedDescriptor(key) then
@@ -81,8 +80,6 @@ function ScanForCmd(content, cmd)
                 Append(out, commands)
             end
         end
-    else
-        LogError("Tried to scan content of type " .. type(content) .. "!")
     end
     StopBenchmarking("ScanForCmd")
     return out
@@ -91,13 +88,9 @@ end
 function ScanContentForMentionedRefs(content)
     StartBenchmarking("ScanContentForMentionedRefs")
     local mentionedRefsHere = {}
-    for key1, refType in pairs(RefTypes) do
+    for key1, refType in pairs(refTypes) do
         local refs = ScanForCmd(content, refType)
-        for key2, ref in pairs(refs) do
-            if not IsIn(ref, PrimaryRefs) then
-                UniqueAppend(mentionedRefsHere, ref)
-            end
-        end
+        UniqueAppend(mentionedRefsHere, refs)
     end
     StopBenchmarking("ScanContentForMentionedRefs")
     return mentionedRefsHere

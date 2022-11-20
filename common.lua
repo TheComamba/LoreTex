@@ -264,7 +264,7 @@ local function getKeysOfType(tableInput, keyType)
 			Append(out, key)
 		end
 	end
-	table.sort(out, CompareAlphanumerical)
+	Sort(out, "compareAlphanumerical")
 	return out
 end
 

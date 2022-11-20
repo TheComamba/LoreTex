@@ -1,3 +1,5 @@
+Comparer = {}
+
 local function substringUntil(str, start, pattern)
     local pos = string.find(str, pattern, start)
     if pos == nil then
@@ -7,7 +9,7 @@ local function substringUntil(str, start, pattern)
     end
 end
 
-function CompareString(a, b)
+Comparer.compareString = function(a, b)
     if a:lower() == b:lower() then
         return a < b
     else
@@ -32,13 +34,13 @@ function CompareString(a, b)
     end
 end
 
-function CompareAlphanumerical(a, b)
+Comparer.compareAlphanumerical = function(a, b)
     if type(a) == "string" and tonumber(a) ~= nil then
-        return CompareAlphanumerical(tonumber(a), b)
+        return Comparer.compareAlphanumerical(tonumber(a), b)
     elseif type(b) == "string" and tonumber(b) ~= nil then
-        return CompareAlphanumerical(a, tonumber(b))
+        return Comparer.compareAlphanumerical(a, tonumber(b))
     elseif type(a) == "string" and type(b) == "string" then
-        return CompareString(a, b)
+        return Comparer.compareString(a, b)
     elseif type(a) == "number" and type(b) == "number" then
         return a < b
     elseif type(a) == "number" and type(b) == "string" then
@@ -51,27 +53,27 @@ function CompareAlphanumerical(a, b)
     return false
 end
 
-function CompareByName(entity1, entity2)
+Comparer.compareByName = function(entity1, entity2)
     if type(entity1) == "table" then
-        return CompareString(GetShortname(entity1), GetShortname(entity2))
+        return Comparer.compareString(GetShortname(entity1), GetShortname(entity2))
     elseif type(entity1) == "string" then
-        return CompareString(LabelToName(entity1), LabelToName(entity2))
+        return Comparer.compareString(LabelToName(entity1), LabelToName(entity2))
     end
 end
 
-function CompareAffiliations(a, b)
+Comparer.compareAffiliations = function(a, b)
     if a[1] ~= b[1] then
-        return CompareByName(a[1], b[1])
+        return Comparer.compareByName(a[1], b[1])
     elseif #a ~= #b then
         return #a < #b
     elseif #a > 1 then
-        return CompareString(a[2], b[2])
+        return Comparer.compareString(a[2], b[2])
     else
         return false
     end
 end
 
-function CompareHistoryItems(a, b)
+Comparer.compareHistoryItems = function(a, b)
     local yearA = GetProtectedNullableField(a, "year")
     local yearB = GetProtectedNullableField(b, "year")
     local dayA = GetProtectedNullableField(a, "day")
@@ -93,6 +95,12 @@ function CompareHistoryItems(a, b)
     end
 end
 
-function CompareTranslation(a, b)
-    return CompareString(Tr(a), Tr(b))
+Comparer.compareTranslation = function(a, b)
+    return Comparer.compareString(Tr(a), Tr(b))
+end
+
+function Sort(t, comp)
+    StartBenchmarking("Sort using " .. comp)
+    table.sort(t, Comparer[comp])
+    StopBenchmarking("Sort using " .. comp)
 end

@@ -90,7 +90,7 @@ local function addHistoryDescriptors(entity)
             historyItems[#historyItems + 1] = item
         end
     end
-    table.sort(historyItems, CompareHistoryItems)
+    Sort(historyItems, "compareHistoryItems")
     local processedHistory = {}
     for key, historyItem in pairs(historyItems) do
         if isHistoryShown(historyItem) then

@@ -213,13 +213,16 @@ function LabelToNameFromContent(arg)
 end
 
 function LabelToName(label)
+    StartBenchmarking("LabelToName")
     local entity = GetEntity(label)
     if label == GetMainLabel(entity) then
+        StopBenchmarking("LabelToName")
         return GetShortname(entity)
     else
         for paragraph, content in pairs(entity) do
             local name = LabelToNameFromContent { label = label, descriptor = paragraph, content = content }
             if not IsEmpty(name) then
+                StopBenchmarking("LabelToName")
                 return name
             end
         end
@@ -228,5 +231,6 @@ function LabelToName(label)
         LogError("Label \"" .. label .. "\" not found.")
         Append(UnfoundRefs, label)
     end
+    StopBenchmarking("LabelToName")
     return label:upper()
 end

@@ -50,7 +50,7 @@ function SortedMetatypes()
     for key, types in pairs(AllTypes) do
         Append(metatypes, key)
     end
-    table.sort(metatypes, CompareTranslation)
+    Sort(metatypes, "compareTranslation")
     return metatypes
 end
 

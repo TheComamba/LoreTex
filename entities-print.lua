@@ -19,7 +19,7 @@ local function descritptorMapString(map)
     for key, elem in pairs(map) do
         keys[#keys + 1] = key
     end
-    table.sort(keys, CompareAlphanumerical)
+    Sort(keys, "compareAlphanumerical")
     local out = {}
     for index, key in pairs(keys) do
         local content = map[key]
@@ -42,7 +42,7 @@ local function descriptorsString(entity)
             descriptorsList[#descriptorsList + 1] = descriptor
         end
     end
-    table.sort(descriptorsList, CompareAlphanumerical)
+    Sort(descriptorsList, "compareAlphanumerical")
     for key, descriptor in pairs(descriptorsList) do
         Append(out, TexCmd("paragraph", CapFirst(descriptor)))
         if descriptor == HeightCaption then
@@ -60,14 +60,14 @@ local function descriptorsString(entity)
 end
 
 local function printEntities(sectionname, entitiesList)
+    if IsEmpty(entitiesList) then
+        return {}
+    end
+
     StartBenchmarking("printEntities")
     local out = {}
-    if IsEmpty(entitiesList) then
-        StopBenchmarking("printEntities")
-        return out
-    end
     Append(out, TexCmd("subsection", CapFirst(sectionname)))
-    table.sort(entitiesList, CompareByName)
+    Sort(entitiesList, "compareByName")
     for key, entity in pairs(entitiesList) do
         local shortname = GetProtectedStringField(entity, "shortname")
         if IsEmpty(shortname) then
@@ -85,7 +85,7 @@ end
 function PrintOnlyMentionedChapter(mentionedRefs)
     StartBenchmarking("PrintOnlyMentionedChapter")
     local out = {}
-    table.sort(mentionedRefs, CompareByName)
+    Sort(mentionedRefs, "compareByName")
     for key, label in pairs(mentionedRefs) do
         if key == 1 then
             Append(out, TexCmd("chapter", CapFirst(Tr("only-mentioned"))))
@@ -115,7 +115,7 @@ local function PrintAllEntities(name, entities)
     for locationName, entity in pairs(entities) do
         Append(allLabels, getAllLabels(entity))
     end
-    table.sort(allLabels, CompareByName)
+    Sort(allLabels, "compareByName")
     if not IsEmpty(allLabels) then
         Append(out, TexCmd("subsection*", CapFirst(Tr("all")) .. " " .. CapFirst(name)))
         Append(out, ListAll(allLabels, NamerefString))
@@ -158,7 +158,7 @@ function PrintEntityChapter(processedOut, metatype)
     local out = {}
     Append(out, TexCmd("chapter", CapFirst(Tr(metatype))))
     local types = AllTypes[metatype]
-    table.sort(types, CompareTranslation)
+    Sort(types, "compareTranslation")
     for i, type in pairs(types) do
         local entitiesOfType = processedOut.entities[metatype][type]
         if not IsEmpty(entitiesOfType) then

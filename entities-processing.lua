@@ -83,7 +83,7 @@ end
 local function addChildrenDescriptorsToParent(parent)
     StartBenchmarking("addChildrenDescriptorsToParent")
     local children = GetProtectedTableField(parent, "children")
-    table.sort(children, CompareByName)
+    Sort(children, "compareByName")
     for key, child in pairs(children) do
         if IsEntityShown(child) then
             local relationships = getRelationships(child, parent)

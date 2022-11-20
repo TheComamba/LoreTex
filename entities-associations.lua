@@ -2,7 +2,7 @@ function AddParentDescriptorsToChild(child)
     StartBenchmarking("AddParentDescriptorsToChild")
     local parentList = {}
     local parentsAndRelationships = GetProtectedTableField(child, "parents")
-    table.sort(parentsAndRelationships, CompareAffiliations)
+    Sort(parentsAndRelationships, "compareAffiliations")
     for key, parentAndRelationship in pairs(parentsAndRelationships) do
         local parent = parentAndRelationship[1]
         local relationship = parentAndRelationship[2]

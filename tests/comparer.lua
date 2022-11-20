@@ -24,6 +24,6 @@ local received = {}
 for i = #expected, 1, -1 do
     Append(received, expected[i])
 end
-table.sort(received, CompareAlphanumerical)
+Sort(received, "compareAlphanumerical")
 
 Assert("CompareAlphanumerical", expected, received)

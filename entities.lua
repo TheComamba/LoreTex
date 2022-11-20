@@ -14,11 +14,6 @@ end
 
 ResetEntities()
 
-function IsPrimary(entity)
-    local label = GetProtectedStringField(entity, "label")
-    return IsIn(label, PrimaryRefs)
-end
-
 function GetEntitiesIf(condition, list)
     StartBenchmarking("GetEntitiesIf")
     local out = {}

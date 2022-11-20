@@ -203,13 +203,21 @@ local function removeProcessedEntities(mentionedRefs)
     return onlyMentioned
 end
 
+local function getPrimaryEntities()
+    local out = {}
+    for key, label in pairs(PrimaryRefs) do
+        out[#out + 1] = GetEntity(label)
+    end
+    return out
+end
+
 function ProcessEntities()
     StartBenchmarking("ProcessEntities")
     labelToProcessedEntity = {}
     local out = {}
     out.entities = {}
     out.mentionedRefs = DeepCopy(MentionedRefs)
-    local primaryEntities = GetEntitiesIf(IsPrimary, AllEntities)
+    local primaryEntities = getPrimaryEntities()
     addPrimariesWhenMentioned(out, out.mentionedRefs)
     for key, entity in pairs(primaryEntities) do
         AddProcessedEntity(out, entity)

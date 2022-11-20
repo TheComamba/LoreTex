@@ -38,7 +38,7 @@ local out = TexApi.automatedChapters()
 
 Assert("Deferred Entities", expected, out)
 
-ResetEntities()
+ResetEnvironment()
 
 TexApi.newEntity { type = "npcs", label = "some-npc", name = "Some NPC" }
 TexApi.setLocation("some-place")
@@ -82,21 +82,21 @@ local function defineCalendar()
     TexApi.setYearOffset(200)
 end
 
-ResetEntities()
+ResetEnvironment()
 TexApi.addDayFmt("test-1")
 defineCalendar()
 expected = { Tr("day") .. [[17 / 17.Primus]] }
 out = { DayString(17) }
 Assert("Deferred Calendar (Day)", expected, out)
 
-ResetEntities()
+ResetEnvironment()
 TexApi.addYearFmt("test-1")
 defineCalendar()
 expected = { [[2001 QT]] }
 out = { YearString(1801) }
 Assert("Deferred Calendar (Year)", expected, out)
 
-ResetEntities()
+ResetEnvironment()
 TexApi.newEntity { type = "places", label = "some-place", name = "Some Place" }
 TexApi.addHistory { yearFmt = "test-1", year = 0, event = "Some event." }
 defineCalendar()

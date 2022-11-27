@@ -5,6 +5,8 @@
 
 \newcommand{\loadLuacode}[1]{
     \directlua{
+        dofile([[#1]] .. "/state.lua")
+
         dofile([[#1]] .. "/common.lua")
         dofile([[#1]] .. "/comparer.lua")
         dofile([[#1]] .. "/dates-and-years.lua")
@@ -34,6 +36,8 @@
         dofile([[#1]] .. "/entities/species.lua")
         dofile([[#1]] .. "/entities/types.lua")
         dofile([[#1]] .. "/entities/visibility.lua")
+
+        ResetState()
         RelativePath = [[#1]]
     }
     \input{#1/dates-and-years.tex}

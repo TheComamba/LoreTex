@@ -1,14 +1,18 @@
 AllTypes = {}
-AllTypes["associations"] = { "families", "organisations" }
-AllTypes["characters"] = { "gods", "npcs", "pcs" }
-AllTypes["chronologies"] = { "calendars", "events", "stories" }
-AllTypes["classes"] = { "classes", "subclasses" }
-AllTypes["things"] = { "artefacts", "items", "vehicles" }
-AllTypes["landmarks"] = { "forests", "glaciers", "grasslands", "lakes", "mountainranges", "mountains", "rivers" }
-AllTypes["magic"] = { "spells", "spell-properties" }
-AllTypes["other"] = { "other" }
-AllTypes["peoples"] = { "languages", "species" }
-AllTypes["places"] = { "places" }
+
+StateResetters[#StateResetters + 1] = function()
+    AllTypes = {}
+    AllTypes["associations"] = { "families", "organisations" }
+    AllTypes["characters"] = { "gods", "npcs", "pcs" }
+    AllTypes["chronologies"] = { "calendars", "events", "stories" }
+    AllTypes["classes"] = { "classes", "subclasses" }
+    AllTypes["things"] = { "artefacts", "items", "vehicles" }
+    AllTypes["landmarks"] = { "forests", "glaciers", "grasslands", "lakes", "mountainranges", "mountains", "rivers" }
+    AllTypes["magic"] = { "spells", "spell-properties" }
+    AllTypes["other"] = { "other" }
+    AllTypes["peoples"] = { "languages", "species" }
+    AllTypes["places"] = { "places" }
+end
 
 function IsType(type, entity)
     local entityType = GetProtectedStringField(entity, "type")

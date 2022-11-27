@@ -1,5 +1,3 @@
-IsShowFuture = true
-
 local currentYear = 0
 IsCurrentYearSet = false
 local currentDay = 0
@@ -10,7 +8,7 @@ IsDaysPerYearSet = false
 YearFmt = {}
 DayFmt = {}
 
-function ResetDates()
+StateResetters[#StateResetters+1] = function ()
     currentYear = 0
     IsCurrentYearSet = false
     currentDay = 0

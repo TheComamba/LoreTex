@@ -2,17 +2,14 @@ PrimaryRefs = {}
 MentionedRefs = {}
 UnfoundRefs = {}
 PrimaryRefWhenMentionedTypes = {}
-IsAppendix = false
 local refTypes = { "reference", "nameref", "itref", "ref" }
 
-function ResetRefs()
+StateResetters[#StateResetters + 1] = function()
     PrimaryRefs = {}
     MentionedRefs = {}
     UnfoundRefs = {}
     PrimaryRefWhenMentionedTypes = {}
 end
-
-ResetRefs()
 
 function IsContainsPrimary(list)
     for key, label in pairs(list) do

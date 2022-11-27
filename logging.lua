@@ -1,7 +1,14 @@
-IsThrowOnError = false
 local errorMessages = {}
 local benchmarkingStartTimes = {}
 local benchmarkingResults = {}
+
+function ResetErrors()
+    errorMessages = {}
+    benchmarkingStartTimes = {}
+    benchmarkingResults = {}
+end
+
+StateResetters[#StateResetters + 1] = ResetErrors
 
 function LogError(errorMessage)
     if type(errorMessage) == "table" then
@@ -26,10 +33,6 @@ end
 
 function HasError()
     return #errorMessages > 0
-end
-
-function ResetErrors()
-    errorMessages = {}
 end
 
 local function cleanedErrors()

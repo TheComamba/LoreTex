@@ -52,7 +52,7 @@ local expected = {
 
 Assert("Sublabel", expected, out)
 
-ResetEnvironment()
+ResetState()
 
 TexApi.newEntity { type = "npcs", label = "also-primary", name = "Also Primary" }
 TexApi.setDescriptor { descriptor = "Sublabel 1", description = [[\label{sublabel-1}]] }
@@ -97,7 +97,7 @@ local out = TexApi.automatedChapters()
 
 Assert("Only sublabel mentioned", expected, out)
 
-ResetEnvironment()
+ResetState()
 
 TexApi.newEntity { type = "npcs", label = "some-npc", name = "Some NPC" }
 TexApi.setDescriptor { descriptor = "Paragraph with just label", description = [[\label{sublabel}]] }

@@ -2,13 +2,11 @@ AllEntities = {}
 CurrentEntity = nil
 local labelToEntity = {}
 
-function ResetEntities()
+StateResetters[#StateResetters + 1] = function()
     AllEntities = {}
     CurrentEntity = nil
     labelToEntity = {}
 end
-
-ResetEntities()
 
 function GetEntitiesIf(condition, list)
     StartBenchmarking("GetEntitiesIf")

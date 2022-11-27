@@ -1,12 +1,12 @@
+IsShowFuture = true
 IsShowSecrets = false
 RevealedLabels = {}
 
-function ResetSecrecy()
+StateResetters[#StateResetters + 1] = function()
+    IsShowFuture = true
     IsShowSecrets = false
     RevealedLabels = {}
 end
-
-ResetSecrecy()
 
 function IsEntitySecret(entity)
     if entity == nil then

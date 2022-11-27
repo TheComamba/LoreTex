@@ -1,5 +1,9 @@
 PCs = {}
 
+StateResetters[#StateResetters + 1] = function()
+    PCs = {}
+end
+
 function AddSpeciesAndAgeStringToNPC(entity)
     StartBenchmarking("AddSpeciesAndAgeStringToNPC")
     if IsType("characters", entity) then

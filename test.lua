@@ -25,18 +25,7 @@ local numSucceeded = 0
 local numFailed = 0
 local isContainedTranslation = false
 local apiFunctionUsage = {}
-
 local testFunctions = {}
-
-function ResetEnvironment()
-    ResetDates()
-    ResetSecrecy()
-    ResetEntities()
-    ResetRefs()
-    CurrentDay = 0
-    IsShowFuture = true
-    IsShowSecrets = false
-end
 
 testFunctions.areTablesEqual = function(obj1, obj2, elementNum, currentObj1, currentObj2)
     if #obj1 ~= #obj2 then
@@ -226,7 +215,7 @@ local function runTests(testFiles)
     end
 
     for key, testfile in pairs(testFiles) do
-        ResetEnvironment()
+        ResetState()
         PushScopedVariables()
         SelectLanguage("english")
         local currentlyFailed = numFailed
@@ -234,7 +223,7 @@ local function runTests(testFiles)
         PopScopedVariables()
 
         if currentlyFailed == numFailed and isContainedTranslation then
-            ResetEnvironment()
+            ResetState()
             PushScopedVariables()
             RandomiseDictionary()
             dofile(RelativePath .. "/tests/" .. testfile .. ".lua")

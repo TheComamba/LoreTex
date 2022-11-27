@@ -1,5 +1,9 @@
 local historyItemCounter = 1
 
+StateResetters[#StateResetters + 1] = function()
+	historyItemCounter = 1
+end
+
 local function IsHistoryItemOk(caller, item)
 	local required = {}
 	Append(required, GetProtectedDescriptor("counter"))

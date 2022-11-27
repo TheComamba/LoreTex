@@ -1,5 +1,9 @@
 local labelToProcessedEntity = {}
 
+StateResetters[#StateResetters + 1] = function()
+    labelToProcessedEntity = {}
+end
+
 local function registerProcessedEntityLabels(entity)
     StartBenchmarking("registerProcessedEntityLabels")
     for key, label in pairs(GetAllLabels(entity)) do

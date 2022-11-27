@@ -60,7 +60,7 @@ end
 function AddMentions(entity, content)
 	local mentionedLabels = ScanContentForMentionedRefs(content)
 	for key, label in pairs(mentionedLabels) do
-		local mentioned = GetEntityRaw(label)
+		local mentioned = GetMutableEntityFromAll(label)
 		AddToProtectedField(entity, "mentions", mentioned)
 	end
 end
@@ -110,7 +110,9 @@ local function processEvent(item)
 	SetProtectedField(item, "birthof", ScanStringForCmd(event, "birthof"))
 	SetProtectedField(item, "deathof", ScanStringForCmd(event, "deathof"))
 
-	addConcerns(item, GetProtectedStringField(item, "content"))
+	local content = GetProtectedStringField(item, "content")
+	AddMentions(item, content)
+	addConcerns(item, content)
 	for key, entity in pairs(GetProtectedTableField(item, "concerns")) do
 		AddToProtectedField(entity, "historyItems", item)
 	end

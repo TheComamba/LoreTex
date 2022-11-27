@@ -177,18 +177,6 @@ function UniqueAppend(dest, src)
 	end
 end
 
-function JoinTables(mainTable, secondaryTable)
-	for key, val in pairs(secondaryTable) do
-		if not IsIn(val, mainTable) then
-			if type(key) == "number" then
-				mainTable[#mainTable + 1] = val
-			else
-				mainTable[key] = val
-			end
-		end
-	end
-end
-
 function Replace(strOld, strNew, content)
 	if type(content) == "string" then
 		return string.gsub(content, strOld, strNew)

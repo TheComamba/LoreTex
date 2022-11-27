@@ -1,25 +1,25 @@
 function PlaceToName(location)
     local name = ""
-    local locationLabels = {}
+    local locationNames = {}
     while location ~= nil do
-        local locationLabel = GetProtectedStringField(location, "label")
+        local locationName = GetShortname(location)
         if name == "" then
-            name = LabelToName(locationLabel)
+            name = locationName
         else
-            name = LabelToName(locationLabel) .. " - " .. name
+            name = locationName .. " - " .. name
         end
 
-        if IsIn(locationLabel, locationLabels) then
-            Append(locationLabels, locationLabel)
+        if IsIn(locationName, locationNames) then
+            Append(locationNames, locationName)
             local err = {}
             Append(err, "Enountered loop! Output is \"")
             Append(err, name)
             Append(err, "\", generated from location labels:")
-            Append(err, DebugPrint(locationLabels))
+            Append(err, DebugPrint(locationNames))
             LogError(err)
             break
         else
-            Append(locationLabels, locationLabel)
+            Append(locationNames, locationName)
         end
         location = GetProtectedNullableField(location, "location")
     end

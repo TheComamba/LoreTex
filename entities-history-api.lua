@@ -57,19 +57,38 @@ local function setYearFmt(historyItem, label)
 	SetProtectedField(historyItem, "yearFormat", fmt)
 end
 
-function AddConcerns(entity, content)
-	local concernesLabels = {}
-	if GetProtectedNullableField(entity, "year") ~= nil then
-		UniqueAppend(concernesLabels, ScanStringForCmd(content, "concerns"))
-		UniqueAppend(concernesLabels, GetProtectedTableFieldReference(entity, "birthof"))
-		UniqueAppend(concernesLabels, GetProtectedTableFieldReference(entity, "deathof"))
+function AddMentions(entity, content)
+	local mentionedLabels = ScanContentForMentionedRefs(content)
+	for key, label in pairs(mentionedLabels) do
+		local mentioned = GetEntityRaw(label)
+		AddToProtectedField(entity, "mentions", mentioned)
 	end
-	UniqueAppend(concernesLabels, ScanContentForMentionedRefs(content))
-	local notConcerns = ScanForCmd(content, "notconcerns")
-	for key, concernedLabel in pairs(concernesLabels) do
-		if not IsEmpty(concernedLabel) and not IsIn(concernedLabel, notConcerns) then
-			local concernedEntity = GetMutableEntityFromAll(concernedLabel)
-			AddToProtectedField(entity, "concerns", concernedEntity)
+end
+
+local function addConcerns(entity, content)
+	local originator = GetProtectedNullableField(entity, "originator")
+	if originator ~= nil then
+		AddToProtectedField(entity, "concerns", originator)
+	end
+	if GetProtectedNullableField(entity, "isConcernsOthers") then
+		local concernesLabels = {}
+		for key, mentioned in pairs(GetProtectedTableField(entity, "mentions")) do
+			local label = GetProtectedStringField(mentioned, "label")
+			if not IsEmpty(label) then
+				UniqueAppend(concernesLabels, label)
+			end
+		end
+		if GetProtectedNullableField(entity, "year") ~= nil then
+			UniqueAppend(concernesLabels, ScanStringForCmd(content, "concerns"))
+			UniqueAppend(concernesLabels, GetProtectedTableFieldReference(entity, "birthof"))
+			UniqueAppend(concernesLabels, GetProtectedTableFieldReference(entity, "deathof"))
+		end
+		local notConcerns = ScanForCmd(content, "notconcerns")
+		for key, concernedLabel in pairs(concernesLabels) do
+			if not IsEmpty(concernedLabel) and not IsIn(concernedLabel, notConcerns) then
+				local concernedEntity = GetMutableEntityFromAll(concernedLabel)
+				AddToProtectedField(entity, "concerns", concernedEntity)
+			end
 		end
 	end
 end
@@ -90,18 +109,12 @@ local function processEvent(item)
 	local event = GetProtectedStringField(item, "content")
 	SetProtectedField(item, "birthof", ScanStringForCmd(event, "birthof"))
 	SetProtectedField(item, "deathof", ScanStringForCmd(event, "deathof"))
-	if GetProtectedNullableField(item, "isConcernsOthers") then
-		AddConcerns(item, GetProtectedStringField(item, "content"))
-	end
-	
-	local originator = GetProtectedNullableField(item, "originator")
-	if originator ~= nil then
-		AddToProtectedField(originator, "historyItems", item)
-	end
+
+	addConcerns(item, GetProtectedStringField(item, "content"))
 	for key, entity in pairs(GetProtectedTableField(item, "concerns")) do
 		AddToProtectedField(entity, "historyItems", item)
 	end
-	
+
 	local year = GetProtectedNullableField(item, "year")
 	addSpecialyearsToEntities("born", year, GetProtectedTableFieldReference(item, "birthof"))
 	addSpecialyearsToEntities("died", year, GetProtectedTableFieldReference(item, "deathof"))
@@ -109,7 +122,7 @@ local function processEvent(item)
 	if IsEmpty(GetProtectedNullableField(item, "day")) then
 		SetProtectedField(item, "day", nil)
 	end
-	if IsEmpty(GetProtectedTableField(item, "concerns")) and IsEmpty(GetProtectedNullableField(item, "originator")) then
+	if IsEmpty(GetProtectedTableField(item, "concerns")) then
 		LogError("This history item concerns nobody:" .. DebugPrint(item))
 	end
 

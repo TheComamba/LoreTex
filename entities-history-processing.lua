@@ -1,14 +1,13 @@
-local function concernedAndOriginator(historyItem)
+local function concernesAndMentions(historyItem)
     local out = GetProtectedTableField(historyItem, "concerns")
-    local originator = GetProtectedNullableField(historyItem, "originator")
-    if originator ~= nil then
-        out[#out + 1] = originator
+    for key, mentions in pairs(GetProtectedTableField(historyItem, "mentions")) do
+        out[#out + 1] = mentions
     end
     return out
 end
 
-local function isConcernsUnrevealed(historyItem)
-    for key, entity in pairs(concernedAndOriginator(historyItem)) do
+local function isConcernsOrMentionsUnrevealed(historyItem)
+    for key, entity in pairs(concernesAndMentions(historyItem)) do
         if IsEntitySecret(entity) and not IsRevealed(entity) then
             return true
         end
@@ -16,8 +15,8 @@ local function isConcernsUnrevealed(historyItem)
     return false
 end
 
-local function isConcernsSecret(historyItem)
-    for key, entity in pairs(concernedAndOriginator(historyItem)) do
+local function isConcernsOrMentionsSecret(historyItem)
+    for key, entity in pairs(concernesAndMentions(historyItem)) do
         if IsEntitySecret(entity) then
             return true
         end
@@ -25,8 +24,8 @@ local function isConcernsSecret(historyItem)
     return false
 end
 
-local function isAllConcnernsShown(historyItem)
-    for key, entity in pairs(concernedAndOriginator(historyItem)) do
+local function isAllConcnernsAndMentionsShown(historyItem)
+    for key, entity in pairs(concernesAndMentions(historyItem)) do
         if not IsEntityShown(entity) then
             return false
         end
@@ -37,7 +36,7 @@ end
 local function isHistoryShown(historyItem)
     if IsEmpty(historyItem) then
         return false
-    elseif not isAllConcnernsShown(historyItem) then
+    elseif not isAllConcnernsAndMentionsShown(historyItem) then
         return false
     elseif not IsShowFuture and IsFutureEvent(historyItem) then
         return false
@@ -45,7 +44,7 @@ local function isHistoryShown(historyItem)
         local isSecret = GetProtectedNullableField(historyItem, "isSecret")
         if isSecret ~= nil and isSecret then
             return false
-        elseif isConcernsUnrevealed(historyItem) then
+        elseif isConcernsOrMentionsUnrevealed(historyItem) then
             return false
         else
             return true
@@ -57,7 +56,7 @@ end
 
 local function historyItemToString(historyItem, isPrintDate)
     local event = GetProtectedStringField(historyItem, "content")
-    local isSecret = GetProtectedNullableField(historyItem, "isSecret") or isConcernsSecret(historyItem)
+    local isSecret = GetProtectedNullableField(historyItem, "isSecret") or isConcernsOrMentionsSecret(historyItem)
     local out = {}
     if isPrintDate then
         Append(out, YearAndDayString(historyItem))

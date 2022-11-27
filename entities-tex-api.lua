@@ -30,7 +30,7 @@ function SetDescriptor(arg)
     Replace([[\reference]], [[\nameref]], arg.description)
     if IsEmpty(ScanForCmd(arg.description, "label")) then
         setDescriptorAsKeyValPair(arg)
-        AddConcerns(arg.entity, arg.description)
+        AddMentions(arg.entity, arg.description)
     else
         local alias = LabeledContentToEntity { mainEntity = arg.entity,
             name = arg.descriptor,

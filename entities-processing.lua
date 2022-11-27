@@ -8,16 +8,16 @@ local function registerProcessedEntityLabels(entity)
     StopBenchmarking("registerProcessedEntityLabels")
 end
 
-local function collectConernedEntities(entity)
+local function collectMentionedEntities(entity)
     StartBenchmarking("collectConernedEntities")
-    local out = GetProtectedTableField(entity, "concerns")
+    local out = GetProtectedTableField(entity, "mentions")
     for key, item in pairs(GetProtectedTableField(entity, "historyItems")) do
-        for key2, concern in pairs(GetProtectedTableField(item, "concerns")) do
+        for key2, concern in pairs(GetProtectedTableField(item, "mentions")) do
             out[#out + 1] = concern
         end
     end
     for key, sub in pairs(GetProtectedTableField(entity, "subEntities")) do
-        for key2, concern in pairs(collectConernedEntities(sub)) do
+        for key2, concern in pairs(collectMentionedEntities(sub)) do
             out[#out + 1] = concern
         end
     end
@@ -58,7 +58,7 @@ local function entityQualifiersString(child, parent, relationships)
         if childLocationLabel ~= parentLocationLabel and
             not IsIn(childLocationLabel, GetAllLabels(parent)) then
             Append(content, Tr("in") .. " " .. TexCmd("nameref", childLocationLabel))
-            AddToProtectedField(parent, "concerns", childLocation)
+            AddToProtectedField(parent, "mentions", childLocation)
         end
     end
     if not IsEmpty(content) then
@@ -80,7 +80,7 @@ local function addSingleChildDescriptorToParent(child, parent, relationships)
     Append(content, " ")
     Append(content, entityQualifiersString(child, parent, relationships))
     UniqueAppend(parent[descriptor], table.concat(content))
-    AddToProtectedField(parent, "concerns", child)
+    AddToProtectedField(parent, "mentions", child)
 end
 
 local function getRelationships(child, parent)
@@ -200,7 +200,7 @@ end
 
 local function addFollowUpEntities(arg, newEntity)
     StartBenchmarking("addFollowUpEntities")
-    local mentionedEntities = collectConernedEntities(newEntity)
+    local mentionedEntities = collectMentionedEntities(newEntity)
     addPrimariesWhenMentioned(arg, mentionedEntities)
     for key, mentionedEntity in pairs(mentionedEntities) do
         if not IsEntityUnrevealed(mentionedEntity) then

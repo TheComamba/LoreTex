@@ -188,7 +188,7 @@ local function contentToEntityRaw(arg)
     end
     SetProtectedField(newEntity, "name", arg.name)
     SetProtectedField(newEntity, "content", arg.content)
-    AddConcerns(newEntity, arg.content)
+    AddMentions(newEntity, arg.content)
     MakePartOf { subEntity = newEntity, mainEntity = arg.mainEntity }
     return newEntity
 end

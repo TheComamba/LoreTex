@@ -22,18 +22,6 @@ function IsDead(entity)
     return IsHasHappened(entity, "died", false)
 end
 
-function MarkDead(entity)
-    local name = GetProtectedStringField(entity, "name")
-    if IsEmpty(name) then
-        LogError("Entity has no name: " .. DebugPrint(entity))
-    elseif IsDead(entity) then
-        if IsEmpty(GetProtectedStringField(entity, "shortname")) then
-            SetProtectedField(entity, "shortname", name)
-        end
-        SetProtectedField(entity, "name", name .. " " .. TexCmd("textdied"))
-    end
-end
-
 local function getYear(entity, key)
     local value = GetProtectedNullableField(entity, key)
     if value == nil then

@@ -106,7 +106,7 @@ TexApi.newCharacter = newCharacter
 
 local function automatedChapters()
     StartBenchmarking("AutomatedChapters")
-    local processOut = ProcessEntities()
+    local processOut = ProcessedEntities()
     local output = {}
     for key, metatype in pairs(SortedMetatypes()) do
         Append(output, PrintEntityChapter(processOut, metatype))

@@ -30,9 +30,9 @@ Append(expected, [[\begin{itemize}]])
 Append(expected, [[\item -10 (]] .. Tr("years-ago", { 10 }) .. [[):\\\nameref{flora} is born.\birthof{flora}]])
 Append(expected, [[\item -5 (]] .. Tr("years-ago", { 5 }) .. [[):\\\nameref{flora} dies.\deathof{flora}]])
 Append(expected, [[\end{itemize}]])
-Append(expected, [[\subsubsection[Ramona]{(]] .. CapFirst(Tr("secret")) .. [[) Ramona}]])
+Append(expected, [[\subsubsection[Ramona]{Ramona (]] .. CapFirst(Tr("secret")) .. [[)}]])
 Append(expected, [[\label{ramona}]])
 
 
 local out = TexApi.automatedChapters()
-Assert("Dead entity", expected, out)
+Assert("Marked Entities", expected, out)

@@ -39,7 +39,7 @@ local function generateExpected(isItemReferenced)
             Append(out, [[\item \nameref{secret-item}]])
             Append(out, [[\end{itemize}]])
             Append(out, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
-            Append(out, [[\subsubsection[Secret Item]{(]] .. CapFirst(Tr("secret")) .. [[)Secret Item}]])
+            Append(out, [[\subsubsection[Secret Item]{Secret Item (]] .. CapFirst(Tr("secret")) .. [[)}]])
             Append(out, [[\label{secret-item}]])
             Append(out, generateHistoryParagraph())
         else

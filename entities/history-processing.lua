@@ -1,62 +1,6 @@
-local function concernesAndMentions(historyItem)
-    local out = GetProtectedTableField(historyItem, "concerns")
-    for key, mentions in pairs(GetProtectedTableField(historyItem, "mentions")) do
-        out[#out + 1] = mentions
-    end
-    return out
-end
-
-local function isConcernsOrMentionsUnrevealed(historyItem)
-    for key, entity in pairs(concernesAndMentions(historyItem)) do
-        if IsEntitySecret(entity) and not IsRevealed(entity) then
-            return true
-        end
-    end
-    return false
-end
-
-local function isConcernsOrMentionsSecret(historyItem)
-    for key, entity in pairs(concernesAndMentions(historyItem)) do
-        if IsEntitySecret(entity) then
-            return true
-        end
-    end
-    return false
-end
-
-local function isAllConcnernsAndMentionsShown(historyItem)
-    for key, entity in pairs(concernesAndMentions(historyItem)) do
-        if not IsEntityShown(entity) then
-            return false
-        end
-    end
-    return true
-end
-
-local function isHistoryShown(historyItem)
-    if IsEmpty(historyItem) then
-        return false
-    elseif not isAllConcnernsAndMentionsShown(historyItem) then
-        return false
-    elseif not IsShowFuture and IsFutureEvent(historyItem) then
-        return false
-    elseif not IsShowSecrets then
-        local isSecret = GetProtectedNullableField(historyItem, "isSecret")
-        if isSecret ~= nil and isSecret then
-            return false
-        elseif isConcernsOrMentionsUnrevealed(historyItem) then
-            return false
-        else
-            return true
-        end
-    else
-        return true
-    end
-end
-
 local function historyItemToString(historyItem, isPrintDate)
     local event = GetProtectedStringField(historyItem, "content")
-    local isSecret = GetProtectedNullableField(historyItem, "isSecret") or isConcernsOrMentionsSecret(historyItem)
+    local isSecret = GetProtectedNullableField(historyItem, "isSecret") or IsConcernsOrMentionsSecret(historyItem)
     local out = {}
     if isPrintDate then
         Append(out, YearAndDayString(historyItem))
@@ -120,7 +64,7 @@ local function addHistoryDescriptors(entity)
     Sort(historyItems, "compareHistoryItems")
     local processedHistory = {}
     for key, historyItem in pairs(historyItems) do
-        if isHistoryShown(historyItem) then
+        if IsHistoryShown(historyItem) then
             local isPrintDate = (key == 1 or not isSameDate(historyItem, historyItems[key - 1]))
             Append(processedHistory, historyItemToString(historyItem, isPrintDate))
         end

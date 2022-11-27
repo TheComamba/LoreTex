@@ -1,16 +1,3 @@
-function GetShortname(entity)
-    local shortname = GetProtectedStringField(entity, "shortname")
-    if not IsEmpty(shortname) then
-        return shortname
-    end
-    local fullname = GetProtectedStringField(entity, "name")
-    if not IsEmpty(fullname) then
-        return fullname
-    end
-    LogError("Entity has no name:" .. DebugPrint(entity))
-    return "NO NAME"
-end
-
 local function descritptorMapString(map)
     local keys = {}
     for key, elem in pairs(map) do

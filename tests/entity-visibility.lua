@@ -120,7 +120,7 @@ local function generateExpected()
     Append(out, [[\subsubsection{Normal Organisation}]])
     Append(out, [[\label{normal-orga}]])
     Append(out, itemsParagraph())
-    Append(out, [[\subsubsection[Revealed Organisation]{(]] .. CapFirst(Tr("secret")) .. [[) Revealed Organisation}]])
+    Append(out, [[\subsubsection[Revealed Organisation]{Revealed Organisation (]] .. CapFirst(Tr("secret")) .. [[)}]])
     Append(out, [[\label{revealed-orga}]])
     Append(out, itemsParagraph())
     if IsShowFuture then
@@ -175,7 +175,7 @@ local function generateExpected()
     end
     Append(out, [[\end{itemize}]])
 
-    Append(out, [[\subsubsection[Revealed]{(]] .. CapFirst(Tr("secret")) .. [[) Revealed}]])
+    Append(out, [[\subsubsection[Revealed]{Revealed (]] .. CapFirst(Tr("secret")) .. [[)}]])
     Append(out, [[\label{revealed}]])
     Append(out, affiliationParagraph())
     Append(out, [[\paragraph{]] .. CapFirst(Tr("history")) .. [[}]])

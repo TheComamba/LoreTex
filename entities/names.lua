@@ -1,8 +1,3 @@
-function IsLocationUnrevealed(entity)
-    local location = GetProtectedNullableField(entity, "location")
-    return IsEntityUnrevealed(location)
-end
-
 function PlaceToName(location)
     StartBenchmarking("PlaceToName")
     local name = ""
@@ -31,4 +26,35 @@ function PlaceToName(location)
     end
     StopBenchmarking("PlaceToName")
     return name
+end
+
+function LabelToName(label)
+    if IsEmpty(label) then
+        return ""
+    end
+    StartBenchmarking("LabelToName")
+    local name = ""
+    local entity = GetEntityRaw(label)
+    if not IsEmpty(entity) then
+        name = GetProtectedStringField(entity, "name")
+    elseif not IsIn(label, UnfoundRefs) then
+        LogError("Label \"" .. label .. "\" not found.")
+        Append(UnfoundRefs, label)
+        name = label:upper()
+    end
+    StopBenchmarking("LabelToName")
+    return name
+end
+
+function GetShortname(entity)
+    local shortname = GetProtectedStringField(entity, "shortname")
+    if not IsEmpty(shortname) then
+        return shortname
+    end
+    local fullname = GetProtectedStringField(entity, "name")
+    if not IsEmpty(fullname) then
+        return fullname
+    end
+    LogError("Entity has no name:" .. DebugPrint(entity))
+    return "NO NAME"
 end

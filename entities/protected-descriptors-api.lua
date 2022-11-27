@@ -1,41 +1,3 @@
-local protectedDescriptors = {}
-
-local function addProtectedDescriptor(descriptor)
-    protectedDescriptors[descriptor] = "_" .. descriptor
-end
-
-addProtectedDescriptor("ageExponent")
-addProtectedDescriptor("ageFactor")
-addProtectedDescriptor("ageMixing")
-addProtectedDescriptor("birthof")
-addProtectedDescriptor("born")
-addProtectedDescriptor("children")
-addProtectedDescriptor("concerns")
-addProtectedDescriptor("content")
-addProtectedDescriptor("counter")
-addProtectedDescriptor("day")
-addProtectedDescriptor("deathof")
-addProtectedDescriptor("died")
-addProtectedDescriptor("historyItems")
-addProtectedDescriptor("isConcernsOthers")
-addProtectedDescriptor("isSecret")
-addProtectedDescriptor("label")
-addProtectedDescriptor("location")
-addProtectedDescriptor("mentions")
-addProtectedDescriptor("monthsAndFirstDays")
-addProtectedDescriptor("name")
-addProtectedDescriptor("originator")
-addProtectedDescriptor("parents")
-addProtectedDescriptor("partOf")
-addProtectedDescriptor("shortname")
-addProtectedDescriptor("species")
-addProtectedDescriptor("subEntities")
-addProtectedDescriptor("type")
-addProtectedDescriptor("year")
-addProtectedDescriptor("yearAbbreviation")
-addProtectedDescriptor("yearFormat")
-addProtectedDescriptor("yearOffset")
-
 function IsProtectedDescriptor(descriptor)
     return string ~= "" and string.sub(descriptor, 1, 1) == "_"
 end
@@ -88,15 +50,6 @@ function AddToProtectedField(entity, key, value)
         entity[descriptor] = {}
     end
     entity[descriptor][#entity[descriptor] + 1] = value
-end
-
-function GetProtectedDescriptor(key)
-    local descriptor = protectedDescriptors[key]
-    if descriptor == nil then
-        LogError("Key \"" .. key .. "\" does not name a protected descriptor.")
-        return ""
-    end
-    return descriptor
 end
 
 TexApi.setAgeExponent = function(exponent)

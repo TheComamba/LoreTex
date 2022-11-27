@@ -30,6 +30,7 @@ local testFunctions = {}
 
 function ResetEnvironment()
     ResetDates()
+    ResetSecrecy()
     ResetEntities()
     ResetRefs()
     CurrentDay = 0

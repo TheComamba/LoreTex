@@ -9,36 +9,43 @@
         dofile([[#1]] .. "/comparer.lua")
         dofile([[#1]] .. "/dates-and-years.lua")
         dofile([[#1]] .. "/dictionary.lua")
-        dofile([[#1]] .. "/entities.lua")
-        dofile([[#1]] .. "/entities-associations.lua")
-        dofile([[#1]] .. "/entities-characters.lua")
-        dofile([[#1]] .. "/entities-geography.lua")
-        dofile([[#1]] .. "/entities-landmarks.lua")
-        dofile([[#1]] .. "/entities-print.lua")
-        dofile([[#1]] .. "/entities-processing.lua")
-        dofile([[#1]] .. "/entities-protected-descriptors.lua")
-        dofile([[#1]] .. "/entities-species.lua")
-        dofile([[#1]] .. "/entities-tex-api.lua")
-        dofile([[#1]] .. "/entities-types.lua")
-        dofile([[#1]] .. "/entities-history-processing.lua")
-        dofile([[#1]] .. "/entities-history-api.lua")
         dofile([[#1]] .. "/logging.lua")
-        dofile([[#1]] .. "/refs.lua")
         dofile([[#1]] .. "/scoped-variables.lua")
         dofile([[#1]] .. "/test.lua")
         dofile([[#1]] .. "/translation.lua")
         dofile([[#1]] .. "/units.lua")
+
+        dofile([[#1]] .. "/entities/affiliations.lua")
+        dofile([[#1]] .. "/entities/api.lua")
+        dofile([[#1]] .. "/entities/common.lua")
+        dofile([[#1]] .. "/entities/contentToEntity.lua")
+        dofile([[#1]] .. "/entities/getEntities.lua")
+        dofile([[#1]] .. "/entities/characters.lua")
+        dofile([[#1]] .. "/entities/history-processing.lua")
+        dofile([[#1]] .. "/entities/history-api.lua")
+        dofile([[#1]] .. "/entities/landmarks.lua")
+        dofile([[#1]] .. "/entities/nameMarkers.lua")
+        dofile([[#1]] .. "/entities/names.lua")
+        dofile([[#1]] .. "/entities/print.lua")
+        dofile([[#1]] .. "/entities/processing.lua")
+        dofile([[#1]] .. "/entities/protected-descriptors-api.lua")
+        dofile([[#1]] .. "/entities/protected-descriptors-setup.lua")
+        dofile([[#1]] .. "/entities/refs.lua")
+        dofile([[#1]] .. "/entities/species.lua")
+        dofile([[#1]] .. "/entities/types.lua")
+        dofile([[#1]] .. "/entities/visibility.lua")
         RelativePath = [[#1]]
     }
     \input{#1/dates-and-years.tex}
     \input{#1/dictionary.tex}
-    \input{#1/entities-history.tex}
-    \input{#1/entities-protected-descriptors.tex}
-    \input{#1/entities.tex}
     \input{#1/logging.tex}
-    \input{#1/refs.tex}
     \input{#1/scoped-variables.tex}
     \input{#1/test.tex}
     \input{#1/translation.tex}
     \input{#1/units.tex}
+
+    \input{#1/entities/history.tex}
+    \input{#1/entities/protected-descriptors.tex}
+    \input{#1/entities/common.tex}
+    \input{#1/entities/refs.tex}
 }

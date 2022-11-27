@@ -118,7 +118,11 @@ local function automatedChapters()
         Append(output, " encountered errors. Call PrintRpgTexErrors to show them.")
     end
     StopBenchmarking("AutomatedChapters")
-    return output
+    if IsBenchmarkingRun then
+        return {}
+    else
+        return output
+    end
 end
 
 TexApi.automatedChapters = automatedChapters

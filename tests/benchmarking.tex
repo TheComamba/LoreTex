@@ -4,19 +4,14 @@
 \begin{document}
 \pagestyle{empty}
 
+\activateBenchmarking
+
 \begin{luacode*}
 	dofile(RelativePath .. "tests/benchmarking.lua")
-	local benchout = CreateBenchmarkingTest(500)
-	--tex.print(benchout)
-\end{luacode*}
-
-\chapter*{Results}
-
-\begin{luacode*}
-	tex.print("Processed " .. (#AllEntities) .. " entities.")
+	local benchout = CreateBenchmarkingTest(50)
 \end{luacode*}
 
 \PrintRpgTexErrors
 
-\PrintRpgTexBenchmarking
+\printRpgTexBenchmarking
 \end{document}

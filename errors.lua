@@ -1,11 +1,7 @@
 local errorMessages = {}
-local benchmarkingStartTimes = {}
-local benchmarkingResults = {}
 
 function ResetErrors()
     errorMessages = {}
-    benchmarkingStartTimes = {}
-    benchmarkingResults = {}
 end
 
 StateResetters[#StateResetters + 1] = ResetErrors
@@ -103,67 +99,4 @@ function DebugPrint(entity)
     Append(out, DebugPrintRaw(entity))
     Append(out, TexCmd("end", "verbatim"))
     return table.concat(out)
-end
-
-function StartBenchmarking(identifier)
-    if benchmarkingStartTimes[identifier] == nil then
-        benchmarkingStartTimes[identifier] = {}
-    end
-    benchmarkingStartTimes[identifier][#benchmarkingStartTimes[identifier] + 1] = os.clock()
-end
-
-function StopBenchmarking(identifier)
-    if benchmarkingStartTimes[identifier] == nil or #benchmarkingStartTimes[identifier] == 0 then
-        local mess = {}
-        Append(mess, "Benchmarking for identifier \"")
-        Append(mess, identifier)
-        Append(mess, "\" has not been started.")
-        LogError(mess)
-        return
-    end
-    local time = os.clock() - benchmarkingStartTimes[identifier][#benchmarkingStartTimes[identifier]]
-    benchmarkingStartTimes[identifier][#benchmarkingStartTimes[identifier]] = nil
-    if benchmarkingResults[identifier] == nil then
-        benchmarkingResults[identifier] = {}
-        benchmarkingResults[identifier]["calls"] = 0
-        benchmarkingResults[identifier]["time"] = 0
-    end
-    benchmarkingResults[identifier]["calls"] = benchmarkingResults[identifier]["calls"] + 1
-    benchmarkingResults[identifier]["time"] = benchmarkingResults[identifier]["time"] + time
-end
-
-function PrintBenchmarking()
-    local benchmarkStrings = {}
-    for identifier, timeAndCalls in pairs(benchmarkingResults) do
-        local time = timeAndCalls["time"]
-        local calls = timeAndCalls["calls"]
-        local str = {}
-        Append(str, identifier)
-        Append(str, ": ")
-        Append(str, RoundedNumString(time, 1))
-        Append(str, "s, called ")
-        if calls == 1 then
-            Append(str, "once")
-        else
-            Append(str, calls)
-            Append(str, " times (")
-            Append(str, RoundedNumString(time / calls, 3))
-            Append(str, "s on avg.)")
-        end
-        benchmarkStrings[#benchmarkStrings + 1] = { time, table.concat(str) }
-    end
-    local out = {}
-    if not IsEmpty(benchmarkStrings) then
-        table.sort(benchmarkStrings, function(a, b) return a[1] > b[1] end)
-        Append(out, TexCmd("section", "Benchmarking"))
-        Append(out, TexCmd("RpgTex"))
-        Append(out, " benchmarked the following functions (sorted by total runtime):")
-        Append(out, TexCmd("begin", "itemize"))
-        for key, timeAndString in pairs(benchmarkStrings) do
-            Append(out, TexCmd("item"))
-            Append(out, timeAndString[2])
-        end
-        Append(out, TexCmd("end", "itemize"))
-    end
-    return out
 end

@@ -60,14 +60,12 @@ end
 TexApi.reveal = reveal
 
 function MakePrimaryIf(condition)
-    StartBenchmarking("MakePrimaryIf")
     for key, entity in pairs(AllEntities) do
         if (condition(entity)) then
             local label = GetProtectedStringField(entity, "label")
             UniqueAppend(PrimaryRefs, label)
         end
     end
-    StopBenchmarking("MakePrimaryIf")
 end
 
 local function newEntity(arg)
@@ -118,7 +116,7 @@ local function automatedChapters()
         Append(output, " encountered errors. Call PrintRpgTexErrors to show them.")
     end
     StopBenchmarking("AutomatedChapters")
-    if IsBenchmarkingRun then
+    if IsBenchmarkingActivated() then
         return {}
     else
         return output

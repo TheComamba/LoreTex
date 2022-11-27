@@ -6,9 +6,9 @@
 \newcommand{\loadLuacode}[1]{
     \directlua{
         dofile([[#1]] .. "/state.lua")
+        dofile([[#1]] .. "/common.lua")
 
         dofile([[#1]] .. "/benchmarking.lua")
-        dofile([[#1]] .. "/common.lua")
         dofile([[#1]] .. "/comparer.lua")
         dofile([[#1]] .. "/dates-and-years.lua")
         dofile([[#1]] .. "/dictionary.lua")
@@ -41,7 +41,7 @@
         ResetState()
         RelativePath = [[#1]]
     }
-    
+
     \input{#1/benchmarking.tex}
     \input{#1/dates-and-years.tex}
     \input{#1/dictionary.tex}

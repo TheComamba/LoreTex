@@ -1,13 +1,51 @@
+local isBenchmarkingRun = false
 local benchmarkingStartTimes = {}
 local benchmarkingResults = {}
 
 StateResetters[#StateResetters + 1] = function()
+    isBenchmarkingRun = false
     benchmarkingStartTimes = {}
     benchmarkingResults = {}
 end
 
+local unbenchmarkables = {}
+Append(unbenchmarkables, "ActivateBenchmarking")
+Append(unbenchmarkables, "StartBenchmarking")
+Append(unbenchmarkables, "StopBenchmarking")
+
+function ActivateBenchmarking()
+    isBenchmarkingRun = true
+    for funName, fun in pairs(_G) do
+        if type(fun) == "function" and not IsEmpty(funName) then
+            if not IsIn(funName, unbenchmarkables) then
+                _G[funName] = function(...)
+                    StartBenchmarking(funName)
+                    local out = { fun(...) }
+                    StopBenchmarking(funName)
+                    if #out == 0 then
+                        return
+                    elseif #out == 1 then
+                        return out[1]
+                    elseif #out == 2 then
+                        return out[1], out[2]
+                    elseif #out == 3 then
+                        return out[1], out[2], out[3]
+                    else
+                        tex.print(funName .. " has more than 3 return values.")
+                        return fun(...)
+                    end
+                end
+            end
+        end
+    end
+end
+
+function IsBenchmarkingActivated()
+    return isBenchmarkingRun
+end
+
 function StartBenchmarking(identifier)
-    if not IsBenchmarkingRun then
+    if not isBenchmarkingRun then
         return
     end
     if benchmarkingStartTimes[identifier] == nil then
@@ -17,7 +55,7 @@ function StartBenchmarking(identifier)
 end
 
 function StopBenchmarking(identifier)
-    if not IsBenchmarkingRun then
+    if not isBenchmarkingRun then
         return
     end
     if benchmarkingStartTimes[identifier] == nil or #benchmarkingStartTimes[identifier] == 0 then
@@ -63,7 +101,7 @@ local function getBenchmarkStrings()
 end
 
 function PrintBenchmarking()
-    if not IsBenchmarkingRun then
+    if not isBenchmarkingRun then
         local message = "PrintBenchmarking called, but benchmarking has not been activated!"
         LogError(message)
         return { message }

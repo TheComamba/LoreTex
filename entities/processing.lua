@@ -121,7 +121,6 @@ local function addFollowUpEntities(arg, newEntity)
 end
 
 function AddProcessedEntity(arg, entity)
-    StartBenchmarking("AddProcessedEntity")
     local superEntity = GetProtectedNullableField(entity, "partOf")
     if superEntity ~= nil then
         AddProcessedEntity(arg, superEntity)
@@ -130,7 +129,6 @@ function AddProcessedEntity(arg, entity)
         registerProcessedEntity(arg, newEntity)
         addFollowUpEntities(arg, newEntity)
     end
-    StopBenchmarking("AddProcessedEntity")
 end
 
 local function getPrimaryEntities()
@@ -148,7 +146,6 @@ function IsEntityProcessed(label)
 end
 
 function ProcessedEntities()
-    StartBenchmarking("ProcessEntities")
     labelToProcessedEntity = {}
     local out = {}
     out.entities = {}
@@ -161,6 +158,5 @@ function ProcessedEntities()
     for key, entity in pairs(primaryEntities) do
         AddProcessedEntity(out, entity)
     end
-    StopBenchmarking("ProcessEntities")
     return out
 end

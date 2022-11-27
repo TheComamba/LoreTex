@@ -26,7 +26,6 @@ function GetEntitiesIf(condition, list)
 end
 
 function GetEntitiesOfType(type, list)
-    StartBenchmarking("GetEntitiesOfType")
     local out = {}
     if list == nil then
         list = AllEntities
@@ -36,7 +35,6 @@ function GetEntitiesOfType(type, list)
             out[#out + 1] = entity
         end
     end
-    StopBenchmarking("GetEntitiesOfType")
     return out
 end
 
@@ -67,12 +65,9 @@ function GetEntityRaw(label)
 end
 
 function GetEntity(label)
-    StartBenchmarking("GetEntity")
     local entity = GetEntityRaw(label)
     while GetProtectedNullableField(entity, "partOf") ~= nil do
         entity = GetProtectedNullableField(entity, "partOf")
     end
-    entity = ReadonlyTable(entity)
-    StopBenchmarking("GetEntity")
-    return entity
+    return ReadonlyTable(entity)
 end

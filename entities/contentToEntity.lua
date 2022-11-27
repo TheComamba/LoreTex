@@ -54,8 +54,6 @@ function LabeledContentToEntity(arg)
     if not IsArgOk("LabeledContentToEntity", arg, { "mainEntity", "name", "content" }) then
         return ""
     end
-
-    StartBenchmarking("LabeledContentToEntity")
     local contentSplit = splitContentAtSubparagraph(arg.content)
     contentSplit = mergePartsWithoutLabels(contentSplit)
     local newEntity = contentToEntityRaw { mainEntity = arg.mainEntity,
@@ -66,6 +64,5 @@ function LabeledContentToEntity(arg)
         local name = ScanStringForCmd(part, "subparagraph")[1]
         contentToEntityRaw { mainEntity = newEntity, name = name, content = part }
     end
-    StopBenchmarking("LabeledContentToEntity")
     return newEntity
 end

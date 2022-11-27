@@ -5,7 +5,6 @@ StateResetters[#StateResetters + 1] = function()
 end
 
 function AddSpeciesAndAgeStringToNPC(entity)
-    StartBenchmarking("AddSpeciesAndAgeStringToNPC")
     if IsType("characters", entity) then
         local speciesAndAgeStr = SpeciesAndAgeString(entity)
         if not IsEmpty(speciesAndAgeStr) then
@@ -15,7 +14,6 @@ function AddSpeciesAndAgeStringToNPC(entity)
                 description = speciesAndAgeStr }
         end
     end
-    StopBenchmarking("AddSpeciesAndAgeStringToNPC")
 end
 
 function IsBorn(entity)

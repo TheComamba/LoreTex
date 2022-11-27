@@ -1,5 +1,4 @@
 function PlaceToName(location)
-    StartBenchmarking("PlaceToName")
     local name = ""
     local locationLabels = {}
     while not IsEmpty(location) do
@@ -24,7 +23,6 @@ function PlaceToName(location)
         end
         location = GetProtectedNullableField(location, "location")
     end
-    StopBenchmarking("PlaceToName")
     return name
 end
 

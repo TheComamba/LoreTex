@@ -82,7 +82,6 @@ local function withoutDiplicatesOrProcessed(entities)
 end
 
 function PrintOnlyMentionedChapter(mentionedEntities)
-    StartBenchmarking("PrintOnlyMentionedChapter")
     local out = {}
     mentionedEntities = withoutDiplicatesOrProcessed(mentionedEntities)
     Sort(mentionedEntities, "compareByName")
@@ -98,7 +97,6 @@ function PrintOnlyMentionedChapter(mentionedEntities)
             Append(out, TexCmd("hspace", "1cm"))
         end
     end
-    StopBenchmarking("PrintOnlyMentionedChapter")
     return out
 end
 
@@ -147,7 +145,6 @@ function PrintEntityChapter(processedOut, metatype)
         return {}
     end
 
-    StartBenchmarking("PrintEntityChapter")
     local out = {}
     Append(out, TexCmd("chapter", CapFirst(Tr(metatype))))
     local types = AllTypes[metatype]
@@ -160,6 +157,5 @@ function PrintEntityChapter(processedOut, metatype)
             Append(out, printEntityChapterSortedByLocation(entitiesOfType))
         end
     end
-    StopBenchmarking("PrintEntityChapter")
     return out
 end

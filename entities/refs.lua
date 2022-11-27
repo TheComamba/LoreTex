@@ -41,7 +41,6 @@ function ListAllRefs()
 end
 
 function ScanStringForCmd(str, cmd)
-    StartBenchmarking("ScanStringForCommand")
     local args = {}
     local cmdStr = [[\]] .. cmd
     local openStr = [[{]]
@@ -61,12 +60,10 @@ function ScanStringForCmd(str, cmd)
 
         posCmd = string.find(str, cmdStr, posClose)
     end
-    StopBenchmarking("ScanStringForCommand")
     return args
 end
 
 function ScanForCmd(content, cmd)
-    StartBenchmarking("ScanForCmd")
     local out = {}
     if type(content) == "string" then
         out = ScanStringForCmd(content, cmd)
@@ -78,18 +75,15 @@ function ScanForCmd(content, cmd)
             end
         end
     end
-    StopBenchmarking("ScanForCmd")
     return out
 end
 
 function ScanContentForMentionedRefs(content)
-    StartBenchmarking("ScanContentForMentionedRefs")
     local mentionedRefsHere = {}
     for key1, refType in pairs(refTypes) do
         local refs = ScanForCmd(content, refType)
         UniqueAppend(mentionedRefsHere, refs)
     end
-    StopBenchmarking("ScanContentForMentionedRefs")
     return mentionedRefsHere
 end
 

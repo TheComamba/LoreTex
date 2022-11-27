@@ -76,8 +76,6 @@ local function addHistoryDescriptors(entity)
 end
 
 function ProcessHistory(entity)
-    StartBenchmarking("ProcessHistory")
     AddLifestageHistoryItemsToNPC(entity)
     addHistoryDescriptors(entity)
-    StopBenchmarking("ProcessHistory")
 end

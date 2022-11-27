@@ -136,7 +136,7 @@ function AddAutomatedDescriptors(entity)
     StopBenchmarking("AddAutomatedDescriptors")
 end
 
-local function isEntityProcessed(label)
+function IsEntityProcessed(label)
     return labelToProcessedEntity[label] ~= nil
 end
 
@@ -203,9 +203,7 @@ local function addFollowUpEntities(arg, newEntity)
     addPrimariesWhenMentioned(arg, mentionedEntities)
     for key, mentionedEntity in pairs(mentionedEntities) do
         local label = GetProtectedStringField(mentionedEntity, "label")
-        if not isEntityProcessed(label) then
-            arg.mentioned[#arg.mentioned + 1] = mentionedEntity
-        end
+        arg.mentioned[#arg.mentioned + 1] = mentionedEntity
     end
     StopBenchmarking("addFollowUpEntities")
 end
@@ -215,7 +213,7 @@ function AddProcessedEntity(arg, entity)
     local superEntity = GetProtectedNullableField(entity, "partOf")
     if superEntity ~= nil then
         AddProcessedEntity(arg, superEntity)
-    elseif IsEntityShown(entity) and not isEntityProcessed(GetProtectedStringField(entity, "label")) then
+    elseif IsEntityShown(entity) and not IsEntityProcessed(GetProtectedStringField(entity, "label")) then
         local newEntity = processEntity(entity)
         registerProcessedEntity(arg, newEntity)
         addFollowUpEntities(arg, newEntity)

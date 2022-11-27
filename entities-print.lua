@@ -79,14 +79,16 @@ local function printEntities(sectionname, entitiesList)
     return out
 end
 
-local function withoutDiplicates(entities)
+local function withoutDiplicatesOrProcessed(entities)
     local out = {}
     local labels = {}
     for key, entity in pairs(entities) do
         local label = GetProtectedStringField(entity, "label")
         if not IsEmpty(label) and not IsIn(label, labels) then
-            out[#out + 1] = entity
             Append(labels, label)
+            if not IsEntityProcessed(label) then
+                out[#out + 1] = entity
+            end
         end
     end
     return out
@@ -95,7 +97,7 @@ end
 function PrintOnlyMentionedChapter(mentionedEntities)
     StartBenchmarking("PrintOnlyMentionedChapter")
     local out = {}
-    mentionedEntities = withoutDiplicates(mentionedEntities)
+    mentionedEntities = withoutDiplicatesOrProcessed(mentionedEntities)
     Sort(mentionedEntities, "compareByName")
     for key, mentionedEntity in pairs(mentionedEntities) do
         if key == 1 then

@@ -30,7 +30,7 @@ function LabelToName(label)
     if IsEmpty(label) then
         return ""
     end
-    
+
     local name = ""
     local entity = GetEntityRaw(label)
     if not IsEmpty(entity) then
@@ -43,15 +43,29 @@ function LabelToName(label)
     return name
 end
 
+function GetName(entity)
+    local name = GetProtectedStringField(entity, "name")
+    if not IsEmpty(name) then
+        return name
+    else
+        local label = GetProtectedStringField(entity, "label")
+        if IsEmpty(label) then
+            LogError("Entity has neither label nor name:" .. DebugPrint(entity))
+            return "NO NAME"
+        else
+            if not IsIn(label, UnfoundRefs) then
+                LogError("Entity without a name: \"" .. label .. "\"")
+                Append(UnfoundRefs, label)
+            end
+            return label:upper()
+        end
+    end
+end
+
 function GetShortname(entity)
     local shortname = GetProtectedStringField(entity, "shortname")
     if not IsEmpty(shortname) then
         return shortname
     end
-    local fullname = GetProtectedStringField(entity, "name")
-    if not IsEmpty(fullname) then
-        return fullname
-    end
-    LogError("Entity has no name:" .. DebugPrint(entity))
-    return "NO NAME"
+    return GetName(entity)
 end

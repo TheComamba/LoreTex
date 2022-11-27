@@ -58,6 +58,7 @@ local function entityQualifiersString(child, parent, relationships)
         if childLocationLabel ~= parentLocationLabel and
             not IsIn(childLocationLabel, GetAllLabels(parent)) then
             Append(content, Tr("in") .. " " .. TexCmd("nameref", childLocationLabel))
+            AddToProtectedField(parent, "concerns", childLocation)
         end
     end
     if not IsEmpty(content) then

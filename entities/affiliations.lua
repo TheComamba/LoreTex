@@ -1,5 +1,4 @@
 local function addParentDescriptorsToChild(child)
-    StartBenchmarking("AddParentDescriptorsToChild")
     local parentList = {}
     local parentsAndRelationships = GetProtectedTableField(child, "parents")
     Sort(parentsAndRelationships, "compareAffiliations")
@@ -24,7 +23,6 @@ local function addParentDescriptorsToChild(child)
     if not IsEmpty(parentList) then
         SetDescriptor { entity = child, descriptor = Tr("affiliations"), description = parentList }
     end
-    StopBenchmarking("AddParentDescriptorsToChild")
 end
 
 local function entityQualifiersString(child, parent, relationships)
@@ -103,7 +101,6 @@ local function getRelationships(child, parent)
 end
 
 local function addChildrenDescriptorsToParent(parent)
-    StartBenchmarking("addChildrenDescriptorsToParent")
     local children = GetProtectedTableField(parent, "children")
     Sort(children, "compareByName")
     for key, child in pairs(children) do
@@ -112,7 +109,6 @@ local function addChildrenDescriptorsToParent(parent)
             addSingleChildDescriptorToParent(child, parent, relationships)
         end
     end
-    StopBenchmarking("addChildrenDescriptorsToParent")
 end
 
 function AddAffiliationDescriptors(entity)

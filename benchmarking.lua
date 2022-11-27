@@ -8,43 +8,7 @@ StateResetters[#StateResetters + 1] = function()
     benchmarkingResults = {}
 end
 
-local unbenchmarkables = {}
-Append(unbenchmarkables, "ActivateBenchmarking")
-Append(unbenchmarkables, "StartBenchmarking")
-Append(unbenchmarkables, "StopBenchmarking")
-
-function ActivateBenchmarking()
-    isBenchmarkingRun = true
-    for funName, fun in pairs(_G) do
-        if type(fun) == "function" and not IsEmpty(funName) then
-            if not IsIn(funName, unbenchmarkables) then
-                _G[funName] = function(...)
-                    StartBenchmarking(funName)
-                    local out = { fun(...) }
-                    StopBenchmarking(funName)
-                    if #out == 0 then
-                        return
-                    elseif #out == 1 then
-                        return out[1]
-                    elseif #out == 2 then
-                        return out[1], out[2]
-                    elseif #out == 3 then
-                        return out[1], out[2], out[3]
-                    else
-                        tex.print(funName .. " has more than 3 return values.")
-                        return fun(...)
-                    end
-                end
-            end
-        end
-    end
-end
-
-function IsBenchmarkingActivated()
-    return isBenchmarkingRun
-end
-
-function StartBenchmarking(identifier)
+local function startBenchmarking(identifier)
     if not isBenchmarkingRun then
         return
     end
@@ -54,7 +18,7 @@ function StartBenchmarking(identifier)
     benchmarkingStartTimes[identifier][#benchmarkingStartTimes[identifier] + 1] = os.clock()
 end
 
-function StopBenchmarking(identifier)
+local function stopBenchmarking(identifier)
     if not isBenchmarkingRun then
         return
     end
@@ -75,6 +39,28 @@ function StopBenchmarking(identifier)
     end
     benchmarkingResults[identifier]["calls"] = benchmarkingResults[identifier]["calls"] + 1
     benchmarkingResults[identifier]["time"] = benchmarkingResults[identifier]["time"] + time
+end
+
+local function benchmark(funName, fun, ...)
+    startBenchmarking(funName)
+    local out = { fun(...) }
+    stopBenchmarking(funName)
+    return table.unpack(out)
+end
+
+function ActivateBenchmarking()
+    isBenchmarkingRun = true
+    for funName, fun in pairs(_G) do
+        if type(fun) == "function" and not IsEmpty(funName) then
+            _G[funName] = function(...)
+                return benchmark(funName, fun, ...)
+            end
+        end
+    end
+end
+
+function IsBenchmarkingActivated()
+    return isBenchmarkingRun
 end
 
 local function getBenchmarkStrings()

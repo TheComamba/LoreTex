@@ -9,11 +9,9 @@ StateResetters[#StateResetters + 1] = function()
 end
 
 function GetEntitiesIf(condition, list)
-    StartBenchmarking("GetEntitiesIf")
     local out = {}
     if list == nil or type(list) ~= "table" then
         LogError("Called with " .. DebugPrint(list))
-        StopBenchmarking("GetEntitiesIf")
         return out
     end
     for key, entity in pairs(list) do
@@ -21,7 +19,6 @@ function GetEntitiesIf(condition, list)
             out[#out + 1] = entity
         end
     end
-    StopBenchmarking("GetEntitiesIf")
     return out
 end
 

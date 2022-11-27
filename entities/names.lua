@@ -30,7 +30,7 @@ function LabelToName(label)
     if IsEmpty(label) then
         return ""
     end
-    StartBenchmarking("LabelToName")
+    
     local name = ""
     local entity = GetEntityRaw(label)
     if not IsEmpty(entity) then
@@ -40,7 +40,6 @@ function LabelToName(label)
         Append(UnfoundRefs, label)
         name = label:upper()
     end
-    StopBenchmarking("LabelToName")
     return name
 end
 

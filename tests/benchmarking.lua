@@ -9,7 +9,6 @@ function SetBenchmarkingSize(num)
 end
 
 function CreateBenchmarkingTest(sizeStr)
-    StartBenchmarking("All")
     local numcast = tonumber(sizeStr)
     if numcast == nil then
         LogError("Called with " .. DebugPrint(sizeStr))
@@ -46,6 +45,5 @@ function CreateBenchmarkingTest(sizeStr)
     end
 
     local out = TexApi.automatedChapters()
-    StopBenchmarking("All")
     return out
 end

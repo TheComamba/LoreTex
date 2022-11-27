@@ -108,8 +108,7 @@ local function processEvent(item)
 	if not IsHistoryItemOk("ProcessEvent", item) then
 		return
 	end
-	StartBenchmarking("ProcessEvent")
-
+	
 	local event = GetProtectedStringField(item, "content")
 	SetProtectedField(item, "birthof", ScanStringForCmd(event, "birthof"))
 	SetProtectedField(item, "deathof", ScanStringForCmd(event, "deathof"))
@@ -131,8 +130,6 @@ local function processEvent(item)
 	if IsEmpty(GetProtectedTableField(item, "concerns")) then
 		LogError("This history item concerns nobody:" .. DebugPrint(item))
 	end
-
-	StopBenchmarking("ProcessEvent")
 end
 
 local function addHistory(arg)

@@ -16,10 +16,7 @@ local function descritptorMapString(map)
 end
 
 local function descriptorsString(entity)
-    StartBenchmarking("DescriptorsString")
     local out = {}
-
-
     local descriptorsList = {}
     for descriptor, description in pairs(entity) do
         if not IsProtectedDescriptor(descriptor) then
@@ -39,7 +36,6 @@ local function descriptorsString(entity)
             Append(out, descritptorMapString(entity[descriptor]))
         end
     end
-    StopBenchmarking("DescriptorsString")
     return out
 end
 
@@ -48,7 +44,6 @@ local function printEntities(sectionname, entitiesList)
         return {}
     end
 
-    StartBenchmarking("printEntities")
     local out = {}
     Append(out, TexCmd("subsection", CapFirst(sectionname)))
     Sort(entitiesList, "compareByName")
@@ -62,7 +57,6 @@ local function printEntities(sectionname, entitiesList)
         Append(out, TexCmd("label", GetProtectedStringField(entity, "label")))
         Append(out, descriptorsString(entity))
     end
-    StopBenchmarking("printEntities")
     return out
 end
 
@@ -115,9 +109,7 @@ local function PrintAllEntities(name, entities)
 end
 
 local function printEntityChapterSortedByLocation(entities)
-    StartBenchmarking("printEntityChapterSortedByLocation")
     local out = {}
-
     local locationNames = GetSortedKeys(entities)
     for i, locationName in pairs(locationNames) do
         if not IsProtectedDescriptor(locationName) then
@@ -136,7 +128,6 @@ local function printEntityChapterSortedByLocation(entities)
     local entitiesAtSecretLocations = GetProtectedTableField(entities, "isSecret")
     Append(out, printEntities(sectionname, entitiesAtSecretLocations))
 
-    StopBenchmarking("printEntityChapterSortedByLocation")
     return out
 end
 

@@ -1,5 +1,4 @@
 local function setDescriptorAsKeyValPair(arg)
-    StartBenchmarking("setDescriptorAsKeyValPair")
     if IsEmpty(arg.subdescriptor) then
         arg.entity[arg.descriptor] = arg.description
     else
@@ -18,7 +17,6 @@ local function setDescriptorAsKeyValPair(arg)
         end
         arg.entity[arg.descriptor][arg.subdescriptor] = arg.description
     end
-    StopBenchmarking("setDescriptorAsKeyValPair")
 end
 
 function SetDescriptor(arg)
@@ -26,7 +24,6 @@ function SetDescriptor(arg)
         return
     end
 
-    StartBenchmarking("SetDescriptor")
     Replace([[\reference]], [[\nameref]], arg.description)
     if IsEmpty(ScanForCmd(arg.description, "label")) then
         setDescriptorAsKeyValPair(arg)
@@ -37,7 +34,6 @@ function SetDescriptor(arg)
             content = arg.description }
         MakePartOf { subEntity = alias, mainEntity = arg.entity }
     end
-    StopBenchmarking("SetDescriptor")
 end
 
 TexApi.setDescriptor = function(arg)
@@ -76,7 +72,6 @@ local function newEntity(arg)
         LogError("Trying to create entity with unkown type \"" .. arg.type .. "\"")
         return
     end
-    StartBenchmarking("NewEntity")
     CurrentEntity = GetMutableEntityFromAll(arg.label)
     SetProtectedField(CurrentEntity, "type", arg.type)
     SetProtectedField(CurrentEntity, "shortname", arg.shortname)
@@ -85,7 +80,6 @@ local function newEntity(arg)
     if not IsEmpty(defaultLocation) then
         SetLocation(CurrentEntity, defaultLocation)
     end
-    StopBenchmarking("NewEntity")
 end
 
 TexApi.newEntity = newEntity
@@ -103,7 +97,6 @@ end
 TexApi.newCharacter = newCharacter
 
 local function automatedChapters()
-    StartBenchmarking("AutomatedChapters")
     local processOut = ProcessedEntities()
     local output = {}
     for key, metatype in pairs(SortedMetatypes()) do
@@ -115,7 +108,6 @@ local function automatedChapters()
         Append(output, TexCmd("RpgTex"))
         Append(output, " encountered errors. Call PrintRpgTexErrors to show them.")
     end
-    StopBenchmarking("AutomatedChapters")
     if IsBenchmarkingActivated() then
         return {}
     else

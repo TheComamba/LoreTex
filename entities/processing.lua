@@ -5,15 +5,12 @@ StateResetters[#StateResetters + 1] = function()
 end
 
 local function registerProcessedEntityLabels(entity)
-    StartBenchmarking("registerProcessedEntityLabels")
     for key, label in pairs(GetAllLabels(entity)) do
         labelToProcessedEntity[label] = entity
     end
-    StopBenchmarking("registerProcessedEntityLabels")
 end
 
 local function collectMentionedEntities(entity)
-    StartBenchmarking("collectConernedEntities")
     local out = GetProtectedTableField(entity, "mentions")
     for key, item in pairs(GetProtectedTableField(entity, "historyItems")) do
         for key2, concern in pairs(GetProtectedTableField(item, "mentions")) do
@@ -25,7 +22,6 @@ local function collectMentionedEntities(entity)
             out[#out + 1] = concern
         end
     end
-    StopBenchmarking("collectConernedEntities")
     return out
 end
 
@@ -43,28 +39,23 @@ local function addSubEntitiesAsDescriptors(entity)
 end
 
 local function addAutomatedDescriptors(entity)
-    StartBenchmarking("AddAutomatedDescriptors")
     AddAffiliationDescriptors(entity)
     AddSpeciesAndAgeStringToNPC(entity)
     AddLifeStagesToSpecies(entity)
     ProcessHistory(entity)
     addSubEntitiesAsDescriptors(entity)
-    StopBenchmarking("AddAutomatedDescriptors")
 end
 
 local function addPrimariesWhenMentioned(arg, mentioned)
-    StartBenchmarking("addPrimariesWhenMentioned")
     for key, entity in pairs(mentioned) do
         local typeName = GetProtectedStringField(entity, "type")
         if IsIn(typeName, PrimaryRefWhenMentionedTypes) then
             AddProcessedEntity(arg, entity)
         end
     end
-    StopBenchmarking("addPrimariesWhenMentioned")
 end
 
 local function addEntityToDict(arg, newEntity)
-    StartBenchmarking("addEntityToDict")
     if arg.entites == nil then
         arg.entites = {}
     end
@@ -89,27 +80,21 @@ local function addEntityToDict(arg, newEntity)
         arg.entities[metatype][typename][locationName] = {}
     end
     arg.entities[metatype][typename][locationName][#arg.entities[metatype][typename][locationName] + 1] = newEntity
-    StopBenchmarking("addEntityToDict")
 end
 
 local function processEntity(entity)
-    StartBenchmarking("processEntity")
     local newEntity = DeepCopy(entity)
     AddNameMarkers(newEntity)
     addAutomatedDescriptors(newEntity)
-    StopBenchmarking("processEntity")
     return newEntity
 end
 
 local function registerProcessedEntity(arg, newEntity)
-    StartBenchmarking("registerProcessedEntity")
     addEntityToDict(arg, newEntity)
     registerProcessedEntityLabels(newEntity)
-    StopBenchmarking("registerProcessedEntity")
 end
 
 local function addFollowUpEntities(arg, newEntity)
-    StartBenchmarking("addFollowUpEntities")
     local mentionedEntities = collectMentionedEntities(newEntity)
     addPrimariesWhenMentioned(arg, mentionedEntities)
     for key, mentionedEntity in pairs(mentionedEntities) do
@@ -117,7 +102,6 @@ local function addFollowUpEntities(arg, newEntity)
             arg.mentioned[#arg.mentioned + 1] = mentionedEntity
         end
     end
-    StopBenchmarking("addFollowUpEntities")
 end
 
 function AddProcessedEntity(arg, entity)
@@ -132,12 +116,10 @@ function AddProcessedEntity(arg, entity)
 end
 
 local function getPrimaryEntities()
-    StartBenchmarking("getPrimaryEntities")
     local out = {}
     for key, label in pairs(PrimaryRefs) do
         out[#out + 1] = GetEntity(label)
     end
-    StopBenchmarking("getPrimaryEntities")
     return out
 end
 

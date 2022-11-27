@@ -100,7 +100,5 @@ Comparer.compareTranslation = function(a, b)
 end
 
 function Sort(t, comp)
-    StartBenchmarking("Sort using " .. comp)
     table.sort(t, Comparer[comp])
-    StopBenchmarking("Sort using " .. comp)
 end

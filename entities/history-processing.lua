@@ -58,7 +58,6 @@ local function deleteDuplicateHistoryItems(items)
 end
 
 local function addHistoryDescriptors(entity)
-    StartBenchmarking("addHistoryDescriptors")
     local historyItems = collectHistoryItems(entity)
     historyItems = deleteDuplicateHistoryItems(historyItems)
     Sort(historyItems, "compareHistoryItems")
@@ -72,7 +71,6 @@ local function addHistoryDescriptors(entity)
     if not IsEmpty(processedHistory) then
         SetDescriptor { entity = entity, descriptor = Tr("history"), description = processedHistory }
     end
-    StopBenchmarking("addHistoryDescriptors")
 end
 
 function ProcessHistory(entity)

@@ -1,50 +1,17 @@
 local isBenchmarkingRun = false
-local benchmarkingStartTimes = {}
 local benchmarkingResults = {}
 
 StateResetters[#StateResetters + 1] = function()
     isBenchmarkingRun = false
-    benchmarkingStartTimes = {}
     benchmarkingResults = {}
 end
 
-local function startBenchmarking(identifier)
-    if not isBenchmarkingRun then
-        return
-    end
-    if benchmarkingStartTimes[identifier] == nil then
-        benchmarkingStartTimes[identifier] = {}
-    end
-    benchmarkingStartTimes[identifier][#benchmarkingStartTimes[identifier] + 1] = os.clock()
-end
-
-local function stopBenchmarking(identifier)
-    if not isBenchmarkingRun then
-        return
-    end
-    if benchmarkingStartTimes[identifier] == nil or #benchmarkingStartTimes[identifier] == 0 then
-        local mess = {}
-        Append(mess, "Benchmarking for identifier \"")
-        Append(mess, identifier)
-        Append(mess, "\" has not been started.")
-        LogError(mess)
-        return
-    end
-    local time = os.clock() - benchmarkingStartTimes[identifier][#benchmarkingStartTimes[identifier]]
-    benchmarkingStartTimes[identifier][#benchmarkingStartTimes[identifier]] = nil
-    if benchmarkingResults[identifier] == nil then
-        benchmarkingResults[identifier] = {}
-        benchmarkingResults[identifier]["calls"] = 0
-        benchmarkingResults[identifier]["time"] = 0
-    end
-    benchmarkingResults[identifier]["calls"] = benchmarkingResults[identifier]["calls"] + 1
-    benchmarkingResults[identifier]["time"] = benchmarkingResults[identifier]["time"] + time
-end
-
 local function benchmark(funName, fun, ...)
-    startBenchmarking(funName)
+    local before = os.clock()
     local out = { fun(...) }
-    stopBenchmarking(funName)
+    local time = os.clock() - before
+    benchmarkingResults[funName]["calls"] = benchmarkingResults[funName]["calls"] + 1
+    benchmarkingResults[funName]["time"] = benchmarkingResults[funName]["time"] + time
     return table.unpack(out)
 end
 
@@ -56,6 +23,12 @@ function ActivateBenchmarking()
                 funTable[funName] = function(...)
                     return benchmark(funName, fun, ...)
                 end
+                if benchmarkingResults[funName] ~= nil then
+                    LogError("Function with name " .. funName .. " defined more than once!")
+                end
+                benchmarkingResults[funName] = {}
+                benchmarkingResults[funName]["calls"] = 0
+                benchmarkingResults[funName]["time"] = 0
             end
         end
     end
@@ -75,7 +48,9 @@ local function getBenchmarkStrings()
         Append(str, ": ")
         Append(str, RoundedNumString(time, 1))
         Append(str, "s, called ")
-        if calls == 1 then
+        if calls == 0 then
+            Append(str, "not a single time")
+        elseif calls == 1 then
             Append(str, "once")
         else
             Append(str, calls)

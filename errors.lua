@@ -1,7 +1,9 @@
 local errorMessages = {}
+IsErrorsChronologicallySorted = false
 
 function ResetErrors()
     errorMessages = {}
+    IsErrorsChronologicallySorted = false
 end
 
 StateResetters[#StateResetters + 1] = ResetErrors
@@ -19,6 +21,9 @@ function LogError(errorMessage)
     if caller ~= nil and type(caller) == "string" then
         caller = string.gsub(caller, [[_]], [[\_]])
         errorMessage = "In function \"" .. caller .. "\": " .. errorMessage
+    end
+    if IsErrorsChronologicallySorted then
+        errorMessage = tostring(#errorMessages + 1) .. ".: " .. errorMessage
     end
     if IsThrowOnError then
         error(errorMessage)

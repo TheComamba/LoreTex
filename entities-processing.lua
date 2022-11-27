@@ -75,11 +75,12 @@ local function addSingleChildDescriptorToParent(child, parent, relationships)
         parent[descriptor] = {}
     end
     local content = {}
-    local srcLabel = GetProtectedStringField(child, "label")
-    Append(content, TexCmd("nameref", srcLabel))
+    local childLabel = GetProtectedStringField(child, "label")
+    Append(content, TexCmd("nameref", childLabel))
     Append(content, " ")
     Append(content, entityQualifiersString(child, parent, relationships))
     UniqueAppend(parent[descriptor], table.concat(content))
+    AddToProtectedField(parent, "concerns", child)
 end
 
 local function getRelationships(child, parent)
@@ -240,7 +241,7 @@ function ProcessEntities()
     local primaryEntities = getPrimaryEntities()
     out.mentioned = {}
     for key, label in pairs(MentionedRefs) do
-        out.mentioned[#out.mentioned + 1] = GetEntity(label)
+        out.mentioned[#out.mentioned + 1] = GetEntityRaw(label)
     end
     addPrimariesWhenMentioned(out, out.mentioned)
     for key, entity in pairs(primaryEntities) do

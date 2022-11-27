@@ -101,6 +101,13 @@ function IsRevealed(entity)
     return IsIn(GetProtectedStringField(entity, "label"), RevealedLabels)
 end
 
+function IsEntityUnrevealed(entity)
+    if IsShowSecrets then
+        return false
+    end
+    return IsEntitySecret(entity) and (not IsRevealed(entity))
+end
+
 function IsEntityShown(entity)
     if IsEmpty(entity) then
         return false

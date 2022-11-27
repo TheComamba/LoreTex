@@ -1,9 +1,6 @@
 function IsLocationUnrevealed(entity)
-    if IsShowSecrets then
-        return false
-    end
     local location = GetProtectedNullableField(entity, "location")
-    return IsEntitySecret(location) and (not IsRevealed(location))
+    return IsEntityUnrevealed(location)
 end
 
 function PlaceToName(location)

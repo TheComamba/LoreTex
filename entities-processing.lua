@@ -202,8 +202,9 @@ local function addFollowUpEntities(arg, newEntity)
     local mentionedEntities = collectConernedEntities(newEntity)
     addPrimariesWhenMentioned(arg, mentionedEntities)
     for key, mentionedEntity in pairs(mentionedEntities) do
-        local label = GetProtectedStringField(mentionedEntity, "label")
-        arg.mentioned[#arg.mentioned + 1] = mentionedEntity
+        if not IsEntityUnrevealed(mentionedEntity) then
+            arg.mentioned[#arg.mentioned + 1] = mentionedEntity
+        end
     end
     StopBenchmarking("addFollowUpEntities")
 end

@@ -16,7 +16,7 @@ end
 
 function IsType(type, entity)
     local entityType = GetProtectedStringField(entity, "type")
-    if IsEmpty(entity) or entityType == nil then
+    if entityType == nil then
         return false
     else
         local types = AllTypes[type]

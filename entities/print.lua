@@ -49,7 +49,7 @@ local function printEntities(sectionname, entitiesList)
     Sort(entitiesList, "compareByName")
     for key, entity in pairs(entitiesList) do
         local shortname = GetProtectedStringField(entity, "shortname")
-        if IsEmpty(shortname) then
+        if shortname == "" then
             Append(out, TexCmd("subsubsection", GetProtectedStringField(entity, "name")))
         else
             Append(out, TexCmd("subsubsection", GetProtectedStringField(entity, "name"), shortname))
@@ -65,7 +65,7 @@ local function withoutDiplicatesOrProcessed(entities)
     local labels = {}
     for key, entity in pairs(entities) do
         local label = GetProtectedStringField(entity, "label")
-        if not IsEmpty(label) and not IsIn(label, labels) then
+        if label ~= nil and not IsIn(label, labels) then
             Append(labels, label)
             if not IsEntityProcessed(label) then
                 out[#out + 1] = entity
@@ -85,7 +85,7 @@ function PrintOnlyMentionedChapter(mentionedEntities)
         end
         local name = GetProtectedStringField(mentionedEntity, "name")
         local label = GetProtectedStringField(mentionedEntity, "label")
-        if not IsEmpty(name) then
+        if name ~= "" then
             Append(out, TexCmd("subparagraph", name))
             Append(out, TexCmd("label", label))
             Append(out, TexCmd("hspace", "1cm"))
@@ -100,8 +100,8 @@ local function PrintAllEntities(name, entities)
     for locationName, entity in pairs(entities) do
         Append(allLabels, GetAllLabels(entity))
     end
-    Sort(allLabels, "compareByName")
-    if not IsEmpty(allLabels) then
+    if #allLabels > 0 then
+        Sort(allLabels, "compareByName")
         Append(out, TexCmd("subsection*", CapFirst(Tr("all")) .. " " .. CapFirst(name)))
         Append(out, ListAll(allLabels, NamerefString))
     end

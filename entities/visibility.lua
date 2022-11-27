@@ -35,9 +35,7 @@ function IsEntityUnrevealed(entity)
 end
 
 function IsEntityShown(entity)
-    if IsEmpty(entity) then
-        return false
-    elseif not IsBorn(entity) and not IsShowFuture then
+    if not IsBorn(entity) and not IsShowFuture then
         return false
     elseif IsEntitySecret(entity) then
         if IsRevealed(entity) or IsShowSecrets then

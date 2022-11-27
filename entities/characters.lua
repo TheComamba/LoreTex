@@ -7,7 +7,7 @@ end
 function AddSpeciesAndAgeStringToNPC(entity)
     if IsType("characters", entity) then
         local speciesAndAgeStr = SpeciesAndAgeString(entity)
-        if not IsEmpty(speciesAndAgeStr) then
+        if speciesAndAgeStr ~= "" then
             SetDescriptor { entity = entity,
                 descriptor = Tr("appearance"),
                 subdescriptor = CapFirst(Tr("species-and-age")) .. ":",

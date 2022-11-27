@@ -1,7 +1,7 @@
 local function markName(entity, condition, marker)
     local name = GetName(entity)
     if condition(entity) then
-        if IsEmpty(GetProtectedStringField(entity, "shortname")) then
+        if GetProtectedStringField(entity, "shortname") == "" then
             SetProtectedField(entity, "shortname", name)
         end
         SetProtectedField(entity, "name", name .. " " .. marker)

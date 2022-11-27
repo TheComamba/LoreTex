@@ -100,7 +100,7 @@ end
 function MakeEntityAndChildrenPrimary(label)
     UniqueAppend(PrimaryRefs, label)
     local entity = GetEntity(label)
-    if IsEmpty(entity) then
+    if entity == nil then
         LogError("Entity with label \"" .. label .. "\" not found.")
         return
     end

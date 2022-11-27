@@ -70,7 +70,7 @@ end
 
 local function specificAgeString(entity, age)
 	local species = GetProtectedNullableField(entity, "species")
-	if IsEmpty(species) then
+	if species == nil then
 		return ""
 	end
 	if isAges(species) then
@@ -87,7 +87,7 @@ local function ageString(entity, year)
 		Append(out, " ")
 	end
 	local age = GetAgeInYears(entity, year)
-	if IsEmpty(age) or age < 0 then
+	if age == nil or age < 0 then
 		return ""
 	end
 	Append(out, tostring(age))
@@ -100,12 +100,12 @@ end
 function SpeciesAndAgeString(entity)
 	local parts = {}
 	local species = GetProtectedNullableField(entity, "species")
-	if not IsEmpty(species) then
+	if species ~= nil then
 		Append(parts, TexCmd("nameref ", GetProtectedStringField(species, "label")))
 	end
 	if IsCurrentYearSet then
 		local ageDescription = ageString(entity, GetCurrentYear())
-		if not IsEmpty(ageDescription) then
+		if ageDescription ~= "" then
 			Append(parts, ageDescription)
 		end
 	end
@@ -123,15 +123,15 @@ end
 
 local function addLifestageHistoryItems(entity)
 	local label = GetProtectedStringField(entity, "label")
-	if IsEmpty(label) then
+	if label == "" then
 		return
 	end
 	local birthyear = GetProtectedNullableField(entity, "born")
-	if IsEmpty(birthyear) then
+	if birthyear == nil then
 		return
 	end
 	local species = GetProtectedNullableField(entity, "species")
-	if IsEmpty(species) then
+	if species == nil then
 		return
 	end
 	local deathyear = GetProtectedNullableField(entity, "died")
@@ -166,10 +166,6 @@ function AddLifestageHistoryItemsToNPC(entity)
 end
 
 local function lifestagesDescription(species)
-	if IsEmpty(species) then
-		LogError("Called with " .. DebugPrint(species))
-		return ""
-	end
 	local out = {}
 	local factor, exponent = GetAgeFactorAndExponent(species)
 	for i, stageAndAge in pairs(lifestagesAndAges) do
@@ -198,7 +194,7 @@ function AddLifeStagesToSpecies(entity)
 	if IsType("species", entity) then
 		if isAges(entity) then
 			local lifestages = lifestagesDescription(entity)
-			if not IsEmpty(lifestages) then
+			if lifestages ~= "" then
 				SetDescriptor { entity = entity, descriptor = Tr("lifestages"), description = lifestages }
 			end
 		end

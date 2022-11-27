@@ -72,7 +72,7 @@ local function addEntityToDict(arg, newEntity)
         locationName = GetProtectedDescriptor("isSecret")
     else
         local location = GetProtectedNullableField(newEntity, "location")
-        if not IsEmpty(location) then
+        if location ~= nil then
             locationName = PlaceToName(location)
         end
     end

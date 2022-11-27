@@ -77,7 +77,7 @@ local function newEntity(arg)
     SetProtectedField(CurrentEntity, "shortname", arg.shortname)
     SetProtectedField(CurrentEntity, "name", arg.name)
     local defaultLocation = GetScopedVariable("DefaultLocation")
-    if not IsEmpty(defaultLocation) then
+    if defaultLocation ~= nil then
         SetLocation(CurrentEntity, defaultLocation)
     end
 end

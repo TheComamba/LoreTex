@@ -19,7 +19,7 @@ function ActivateBenchmarking()
     isBenchmarkingRun = true
     for key, funTable in pairs({ _G, TexApi, Comparer }) do
         for funName, fun in pairs(funTable) do
-            if type(fun) == "function" and not IsEmpty(funName) then
+            if type(fun) == "function" then
                 funTable[funName] = function(...)
                     return benchmark(funName, fun, ...)
                 end
@@ -71,7 +71,7 @@ function PrintBenchmarking()
     end
     local benchmarkStrings = getBenchmarkStrings()
     local out = {}
-    if not IsEmpty(benchmarkStrings) then
+    if #benchmarkStrings > 0 then
         table.sort(benchmarkStrings, function(a, b) return a[1] > b[1] end)
         Append(out, TexCmd("chapter", "Benchmarking"))
         Append(out, TexCmd("RpgTex"))

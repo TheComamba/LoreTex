@@ -45,7 +45,7 @@ function SetYear(historyItem, year)
 		LogError("Could not convert to number:" .. DebugPrint(year))
 	else
 		local yearFmt = GetProtectedNullableField(historyItem, "yearFormat")
-		if not IsEmpty(yearFmt) then
+		if yearFmt ~= nil then
 			yearNumber = RemoveYearOffset(yearNumber, yearFmt)
 		end
 		SetProtectedField(historyItem, "year", yearNumber)
@@ -78,7 +78,7 @@ local function addConcerns(entity, content)
 		local concernesLabels = {}
 		for key, mentioned in pairs(GetProtectedTableField(entity, "mentions")) do
 			local label = GetProtectedStringField(mentioned, "label")
-			if not IsEmpty(label) then
+			if label ~= "" then
 				UniqueAppend(concernesLabels, label)
 			end
 		end
@@ -89,7 +89,7 @@ local function addConcerns(entity, content)
 		end
 		local notConcerns = ScanForCmd(content, "notconcerns")
 		for key, concernedLabel in pairs(concernesLabels) do
-			if not IsEmpty(concernedLabel) and not IsIn(concernedLabel, notConcerns) then
+			if concernedLabel ~= "" and not IsIn(concernedLabel, notConcerns) then
 				local concernedEntity = GetMutableEntityFromAll(concernedLabel)
 				AddToProtectedField(entity, "concerns", concernedEntity)
 			end
@@ -108,7 +108,7 @@ local function processEvent(item)
 	if not IsHistoryItemOk("ProcessEvent", item) then
 		return
 	end
-	
+
 	local event = GetProtectedStringField(item, "content")
 	SetProtectedField(item, "birthof", ScanStringForCmd(event, "birthof"))
 	SetProtectedField(item, "deathof", ScanStringForCmd(event, "deathof"))

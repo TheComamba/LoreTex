@@ -89,9 +89,7 @@ local function processLabelList(list, processor, additionalProcessorArg)
 	local out = {}
 	for key, content in pairs(list) do
 		local processedContent = processor(content, additionalProcessorArg)
-		if not IsEmpty(processedContent) then
-			out[#out + 1] = processedContent
-		end
+		out[#out + 1] = processedContent
 	end
 	return out
 end
@@ -102,7 +100,7 @@ function ListAll(list, processor)
 	end
 
 	local processedList = processLabelList(list, processor)
-	if IsEmpty(processedList) then
+	if #processedList == 0 then
 		return {}
 	end
 

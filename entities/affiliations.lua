@@ -9,7 +9,7 @@ local function addParentDescriptorsToChild(child)
             if IsEmpty(relationship) then
                 relationship = CapFirst(Tr("member"))
             end
-            if not IsEmpty(parent) and IsEntityShown(parent) then
+            if IsEntityShown(parent) then
                 local parentLabel = GetProtectedStringField(parent, "label")
                 local description = relationship ..
                     " " .. Tr("of") .. " " .. TexCmd("nameref ", parentLabel) .. "."
@@ -35,13 +35,13 @@ local function entityQualifiersString(child, parent, relationships)
     end
     local birthyearstr = GetProtectedNullableField(child, "born")
     local birthyear = tonumber(birthyearstr)
-    if not IsEmpty(birthyear) and birthyear <= GetCurrentYear() then
+    if birthyear ~= nil and birthyear <= GetCurrentYear() then
         birthyear = AddYearOffset(birthyear, YearFmt)
         Append(content, TexCmd("textborn") .. birthyear)
     end
     local deathyearstr = GetProtectedNullableField(child, "died")
     local deathyear = tonumber(deathyearstr)
-    if not IsEmpty(deathyear) and deathyear <= GetCurrentYear() then
+    if deathyear ~= nil and deathyear <= GetCurrentYear() then
         deathyear = AddYearOffset(deathyear, YearFmt)
         Append(content, TexCmd("textdied") .. deathyear)
     end
@@ -49,10 +49,10 @@ local function entityQualifiersString(child, parent, relationships)
     local parentLocation = GetProtectedNullableField(parent, "location")
     if IsLocationUnrevealed(child) then
         Append(content, Tr("at-secret-location"))
-    elseif not IsEmpty(childLocation) then
+    elseif childLocation ~= nil then
         local childLocationLabel = GetProtectedStringField(childLocation, "label")
         local parentLocationLabel = ""
-        if not IsEmpty(parentLocation) then
+        if parentLocation ~= nil then
             parentLocationLabel = GetProtectedStringField(parentLocation, "label")
         end
         if childLocationLabel ~= parentLocationLabel and
@@ -61,7 +61,7 @@ local function entityQualifiersString(child, parent, relationships)
             AddToProtectedField(parent, "mentions", childLocation)
         end
     end
-    if not IsEmpty(content) then
+    if #content > 0 then
         return "(" .. table.concat(content, ", ") .. ")"
     else
         return ""

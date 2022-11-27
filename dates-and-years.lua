@@ -88,12 +88,8 @@ end
 TexApi.addYearFmt = addYearFmt
 
 local function setYearAbbreviation(entity, abbr)
-    if IsEmpty(entity) then
-        LogError("Called with empty entity and abbreviation:" .. DebugPrint(abbr))
-        return
-    end
-    if IsEmpty(abbr) then
-        LogError("Called with empty abbreviation for entity:" .. DebugPrint(entity))
+    if entity == nil then
+        LogError("Called without entity for abbreviation:" .. DebugPrint(abbr))
         return
     end
     SetProtectedField(entity, "yearAbbreviation", abbr)
@@ -104,11 +100,11 @@ TexApi.setYearAbbreviation = function(abbr)
 end
 
 local function setYearOffset(entity, offset)
-    if IsEmpty(entity) then
-        LogError("Called with empty entity!")
+    if entity == nil then
+        LogError("Called without entity!")
         return
     end
-    if IsEmpty(offset) or type(offset) ~= "number" then
+    if offset == nil or type(offset) ~= "number" then
         LogError("Called with invalid offset for entity:" .. DebugPrint(entity))
         return
     end
@@ -303,7 +299,7 @@ function YearString(year, fmt)
         end
         Append(out, year + offset)
         local abbr = GetProtectedStringField(calendar, "yearAbbreviation")
-        if not IsEmpty(abbr) then
+        if abbr ~= "" then
             Append(out, " ")
             Append(out, abbr)
         end

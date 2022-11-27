@@ -57,7 +57,7 @@ end
 
 function PrintErrors()
     local out = {}
-    if not IsEmpty(errorMessages) then
+    if #errorMessages > 0 then
         Append(out, TexCmd("section", "Errors"))
         Append(out, TexCmd("RpgTex"))
         Append(out, " encountered " .. #errorMessages .. " errors:")

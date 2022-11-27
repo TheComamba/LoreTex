@@ -18,7 +18,7 @@ function GetAllLabels(list)
     for key, entry in pairs(list) do
         if IsEntity(entry) then
             local label = GetProtectedStringField(entry, "label")
-            if not IsEmpty(label) then
+            if label ~= "" then
                 UniqueAppend(out, label)
             end
             UniqueAppend(out, GetAllLabels(GetProtectedTableField(entry, "subEntities")))

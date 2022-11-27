@@ -1,7 +1,7 @@
 function PlaceToName(location)
     local name = ""
     local locationLabels = {}
-    while not IsEmpty(location) do
+    while location ~= nil do
         local locationLabel = GetProtectedStringField(location, "label")
         if name == "" then
             name = LabelToName(locationLabel)
@@ -27,13 +27,13 @@ function PlaceToName(location)
 end
 
 function LabelToName(label)
-    if IsEmpty(label) then
+    if label == "" then
         return ""
     end
 
     local name = ""
     local entity = GetEntityRaw(label)
-    if not IsEmpty(entity) then
+    if entity ~= nil then
         name = GetProtectedStringField(entity, "name")
     elseif not IsIn(label, UnfoundRefs) then
         LogError("Label \"" .. label .. "\" not found.")
@@ -45,11 +45,11 @@ end
 
 function GetName(entity)
     local name = GetProtectedStringField(entity, "name")
-    if not IsEmpty(name) then
+    if name ~= "" then
         return name
     else
         local label = GetProtectedStringField(entity, "label")
-        if IsEmpty(label) then
+        if label == "" then
             LogError("Entity has neither label nor name:" .. DebugPrint(entity))
             return "NO NAME"
         else
@@ -64,7 +64,7 @@ end
 
 function GetShortname(entity)
     local shortname = GetProtectedStringField(entity, "shortname")
-    if not IsEmpty(shortname) then
+    if shortname ~= "" then
         return shortname
     end
     return GetName(entity)

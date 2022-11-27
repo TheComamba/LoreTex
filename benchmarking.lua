@@ -50,10 +50,12 @@ end
 
 function ActivateBenchmarking()
     isBenchmarkingRun = true
-    for funName, fun in pairs(_G) do
-        if type(fun) == "function" and not IsEmpty(funName) then
-            _G[funName] = function(...)
-                return benchmark(funName, fun, ...)
+    for key, funTable in pairs({ _G, TexApi, Comparer }) do
+        for funName, fun in pairs(funTable) do
+            if type(fun) == "function" and not IsEmpty(funName) then
+                funTable[funName] = function(...)
+                    return benchmark(funName, fun, ...)
+                end
             end
         end
     end

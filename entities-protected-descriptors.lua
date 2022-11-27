@@ -36,7 +36,7 @@ addProtectedDescriptor("yearFormat")
 addProtectedDescriptor("yearOffset")
 
 function IsProtectedDescriptor(descriptor)
-    return string ~= "" and string.sub(descriptor, 1,1) == "_"
+    return string ~= "" and string.sub(descriptor, 1, 1) == "_"
 end
 
 local function getProtectedField(entity, key)
@@ -60,7 +60,7 @@ function GetProtectedStringField(entity, key)
     end
 end
 
-function GetProtectedTableField(entity, key)
+function GetProtectedTableFieldReference(entity, key)
     local out = getProtectedField(entity, key)
     if out == nil then
         return {}
@@ -70,6 +70,10 @@ function GetProtectedTableField(entity, key)
     else
         return out
     end
+end
+
+function GetProtectedTableField(entity, key)
+    return DeepCopy(GetProtectedTableFieldReference(entity, key))
 end
 
 function SetProtectedField(entity, key, value)

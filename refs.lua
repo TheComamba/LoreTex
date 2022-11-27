@@ -113,8 +113,9 @@ function MakeEntityAndChildrenPrimary(label)
         LogError("Entity with label \"" .. label .. "\" not found.")
         return
     end
-    local children = GetProtectedTableField(entity, "children")
-    UniqueAppend(PrimaryRefs, children)
+    for key, child in pairs(GetProtectedTableField(entity, "children")) do
+        UniqueAppend(PrimaryRefs, GetProtectedStringField(child, "label"))
+    end
 end
 
 TexApi.makeEntityPrimary = function(label)

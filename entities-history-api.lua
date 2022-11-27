@@ -61,8 +61,8 @@ function AddConcerns(entity, content)
 	local concernesLabels = {}
 	if GetProtectedNullableField(entity, "year") ~= nil then
 		UniqueAppend(concernesLabels, ScanStringForCmd(content, "concerns"))
-		UniqueAppend(concernesLabels, GetProtectedTableField(entity, "birthof"))
-		UniqueAppend(concernesLabels, GetProtectedTableField(entity, "deathof"))
+		UniqueAppend(concernesLabels, GetProtectedTableFieldReference(entity, "birthof"))
+		UniqueAppend(concernesLabels, GetProtectedTableFieldReference(entity, "deathof"))
 	end
 	UniqueAppend(concernesLabels, ScanContentForMentionedRefs(content))
 	local notConcerns = ScanForCmd(content, "notconcerns")
@@ -103,8 +103,8 @@ local function processEvent(item)
 	end
 	
 	local year = GetProtectedNullableField(item, "year")
-	addSpecialyearsToEntities("born", year, GetProtectedTableField(item, "birthof"))
-	addSpecialyearsToEntities("died", year, GetProtectedTableField(item, "deathof"))
+	addSpecialyearsToEntities("born", year, GetProtectedTableFieldReference(item, "birthof"))
+	addSpecialyearsToEntities("died", year, GetProtectedTableFieldReference(item, "deathof"))
 
 	if IsEmpty(GetProtectedNullableField(item, "day")) then
 		SetProtectedField(item, "day", nil)

@@ -2,10 +2,10 @@ local function concernedAndOriginator(historyItem)
     local out = GetProtectedTableField(historyItem, "concerns")
     local originator = GetProtectedNullableField(historyItem, "originator")
     if originator ~= nil then
-        out[#out+1] = originator
+        out[#out + 1] = originator
     end
     return out
-    end
+end
 
 local function isConcernsUnrevealed(historyItem)
     for key, entity in pairs(concernedAndOriginator(historyItem)) do

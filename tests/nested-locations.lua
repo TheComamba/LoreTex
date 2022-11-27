@@ -1,76 +1,50 @@
-TexApi.newEntity { type = "places", label = "place-1", name = "Place 1" }
-TexApi.newEntity { type = "places", label = "place-2", name = "Place 2" }
-TexApi.setLocation("place-1")
-TexApi.newEntity { type = "places", label = "place-3", name = "Place 3" }
-TexApi.setLocation("place-2")
-TexApi.newEntity { type = "classes", label = "class-1", name = "Class 1" }
-TexApi.newEntity { type = "classes", label = "class-2", name = "Class 2" }
-TexApi.setLocation("class-1")
-TexApi.newEntity { type = "classes", label = "class-3", name = "Class 3" }
-TexApi.setLocation("class-2")
-AddAllEntitiesToPrimaryRefs()
+local function setupTest(typename)
+    ResetState()
+    TexApi.newEntity { type = typename, label = typename .. "-1", name = typename .. " 1" }
+    TexApi.newEntity { type = typename, label = typename .. "-2", name = typename .. " 2" }
+    TexApi.setLocation(typename .. "-1")
+    TexApi.newEntity { type = typename, label = typename .. "-3", name = typename .. " 3" }
+    TexApi.setLocation(typename .. "-2")
+    AddAllEntitiesToPrimaryRefs()
+end
 
-local expected = {}
-Append(expected, [[\chapter{]] .. CapFirst(Tr("classes")) .. [[}]])
-Append(expected, [[\section{]] .. CapFirst(Tr("classes")) .. [[}]])
+local function generateExpected(typename)
+    local out = {}
+    Append(out, [[\chapter{]] .. CapFirst(Tr(typename)) .. [[}]])
+    Append(out, [[\section{]] .. CapFirst(Tr(typename)) .. [[}]])
 
-Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("classes")) .. [[}]])
-Append(expected, [[\begin{itemize}]])
-Append(expected, [[\item \nameref{class-1}]])
-Append(expected, [[\item \nameref{class-2}]])
-Append(expected, [[\item \nameref{class-3}]])
-Append(expected, [[\end{itemize}]])
+    Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr(typename)) .. [[}]])
+    Append(out, [[\begin{itemize}]])
+    Append(out, [[\item \nameref{]] .. typename .. [[-1}]])
+    Append(out, [[\item \nameref{]] .. typename .. [[-2}]])
+    Append(out, [[\item \nameref{]] .. typename .. [[-3}]])
+    Append(out, [[\end{itemize}]])
 
-Append(expected, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
-Append(expected, [[\subsubsection{Class 1}]])
-Append(expected, [[\label{class-1}]])
-Append(expected, [[\paragraph{]] .. CapFirst(Tr("affiliated")) .. [[ ]] .. Tr("classes") .. [[}]])
-Append(expected, [[\begin{itemize}]])
-Append(expected, [[\item \nameref{class-2}]])
-Append(expected, [[\end{itemize}]])
+    Append(out, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
+    Append(out, [[\subsubsection{]] .. typename .. [[ 1}]])
+    Append(out, [[\label{]] .. typename .. [[-1}]])
+    Append(out, [[\paragraph{]] .. CapFirst(Tr("affiliated")) .. [[ ]] .. Tr(typename) .. [[}]])
+    Append(out, [[\begin{itemize}]])
+    Append(out, [[\item \nameref{]] .. typename .. [[-2}]])
+    Append(out, [[\end{itemize}]])
 
-Append(expected, [[\subsection{]] .. CapFirst(Tr("in")) .. [[ Class 1}]])
-Append(expected, [[\subsubsection{Class 2}]])
-Append(expected, [[\label{class-2}]])
-Append(expected, [[\paragraph{]] .. CapFirst(Tr("affiliated")) .. [[ ]] .. Tr("classes") .. [[}]])
-Append(expected, [[\begin{itemize}]])
-Append(expected, [[\item \nameref{class-3}]])
-Append(expected, [[\end{itemize}]])
+    Append(out, [[\subsection{]] .. CapFirst(Tr("in")) .. [[ ]] .. typename .. [[ 1}]])
+    Append(out, [[\subsubsection{]] .. typename .. [[ 2}]])
+    Append(out, [[\label{]] .. typename .. [[-2}]])
+    Append(out, [[\paragraph{]] .. CapFirst(Tr("affiliated")) .. [[ ]] .. Tr(typename) .. [[}]])
+    Append(out, [[\begin{itemize}]])
+    Append(out, [[\item \nameref{]] .. typename .. [[-3}]])
+    Append(out, [[\end{itemize}]])
 
-Append(expected, [[\subsection{]] .. CapFirst(Tr("in")) .. [[ Class 1 - Class 2}]])
-Append(expected, [[\subsubsection{Class 3}]])
-Append(expected, [[\label{class-3}]])
+    Append(out, [[\subsection{]] .. CapFirst(Tr("in")) .. [[ ]] .. typename .. [[ 1 - ]] .. typename .. [[ 2}]])
+    Append(out, [[\subsubsection{]] .. typename .. [[ 3}]])
+    Append(out, [[\label{]] .. typename .. [[-3}]])
+    return out
+end
 
-Append(expected, [[\chapter{]] .. CapFirst(Tr("places")) .. [[}]])
-Append(expected, [[\section{]] .. CapFirst(Tr("places")) .. [[}]])
-
-Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("places")) .. [[}]])
-Append(expected, [[\begin{itemize}]])
-Append(expected, [[\item \nameref{place-1}]])
-Append(expected, [[\item \nameref{place-2}]])
-Append(expected, [[\item \nameref{place-3}]])
-Append(expected, [[\end{itemize}]])
-
-Append(expected, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
-Append(expected, [[\subsubsection{Place 1}]])
-Append(expected, [[\label{place-1}]])
-Append(expected, [[\paragraph{]] .. CapFirst(Tr("affiliated")) .. [[ ]] .. Tr("places") .. [[}]])
-Append(expected, [[\begin{itemize}]])
-Append(expected, [[\item \nameref{place-2}]])
-Append(expected, [[\end{itemize}]])
-
-Append(expected, [[\subsection{]] .. CapFirst(Tr("in")) .. [[ Place 1}]])
-Append(expected, [[\subsubsection{Place 2}]])
-Append(expected, [[\label{place-2}]])
-Append(expected, [[\paragraph{]] .. CapFirst(Tr("affiliated")) .. [[ ]] .. Tr("places") .. [[}]])
-Append(expected, [[\begin{itemize}]])
-Append(expected, [[\item \nameref{place-3}]])
-Append(expected, [[\end{itemize}]])
-
-Append(expected, [[\subsection{]] .. CapFirst(Tr("in")) .. [[ Place 1 - Place 2}]])
-Append(expected, [[\subsubsection{Place 3}]])
-Append(expected, [[\label{place-3}]])
-
-local out = TexApi.automatedChapters()
-
-Assert("nested-locations", expected, out)
+for key, typename in pairs({ "places", "classes" }) do
+    setupTest(typename)
+    local expected = generateExpected(typename)
+    local out = TexApi.automatedChapters()
+    Assert("nested-" .. typename, expected, out)
+end

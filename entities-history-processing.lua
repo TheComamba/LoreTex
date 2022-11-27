@@ -1,5 +1,14 @@
+local function concernedAndOriginator(historyItem)
+    local out = GetProtectedTableField(historyItem, "concerns")
+    local originator = GetProtectedNullableField(historyItem, "originator")
+    if originator ~= nil then
+        out[#out+1] = originator
+    end
+    return out
+    end
+
 local function isConcernsUnrevealed(historyItem)
-    for key, entity in pairs(GetProtectedTableField(historyItem, "concerns")) do
+    for key, entity in pairs(concernedAndOriginator(historyItem)) do
         if IsEntitySecret(entity) and not IsRevealed(entity) then
             return true
         end
@@ -8,7 +17,7 @@ local function isConcernsUnrevealed(historyItem)
 end
 
 local function isConcernsSecret(historyItem)
-    for key, entity in pairs(GetProtectedTableField(historyItem, "concerns")) do
+    for key, entity in pairs(concernedAndOriginator(historyItem)) do
         if IsEntitySecret(entity) then
             return true
         end
@@ -17,7 +26,7 @@ local function isConcernsSecret(historyItem)
 end
 
 local function isAllConcnernsShown(historyItem)
-    for key, entity in pairs(GetProtectedTableField(historyItem, "concerns")) do
+    for key, entity in pairs(concernedAndOriginator(historyItem)) do
         if not IsEntityShown(entity) then
             return false
         end

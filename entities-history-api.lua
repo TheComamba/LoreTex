@@ -63,7 +63,6 @@ function AddConcerns(entity, content)
 		UniqueAppend(concernesLabels, ScanStringForCmd(content, "concerns"))
 		UniqueAppend(concernesLabels, GetProtectedTableField(entity, "birthof"))
 		UniqueAppend(concernesLabels, GetProtectedTableField(entity, "deathof"))
-		UniqueAppend(concernesLabels, GetProtectedStringField(entity, "originator"))
 	end
 	UniqueAppend(concernesLabels, ScanContentForMentionedRefs(content))
 	local notConcerns = ScanForCmd(content, "notconcerns")
@@ -93,17 +92,16 @@ local function processEvent(item)
 	SetProtectedField(item, "deathof", ScanStringForCmd(event, "deathof"))
 	if GetProtectedNullableField(item, "isConcernsOthers") then
 		AddConcerns(item, GetProtectedStringField(item, "content"))
-	else
-		local originator = GetProtectedStringField(item, "originator")
-		if not IsEmpty(originator) then
-			AddToProtectedField(item, "concerns", GetMutableEntityFromAll(originator))
-		end
 	end
-
+	
+	local originator = GetProtectedNullableField(item, "originator")
+	if originator ~= nil then
+		AddToProtectedField(originator, "historyItems", item)
+	end
 	for key, entity in pairs(GetProtectedTableField(item, "concerns")) do
 		AddToProtectedField(entity, "historyItems", item)
 	end
-
+	
 	local year = GetProtectedNullableField(item, "year")
 	addSpecialyearsToEntities("born", year, GetProtectedTableField(item, "birthof"))
 	addSpecialyearsToEntities("died", year, GetProtectedTableField(item, "deathof"))
@@ -111,7 +109,7 @@ local function processEvent(item)
 	if IsEmpty(GetProtectedNullableField(item, "day")) then
 		SetProtectedField(item, "day", nil)
 	end
-	if IsEmpty(GetProtectedTableField(item, "concerns")) then
+	if IsEmpty(GetProtectedTableField(item, "concerns")) and IsEmpty(GetProtectedNullableField(item, "originator")) then
 		LogError("This history item concerns nobody:" .. DebugPrint(item))
 	end
 
@@ -123,7 +121,7 @@ local function addHistory(arg)
 		return
 	end
 	local item = NewHistoryItem()
-	SetProtectedField(item, "originator", GetProtectedStringField(CurrentEntity, "label"))
+	SetProtectedField(item, "originator", CurrentEntity)
 	setDay(item, arg.day)
 	SetYear(item, arg.year)
 	SetProtectedField(item, "content", arg.event)

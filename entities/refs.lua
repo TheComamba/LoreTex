@@ -116,3 +116,12 @@ end
 TexApi.mention = function(label)
     UniqueAppend(MentionedRefs, label)
 end
+
+TexApi.makeFirstEntitiesPrimary = function(number)
+    for key, entity in pairs(AllEntities) do
+        if key > number then
+            break
+        end
+        UniqueAppend(PrimaryRefs, GetAllLabels(entity))
+    end
+end

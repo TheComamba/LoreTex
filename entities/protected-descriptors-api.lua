@@ -98,11 +98,27 @@ TexApi.setSpecies = function(speciesLabel)
     SetProtectedField(CurrentEntity, "species", species)
 end
 
+local function isLabelInTopEntities(label, entity)
+    while entity ~= nil do
+        local thisLabel = GetProtectedStringField(entity, "label")
+        if label == thisLabel then
+            return true
+        end
+        entity = GetProtectedNullableField(entity, "partOf")
+    end
+    return false
+end
+
 function MakePartOf(arg)
     if not IsArgOk("MakePartOf", arg, { "subEntity", "mainEntity" }) then
         return
     end
 
+    local label = GetProtectedStringField(arg.subEntity, "label")
+    if isLabelInTopEntities(label, arg.mainEntity) then
+        LogError("Trying to make entity with label \"" .. label .. "\" part of a hierarchy that already contains it.")
+        return
+    end
     SetProtectedField(arg.subEntity, "partOf", arg.mainEntity)
     AddToProtectedField(arg.mainEntity, "subEntities", arg.subEntity)
 end

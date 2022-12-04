@@ -60,7 +60,7 @@ local function printEntities(sectionname, entitiesList)
     return out
 end
 
-local function withoutDiplicatesOrProcessed(entities)
+local function withoutDuplicatesOrProcessed(entities)
     local out = {}
     local labels = {}
     for key, entity in pairs(entities) do
@@ -77,7 +77,7 @@ end
 
 function PrintOnlyMentionedChapter(mentionedEntities)
     local out = {}
-    mentionedEntities = withoutDiplicatesOrProcessed(mentionedEntities)
+    mentionedEntities = withoutDuplicatesOrProcessed(mentionedEntities)
     Sort(mentionedEntities, "compareByName")
     for key, mentionedEntity in pairs(mentionedEntities) do
         if key == 1 then

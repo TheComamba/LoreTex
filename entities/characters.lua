@@ -25,7 +25,7 @@ function IsDead(entity)
 end
 
 local function getYear(entity, key)
-    local value = GetProtectedNullableField(entity, key)
+    local value = GetProtectedInheritableField(entity, key)
     if value == nil then
         return nil
     end

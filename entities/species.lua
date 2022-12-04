@@ -126,7 +126,7 @@ local function addLifestageHistoryItems(entity)
 	if label == "" then
 		return
 	end
-	local birthyear = GetProtectedNullableField(entity, "born")
+	local birthyear = GetProtectedInheritableField(entity, "born")
 	if birthyear == nil then
 		return
 	end
@@ -134,7 +134,7 @@ local function addLifestageHistoryItems(entity)
 	if species == nil then
 		return
 	end
-	local deathyear = GetProtectedNullableField(entity, "died")
+	local deathyear = GetProtectedInheritableField(entity, "died")
 	local factor, exponent = GetAgeFactorAndExponent(species)
 	for i = 2, #lifestagesAndAges do
 		local lifestage = lifestagesAndAges[i][1]

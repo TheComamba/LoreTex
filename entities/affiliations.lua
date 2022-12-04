@@ -33,20 +33,20 @@ local function entityQualifiersString(child, parent, relationships)
     for key, relationship in pairs(relationships) do
         Append(content, relationship)
     end
-    local birthyearstr = GetProtectedNullableField(child, "born")
+    local birthyearstr = GetProtectedInheritableField(child, "born")
     local birthyear = tonumber(birthyearstr)
     if birthyear ~= nil and birthyear <= GetCurrentYear() then
         birthyear = AddYearOffset(birthyear, YearFmt)
         Append(content, TexCmd("textborn") .. birthyear)
     end
-    local deathyearstr = GetProtectedNullableField(child, "died")
+    local deathyearstr = GetProtectedInheritableField(child, "died")
     local deathyear = tonumber(deathyearstr)
     if deathyear ~= nil and deathyear <= GetCurrentYear() then
         deathyear = AddYearOffset(deathyear, YearFmt)
         Append(content, TexCmd("textdied") .. deathyear)
     end
-    local childLocation = GetProtectedNullableField(child, "location")
-    local parentLocation = GetProtectedNullableField(parent, "location")
+    local childLocation = GetProtectedInheritableField(child, "location")
+    local parentLocation = GetProtectedInheritableField(parent, "location")
     if IsLocationUnrevealed(child) then
         Append(content, Tr("at-secret-location"))
     elseif childLocation ~= nil then

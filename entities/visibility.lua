@@ -12,7 +12,7 @@ function IsEntitySecret(entity)
     if entity == nil then
         return false
     end
-    local isSecret = GetProtectedNullableField(entity, "isSecret")
+    local isSecret = GetProtectedInheritableField(entity, "isSecret")
     if isSecret == nil then
         return false
     end
@@ -49,7 +49,7 @@ function IsEntityShown(entity)
 end
 
 function IsLocationUnrevealed(entity)
-    local location = GetProtectedNullableField(entity, "location")
+    local location = GetProtectedInheritableField(entity, "location")
     return IsEntityUnrevealed(location)
 end
 
@@ -96,7 +96,7 @@ function IsHistoryShown(historyItem)
     elseif not IsShowFuture and IsFutureEvent(historyItem) then
         return false
     elseif not IsShowSecrets then
-        local isSecret = GetProtectedNullableField(historyItem, "isSecret")
+        local isSecret = GetProtectedInheritableField(historyItem, "isSecret")
         if isSecret ~= nil and isSecret then
             return false
         elseif isConcernsOrMentionsUnrevealed(historyItem) then

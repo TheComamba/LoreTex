@@ -21,7 +21,7 @@ function PlaceToName(location)
         else
             Append(locationNames, locationName)
         end
-        location = GetProtectedNullableField(location, "location")
+        location = GetProtectedInheritableField(location, "location")
     end
     return name
 end

@@ -71,7 +71,7 @@ local function addEntityToDict(arg, newEntity)
     if IsLocationUnrevealed(newEntity) then
         locationName = GetProtectedDescriptor("isSecret")
     else
-        local location = GetProtectedNullableField(newEntity, "location")
+        local location = GetProtectedInheritableField(newEntity, "location")
         if location ~= nil then
             locationName = PlaceToName(location)
         end

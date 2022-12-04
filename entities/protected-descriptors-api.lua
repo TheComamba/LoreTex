@@ -122,3 +122,15 @@ function MakePartOf(arg)
     SetProtectedField(arg.subEntity, "partOf", arg.mainEntity)
     AddToProtectedField(arg.mainEntity, "subEntities", arg.subEntity)
 end
+
+function GetProtectedInheritableField(entity, key)
+    local field = GetProtectedNullableField(entity, key)
+    if field ~= nil then
+        return field
+    end
+    local super = GetProtectedNullableField(entity, "partOf")
+    if super ~= nil then
+        return GetProtectedInheritableField(super, key)
+    end
+    return nil
+end

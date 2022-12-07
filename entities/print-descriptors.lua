@@ -19,7 +19,7 @@ local function appendDescriptorString(out, entity, descriptor, level)
     if stringContent ~= "" then
         Append(out, stringContent)
     end
-    if IsEntity(desctiption) or IsMap(desctiption) then
+    if IsMap(desctiption) then
         Append(out, DescriptorsString(desctiption, level + 1))
     elseif IsList(desctiption) then
         Append(out, ListAll(desctiption))
@@ -43,7 +43,7 @@ function DescriptorsString(entity, level)
         return {}
     end
     Sort(descriptorsList, "compareAlphanumerical")
-    
+
     local out = {}
     if level > 2 then
         Append(out, TexCmd("begin", "itemize"))

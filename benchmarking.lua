@@ -44,6 +44,7 @@ local function getBenchmarkStrings()
         local time = timeAndCalls["time"]
         local calls = timeAndCalls["calls"]
         local str = {}
+        identifier = Replace("_", [[\_]], identifier)
         Append(str, identifier)
         Append(str, ": ")
         Append(str, RoundedNumString(time, 1))

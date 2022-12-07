@@ -64,6 +64,10 @@ TexApi.setAgeModifierMixing = function(species1, species2)
     SetProtectedField(CurrentEntity, "ageMixing", { species1, species2 })
 end
 
+TexApi.setHeight = function(height)
+    SetProtectedField(CurrentEntity, "height", height)
+end
+
 local function addParent(arg)
     if not IsArgOk("addParent", arg, { "entity", "parentLabel" }, { "relationship" }) then
         return

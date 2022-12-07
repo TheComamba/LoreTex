@@ -22,8 +22,8 @@ local expected = {
     [[\subsubsection{Test NPC}]],
     [[\label{test-npc}]],
     [[\paragraph{]] .. CapFirst(Tr("appearance")) .. [[}]],
-    [[\subparagraph{]] ..
-        CapFirst(Tr("species-and-age")) .. [[:}\nameref {test-species}, 20 ]] .. Tr("years-old") .. [[.]],
+    [[\subparagraph{]] .. CapFirst(Tr("species-and-age")) .. [[:}]],
+    [[\nameref {test-species}, 20 ]] .. Tr("years-old") .. [[.]],
     [[\paragraph{]] .. CapFirst(Tr("history")) .. [[}]],
     [[\begin{itemize}]],
     [[\item -20 (]] .. Tr("years-ago", { 20 }) .. [[):\\Birth.]],
@@ -41,12 +41,12 @@ local expected = {
     [[\subsubsection{Test Species}]],
     [[\label{test-species}]],
     [[\paragraph{]] .. CapFirst(Tr("lifestages")) .. [[}]],
-    [[\subparagraph{]] .. CapFirst(Tr("child")) .. [[} 0-12 ]] .. Tr("years") .. [[
-    \subparagraph{]] .. CapFirst(Tr("juvenile")) .. [[} 12-20 ]] .. Tr("years") .. [[
-    \subparagraph{]] .. CapFirst(Tr("young")) .. [[} 20-30 ]] .. Tr("years") .. [[
-    \subparagraph{]] .. CapFirst(Tr("adult")) .. [[} 30-60 ]] .. Tr("years") .. [[
-    \subparagraph{]] .. CapFirst(Tr("old")) .. [[} 60-90 ]] .. Tr("years") .. [[
-    \subparagraph{]] .. CapFirst(Tr("ancient")) .. [[} 90+ ]] .. Tr("years") .. [[]]
+    [[\subparagraph{\comment{1}]] .. CapFirst(Tr("child")) .. [[}]], [[0-12 ]] .. Tr("years"),
+    [[\subparagraph{\comment{2}]] .. CapFirst(Tr("juvenile")) .. [[}]], [[12-20 ]] .. Tr("years"),
+    [[\subparagraph{\comment{3}]] .. CapFirst(Tr("young")) .. [[}]], [[20-30 ]] .. Tr("years"),
+    [[\subparagraph{\comment{4}]] .. CapFirst(Tr("adult")) .. [[}]], [[30-60 ]] .. Tr("years"),
+    [[\subparagraph{\comment{5}]] .. CapFirst(Tr("old")) .. [[}]], [[60-90 ]] .. Tr("years"),
+    [[\subparagraph{\comment{6}]] .. CapFirst(Tr("ancient")) .. [[}]], [[90+ ]] .. Tr("years")
 }
 
 Assert("npc-and-species", expected, out)

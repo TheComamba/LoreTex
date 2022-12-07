@@ -25,6 +25,7 @@ Dictionary["forests"] = "Wälder"
 Dictionary["glaciers"] = "Gletscher"
 Dictionary["gods"] = "Götter"
 Dictionary["grasslands"] = "Grassländer"
+Dictionary["height"] = "Höhe"
 Dictionary["history"] = [[Histori\"e]]
 Dictionary["in"] = "in"
 Dictionary["in-days"] = [[in {1} Tagen]]

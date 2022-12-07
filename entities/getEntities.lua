@@ -35,6 +35,14 @@ function GetEntitiesOfType(type, list)
     return out
 end
 
+local function newEntity(label)
+    local entity = {}
+    SetProtectedField(entity, "label", label)
+    AllEntities[#AllEntities + 1] = entity
+    labelToEntity[label] = entity
+    return entity
+end
+
 function GetMutableEntityFromAll(label)
     if label == "" then
         LogError("Called with empty label!")
@@ -42,10 +50,7 @@ function GetMutableEntityFromAll(label)
     end
     local entity = labelToEntity[label]
     if entity == nil then
-        local newEntity = {}
-        SetProtectedField(newEntity, "label", label)
-        AllEntities[#AllEntities + 1] = newEntity
-        labelToEntity[label] = newEntity
+        newEntity(label)
         entity = labelToEntity[label]
     end
     return entity

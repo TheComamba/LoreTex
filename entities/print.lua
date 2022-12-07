@@ -1,44 +1,3 @@
-local function descritptorMapString(map)
-    local keys = {}
-    for key, elem in pairs(map) do
-        keys[#keys + 1] = key
-    end
-    Sort(keys, "compareAlphanumerical")
-    local out = {}
-    for index, key in pairs(keys) do
-        local content = map[key]
-        if not IsEmpty(content) then
-            Append(out, TexCmd("subparagraph", key))
-            Append(out, content)
-        end
-    end
-    return table.concat(out)
-end
-
-local function descriptorsString(entity)
-    local out = {}
-    local descriptorsList = {}
-    for descriptor, description in pairs(entity) do
-        if not IsProtectedDescriptor(descriptor) then
-            descriptorsList[#descriptorsList + 1] = descriptor
-        end
-    end
-    Sort(descriptorsList, "compareAlphanumerical")
-    for key, descriptor in pairs(descriptorsList) do
-        Append(out, TexCmd("paragraph", CapFirst(descriptor)))
-        if descriptor == HeightCaption then
-            Append(out, HeightDescriptor(entity[descriptor]))
-        elseif type(entity[descriptor]) == "string" then
-            Append(out, entity[descriptor])
-        elseif IsList(entity[descriptor]) then
-            Append(out, ListAll(entity[descriptor]))
-        elseif IsMap(entity[descriptor]) then
-            Append(out, descritptorMapString(entity[descriptor]))
-        end
-    end
-    return out
-end
-
 local function printEntities(sectionname, entitiesList)
     if IsEmpty(entitiesList) then
         return {}
@@ -55,7 +14,7 @@ local function printEntities(sectionname, entitiesList)
             Append(out, TexCmd("subsubsection", GetProtectedStringField(entity, "name"), shortname))
         end
         Append(out, TexCmd("label", GetProtectedStringField(entity, "label")))
-        Append(out, descriptorsString(entity))
+        Append(out, DescriptorsString(entity))
     end
     return out
 end

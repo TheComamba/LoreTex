@@ -1,4 +1,3 @@
-HeightCaption = "Höhe"
 local planetRadiusInKM = 6371
 
 local function distanceToHorizon(heightInM)
@@ -7,10 +6,10 @@ local function distanceToHorizon(heightInM)
     return math.sqrt(distanceFromCentre ^ 2 - planetRadiusInKM ^ 2)
 end
 
-function HeightDescriptor(inputInM)
-    local heightInM = tonumber(inputInM)
+function AddHeightDescriptor(entity)
+    local heightInM = GetProtectedInheritableField(entity, "height")
     if heightInM == nil then
-        LogError("Called with " .. DebugPrint(inputInM))
+        return
     end
     local toHorizon = distanceToHorizon(heightInM)
     local toHorizonString = RoundedNumString(toHorizon, -1)
@@ -21,5 +20,6 @@ function HeightDescriptor(inputInM)
     Append(out, "km ")
     Append(out, Tr("visual-range-to-horizon"))
     Append(out, ").")
-    return out
+    local description = table.concat(out)
+    SetDescriptor { entity = entity, descriptor = Tr("height"), description = description }
 end

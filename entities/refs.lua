@@ -46,19 +46,24 @@ function ScanStringForCmd(str, cmd)
     local openStr = [[{]]
     local closeStr = [[}]]
     local posCmd = string.find(str, cmdStr)
+    local posClose = 0
     while posCmd ~= nil do
         local posOpen = string.find(str, openStr, posCmd)
-        local posClose = string.find(str, closeStr, posOpen)
+        posClose = string.find(str, closeStr, math.max(posOpen, posClose + 1))
 
         local between = string.sub(str, posCmd + string.len(cmdStr), posOpen - 1)
         local arg = string.sub(str, posOpen + string.len(openStr), posClose - 1)
-        if IsEmpty(between) then
-            if not IsIn(arg, args) then
-                args[#args + 1] = arg
-            end
-        end
 
-        posCmd = string.find(str, cmdStr, posClose)
+        local _, openCount = string.gsub(arg, openStr, openStr)
+        local _, closeCount = string.gsub(arg, closeStr, closeStr)
+        if openCount == closeCount then
+            if IsEmpty(between) then
+                if not IsIn(arg, args) then
+                    args[#args + 1] = arg
+                end
+            end
+            posCmd = string.find(str, cmdStr, posClose)
+        end
     end
     return args
 end

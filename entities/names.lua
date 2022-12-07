@@ -43,6 +43,15 @@ function LabelToName(label)
     return name
 end
 
+function LabelFromName(name)
+    local label = name:lower()
+    label = Replace(" ", "-", label)
+    label = Replace([[\]], "", label)
+    label = Replace([[{]], "", label)
+    label = Replace([[}]], "", label)
+    return label
+end
+
 function GetName(entity)
     local name = GetProtectedStringField(entity, "name")
     if name ~= "" then

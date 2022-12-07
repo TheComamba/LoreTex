@@ -5,7 +5,8 @@ local args = {
     { str, "not", { "" } },
     { str, "pear", { "you guys" } },
     { [[Several \ref{1} \ref {2} \ref  {3}]], "ref", { "1", "2", "3" } },
-    { [[False alarm \reference {Castingshow}]], "ref", {} }
+    { [[False alarm \reference {Castingshow}]], "ref", {} },
+    { [[\command{\inside{\other{{}}\command{}}}]], "inside", {[[\other{{}}\command{}]]} }
 }
 for key, arg in pairs(args) do
     Assert("ScanForCmd", arg[3], ScanForCmd(arg[1], arg[2]))

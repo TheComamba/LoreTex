@@ -28,7 +28,8 @@ local expected = {
     [[\subsubsection{Some NPC}]],
     [[\label{some-npc}]],
     [[\paragraph{]] .. CapFirst(Tr("appearance")) .. [[}]],
-    [[\subparagraph{]] .. CapFirst(Tr("species-and-age")) .. [[:}\nameref {subspecies}.]],
+    [[\subparagraph{]] .. CapFirst(Tr("species-and-age")) .. [[:}]],
+    [[\nameref {subspecies}.]],
     [[\paragraph{Info 1}]],
     [[Refers to \nameref{subplace-2}.]],
     [[\paragraph{Info 2}]],
@@ -74,6 +75,7 @@ local expected = {
     [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("npcs")) .. [[}]],
     [[\begin{itemize}]],
     [[\item \nameref{also-primary}]],
+    [[\item \nameref{some-paragraph}]],
     [[\item \nameref{sublabel-1}]],
     [[\item \nameref{sublabel-2}]],
     [[\end{itemize}]],
@@ -81,7 +83,8 @@ local expected = {
     [[\subsubsection{Also Primary}]],
     [[\label{also-primary}]],
     [[\paragraph{Some Paragraph}]],
-    [[\subparagraph{Sublabel 2}\label{sublabel-2}]],
+    [[\subparagraph{Sublabel 2}]],
+    [[\label{sublabel-2}]],
     [[\paragraph{Sublabel 1}]],
     [[\label{sublabel-1}]],
     [[\chapter{]] .. CapFirst(Tr("only-mentioned")) .. [[}]],
@@ -102,23 +105,23 @@ ResetState()
 TexApi.newEntity { type = "npcs", label = "some-npc", name = "Some NPC" }
 TexApi.setDescriptor { descriptor = "Paragraph with just label", description = [[\label{sublabel}]] }
 local paraWithoutLabel = {}
-Append(paraWithoutLabel, [[\subparagraph{Subpara 1}]])
-Append(paraWithoutLabel, [[\subparagraph{Subpara 2}]])
-TexApi.setDescriptor { descriptor = "Paragraph with no label", description = table.concat(paraWithoutLabel, " ") }
+Append(paraWithoutLabel, [[\subparagraph{AA Subpara 1}]])
+Append(paraWithoutLabel, [[\subparagraph{BB Subpara 2}]])
+TexApi.setDescriptor { descriptor = "Paragraph with no label", description = table.concat(paraWithoutLabel) }
 local paraWitLabeledSubs = {}
-Append(paraWitLabeledSubs, [[\label{para-labeled-subs}]])
-Append(paraWitLabeledSubs, [[Some content]])
-Append(paraWitLabeledSubs, [[\subparagraph{Subpara 1}]])
+Append(paraWitLabeledSubs, [[\label{para-labeled-subs} Some content]])
+Append(paraWitLabeledSubs, [[\subparagraph{CC Subpara 1} ]])
 Append(paraWitLabeledSubs, [[\label{subpara-1}]])
-Append(paraWitLabeledSubs, [[\subparagraph{Subpara 2}]])
+Append(paraWitLabeledSubs, [[\subparagraph{DD Subpara 2}]])
 Append(paraWitLabeledSubs, [[\label{subpara-2}]])
 TexApi.setDescriptor { descriptor = "Labeled subparagraphs", description = table.concat(paraWitLabeledSubs, " ") }
 local unusualPara = {}
 Append(unusualPara, [[Some content but no label]])
-Append(unusualPara, [[\subparagraph{Subpara without label}]])
-Append(unusualPara, [[\subparagraph{Subpara with label}]])
+Append(unusualPara, [[\subparagraph{EE Subpara without label}]])
+Append(unusualPara, [[\subparagraph{FF Subpara with label}]])
 Append(unusualPara, [[\label{subpara-with-label}]])
-Append(unusualPara, [[\subparagraph{Another subparagraph without label}]])
+Append(unusualPara, [[\subparagraph{GG Again no label}]])
+Append(unusualPara, [[But some miscelaneous content]])
 TexApi.setDescriptor { descriptor = "Unusual paragraph", description = table.concat(unusualPara, " ") }
 TexApi.makeEntityPrimary("some-npc")
 
@@ -127,24 +130,25 @@ Append(expected, [[\chapter{]] .. CapFirst(Tr("characters")) .. [[}]])
 Append(expected, [[\section{]] .. CapFirst(Tr("npcs")) .. [[}]])
 Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("npcs")) .. [[}]])
 Append(expected, [[\begin{itemize}]])
-Append(expected, [[\item \nameref{para-labeled-subs}]])
-Append(expected, [[\item \nameref{sublabel}]])
-Append(expected, [[\item \nameref{some-npc}]])
 Append(expected, [[\item \nameref{subpara-1}]])
 Append(expected, [[\item \nameref{subpara-2}]])
 Append(expected, [[\item \nameref{subpara-with-label}]])
+Append(expected, [[\item \nameref{para-labeled-subs}]])
+Append(expected, [[\item \nameref{sublabel}]])
+Append(expected, [[\item \nameref{some-npc}]])
+Append(expected, [[\item \nameref{unusual-paragraph}]])
 Append(expected, [[\end{itemize}]])
 Append(expected, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
 Append(expected, [[\subsubsection{Some NPC}]])
 Append(expected, [[\label{some-npc}]])
 Append(expected, [[\paragraph{Labeled subparagraphs}]])
-Append(expected, table.concat(paraWitLabeledSubs, " "))
+Append(expected, paraWitLabeledSubs)
 Append(expected, [[\paragraph{Paragraph with just label}]])
 Append(expected, [[\label{sublabel}]])
 Append(expected, [[\paragraph{Paragraph with no label}]])
-Append(expected, table.concat(paraWithoutLabel, " "))
+Append(expected, paraWithoutLabel)
 Append(expected, [[\paragraph{Unusual paragraph}]])
-Append(expected, table.concat(unusualPara, " "))
+Append(expected, unusualPara)
 
 local out = TexApi.automatedChapters()
 

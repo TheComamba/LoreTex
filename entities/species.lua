@@ -173,7 +173,8 @@ local function lifestagesDescription(species)
 		local begins = stageAndAge[2]
 		begins = ageToYears(begins, factor, exponent)
 		local beginsString = RoundedNumString(begins, 0)
-		Append(out, TexCmd("subparagraph", CapFirst(Tr(stage))))
+		local caption = TexCmd("comment", i) .. CapFirst(Tr(stage))
+		Append(out, TexCmd("subparagraph", caption))
 		Append(out, beginsString)
 		if i < #lifestagesAndAges then
 			local ends = lifestagesAndAges[i + 1][2]

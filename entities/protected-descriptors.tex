@@ -2,6 +2,7 @@
 \newcommand{\setAgeFactor}[1]{\directlua{TexApi.setAgeFactor(#1)}}
 \newcommand{\setAgeModifierMixing}[2]{\directlua{TexApi.setAgeModifierMixing("#1","#2")}}
 \newcommand{\setAssociation}[2][]{\directlua{TexApi.addParent{ parentLabel = "#2", relationship = [[\detokenize{#1}]] }}}
+\newcommand{\setHeight}[1]{\directlua{TexApi.setHeight(#1)}}
 \newcommand{\setLocation}[1]{\directlua{TexApi.setLocation("#1")}}
 \newcommand{\setSecret}{\directlua{TexApi.setSecret()}}
 \newcommand{\setSpecies}[1]{\directlua{TexApi.setSpecies([[\detokenize{#1}]])}}

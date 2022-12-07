@@ -1,13 +1,9 @@
 function IsEntity(inp)
     if type(inp) ~= "table" then
         return false
+    else
+        return GetProtectedStringField(inp, "label") ~= ""
     end
-    for key, val in pairs(inp) do
-        if IsProtectedDescriptor(key) then
-            return true
-        end
-    end
-    return false
 end
 
 function GetAllLabels(list)

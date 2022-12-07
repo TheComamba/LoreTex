@@ -25,20 +25,11 @@ local function collectMentionedEntities(entity)
     return out
 end
 
-local function appendSubSubs(sub, description)
-    local subsubs = GetProtectedTableField(sub, "subEntities")
-    for key2, subsub in pairs(subsubs) do
-        local content = GetProtectedStringField(subsub, "content")
-        Append(description, content)
-    end
-end
-
 local function addSubEntitiesAsDescriptors(entity)
     for key, sub in pairs(GetProtectedTableField(entity, "subEntities")) do
         local descriptor = GetProtectedStringField(sub, "name")
-        local description = { GetProtectedStringField(sub, "content") }
-        appendSubSubs(sub, description)
-        entity[descriptor] = table.concat(description)
+        entity[descriptor] = sub
+        addSubEntitiesAsDescriptors(sub)
     end
 end
 
@@ -47,6 +38,7 @@ local function addAutomatedDescriptors(entity)
     AddSpeciesAndAgeStringToNPC(entity)
     AddLifeStagesToSpecies(entity)
     ProcessHistory(entity)
+    AddHeightDescriptor(entity)
     addSubEntitiesAsDescriptors(entity)
 end
 

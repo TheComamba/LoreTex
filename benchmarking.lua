@@ -43,23 +43,23 @@ local function getBenchmarkStrings()
     for identifier, timeAndCalls in pairs(benchmarkingResults) do
         local time = timeAndCalls["time"]
         local calls = timeAndCalls["calls"]
-        local str = {}
-        identifier = Replace("_", [[\_]], identifier)
-        Append(str, identifier)
-        Append(str, ": ")
-        Append(str, RoundedNumString(time, 1))
-        Append(str, "s, called ")
-        if calls == 0 then
-            Append(str, "not a single time")
-        elseif calls == 1 then
-            Append(str, "once")
-        else
-            Append(str, calls)
-            Append(str, " times (")
-            Append(str, RoundedNumString(time / calls, 3))
-            Append(str, "s on avg.)")
+        if calls > 0 then
+            local str = {}
+            identifier = Replace("_", [[\_]], identifier)
+            Append(str, identifier)
+            Append(str, ": ")
+            Append(str, RoundedNumString(time, 1))
+            Append(str, "s, called ")
+            if calls == 1 then
+                Append(str, "once")
+            else
+                Append(str, calls)
+                Append(str, " times (")
+                Append(str, RoundedNumString(time / calls, 3))
+                Append(str, "s on avg.)")
+            end
+            out[#out + 1] = { time, table.concat(str) }
         end
-        out[#out + 1] = { time, table.concat(str) }
     end
     return out
 end

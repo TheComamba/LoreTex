@@ -124,7 +124,6 @@ function MakePartOf(arg)
         return
     end
     SetProtectedField(arg.subEntity, "partOf", arg.mainEntity)
-    AddToProtectedField(arg.mainEntity, "subEntities", arg.subEntity)
 end
 
 function GetProtectedInheritableField(entity, key)

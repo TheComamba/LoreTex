@@ -56,20 +56,12 @@ function GetMutableEntityFromAll(label)
     return entity
 end
 
-function GetEntityRaw(label)
+function GetEntity(label)
     local entity = labelToEntity[label]
     if entity == nil and not IsIn(label, UnfoundRefs) then
         LogError("Entity with label \"" .. label .. "\" not found.")
         Append(UnfoundRefs, label)
         entity = {}
-    end
-    return ReadonlyTable(entity)
-end
-
-function GetEntity(label)
-    local entity = GetEntityRaw(label)
-    while GetProtectedNullableField(entity, "partOf") ~= nil do
-        entity = GetProtectedNullableField(entity, "partOf")
     end
     return ReadonlyTable(entity)
 end

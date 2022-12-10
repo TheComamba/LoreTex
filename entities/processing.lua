@@ -4,12 +4,6 @@ StateResetters[#StateResetters + 1] = function()
     labelToProcessedEntity = {}
 end
 
-local function registerProcessedEntityLabels(entity)
-    for key, label in pairs(GetAllLabels(entity)) do
-        labelToProcessedEntity[label] = entity
-    end
-end
-
 local function collectMentionedEntities(entity)
     local out = GetProtectedTableField(entity, "mentions")
     for key, item in pairs(GetProtectedTableField(entity, "historyItems")) do
@@ -17,20 +11,7 @@ local function collectMentionedEntities(entity)
             out[#out + 1] = concern
         end
     end
-    for key, sub in pairs(GetProtectedTableField(entity, "subEntities")) do
-        for key2, concern in pairs(collectMentionedEntities(sub)) do
-            out[#out + 1] = concern
-        end
-    end
     return out
-end
-
-local function addSubEntitiesAsDescriptors(entity)
-    for key, sub in pairs(GetProtectedTableField(entity, "subEntities")) do
-        local descriptor = GetProtectedStringField(sub, "name")
-        entity[descriptor] = sub
-        addSubEntitiesAsDescriptors(sub)
-    end
 end
 
 local function addAutomatedDescriptors(entity)
@@ -39,7 +20,6 @@ local function addAutomatedDescriptors(entity)
     AddLifeStagesToSpecies(entity)
     ProcessHistory(entity)
     AddHeightDescriptor(entity)
-    addSubEntitiesAsDescriptors(entity)
 end
 
 local function addPrimariesWhenMentioned(arg, mentioned)
@@ -78,16 +58,12 @@ local function addEntityToDict(arg, newEntity)
     arg.entities[metatype][typename][locationName][#arg.entities[metatype][typename][locationName] + 1] = newEntity
 end
 
-local function processEntity(entity)
-    local newEntity = DeepCopy(entity)
-    AddNameMarkers(newEntity)
-    addAutomatedDescriptors(newEntity)
-    return newEntity
-end
-
 local function registerProcessedEntity(arg, newEntity)
-    addEntityToDict(arg, newEntity)
-    registerProcessedEntityLabels(newEntity)
+    if GetProtectedNullableField(newEntity, "partOf") == nil then
+        addEntityToDict(arg, newEntity)
+    end
+    local label = GetProtectedStringField(newEntity, "label")
+    labelToProcessedEntity[label] = newEntity
 end
 
 local function addFollowUpEntities(arg, newEntity)
@@ -100,14 +76,26 @@ local function addFollowUpEntities(arg, newEntity)
     end
 end
 
+local function processEntity(arg, entity)
+    local newEntity = DeepCopy(entity)
+    AddNameMarkers(newEntity)
+    addAutomatedDescriptors(newEntity)
+    for key, val in pairs(entity) do
+        if not IsProtectedDescriptor(key) and IsEntity(val) then
+            newEntity[key] = processEntity(arg, val)
+        end
+    end
+    registerProcessedEntity(arg, newEntity)
+    addFollowUpEntities(arg, newEntity)
+    return newEntity
+end
+
 function AddProcessedEntity(arg, entity)
     local superEntity = GetProtectedNullableField(entity, "partOf")
     if superEntity ~= nil then
         AddProcessedEntity(arg, superEntity)
     elseif IsEntityShown(entity) and not IsEntityProcessed(GetProtectedStringField(entity, "label")) then
-        local newEntity = processEntity(entity)
-        registerProcessedEntity(arg, newEntity)
-        addFollowUpEntities(arg, newEntity)
+        processEntity(arg, entity)
     end
 end
 
@@ -130,7 +118,7 @@ function ProcessedEntities()
     local primaryEntities = getPrimaryEntities()
     out.mentioned = {}
     for key, label in pairs(MentionedRefs) do
-        out.mentioned[#out.mentioned + 1] = GetEntityRaw(label)
+        out.mentioned[#out.mentioned + 1] = GetEntity(label)
     end
     addPrimariesWhenMentioned(out, out.mentioned)
     for key, entity in pairs(primaryEntities) do

@@ -2,7 +2,12 @@ RelativePath = ""
 TexApi = {}
 
 local function logErrorOnModify(table, key, value)
-	LogError("Attempted to set key " .. key .. " to value " .. value .. " in read-only table " .. DebugPrint(table))
+	local message = {}
+	Append(message, "Attempted to modify value with key \"")
+	Append(message, key)
+	Append(message, "\" in read-only table ")
+	Append(message, DebugPrint(table))
+	LogError(message)
 end
 
 function ReadonlyTable(table)

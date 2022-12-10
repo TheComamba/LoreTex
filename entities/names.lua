@@ -32,7 +32,7 @@ function LabelToName(label)
     end
 
     local name = ""
-    local entity = GetEntityRaw(label)
+    local entity = GetEntity(label)
     if entity ~= nil then
         name = GetProtectedStringField(entity, "name")
     elseif not IsIn(label, UnfoundRefs) then

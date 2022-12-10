@@ -56,8 +56,10 @@ end
 local function PrintAllEntities(name, entities)
     local out = {}
     local allLabels = {}
-    for locationName, entity in pairs(entities) do
-        Append(allLabels, GetAllLabels(entity))
+    for locationName, entitiesHere in pairs(entities) do
+        for key, entity in pairs(entitiesHere) do
+            Append(allLabels, GetAllLabels(entity))
+        end
     end
     if #allLabels > 0 then
         Sort(allLabels, "compareByName")

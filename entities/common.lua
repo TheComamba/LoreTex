@@ -6,18 +6,12 @@ function IsEntity(inp)
     end
 end
 
-function GetAllLabels(list)
+function GetAllLabels(entity)
     local out = {}
-    if IsEntity(list) then
-        list = { list }
-    end
-    for key, entry in pairs(list) do
-        if IsEntity(entry) then
-            local label = GetProtectedStringField(entry, "label")
-            if label ~= "" then
-                UniqueAppend(out, label)
-            end
-            UniqueAppend(out, GetAllLabels(GetProtectedTableField(entry, "subEntities")))
+    UniqueAppend(out, GetProtectedStringField(entity, "label"))
+    for key, val in pairs(entity) do
+        if not IsProtectedDescriptor(key) and IsEntity(val) then
+            UniqueAppend(out, GetAllLabels(val))
         end
     end
     return out

@@ -32,18 +32,6 @@ local function isSameDate(item1, item2)
     end
 end
 
-local function collectHistoryItems(entity)
-    local out = GetProtectedTableField(entity, "historyItems")
-    local subEntities = GetProtectedTableField(entity, "subEntities")
-    for key, subEntity in pairs(subEntities) do
-        local subHistoryItems = GetProtectedTableField(subEntity, "historyItems")
-        for key2, item in pairs(subHistoryItems) do
-            out[#out + 1] = item
-        end
-    end
-    return out
-end
-
 local function deleteDuplicateHistoryItems(items)
     local out = {}
     local counters = {}
@@ -58,7 +46,7 @@ local function deleteDuplicateHistoryItems(items)
 end
 
 local function addHistoryDescriptors(entity)
-    local historyItems = collectHistoryItems(entity)
+    local historyItems = GetProtectedTableField(entity, "historyItems")
     historyItems = deleteDuplicateHistoryItems(historyItems)
     Sort(historyItems, "compareHistoryItems")
     local processedHistory = {}

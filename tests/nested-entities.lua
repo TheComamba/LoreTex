@@ -56,14 +56,16 @@ local function generateExpected(typename, includesShortname, includesSubname)
     end
     Append(out, [[\subsubsection{]] .. typename .. [[ 2}]])
     Append(out, [[\label{]] .. typename .. [[-2}]])
-    Append(out, [[\paragraph{]] .. CapFirst(Tr("affiliated")) .. [[ ]] .. Tr(typename) .. [[}]])
-    Append(out, [[\begin{itemize}]])
-    Append(out, [[\item \nameref{]] .. typename .. [[-3}]])
-    Append(out, [[\end{itemize}]])
     if includesSubname then
         Append(out, [[\paragraph{Subname}]])
         Append(out, [[\label{sublabel}]])
+        Append(out, [[\subparagraph{]] .. CapFirst(Tr("affiliated")) .. [[ ]] .. Tr(typename) .. [[}]])
+    else
+        Append(out, [[\paragraph{]] .. CapFirst(Tr("affiliated")) .. [[ ]] .. Tr(typename) .. [[}]])
     end
+    Append(out, [[\begin{itemize}]])
+    Append(out, [[\item \nameref{]] .. typename .. [[-3}]])
+    Append(out, [[\end{itemize}]])
 
     if includesShortname then
         if includesSubname then

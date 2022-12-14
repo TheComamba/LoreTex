@@ -42,7 +42,7 @@ function PrintOnlyMentionedChapter(mentionedEntities)
         if key == 1 then
             Append(out, TexCmd("chapter", CapFirst(Tr("only-mentioned"))))
         end
-        local name = GetProtectedStringField(mentionedEntity, "name")
+        local name = GetShortname(mentionedEntity)
         local label = GetProtectedStringField(mentionedEntity, "label")
         if name ~= "" then
             Append(out, TexCmd("subparagraph", name))

@@ -28,21 +28,21 @@ A location can itself have a location, allowing to make the sorting exactly as f
 \makeEntityPrimary{tattooine}
 \makeEntityPrimary{mos-eisley}
 
-Associations are a similar concept, but they do not influence how an entity is sorted. They are set using the setAssociation command with the label of the associated entity. Both entities will acknowledge the connection if they are printed out.
+Associations are a similar concept, but they do not influence how an entity is sorted. They are set using the addParent command with the label of the associated entity. Both entities will acknowledge the connection if they are printed out.
 
-The setAssociation command can be given a role in the association as an optional argument. Otherwise they will simply be called member. An entity can have an arbitrary number of associations.
+The addParent command can be given a role in the association as an optional argument. Otherwise they will simply be called member. An entity can have an arbitrary number of associations.
 
 \newEntity{organisations}{galactic-empire}{}{Galactic Empire}
 
 \newEntity{ships}{star-destroyer}{}{Star Destroyer}
-\setAssociation{galactic-empire}
+\addParent{galactic-empire}
 
 \newEntity{ships}{death-star}{}{Death Star}
-\setAssociation[Flawless Flagship]{galactic-empire}
+\addParent[Flawless Flagship]{galactic-empire}
 
 \newEntity{ships}{death-star-2}{}{Death Star 2}
-\setAssociation[Unfinished Flagship]{galactic-empire}
-\setAssociation[Successor]{death-star}
+\addParent[Unfinished Flagship]{galactic-empire}
+\addParent[Successor]{death-star}
 
 \makeEntityPrimary{galactic-empire}
 \makeEntityPrimary{star-destroyer}

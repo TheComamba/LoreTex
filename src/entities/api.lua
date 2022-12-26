@@ -65,7 +65,7 @@ local function automatedChapters()
         Append(output, TexCmd("RpgTex"))
         Append(output, " encountered errors. Call PrintRpgTexErrors to show them.")
     end
-    if IsBenchmarkingActivated() then
+    if IsBenchmarkingActivated ~= nil and IsBenchmarkingActivated() then
         return {}
     else
         return output

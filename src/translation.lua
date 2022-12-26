@@ -2,7 +2,7 @@ Dictionary = {}
 IsDictionaryRandomised = false
 
 function SelectLanguage(language)
-    dofile(RelativePath .. "/translation/" .. language .. ".lua")
+    dofile(RelativePath .. "/../translation/" .. language .. ".lua")
     IsDictionaryRandomised = false
 end
 

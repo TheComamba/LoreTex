@@ -220,14 +220,14 @@ local function runTests(testFiles)
         PushScopedVariables()
         SelectLanguage("english")
         local currentlyFailed = numFailed
-        dofile(RelativePath .. "/tests/" .. testfile .. ".lua")
+        dofile(RelativePath .. "../tests/testfiles/" .. testfile .. ".lua")
         PopScopedVariables()
 
         if currentlyFailed == numFailed and isContainedTranslation then
             ResetState()
             PushScopedVariables()
             RandomiseDictionary()
-            dofile(RelativePath .. "/tests/" .. testfile .. ".lua")
+            dofile(RelativePath .. "../tests/testfiles/" .. testfile .. ".lua")
             PopScopedVariables()
             isContainedTranslation = false
         end

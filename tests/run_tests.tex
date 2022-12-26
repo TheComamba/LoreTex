@@ -2,8 +2,10 @@
 \setlrmarginsandblock{10mm}{10mm}{*}
 \setulmarginsandblock{25mm}{25mm}{*}
 \checkandfixthelayout
-\input{../main.tex}
-\loadLuacode{../}
+\input{../src/main.tex}
+\loadLuacode{../src/}
+\directlua{ dofile( "test.lua" ) }
+\input{test.tex}
 \begin{document}
 \pagestyle{empty}
 %\throwOnError

@@ -1,13 +1,14 @@
 \documentclass[oneside]{memoir}
-\input{../main.tex}
-\loadLuacode{../}
+\input{../src/main.tex}
+\loadLuacode{../src/}
+\luacode{ dofile( "benchmarking.lua" ) }
+%\input{benchmarking.tex}
 \begin{document}
 \pagestyle{empty}
 
 \activateBenchmarking
 
 \begin{luacode*}
-	dofile(RelativePath .. "tests/benchmarking.lua")
 	local benchout = CreateBenchmarkingTest(500)
 \end{luacode*}
 

@@ -1,3 +1,5 @@
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](code_of_conduct.md) 
+
 # RpgTex
 
 Have you ever struggled to keep your adventure notes organised? Did you copy and paste parts of your lore to different adventures set in the same world and then they ran out of sync? Do you wish to give your players an up-to-date handout but not reveal your secret details?
@@ -40,15 +42,17 @@ A good place to start is the tutorials folder.
 
 ## Contributing
 
-Pull requests are welcome. 
+Merge requests are welcome.
 
 Please follow the gitflow naming convention of prefixing branches with "bugfix/" or "feature/". Currently I see no reason for a separate develop branch.
 
 For major changes, please open an issue first to discuss what you would like to change.
 
-Please make sure to update tests as appropriate.
+Please make sure to update the tests as appropriate.
 
 Criticism of the coding style is very welcome. I find it tough to write clean code in Lua, and I am eager to improve.
+
+And, of course, you are asked to comply with the code of conduct.
 
 ## License
 

@@ -1,8 +1,8 @@
 \documentclass[oneside]{memoir}
 \input{../src/main.tex}
 \loadLuacode{../src/}
-\luacode{ dofile( "benchmarking.lua" ) }
-%\input{benchmarking.tex}
+\directlua{ dofile( "benchmarking.lua" ) }
+\input{benchmarking.tex}
 \begin{document}
 \pagestyle{empty}
 

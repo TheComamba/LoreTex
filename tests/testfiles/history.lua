@@ -42,20 +42,20 @@ local function generateExpected(isCurrentDaySet)
     Append(out, [[\paragraph{]] .. CapFirst(Tr("history")) .. [[}]])
     Append(out, [[\begin{itemize}]])
 
-    Append(out, [[\item -987654321 (]] .. Tr("years-ago", { 987654321 }) .. [[):\\Long time ago.]])
-    Append(out, [[\item -20 (]] .. Tr("years-ago", { 20 }) .. [[):\\Some event.]])
+    Append(out, [[\item -987654321 (]] .. Tr("x-years-ago", { 987654321 }) .. [[):\\Long time ago.]])
+    Append(out, [[\item -20 (]] .. Tr("x-years-ago", { 20 }) .. [[):\\Some event.]])
     Append(out, [[\item Event same year as another.]])
     Append(out,
         [[\item -10 (]] ..
-        Tr("years-ago", { 10 }) ..
+        Tr("x-years-ago", { 10 }) ..
         [[):\\Event that concerns \nameref{test-1}, but not \nameref{test-2}.]])
     Append(out,
         [[\item -5 (]] ..
-        Tr("years-ago", { 5 }) ..
+        Tr("x-years-ago", { 5 }) ..
         [[):\\Event that concerns \nameref{test-1}, but not \nameref{test-2}.\notconcerns{test-2}]])
 
 
-    Append(out, [[\item -2, ]] .. Tr("day") .. [[ 5 (]] .. Tr("years-ago", { 2 }) .. [[):\\Event with day.]])
+    Append(out, [[\item -2, ]] .. Tr("day") .. [[ 5 (]] .. Tr("x-years-ago", { 2 }) .. [[):\\Event with day.]])
     Append(out, [[\item Event on same day.]])
 
     Append(out, [[\item -1 (]] .. Tr("last-year") .. [[):\\ Event last year.]])
@@ -64,10 +64,10 @@ local function generateExpected(isCurrentDaySet)
     if isCurrentDaySet then
         Append(out,
             [[\item -1, ]] ..
-            Tr("day") .. [[ 100 (]] .. Tr("days-ago", { 275 }) .. [[):\\Event less than a year ago.]])
+            Tr("day") .. [[ 100 (]] .. Tr("x-days-ago", { 275 }) .. [[):\\Event less than a year ago.]])
         Append(out, [[\item 0 (]] .. Tr("this-year") .. [[):\\Event this year.]])
         Append(out,
-            [[\item 0, ]] .. Tr("day") .. [[ 5 (]] .. Tr("days-ago", { 5 }) .. [[):\\Event this year, with day.]])
+            [[\item 0, ]] .. Tr("day") .. [[ 5 (]] .. Tr("x-days-ago", { 5 }) .. [[):\\Event this year, with day.]])
         Append(out, [[\item 0, ]] .. Tr("day") .. [[ 9 (]] .. Tr("yesterday") .. [[):\\Event yesterday.]])
         Append(out, [[\item 0, ]] .. Tr("day") .. [[ 10 (]] .. Tr("today") .. [[):\\Event today.]])
 
@@ -75,7 +75,7 @@ local function generateExpected(isCurrentDaySet)
             Append(out, [[\item 0, ]] .. Tr("day") .. [[ 11 (]] .. Tr("tomorrow") .. [[):\\Event tomorrow.]])
             Append(out,
                 [[\item 0, ]] ..
-                Tr("day") .. [[ 15 (]] .. Tr("in-days", { 5 }) .. [[):\\Event this year, with day in future.]])
+                Tr("day") .. [[ 15 (]] .. Tr("in-x-days", { 5 }) .. [[):\\Event this year, with day in future.]])
         end
     else
         Append(out,
@@ -97,7 +97,7 @@ local function generateExpected(isCurrentDaySet)
         if isCurrentDaySet then
             Append(out,
                 [[\item 1, ]] ..
-                Tr("day") .. [[ 5 (]] .. Tr("in-days", { 360 }) .. [[):\\Event in less than a year.]])
+                Tr("day") .. [[ 5 (]] .. Tr("in-x-days", { 360 }) .. [[):\\Event in less than a year.]])
         else
             Append(out,
                 [[\item 1, ]] ..
@@ -106,7 +106,7 @@ local function generateExpected(isCurrentDaySet)
         Append(out,
             [[\item 1, ]] ..
             Tr("day") .. [[ 15 (]] .. Tr("next-year") .. [[):\\Event next year, with day.]])
-        Append(out, [[\item 5 (]] .. Tr("in-years", { 5 }) .. [[):\\Event in the future.]])
+        Append(out, [[\item 5 (]] .. Tr("in-x-years", { 5 }) .. [[):\\Event in the future.]])
     end
     Append(out, [[\end{itemize}]])
     Append(out, [[\chapter{]] .. CapFirst(Tr("only-mentioned")) .. [[}]])

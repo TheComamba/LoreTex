@@ -1,16 +1,35 @@
-Dictionary = {}
+Dictionaries = {}
 IsDictionaryRandomised = false
 
-function SelectLanguage(language)
-    dofile(RelativePath .. "/../translation/" .. language .. ".lua")
+local currentDictionary = {}
+
+local function selectLanguage(language)
+    if #currentDictionary == 0 then
+        dofile(RelativePath .. "/../translation/" .. language .. ".lua")
+    end
+    currentDictionary = Dictionaries[language:lower()]
     IsDictionaryRandomised = false
 end
 
+TexApi.selectLanguage = selectLanguage
+
+local function addTranslation(arg)
+    if not IsArgOk("addTranslation", arg, {"language", "key", "translation"}, {}) then
+        return
+    end
+    if Dictionaries[arg.language] == nil then
+        Dictionaries[arg.language] = {}
+    end
+    Dictionaries[arg.language][arg.key] = arg.translation
+end
+
+TexApi.addTranslation = addTranslation
+
 function Tr(keyword, additionalArguments)
-    local translation = Dictionary[keyword]
+    local translation = currentDictionary[keyword]
     if translation == nil then
         LogError("Could not find translation for keyword " .. DebugPrint(keyword))
-        translation = ""
+        translation = keyword:upper()
     end
     if additionalArguments ~= nil then
         for i, arg in pairs(additionalArguments) do
@@ -35,8 +54,8 @@ end
 
 function RandomiseDictionary()
     --Before you ask: This is purely for testing.
-    for key, val in pairs(Dictionary) do
-        Dictionary[key] = Dictionary[key]:lower() .. "-" .. randomWord(5)
+    for key, val in pairs(currentDictionary) do
+        currentDictionary[key] = currentDictionary[key]:lower() .. "-" .. randomWord(5)
     end
     IsDictionaryRandomised = true
 end

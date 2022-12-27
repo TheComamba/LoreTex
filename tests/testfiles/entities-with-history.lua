@@ -25,7 +25,7 @@ local function generateExpected(isSecondAdded)
     Append(out, [[\begin{itemize}]])
     Append(out,
         [[\item -10 (]] ..
-        Tr("years-ago", { 10 }) .. [[):\\ Event that concerns \nameref{test-1} and \itref{test-2}.]])
+        Tr("x-years-ago", { 10 }) .. [[):\\ Event that concerns \nameref{test-1} and \itref{test-2}.]])
     Append(out, [[\end{itemize}]])
     if isSecondAdded then
         Append(out, [[\subsubsection{Test 2}]])
@@ -34,7 +34,7 @@ local function generateExpected(isSecondAdded)
         Append(out, [[\begin{itemize}]])
         Append(out,
             [[\item -10 (]] ..
-            Tr("years-ago", { 10 }) .. [[):\\ Event that concerns \nameref{test-1} and \itref{test-2}.]])
+            Tr("x-years-ago", { 10 }) .. [[):\\ Event that concerns \nameref{test-1} and \itref{test-2}.]])
         Append(out, [[\end{itemize}]])
     else
         Append(out, [[\chapter{]] .. CapFirst(Tr("only-mentioned")) .. [[}]])

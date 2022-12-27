@@ -218,7 +218,7 @@ local function runTests(testFiles)
     for key, testfile in pairs(testFiles) do
         ResetState()
         PushScopedVariables()
-        SelectLanguage("english")
+        TexApi.selectLanguage("english")
         local currentlyFailed = numFailed
         dofile(RelativePath .. "../tests/testfiles/" .. testfile .. ".lua")
         PopScopedVariables()

@@ -1,3 +1,4 @@
-\newcommand{\selectLanguage}[1]{\directlua{SelectLanguage("#1")}}
+\newcommand{\selectLanguage}[1]{\directlua{TexApi.selectLanguage("#1")}}
+\newcommand{\addTranslation}[3]{\directlua{TexApi.addTranslation{ language="#1", key="#2", translation=[[\detokenize{#3}]] }}}
 
 \selectLanguage{english}

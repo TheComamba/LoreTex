@@ -175,9 +175,9 @@ local function timeDiffString(historyItem)
         elseif timeDiffInDays == -1 then
             return Tr("tomorrow")
         elseif timeDiffInDays > 1 then
-            return Tr("days-ago", { timeDiffInDays })
+            return Tr("x-days-ago", { timeDiffInDays })
         else
-            return Tr("in-days", { math.abs(timeDiffInDays) })
+            return Tr("in-x-days", { math.abs(timeDiffInDays) })
         end
     else
         timeDiffInYears = Round(timeDiffInYears)
@@ -188,9 +188,9 @@ local function timeDiffString(historyItem)
         elseif timeDiffInYears == -1 then
             return Tr("next-year")
         elseif timeDiffInYears > 1 then
-            return Tr("years-ago", { timeDiffInYears })
+            return Tr("x-years-ago", { timeDiffInYears })
         else
-            return Tr("in-years", { math.abs(timeDiffInYears) })
+            return Tr("in-x-years", { math.abs(timeDiffInYears) })
         end
     end
 end

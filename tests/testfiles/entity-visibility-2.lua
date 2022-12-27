@@ -13,7 +13,7 @@ local function generateHistoryParagraph()
     Append(out, [[\begin{itemize}]])
     Append(out,
         [[\item -10 (]] ..
-        Tr("years-ago", { 10 }) .. [[):\\ (]] .. CapFirst(Tr("secret")) .. [[) Concerns \nameref{secret-item}.]])
+        Tr("x-years-ago", { 10 }) .. [[):\\ (]] .. CapFirst(Tr("secret")) .. [[) Concerns \nameref{secret-item}.]])
     Append(out, [[\end{itemize}]])
     return out
 end

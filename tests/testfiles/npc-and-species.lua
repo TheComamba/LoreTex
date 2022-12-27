@@ -6,7 +6,7 @@ TexApi.newEntity { type = "npcs", label = "test-npc", name = "Test NPC" }
 TexApi.setSpecies("test-species")
 TexApi.born { year = -20, event = "Birth." }
 
-AddAllEntitiesToPrimaryRefs()
+TexApi.makeAllEntitiesPrimary()
 
 IsShowFuture = false
 local out = TexApi.automatedChapters()

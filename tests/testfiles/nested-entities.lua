@@ -19,7 +19,7 @@ local function setupTest(typename, includesShortname, includesSubname)
         TexApi.setLocation(typename .. "-2")
     end
 
-    AddAllEntitiesToPrimaryRefs()
+    TexApi.makeAllEntitiesPrimary()
 end
 
 local function generateExpected(typename, includesShortname, includesSubname)

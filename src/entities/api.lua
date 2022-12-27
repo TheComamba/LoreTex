@@ -12,15 +12,6 @@ end
 
 TexApi.reveal = reveal
 
-function MakePrimaryIf(condition)
-    for key, entity in pairs(AllEntities) do
-        if (condition(entity)) then
-            local label = GetProtectedStringField(entity, "label")
-            UniqueAppend(PrimaryRefs, label)
-        end
-    end
-end
-
 local function newEntity(arg)
     if not IsArgOk("newEntity", arg, { "type", "label", "name" }, { "shortname" }) then
         return

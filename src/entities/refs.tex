@@ -1,9 +1,10 @@
 \newcommand{\makeEntityPrimary}[1]{\directlua{TexApi.makeEntityPrimary("#1")}}
-\newcommand{\makeEntityAndChildrenPrimary}[1]{\directlua{MakeEntityAndChildrenPrimary("#1")}}
-\newcommand{\makeAllEntitiesOfTypePrimary}[1]{\directlua{MakePrimaryIf(Bind(IsType, "#1"))}}
+\newcommand{\makeEntityAndChildrenPrimary}[1]{\directlua{TexApi.makeEntityAndChildrenPrimary("#1")}}
+\newcommand{\makeAllEntitiesOfTypePrimary}[1]{\directlua{TexApi.makeAllEntitiesOfTypePrimary("#1")}}
 \newcommand{\mention}[1]{\nameref{#1}\directlua{TexApi.mention("#1")}}
 \newcommand{\reference}[1]{\nameref{#1}\makeEntityPrimary{#1}}
 \newcommand{\itref}[1]{\textit{\nameref{#1}}}
-\newcommand{\listAllRefs}{\directlua{ListAllRefs()}}
-\newcommand{\makeTypePrimaryWhenMentioned}[1]{\directlua{MakeTypePrimaryWhenMentioned("#1")}}
+\newcommand{\listAllRefs}{\directlua{TexApi.listAllRefs()}}
+\newcommand{\makeTypePrimaryWhenMentioned}[1]{\directlua{TexApi.makeTypePrimaryWhenMentioned("#1")}}
 \newcommand{\makeFirstEntitiesPrimary}[1]{\directlua{TexApi.makeFirstEntitiesPrimary(#1)}}
+\newcommand{\makeAllEntitiesPrimary}{\directlua{TexApi.makeAllEntitiesPrimary()}}

@@ -113,7 +113,7 @@ for key, isSubdescription in pairs({ false, true }) do
             description = [[\label{2} \subparagraph{ZZZSubsubentity} \label{3}]] }
         setDescriptors(GetMutableEntityFromAll(tostring(i)), isSubdescription)
 
-        AddAllEntitiesToPrimaryRefs()
+        TexApi.makeAllEntitiesPrimary()
 
         local expected = {}
         Append(expected, [[\chapter{]] .. CapFirst(Tr("places")) .. [[}]])

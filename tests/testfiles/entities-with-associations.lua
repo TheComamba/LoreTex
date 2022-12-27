@@ -12,7 +12,7 @@ TexApi.newEntity { type = "organisations", label = "orga-2", name = "Orga 2" }
 TexApi.addParent { parentLabel = "place-1", relationship = "Rulers" }
 local orga2 = CurrentEntity
 
-AddAllEntitiesToPrimaryRefs()
+TexApi.makeAllEntitiesPrimary()
 local out = TexApi.automatedChapters()
 
 local function generateOrga1(areLocationsSet)

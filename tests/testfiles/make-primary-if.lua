@@ -1,6 +1,6 @@
 TexApi.newEntity { type = "organisations", label = "test", name = "Test" }
 
-MakePrimaryIf(Bind(IsType, "associations"))
+TexApi.makeAllEntitiesOfTypePrimary("associations")
 
 local expected = {}
 Append(expected, [[\chapter{]] .. CapFirst(Tr("associations")) .. [[}]])

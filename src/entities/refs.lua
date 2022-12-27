@@ -33,12 +33,14 @@ local function namerefDebugString(label)
     return table.concat(out)
 end
 
-function ListAllRefs()
+local function listAllRefs()
     tex.print(TexCmd("paragraph", "PrimaryRefs"))
     tex.print(ListAll(PrimaryRefs, namerefDebugString))
     tex.print(TexCmd("paragraph", "MentionedRefs"))
     tex.print(ListAll(MentionedRefs, namerefDebugString))
 end
+
+TexApi.listAllRefs = listAllRefs
 
 function ScanStringForCmd(str, cmd)
     local args = {}
@@ -92,17 +94,21 @@ function ScanContentForMentionedRefs(content)
     return mentionedRefsHere
 end
 
-function AddAllEntitiesToPrimaryRefs()
+local function makeAllEntitiesPrimary()
     for key, entity in pairs(AllEntities) do
         UniqueAppend(PrimaryRefs, GetAllLabels(entity))
     end
 end
 
-function MakeTypePrimaryWhenMentioned(type)
+TexApi.makeAllEntitiesPrimary = makeAllEntitiesPrimary
+
+local function makeTypePrimaryWhenMentioned(type)
     UniqueAppend(PrimaryRefWhenMentionedTypes, type)
 end
 
-function MakeEntityAndChildrenPrimary(label)
+TexApi.makeTypePrimaryWhenMentioned = makeTypePrimaryWhenMentioned
+
+local function makeEntityAndChildrenPrimary(label)
     UniqueAppend(PrimaryRefs, label)
     local entity = GetEntity(label)
     if entity == nil then
@@ -112,6 +118,21 @@ function MakeEntityAndChildrenPrimary(label)
     for key, child in pairs(GetProtectedTableField(entity, "children")) do
         UniqueAppend(PrimaryRefs, GetProtectedStringField(child, "label"))
     end
+end
+
+local function makePrimaryIf(condition)
+    for key, entity in pairs(AllEntities) do
+        if (condition(entity)) then
+            local label = GetProtectedStringField(entity, "label")
+            UniqueAppend(PrimaryRefs, label)
+        end
+    end
+end
+
+TexApi.makeEntityAndChildrenPrimary = makeEntityAndChildrenPrimary
+
+TexApi.makeAllEntitiesOfTypePrimary = function(type)
+    makePrimaryIf(Bind(IsType, type))
 end
 
 TexApi.makeEntityPrimary = function(label)

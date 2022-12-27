@@ -82,13 +82,13 @@ expected = generateExpected(nil, false)
 Assert("one-only-mentioned-npc", expected, out)
 
 PrimaryRefWhenMentionedTypes = {}
-MakeTypePrimaryWhenMentioned("species")
+TexApi.makeTypePrimaryWhenMentioned("species")
 out = TexApi.automatedChapters()
 expected = generateExpected("species")
 Assert("species-are-primary-types-npc-is-only-mentioned", expected, out)
 
 PrimaryRefWhenMentionedTypes = {}
-MakeTypePrimaryWhenMentioned("npcs")
+TexApi.makeTypePrimaryWhenMentioned("npcs")
 out = TexApi.automatedChapters()
 expected = generateExpected("npcs", false)
 Assert("npcs-are-primary-types-one-is-only-mentioned", expected, out)
@@ -101,13 +101,13 @@ expected = generateExpected(nil, true)
 Assert("two-npcs-one-primary", expected, out)
 
 PrimaryRefWhenMentionedTypes = {}
-MakeTypePrimaryWhenMentioned("species")
+TexApi.makeTypePrimaryWhenMentioned("species")
 out = TexApi.automatedChapters()
 expected = generateExpected("species", true)
 Assert("species-are-primary-types-one-npc-explicitly-referenced", expected, out)
 
 PrimaryRefWhenMentionedTypes = {}
-MakeTypePrimaryWhenMentioned("npcs")
+TexApi.makeTypePrimaryWhenMentioned("npcs")
 out = TexApi.automatedChapters()
 expected = generateExpected("npcs", true)
 Assert("npcs-are-primary-types-one-explicitly-referenced", expected, out)

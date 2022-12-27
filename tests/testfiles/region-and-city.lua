@@ -6,7 +6,7 @@ TexApi.setLocation("test-continent")
 TexApi.newEntity { type = "places", label = "test-city", name = "Test City" }
 TexApi.setLocation("test-region")
 
-AddAllEntitiesToPrimaryRefs()
+TexApi.makeAllEntitiesPrimary()
 
 local out = TexApi.automatedChapters()
 

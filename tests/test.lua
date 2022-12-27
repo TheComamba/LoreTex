@@ -245,7 +245,7 @@ local function printResults()
     Append(out, " of which failed.")
     Append(out, [[\newline]])
     Append(out, "Usage of TexApi functions:")
-    local apiFunctionUsageStr = {}
+    local apiFunctionUsageOutput = {}
     for key, usage in pairs(apiFunctionUsage) do
         local usageStr = ""
         if usage == 0 then
@@ -255,10 +255,11 @@ local function printResults()
         else
             usageStr = " was called " .. usage .. " times."
         end
-        Append(apiFunctionUsageStr, key .. usageStr)
+        Append(apiFunctionUsageOutput, TexCmd("RpgTexSort", usage) .. key .. usageStr)
     end
-    table.sort(apiFunctionUsageStr)
-    Append(out, ListAll(apiFunctionUsageStr))
+    Sort(apiFunctionUsage, "compareAlphanumerical")
+    table.sort(apiFunctionUsageOutput)
+    Append(out, ListAll(apiFunctionUsageOutput))
     return out
 end
 

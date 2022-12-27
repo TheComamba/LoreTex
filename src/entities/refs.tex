@@ -4,7 +4,5 @@
 \newcommand{\mention}[1]{\nameref{#1}\directlua{TexApi.mention("#1")}}
 \newcommand{\reference}[1]{\nameref{#1}\makeEntityPrimary{#1}}
 \newcommand{\itref}[1]{\textit{\nameref{#1}}}
-\newcommand{\listAllRefs}{\directlua{TexApi.listAllRefs()}}
 \newcommand{\makeTypePrimaryWhenMentioned}[1]{\directlua{TexApi.makeTypePrimaryWhenMentioned("#1")}}
-\newcommand{\makeFirstEntitiesPrimary}[1]{\directlua{TexApi.makeFirstEntitiesPrimary(#1)}}
 \newcommand{\makeAllEntitiesPrimary}{\directlua{TexApi.makeAllEntitiesPrimary()}}

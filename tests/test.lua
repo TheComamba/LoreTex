@@ -257,8 +257,7 @@ local function printResults()
         end
         Append(apiFunctionUsageOutput, TexCmd("RpgTexSort", usage) .. key .. usageStr)
     end
-    Sort(apiFunctionUsage, "compareAlphanumerical")
-    table.sort(apiFunctionUsageOutput)
+    Sort(apiFunctionUsageOutput, "compareAlphanumerical")
     Append(out, ListAll(apiFunctionUsageOutput))
     return out
 end

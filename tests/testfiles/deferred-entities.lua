@@ -45,7 +45,7 @@ TexApi.setLocation("some-place")
 TexApi.addParent { parentLabel = "orga-sublabel", relationship = "Code-Cleaner" }
 TexApi.makeEntityPrimary("some-npc")
 TexApi.newEntity { type = "places", label = "some-place", name = "Some Place" }
-TexApi.newEntity { type = "organisations", label = "some-orga", name = "Some Orga" }
+TexApi.newEntity { type = "other", label = "some-orga", name = "Some Orga" }
 TexApi.setDescriptor { descriptor = "Orga Sublabel", description = [[\label{orga-sublabel}]] }
 
 expected = {}
@@ -55,7 +55,6 @@ Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(T
 Append(expected, [[\begin{itemize}]])
 Append(expected, [[\item \nameref{some-npc}]])
 Append(expected, [[\end{itemize}]])
-
 
 Append(expected, [[\subsection{]] .. CapFirst(Tr("in")) .. [[ Some Place}]])
 Append(expected, [[\subsubsection{Some NPC}]])

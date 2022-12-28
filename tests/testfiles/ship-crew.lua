@@ -1,6 +1,9 @@
+TexApi.addType { metatype = "other", type = "ships" }
+TexApi.addTranslation { language = "english", key = "ships", translation = "ships" }
+
 TexApi.newEntity { type = "places", label = "ocean", name = "Ocean" }
 
-TexApi.newEntity { type = "vehicles", label = "aurora", name = "Aurora" }
+TexApi.newEntity { type = "ships", label = "aurora", name = "Aurora" }
 TexApi.setLocation("ocean")
 
 SetScopedVariable("DefaultLocation", GetMutableEntityFromAll("aurora"))
@@ -44,23 +47,9 @@ Append(expected, generateCrewMember("balagog", { "Cook", "First Mate" }))
 Append(expected, generateCrewMember("cuen", { CapFirst(Tr("member")) }))
 Append(expected, generateCrewMember("haldora", { "Captain" }))
 
-Append(expected, [[\chapter{]] .. CapFirst(Tr("places")) .. [[}]])
-Append(expected, [[\section{]] .. CapFirst(Tr("places")) .. [[}]])
-Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("places")) .. [[}]])
-Append(expected, [[\begin{itemize}]])
-Append(expected, [[\item \nameref{ocean}]])
-Append(expected, [[\end{itemize}]])
-Append(expected, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
-Append(expected, [[\subsubsection{Ocean}]])
-Append(expected, [[\label{ocean}]])
-Append(expected, [[\paragraph{]] .. CapFirst(Tr("affiliated")) .. [[ ]] .. Tr("vehicles") .. [[}]])
-Append(expected, [[\begin{itemize}]])
-Append(expected, [[\item \nameref{aurora}]])
-Append(expected, [[\end{itemize}]])
-
-Append(expected, [[\chapter{]] .. CapFirst(Tr("things")) .. [[}]])
-Append(expected, [[\section{]] .. CapFirst(Tr("vehicles")) .. [[}]])
-Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("vehicles")) .. [[}]])
+Append(expected, [[\chapter{]] .. CapFirst(Tr("other")) .. [[}]])
+Append(expected, [[\section{]] .. CapFirst(Tr("ships")) .. [[}]])
+Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("ships")) .. [[}]])
 Append(expected, [[\begin{itemize}]])
 Append(expected, [[\item \nameref{aurora}]])
 Append(expected, [[\end{itemize}]])
@@ -72,6 +61,20 @@ Append(expected, [[\begin{itemize}]])
 Append(expected, [[\item \nameref{balagog} (Cook, First Mate)]])
 Append(expected, [[\item \nameref{cuen}]])
 Append(expected, [[\item \nameref{haldora} (Captain)]])
+Append(expected, [[\end{itemize}]])
+
+Append(expected, [[\chapter{]] .. CapFirst(Tr("places")) .. [[}]])
+Append(expected, [[\section{]] .. CapFirst(Tr("places")) .. [[}]])
+Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("places")) .. [[}]])
+Append(expected, [[\begin{itemize}]])
+Append(expected, [[\item \nameref{ocean}]])
+Append(expected, [[\end{itemize}]])
+Append(expected, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
+Append(expected, [[\subsubsection{Ocean}]])
+Append(expected, [[\label{ocean}]])
+Append(expected, [[\paragraph{]] .. CapFirst(Tr("affiliated")) .. [[ ]] .. Tr("ships") .. [[}]])
+Append(expected, [[\begin{itemize}]])
+Append(expected, [[\item \nameref{aurora}]])
 Append(expected, [[\end{itemize}]])
 
 local out = TexApi.automatedChapters()

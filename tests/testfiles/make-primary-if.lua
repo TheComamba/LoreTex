@@ -1,11 +1,11 @@
-TexApi.newEntity { type = "organisations", label = "test", name = "Test" }
+TexApi.newEntity { type = "npcs", label = "test", name = "Test" }
 
-TexApi.makeAllEntitiesOfTypePrimary("associations")
+TexApi.makeAllEntitiesOfTypePrimary("characters")
 
 local expected = {}
-Append(expected, [[\chapter{]] .. CapFirst(Tr("associations")) .. [[}]])
-Append(expected, [[\section{]] .. CapFirst(Tr("organisations")) .. [[}]])
-Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("organisations")) .. [[}]])
+Append(expected, [[\chapter{]] .. CapFirst(Tr("characters")) .. [[}]])
+Append(expected, [[\section{]] .. CapFirst(Tr("npcs")) .. [[}]])
+Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("npcs")) .. [[}]])
 Append(expected, [[\begin{itemize}]])
 Append(expected, [[\item \nameref{test}]])
 Append(expected, [[\end{itemize}]])

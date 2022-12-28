@@ -26,3 +26,30 @@ local function listAllRefs()
 end
 
 Debug.listAllRefs = listAllRefs
+
+local function printAllTypes()
+    local out = {}
+    local metatypes = SortedMetatypes()
+    if #metatypes > 0 then
+        Append(out, TexCmd("begin", "itemize"))
+        for i, metatype in pairs(metatypes) do
+            Append(out, TexCmd("item"))
+            Append(out, metatype)
+            local types = DeepCopy(AllTypes[metatype])
+            if #types > 0 then
+                Append(out, TexCmd("begin", "itemize"))
+                for j, type in pairs(types) do
+                    Append(out, TexCmd("item"))
+                    Append(out, type)
+                end
+                Append(out, TexCmd("end", "itemize"))
+            end
+        end
+        Append(out, TexCmd("end", "itemize"))
+    else
+        tex.print("There are no types.")
+    end
+    tex.print(out)
+end
+
+Debug.printAllTypes = printAllTypes

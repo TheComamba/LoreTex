@@ -1,4 +1,4 @@
-TexApi.newEntity { type = "organisations", label = "orga", name = "Orga" }
+TexApi.newEntity { type = "other", label = "orga", name = "Orga" }
 local orga = CurrentEntity
 
 TexApi.newEntity { type = "places", label = "place-1", name = "Place 1" }
@@ -8,7 +8,7 @@ TexApi.newEntity { type = "places", label = "place-2", name = "Place 2" }
 TexApi.addParent { parentLabel = "orga", relationship = "Hometown" }
 local place2 = CurrentEntity
 
-TexApi.newEntity { type = "organisations", label = "orga-2", name = "Orga 2" }
+TexApi.newEntity { type = "other", label = "orga-2", name = "Orga 2" }
 TexApi.addParent { parentLabel = "place-1", relationship = "Rulers" }
 local orga2 = CurrentEntity
 
@@ -44,9 +44,9 @@ end
 
 local function generateExpected(areLocationsSet)
     local out = {}
-    Append(out, [[\chapter{]] .. CapFirst(Tr("associations")) .. [[}]])
-    Append(out, [[\section{]] .. CapFirst(Tr("organisations")) .. [[}]])
-    Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("organisations")) .. [[}]])
+    Append(out, [[\chapter{]] .. CapFirst(Tr("other")) .. [[}]])
+    Append(out, [[\section{]] .. CapFirst(Tr("other")) .. [[}]])
+    Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("other")) .. [[}]])
     Append(out, [[\begin{itemize}]])
     Append(out, [[\item \nameref{orga}]])
     Append(out, [[\item \nameref{orga-2}]])
@@ -74,7 +74,7 @@ local function generateExpected(areLocationsSet)
     Append(out, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
     Append(out, [[\subsubsection{Place 1}]])
     Append(out, [[\label{place-1}]])
-    Append(out, [[\paragraph{]] .. CapFirst(Tr("affiliated")) .. " " .. Tr("organisations") .. [[}]])
+    Append(out, [[\paragraph{]] .. CapFirst(Tr("affiliated")) .. " " .. Tr("other") .. [[}]])
     Append(out, [[\begin{itemize}]])
     Append(out, [[\item \nameref{orga-2} (Rulers)]])
     Append(out, [[\end{itemize}]])

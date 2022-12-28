@@ -2,13 +2,8 @@ AllTypes = {}
 
 StateResetters[#StateResetters + 1] = function()
     AllTypes = {}
-    AllTypes["associations"] = { "families", "organisations" }
-    AllTypes["characters"] = { "gods", "npcs", "pcs" }
+    AllTypes["characters"] = { "npcs", "pcs" }
     AllTypes["chronologies"] = { "calendars", "events", "stories" }
-    AllTypes["classes"] = { "classes", "subclasses" }
-    AllTypes["things"] = { "artefacts", "items", "vehicles" }
-    AllTypes["landmarks"] = { "forests", "glaciers", "grasslands", "lakes", "mountainranges", "mountains", "rivers" }
-    AllTypes["magic"] = { "spells", "spell-properties" }
     AllTypes["other"] = { "other" }
     AllTypes["peoples"] = { "languages", "species" }
     AllTypes["places"] = { "places" }
@@ -58,27 +53,18 @@ function SortedMetatypes()
     return metatypes
 end
 
-function PrintAllTypes()
-    local out = {}
-    local metatypes = SortedMetatypes()
-    if #metatypes > 0 then
-        Append(out, TexCmd("begin", "itemize"))
-        for i, metatype in pairs(metatypes) do
-            Append(out, TexCmd("item"))
-            Append(out, metatype)
-            local types = DeepCopy(AllTypes[metatype])
-            if #types > 0 then
-                Append(out, TexCmd("begin", "itemize"))
-                for j, type in pairs(types) do
-                    Append(out, TexCmd("item"))
-                    Append(out, type)
-                end
-                Append(out, TexCmd("end", "itemize"))
-            end
-        end
-        Append(out, TexCmd("end", "itemize"))
-    else
-        tex.print("There are no types.")
+local function addType(arg)
+    if not IsArgOk("addType", arg, { "metatype", "type" }, {}) then
+        return
     end
-    tex.print(out)
+    if AllTypes[arg.metatype] == nil then
+        AllTypes[arg.metatype] = {}
+    end
+    if IsIn(arg.type, AllTypes[arg.metatype]) then
+        LogError("Subtype \"" .. arg.type .. "\" of metatype \"" .. arg.metatype .. "\" already exists.")
+        return
+    end
+    Append(AllTypes[arg.metatype], arg.type)
 end
+
+TexApi.addType = addType

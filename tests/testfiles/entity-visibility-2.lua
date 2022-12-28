@@ -4,7 +4,7 @@ TexApi.newEntity { type = "stories", label = "teststory", name = "Teststory" }
 TexApi.makeEntityPrimary("teststory")
 TexApi.addHistory { year = -10, event = [[Concerns \nameref{secret-item}.]] }
 
-TexApi.newEntity { type = "items", label = "secret-item", name = "Secret Item" }
+TexApi.newEntity { type = "other", label = "secret-item", name = "Secret Item" }
 TexApi.setSecret()
 
 local function generateHistoryParagraph()
@@ -32,9 +32,9 @@ local function generateExpected(isItemReferenced)
     if IsShowSecrets then
         Append(out, generateHistoryParagraph())
         if isItemReferenced then
-            Append(out, [[\chapter{]] .. CapFirst(Tr("things")) .. [[}]])
-            Append(out, [[\section{]] .. CapFirst(Tr("items")) .. [[}]])
-            Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("items")) .. [[}]])
+            Append(out, [[\chapter{]] .. CapFirst(Tr("other")) .. [[}]])
+            Append(out, [[\section{]] .. CapFirst(Tr("other")) .. [[}]])
+            Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("other")) .. [[}]])
             Append(out, [[\begin{itemize}]])
             Append(out, [[\item \nameref{secret-item}]])
             Append(out, [[\end{itemize}]])

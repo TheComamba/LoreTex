@@ -1,40 +1,40 @@
-TexApi.newEntity { type = "items", label = "primary-item", name = "Primary Item" }
-TexApi.makeEntityPrimary("primary-item")
-TexApi.setDescriptor { descriptor = "Description", description = [[Different than \nameref{other-item}.]] }
+TexApi.newEntity { type = "npcs", label = "primary-npc", name = "Primary NPC" }
+TexApi.makeEntityPrimary("primary-npc")
+TexApi.setDescriptor { descriptor = "Description", description = [[Different than \nameref{other-npc}.]] }
 TexApi.addParent { parentLabel = "some-organisation" }
 
-TexApi.newEntity { type = "items", label = "mentioned-item", name = "Mentioned Item" }
-TexApi.mention("mentioned-item")
+TexApi.newEntity { type = "npcs", label = "mentioned-npc", name = "Mentioned NPC" }
+TexApi.mention("mentioned-npc")
 
-TexApi.newEntity { type = "items", label = "other-item", name = "Other Item" }
+TexApi.newEntity { type = "npcs", label = "other-npc", name = "Other NPC" }
 
-TexApi.newEntity { type = "items", label = "not-mentioned-item", name = "Not mentioned Item" }
+TexApi.newEntity { type = "npcs", label = "not-mentioned-npc", name = "Not mentioned NPC" }
 
-TexApi.newEntity { type = "organisations", label = "some-organisation", name = "Some Organisation" }
+TexApi.newEntity { type = "other", label = "some-organisation", name = "Some Organisation" }
 
 local expected = {}
-Append(expected, [[\chapter{]] .. CapFirst(Tr("things")) .. [[}]])
-Append(expected, [[\section{]] .. CapFirst(Tr("items")) .. [[}]])
-Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("items")) .. [[}]])
+Append(expected, [[\chapter{]] .. CapFirst(Tr("characters")) .. [[}]])
+Append(expected, [[\section{]] .. CapFirst(Tr("npcs")) .. [[}]])
+Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("npcs")) .. [[}]])
 Append(expected, [[\begin{itemize}]])
-Append(expected, [[\item \nameref{primary-item}]])
+Append(expected, [[\item \nameref{primary-npc}]])
 Append(expected, [[\end{itemize}]])
 Append(expected, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
-Append(expected, [[\subsubsection{Primary Item}]])
-Append(expected, [[\label{primary-item}]])
+Append(expected, [[\subsubsection{Primary NPC}]])
+Append(expected, [[\label{primary-npc}]])
 Append(expected, [[\paragraph{]] .. CapFirst(Tr("affiliations")) .. [[}]])
 Append(expected, [[\begin{itemize}]])
 Append(expected, [[\item ]] .. CapFirst(Tr("member")) .. [[ ]] .. Tr("of") .. [[ \nameref{some-organisation}.]])
 Append(expected, [[\end{itemize}]])
 Append(expected, [[\paragraph{Description}]])
-Append(expected, [[Different than \nameref{other-item}.]])
+Append(expected, [[Different than \nameref{other-npc}.]])
 
 Append(expected, [[\chapter{]] .. CapFirst(Tr("only-mentioned")) .. [[}]])
-Append(expected, [[\subparagraph{Mentioned Item}]])
-Append(expected, [[\label{mentioned-item}]])
+Append(expected, [[\subparagraph{Mentioned NPC}]])
+Append(expected, [[\label{mentioned-npc}]])
 Append(expected, [[\hspace{1cm}]])
-Append(expected, [[\subparagraph{Other Item}]])
-Append(expected, [[\label{other-item}]])
+Append(expected, [[\subparagraph{Other NPC}]])
+Append(expected, [[\label{other-npc}]])
 Append(expected, [[\hspace{1cm}]])
 Append(expected, [[\subparagraph{Some Organisation}]])
 Append(expected, [[\label{some-organisation}]])

@@ -14,7 +14,7 @@ end
 TexApi.selectLanguage = selectLanguage
 
 local function addTranslation(arg)
-    if not IsArgOk("addTranslation", arg, {"language", "key", "translation"}, {}) then
+    if not IsArgOk("addTranslation", arg, { "language", "key", "translation" }, {}) then
         return
     end
     if Dictionaries[arg.language] == nil then
@@ -28,7 +28,7 @@ TexApi.addTranslation = addTranslation
 function Tr(keyword, additionalArguments)
     local translation = currentDictionary[keyword]
     if translation == nil then
-        LogError("Could not find translation for keyword " .. DebugPrint(keyword))
+        LogError("Could not find translation for keyword \"" .. keyword .. "\".")
         translation = keyword:upper()
     end
     if additionalArguments ~= nil then

@@ -85,7 +85,7 @@ local function generateExpected(typename, includesShortname, includesSubname)
     return out
 end
 
-for key, typename in pairs({ "places", "classes" }) do
+for key, typename in pairs({ "places", "other" }) do
     for key, includesShortname in pairs({ false, true }) do
         for key, includesSubname in pairs({ false, true }) do
             setupTest(typename, includesShortname, includesSubname)

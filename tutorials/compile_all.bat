@@ -11,8 +11,8 @@ FOR /D %%d IN (*) DO (
 )
 
 echo "All .tex files were successfully compiled."
-
-exit
+exit 0
 :error
 cd ..
-set /p DUMMY=An error occurred. Press [Enter] to continue...
+echo "An error occurred during compilation."
+exit 1

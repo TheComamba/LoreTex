@@ -266,5 +266,9 @@ end
 function RpgTexTests(testFiles)
     prepareFunctionsWrappers()
     runTests(testFiles)
-    tex.print(printResults())
+    if IsThrowOnError and numFailed > 0 then
+        error("Some asserts failed.")
+    else
+        tex.print(printResults())
+    end
 end

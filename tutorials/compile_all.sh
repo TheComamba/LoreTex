@@ -8,7 +8,7 @@ for dir in */ ; do
         lualatex --interaction=batchmode "$file"
 
         if [ $? -ne 0 ] ; then
-            read -p "An error occurred. Press [Enter] to continue."
+            echo "An error occurred during compilation."
             exit 1
         fi
     done

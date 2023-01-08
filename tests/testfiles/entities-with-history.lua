@@ -45,8 +45,6 @@ local function generateExpected(isSecondAdded)
     return out
 end
 
-IsShowFuture = false
-
 local out = TexApi.automatedChapters()
 
 local expected = generateExpected(false)

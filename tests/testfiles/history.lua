@@ -28,7 +28,7 @@ TexApi.newEntity { type = "places", label = "test-2", name = "Test 2" }
 TexApi.addHistory { year = -5,
     event = [[Event that concerns \reference{test-1}, but not \reference{test-2}.\notconcerns{test-2}]] }
 
-local function generateExpected(isCurrentDaySet)
+local function generateExpected(isCurrentDaySet, isShowFuture)
     local out = {}
     Append(out, [[\chapter{]] .. CapFirst(Tr("places")) .. [[}]])
     Append(out, [[\section{]] .. CapFirst(Tr("places")) .. [[}]])
@@ -71,7 +71,7 @@ local function generateExpected(isCurrentDaySet)
         Append(out, [[\item 0, ]] .. Tr("day") .. [[ 9 (]] .. Tr("yesterday") .. [[):\\Event yesterday.]])
         Append(out, [[\item 0, ]] .. Tr("day") .. [[ 10 (]] .. Tr("today") .. [[):\\Event today.]])
 
-        if IsShowFuture then
+        if isShowFuture then
             Append(out, [[\item 0, ]] .. Tr("day") .. [[ 11 (]] .. Tr("tomorrow") .. [[):\\Event tomorrow.]])
             Append(out,
                 [[\item 0, ]] ..
@@ -92,7 +92,7 @@ local function generateExpected(isCurrentDaySet)
     end
 
 
-    if IsShowFuture then
+    if isShowFuture then
         Append(out, [[\item 1 (]] .. Tr("next-year") .. [[):\\Event next year.]])
         if isCurrentDaySet then
             Append(out,
@@ -116,25 +116,24 @@ local function generateExpected(isCurrentDaySet)
     return out
 end
 
-IsShowFuture = false
+TexApi.showFuture(false)
 local out = TexApi.automatedChapters()
-local expected = generateExpected(false)
+local expected = generateExpected(false, false)
 Assert("history-events-no-future-day-not-set", expected, out)
 
-IsShowFuture = true
+TexApi.showFuture(true)
 out = TexApi.automatedChapters()
-expected = generateExpected(false)
+expected = generateExpected(false, true)
 Assert("history-events-with-future-day-not-set", expected, out)
-
 
 TexApi.setCurrentDay(10)
 
-IsShowFuture = false
+TexApi.showFuture(false)
 local out = TexApi.automatedChapters()
-local expected = generateExpected(true)
+local expected = generateExpected(true, false)
 Assert("history-events-no-future-day-set", expected, out)
 
-IsShowFuture = true
+TexApi.showFuture(true)
 out = TexApi.automatedChapters()
-expected = generateExpected(true)
+expected = generateExpected(true, true)
 Assert("history-events-with-future-day-set", expected, out)

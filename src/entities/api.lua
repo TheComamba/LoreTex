@@ -5,13 +5,6 @@ end
 
 TexApi.declarePC = declarePC
 
-local function reveal(label)
-    UniqueAppend(RevealedLabels, label)
-    UniqueAppend(PrimaryRefs, label)
-end
-
-TexApi.reveal = reveal
-
 local function newEntity(arg)
     if not IsArgOk("newEntity", arg, { "type", "label", "name" }, { "shortname" }) then
         return

@@ -8,7 +8,6 @@ TexApi.born { year = -20, event = "Birth." }
 
 TexApi.makeAllEntitiesPrimary()
 
-IsShowFuture = false
 local out = TexApi.automatedChapters()
 
 local expected = {

@@ -2,8 +2,4 @@
 \newcommand{\newNPC}[3]{\directlua{TexApi.newCharacter{ label = "#1", shortname = [[\detokenize{#2}]], name = [[\detokenize{#3}]] }}}
 \newcommand{\declarePC}[1]{\directlua{TexApi.declarePC("#1")}}
 \newcommand{\addDescriptor}[3][]{\directlua{TexApi.setDescriptor{ descriptor = [[\detokenize{#2}]], description = [[\detokenize{#3}]], subdescriptor = [[\detokenize{#1}]] }}}
-
-\newcommand{\reveal}[1]{\directlua{TexApi.reveal("#1")}}
-\newcommand{\showSecrets}{\directlua{IsShowSecrets = true}}
-
 \newcommand{\automatedChapters}{\directlua{tex.print(TexApi.automatedChapters())}}

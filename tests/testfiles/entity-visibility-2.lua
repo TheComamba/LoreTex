@@ -18,7 +18,7 @@ local function generateHistoryParagraph()
     return out
 end
 
-local function generateExpected(isItemReferenced)
+local function generateExpected(isItemReferenced, isShowSecrets)
     local out = {}
     Append(out, [[\chapter{]] .. CapFirst(Tr("chronologies")) .. [[}]])
     Append(out, [[\section{]] .. CapFirst(Tr("stories")) .. [[}]])
@@ -29,7 +29,7 @@ local function generateExpected(isItemReferenced)
     Append(out, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
     Append(out, [[\subsubsection{Teststory}]])
     Append(out, [[\label{teststory}]])
-    if IsShowSecrets then
+    if isShowSecrets then
         Append(out, generateHistoryParagraph())
         if isItemReferenced then
             Append(out, [[\chapter{]] .. CapFirst(Tr("other")) .. [[}]])
@@ -55,23 +55,23 @@ end
 local expected = {}
 local received = {}
 
-IsShowSecrets = false
-expected = generateExpected(false)
+TexApi.showSecrets(false)
+expected = generateExpected(false, false)
 received = TexApi.automatedChapters()
 Assert("entity-secrecey-two-do-not-show-secrets", expected, received)
 
-IsShowSecrets = true
-expected = generateExpected(false)
+TexApi.showSecrets(true)
+expected = generateExpected(false, true)
 received = TexApi.automatedChapters()
 Assert("entity-secrecey-two-show-secrets", expected, received)
 
 TexApi.makeEntityPrimary("secret-item")
-IsShowSecrets = false
-expected = generateExpected(true)
+TexApi.showSecrets(false)
+expected = generateExpected(true, false)
 received = TexApi.automatedChapters()
 Assert("entity-secrecey-two-do-not-show-secrets", expected, received)
 
-IsShowSecrets = true
-expected = generateExpected(true)
+TexApi.showSecrets(true)
+expected = generateExpected(true, true)
 received = TexApi.automatedChapters()
 Assert("entity-secrecey-two-show-secrets", expected, received)

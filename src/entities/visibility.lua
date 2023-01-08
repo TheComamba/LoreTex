@@ -1,12 +1,33 @@
-IsShowFuture = true
-IsShowSecrets = false
-RevealedLabels = {}
+local isShowFuture = false
+local isShowSecrets = false
+local revealedLabels = {}
 
 StateResetters[#StateResetters + 1] = function()
-    IsShowFuture = true
-    IsShowSecrets = false
-    RevealedLabels = {}
+    isShowFuture = false
+    isShowSecrets = false
+    revealedLabels = {}
 end
+
+TexApi.showSecrets = function(isShow)
+    if isShow == nil then
+        isShow = true
+    end
+    isShowSecrets = isShow
+end
+
+TexApi.showFuture = function(isShow)
+    if isShow == nil then
+        isShow = true
+    end
+    isShowFuture = isShow
+end
+
+local function reveal(label)
+    UniqueAppend(revealedLabels, label)
+    UniqueAppend(PrimaryRefs, label)
+end
+
+TexApi.reveal = reveal
 
 function IsEntitySecret(entity)
     if entity == nil then
@@ -24,21 +45,21 @@ function IsEntitySecret(entity)
 end
 
 function IsRevealed(entity)
-    return IsIn(GetProtectedStringField(entity, "label"), RevealedLabels)
+    return IsIn(GetProtectedStringField(entity, "label"), revealedLabels)
 end
 
 function IsEntityUnrevealed(entity)
-    if IsShowSecrets then
+    if isShowSecrets then
         return false
     end
     return IsEntitySecret(entity) and (not IsRevealed(entity))
 end
 
 function IsEntityShown(entity)
-    if not IsBorn(entity) and not IsShowFuture then
+    if not IsBorn(entity) and not isShowFuture then
         return false
     elseif IsEntitySecret(entity) then
-        if IsRevealed(entity) or IsShowSecrets then
+        if IsRevealed(entity) or isShowSecrets then
             return true
         else
             return false
@@ -93,9 +114,9 @@ function IsHistoryShown(historyItem)
         return false
     elseif not isAllConcnernsAndMentionsShown(historyItem) then
         return false
-    elseif not IsShowFuture and IsFutureEvent(historyItem) then
+    elseif not isShowFuture and IsFutureEvent(historyItem) then
         return false
-    elseif not IsShowSecrets then
+    elseif not isShowSecrets then
         local isSecret = GetProtectedInheritableField(historyItem, "isSecret")
         if isSecret ~= nil and isSecret then
             return false

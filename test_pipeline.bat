@@ -7,7 +7,7 @@ cd ..
 
 cd tutorials
 echo "Compiling tutorials..."
-./compile_all.sh || goto :error
+compile_all.bat || goto :error
 cd ..
 
 exit 0

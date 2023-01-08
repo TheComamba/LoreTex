@@ -8,7 +8,10 @@ end
 
 function GetAllLabels(entity)
     local out = {}
-    UniqueAppend(out, GetProtectedStringField(entity, "label"))
+    local label = GetProtectedStringField(entity, "label")
+    if not IsLabelGenerated(label) then
+        UniqueAppend(out, label)
+    end
     for key, val in pairs(entity) do
         if not IsProtectedDescriptor(key) and IsEntity(val) then
             UniqueAppend(out, GetAllLabels(val))

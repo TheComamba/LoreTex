@@ -1,3 +1,19 @@
+local generatedLabelFlag = [[GENERATED_LABEL\throwsInTex{}]]
+local labelCounter = 0
+
+StateResetters[#StateResetters + 1] = function()
+    labelCounter = 0
+end
+
+local function newUniqueLabel(name)
+    labelCounter = labelCounter + 1
+    return generatedLabelFlag .. LabelFromName(name) .. "-" .. labelCounter
+end
+
+function IsLabelGenerated(label)
+    return label:find(generatedLabelFlag, 1, true) == 1
+end
+
 local function extractLabel(arg)
     local labels = ScanStringForCmd(arg.content, "label")
     for i = 2, #labels do
@@ -6,7 +22,7 @@ local function extractLabel(arg)
     if #labels > 0 then
         return labels[1]
     else
-        return LabelFromName(arg.name)
+        return newUniqueLabel(arg.name)
     end
 end
 

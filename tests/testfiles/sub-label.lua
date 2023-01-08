@@ -75,7 +75,6 @@ local expected = {
     [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("npcs")) .. [[}]],
     [[\begin{itemize}]],
     [[\item \nameref{also-primary}]],
-    [[\item \nameref{some-paragraph}]],
     [[\item \nameref{sublabel-1}]],
     [[\item \nameref{sublabel-2}]],
     [[\end{itemize}]],
@@ -136,7 +135,6 @@ Append(expected, [[\item \nameref{subpara-with-label}]])
 Append(expected, [[\item \nameref{para-labeled-subs}]])
 Append(expected, [[\item \nameref{sublabel}]])
 Append(expected, [[\item \nameref{some-npc}]])
-Append(expected, [[\item \nameref{unusual-paragraph}]])
 Append(expected, [[\end{itemize}]])
 Append(expected, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
 Append(expected, [[\subsubsection{Some NPC}]])
@@ -153,3 +151,37 @@ Append(expected, unusualPara)
 local out = TexApi.automatedChapters()
 
 Assert("Subparagraphs with and without labels", expected, out)
+
+ResetState()
+
+TexApi.newEntity { type = "places", label = "place-1", name = "Place 1" }
+TexApi.setDescriptor { descriptor = "Appears Twice", description = [[\subparagraph{One}\label{one}]] }
+TexApi.newEntity { type = "places", label = "place-2", name = "Place 2" }
+TexApi.setDescriptor { descriptor = "Appears Twice", description = [[\subparagraph{Two}\label{two}]] }
+TexApi.makeAllEntitiesPrimary()
+
+local expected = {}
+Append(expected, [[\chapter{]] .. CapFirst(Tr("places")) .. [[}]])
+Append(expected, [[\section{]] .. CapFirst(Tr("places")) .. [[}]])
+Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("places")) .. [[}]])
+Append(expected, [[\begin{itemize}]])
+Append(expected, [[\item \nameref{one}]])
+Append(expected, [[\item \nameref{place-1}]])
+Append(expected, [[\item \nameref{place-2}]])
+Append(expected, [[\item \nameref{two}]])
+Append(expected, [[\end{itemize}]])
+Append(expected, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
+Append(expected, [[\subsubsection{Place 1}]])
+Append(expected, [[\label{place-1}]])
+Append(expected, [[\paragraph{Appears Twice}]])
+Append(expected, [[\subparagraph{One}]])
+Append(expected, [[\label{one}]])
+Append(expected, [[\subsubsection{Place 2}]])
+Append(expected, [[\label{place-2}]])
+Append(expected, [[\paragraph{Appears Twice}]])
+Append(expected, [[\subparagraph{Two}]])
+Append(expected, [[\label{two}]])
+
+local out = TexApi.automatedChapters()
+
+Assert("Unlabeled paragraph with labeled subpara appears twice", expected, out)

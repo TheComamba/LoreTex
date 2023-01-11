@@ -1,6 +1,6 @@
 local function historyItemToString(historyItem, isPrintDate)
     local event = GetProtectedStringField(historyItem, "content")
-    local isSecret = GetProtectedInheritableField(historyItem, "isSecret") or IsConcernsOrMentionsSecret(historyItem)
+    local isSecret = GetProtectedNullableField(historyItem, "isSecret") or IsConcernsOrMentionsSecret(historyItem)
     local out = {}
     if isPrintDate then
         Append(out, YearAndDayString(historyItem))
@@ -46,7 +46,7 @@ local function deleteDuplicateHistoryItems(items)
 end
 
 local function addHistoryDescriptors(entity)
-    local historyItems = GetProtectedTableField(entity, "historyItems")
+    local historyItems = GetProtectedTableReferenceField(entity, "historyItems")
     historyItems = deleteDuplicateHistoryItems(historyItems)
     Sort(historyItems, "compareHistoryItems")
     local processedHistory = {}
@@ -62,6 +62,6 @@ local function addHistoryDescriptors(entity)
 end
 
 function ProcessHistory(entity)
-    AddLifestageHistoryItemsToNPC(entity)
+    AddLifestageHistoryItems(entity)
     addHistoryDescriptors(entity)
 end

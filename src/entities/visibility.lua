@@ -33,7 +33,7 @@ function IsEntitySecret(entity)
     if entity == nil then
         return false
     end
-    local isSecret = GetProtectedInheritableField(entity, "isSecret")
+    local isSecret = GetProtectedNullableField(entity, "isSecret")
     if isSecret == nil then
         return false
     end
@@ -70,13 +70,13 @@ function IsEntityShown(entity)
 end
 
 function IsLocationUnrevealed(entity)
-    local location = GetProtectedInheritableField(entity, "location")
+    local location = GetProtectedNullableField(entity, "location")
     return IsEntityUnrevealed(location)
 end
 
 local function concernesAndMentions(historyItem)
-    local out = GetProtectedTableField(historyItem, "concerns")
-    for key, mentions in pairs(GetProtectedTableField(historyItem, "mentions")) do
+    local out = GetProtectedTableReferenceField(historyItem, "concerns")
+    for key, mentions in pairs(GetProtectedTableReferenceField(historyItem, "mentions")) do
         out[#out + 1] = mentions
     end
     return out
@@ -117,7 +117,7 @@ function IsHistoryShown(historyItem)
     elseif not isShowFuture and IsFutureEvent(historyItem) then
         return false
     elseif not isShowSecrets then
-        local isSecret = GetProtectedInheritableField(historyItem, "isSecret")
+        local isSecret = GetProtectedNullableField(historyItem, "isSecret")
         if isSecret ~= nil and isSecret then
             return false
         elseif isConcernsOrMentionsUnrevealed(historyItem) then

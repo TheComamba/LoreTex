@@ -115,7 +115,7 @@ function CreateBenchmarkingTest(sizeStr)
         TexApi.setAgeFactor(i)
         TexApi.makeEntityPrimary("species-" .. i)
 
-        TexApi.newEntity { type = "organisations", label = "organisation-" .. i, name = "Organisation " .. i }
+        TexApi.newEntity { type = "other", label = "organisation-" .. i, name = "Organisation " .. i }
         TexApi.makeEntityPrimary("organisation-" .. i)
         if i > 1 then
             TexApi.setLocation("place-" .. (i - 1))

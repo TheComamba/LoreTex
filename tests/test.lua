@@ -1,4 +1,5 @@
 local allTestFiles = {}
+Append(allTestFiles, "age-modifiers")
 Append(allTestFiles, "calendars")
 Append(allTestFiles, "common")
 Append(allTestFiles, "comparer")
@@ -10,6 +11,7 @@ Append(allTestFiles, "entities-with-associations")
 Append(allTestFiles, "entities-with-history")
 Append(allTestFiles, "entity-visibility")
 Append(allTestFiles, "entity-visibility-2")
+Append(allTestFiles, "height-descriptor")
 Append(allTestFiles, "history")
 Append(allTestFiles, "make-primary-if")
 Append(allTestFiles, "marked-entities")
@@ -199,9 +201,9 @@ local function prepareFunctionsWrappers()
     for key, fun in pairs(TexApi) do
         apiFunctionUsage[key] = 0
         local actualFunction = TexApi[key]
-        TexApi[key] = function(arg)
+        TexApi[key] = function(...)
             apiFunctionUsage[key] = apiFunctionUsage[key] + 1
-            return actualFunction(arg)
+            return actualFunction(...)
         end
     end
     local actualTr = Tr

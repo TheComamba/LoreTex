@@ -1,6 +1,6 @@
 local function addParentDescriptorsToChild(child)
     local parentList = {}
-    local parentsAndRelationships = GetProtectedTableField(child, "parents")
+    local parentsAndRelationships = GetProtectedTableReferenceField(child, "parents", false)
     Sort(parentsAndRelationships, "compareAffiliations")
     for key, parentAndRelationship in pairs(parentsAndRelationships) do
         local parent = parentAndRelationship[1]
@@ -33,20 +33,20 @@ local function entityQualifiersString(child, parent, relationships)
     for key, relationship in pairs(relationships) do
         Append(content, relationship)
     end
-    local birthyearstr = GetProtectedInheritableField(child, "born")
+    local birthyearstr = GetProtectedNullableField(child, "born")
     local birthyear = tonumber(birthyearstr)
     if birthyear ~= nil and birthyear <= GetCurrentYear() then
         birthyear = AddYearOffset(birthyear, YearFmt)
         Append(content, TexCmd("textborn") .. birthyear)
     end
-    local deathyearstr = GetProtectedInheritableField(child, "died")
+    local deathyearstr = GetProtectedNullableField(child, "died")
     local deathyear = tonumber(deathyearstr)
     if deathyear ~= nil and deathyear <= GetCurrentYear() then
         deathyear = AddYearOffset(deathyear, YearFmt)
         Append(content, TexCmd("textdied") .. deathyear)
     end
-    local childLocation = GetProtectedInheritableField(child, "location")
-    local parentLocation = GetProtectedInheritableField(parent, "location")
+    local childLocation = GetProtectedNullableField(child, "location")
+    local parentLocation = GetProtectedNullableField(parent, "location")
     if IsLocationUnrevealed(child) then
         Append(content, Tr("at-secret-location"))
     elseif childLocation ~= nil then
@@ -84,7 +84,7 @@ local function addSingleChildDescriptorToParent(child, parent, relationships)
 end
 
 local function getRelationships(child, parent)
-    local parents = GetProtectedTableField(child, "parents")
+    local parents = GetProtectedTableReferenceField(child, "parents")
     local relationships = {}
     for key, parentAndRelationship in pairs(parents) do
         local affiliationLabel = GetProtectedStringField(parentAndRelationship[1], "label")
@@ -101,7 +101,7 @@ local function getRelationships(child, parent)
 end
 
 local function addChildrenDescriptorsToParent(parent)
-    local children = GetProtectedTableField(parent, "children")
+    local children = GetProtectedTableReferenceField(parent, "children", false)
     Sort(children, "compareByName")
     for key, child in pairs(children) do
         if IsEntityShown(child) then

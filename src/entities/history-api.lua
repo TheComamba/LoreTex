@@ -76,7 +76,7 @@ local function addConcerns(entity, content)
 	end
 	if GetProtectedNullableField(entity, "isConcernsOthers") then
 		local concernesLabels = {}
-		for key, mentioned in pairs(GetProtectedTableField(entity, "mentions")) do
+		for key, mentioned in pairs(GetProtectedTableReferenceField(entity, "mentions")) do
 			local label = GetProtectedStringField(mentioned, "label")
 			if label ~= "" then
 				UniqueAppend(concernesLabels, label)
@@ -84,8 +84,8 @@ local function addConcerns(entity, content)
 		end
 		if GetProtectedNullableField(entity, "year") ~= nil then
 			UniqueAppend(concernesLabels, ScanStringForCmd(content, "concerns"))
-			UniqueAppend(concernesLabels, GetProtectedTableFieldReference(entity, "birthof"))
-			UniqueAppend(concernesLabels, GetProtectedTableFieldReference(entity, "deathof"))
+			UniqueAppend(concernesLabels, GetProtectedTableReferenceField(entity, "birthof"))
+			UniqueAppend(concernesLabels, GetProtectedTableReferenceField(entity, "deathof"))
 		end
 		local notConcerns = ScanForCmd(content, "notconcerns")
 		for key, concernedLabel in pairs(concernesLabels) do
@@ -116,18 +116,18 @@ local function processEvent(item)
 	local content = GetProtectedStringField(item, "content")
 	AddMentions(item, content)
 	addConcerns(item, content)
-	for key, entity in pairs(GetProtectedTableField(item, "concerns")) do
+	for key, entity in pairs(GetProtectedTableReferenceField(item, "concerns")) do
 		AddToProtectedField(entity, "historyItems", item)
 	end
 
 	local year = GetProtectedNullableField(item, "year")
-	addSpecialyearsToEntities("born", year, GetProtectedTableFieldReference(item, "birthof"))
-	addSpecialyearsToEntities("died", year, GetProtectedTableFieldReference(item, "deathof"))
+	addSpecialyearsToEntities("born", year, GetProtectedTableReferenceField(item, "birthof"))
+	addSpecialyearsToEntities("died", year, GetProtectedTableReferenceField(item, "deathof"))
 
 	if IsEmpty(GetProtectedNullableField(item, "day")) then
 		SetProtectedField(item, "day", nil)
 	end
-	if IsEmpty(GetProtectedTableField(item, "concerns")) then
+	if #(GetProtectedTableReferenceField(item, "concerns")) == 0 then
 		LogError("This history item concerns nobody:" .. DebugPrint(item))
 	end
 end

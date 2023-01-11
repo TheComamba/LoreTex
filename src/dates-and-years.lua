@@ -8,7 +8,7 @@ IsDaysPerYearSet = false
 YearFmt = {}
 DayFmt = {}
 
-StateResetters[#StateResetters+1] = function ()
+StateResetters[#StateResetters + 1] = function()
     currentYear = 0
     IsCurrentYearSet = false
     currentDay = 0
@@ -271,7 +271,7 @@ function DayString(day, fmt)
     Append(out, Tr("day") .. " ")
     Append(out, day)
     for key, calendar in pairs(fmt) do
-        local monthsAndDays = GetProtectedTableField(calendar, "monthsAndFirstDays")
+        local monthsAndDays = GetProtectedTableReferenceField(calendar, "monthsAndFirstDays")
         local month, dayOfMonth = monthAndDay(day, monthsAndDays)
         Append(out, [[ / ]])
         Append(out, dayOfMonth)

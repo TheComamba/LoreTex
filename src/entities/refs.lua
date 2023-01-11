@@ -97,7 +97,7 @@ local function makeEntityAndChildrenPrimary(label)
         LogError("Entity with label \"" .. label .. "\" not found.")
         return
     end
-    for key, child in pairs(GetProtectedTableField(entity, "children")) do
+    for key, child in pairs(GetProtectedTableReferenceField(entity, "children")) do
         UniqueAppend(PrimaryRefs, GetProtectedStringField(child, "label"))
     end
 end

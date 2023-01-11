@@ -4,15 +4,13 @@ StateResetters[#StateResetters + 1] = function()
     PCs = {}
 end
 
-function AddSpeciesAndAgeStringToNPC(entity)
-    if IsType("characters", entity) then
-        local speciesAndAgeStr = SpeciesAndAgeString(entity)
-        if speciesAndAgeStr ~= "" then
-            SetDescriptor { entity = entity,
-                descriptor = Tr("appearance"),
-                subdescriptor = CapFirst(Tr("species-and-age")) .. ":",
-                description = speciesAndAgeStr }
-        end
+function AddSpeciesAndAgeString(entity)
+    local speciesAndAgeStr = SpeciesAndAgeString(entity)
+    if speciesAndAgeStr ~= "" then
+        SetDescriptor { entity = entity,
+            descriptor = Tr("appearance"),
+            subdescriptor = CapFirst(Tr("species-and-age")) .. ":",
+            description = speciesAndAgeStr }
     end
 end
 
@@ -25,7 +23,7 @@ function IsDead(entity)
 end
 
 local function getYear(entity, key)
-    local value = GetProtectedInheritableField(entity, key)
+    local value = GetProtectedNullableField(entity, key)
     if value == nil then
         return nil
     end

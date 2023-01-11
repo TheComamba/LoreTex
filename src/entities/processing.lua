@@ -5,9 +5,9 @@ StateResetters[#StateResetters + 1] = function()
 end
 
 local function collectMentionedEntities(entity)
-    local out = GetProtectedTableField(entity, "mentions")
-    for key, item in pairs(GetProtectedTableField(entity, "historyItems")) do
-        for key2, concern in pairs(GetProtectedTableField(item, "mentions")) do
+    local out = GetProtectedTableCopyField(entity, "mentions")
+    for key, item in pairs(GetProtectedTableReferenceField(entity, "historyItems")) do
+        for key2, concern in pairs(GetProtectedTableReferenceField(item, "mentions")) do
             out[#out + 1] = concern
         end
     end
@@ -16,10 +16,10 @@ end
 
 local function addAutomatedDescriptors(entity)
     AddAffiliationDescriptors(entity)
-    AddSpeciesAndAgeStringToNPC(entity)
+    AddSpeciesAndAgeString(entity)
     AddLifeStagesToSpecies(entity)
-    ProcessHistory(entity)
     AddHeightDescriptor(entity)
+    ProcessHistory(entity)
 end
 
 local function addPrimariesWhenMentioned(arg, mentioned)
@@ -47,7 +47,7 @@ local function addEntityToDict(arg, newEntity)
     if IsLocationUnrevealed(newEntity) then
         locationName = GetProtectedDescriptor("isSecret")
     else
-        local location = GetProtectedInheritableField(newEntity, "location")
+        local location = GetProtectedNullableField(newEntity, "location")
         if location ~= nil then
             locationName = PlaceToName(location)
         end

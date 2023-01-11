@@ -21,7 +21,7 @@ end
 
 local function getMixedAgeFactorAndExponent(speciesMixing)
 	if type(speciesMixing) ~= "table" or #speciesMixing ~= 2 then
-		LogError("Called with " .. DebugPrint(speciesMixing))
+		LogError("getMixedAgeFactorAndExponent called with " .. DebugPrint(speciesMixing))
 		return 1, 1
 	end
 	local species1 = GetEntity(speciesMixing[1])
@@ -36,8 +36,8 @@ local function getMixedAgeFactorAndExponent(speciesMixing)
 end
 
 function GetAgeFactorAndExponent(species)
-	local speciesMixing = GetProtectedNullableField(species, "ageMixing")
-	if not IsEmpty(speciesMixing) then
+	local speciesMixing = GetProtectedTableReferenceField(species, "ageMixing")
+	if #speciesMixing > 0 then
 		return getMixedAgeFactorAndExponent(speciesMixing)
 	end
 	local factor = GetProtectedNullableField(species, "ageFactor")
@@ -99,7 +99,7 @@ end
 
 function SpeciesAndAgeString(entity)
 	local parts = {}
-	local species = GetProtectedNullableField(entity, "species")
+	local species = GetProtectedNullableField(entity, "species", false)
 	if species ~= nil then
 		Append(parts, TexCmd("nameref ", GetProtectedStringField(species, "label")))
 	end
@@ -121,12 +121,12 @@ function SpeciesAndAgeString(entity)
 	return table.concat(out)
 end
 
-local function addLifestageHistoryItems(entity)
+function AddLifestageHistoryItems(entity)
 	local label = GetProtectedStringField(entity, "label")
 	if label == "" then
 		return
 	end
-	local birthyear = GetProtectedInheritableField(entity, "born")
+	local birthyear = GetProtectedNullableField(entity, "born")
 	if birthyear == nil then
 		return
 	end
@@ -134,7 +134,7 @@ local function addLifestageHistoryItems(entity)
 	if species == nil then
 		return
 	end
-	local deathyear = GetProtectedInheritableField(entity, "died")
+	local deathyear = GetProtectedNullableField(entity, "died")
 	local factor, exponent = GetAgeFactorAndExponent(species)
 	for i = 2, #lifestagesAndAges do
 		local lifestage = lifestagesAndAges[i][1]
@@ -156,12 +156,6 @@ local function addLifestageHistoryItems(entity)
 			AddToProtectedField(item, "mentions", entity)
 			AddToProtectedField(entity, "historyItems", item)
 		end
-	end
-end
-
-function AddLifestageHistoryItemsToNPC(entity)
-	if IsType("characters", entity) then
-		addLifestageHistoryItems(entity)
 	end
 end
 

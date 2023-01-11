@@ -1,66 +1,36 @@
-function IsProtectedDescriptor(descriptor)
-    return string ~= "" and string.sub(descriptor, 1, 1) == "_"
-end
-
-local function getProtectedField(entity, key)
-    local descriptor = GetProtectedDescriptor(key)
-    return entity[descriptor]
-end
-
-function GetProtectedNullableField(entity, key)
-    return getProtectedField(entity, key)
-end
-
-function GetProtectedStringField(entity, key)
-    local out = getProtectedField(entity, key)
-    if out == nil then
-        return ""
-    elseif type(out) ~= "string" then
-        LogError("Expected string, got " .. type(out) .. " for key \"" .. key .. "\"!")
-        return ""
-    else
-        return out
-    end
-end
-
-function GetProtectedTableFieldReference(entity, key)
-    local out = getProtectedField(entity, key)
-    if out == nil then
-        return {}
-    elseif type(out) ~= "table" then
-        LogError("Expected table, got " .. type(out) .. " for key \"" .. key .. "\"!")
-        return {}
-    else
-        return out
-    end
-end
-
-function GetProtectedTableField(entity, key)
-    return DeepCopy(GetProtectedTableFieldReference(entity, key))
-end
-
-function SetProtectedField(entity, key, value)
-    local descriptor = GetProtectedDescriptor(key)
-    entity[descriptor] = value
-end
-
-function AddToProtectedField(entity, key, value)
-    local descriptor = GetProtectedDescriptor(key)
-    if entity[descriptor] == nil then
-        entity[descriptor] = {}
-    end
-    entity[descriptor][#entity[descriptor] + 1] = value
-end
-
 TexApi.setAgeExponent = function(exponent)
+    if tonumber(exponent) == nil then
+        LogError("Age exponent must be a number. Function called with:" .. DebugPrint(exponent))
+        return
+    end
+    if CurrentEntity == nil then
+        LogError("Trying to set age exponent for no entity!")
+        return
+    end
     SetProtectedField(CurrentEntity, "ageExponent", exponent)
 end
 
 TexApi.setAgeFactor = function(factor)
+    if tonumber(factor) == nil then
+        LogError("Age factor must be a number. Function called with:" .. DebugPrint(factor))
+        return
+    end
+    if CurrentEntity == nil then
+        LogError("Trying to set age factor for no entity!")
+        return
+    end
     SetProtectedField(CurrentEntity, "ageFactor", factor)
 end
 
 TexApi.setAgeModifierMixing = function(species1, species2)
+    if species1 == nil or species2 == nil or type(species1) ~= "string" or type(species2) ~= "string" then
+        LogError("setAgeModifierMixing called with:" .. DebugPrint { species1, species2 })
+        return
+    end
+    if CurrentEntity == nil then
+        LogError("Trying to set age modifier mixing for no entity!")
+        return
+    end
     SetProtectedField(CurrentEntity, "ageMixing", { species1, species2 })
 end
 
@@ -124,16 +94,4 @@ function MakePartOf(arg)
         return
     end
     SetProtectedField(arg.subEntity, "partOf", arg.mainEntity)
-end
-
-function GetProtectedInheritableField(entity, key)
-    local field = GetProtectedNullableField(entity, key)
-    if field ~= nil then
-        return field
-    end
-    local super = GetProtectedNullableField(entity, "partOf")
-    if super ~= nil then
-        return GetProtectedInheritableField(super, key)
-    end
-    return nil
 end

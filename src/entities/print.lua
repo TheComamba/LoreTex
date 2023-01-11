@@ -86,7 +86,7 @@ local function printEntityChapterSortedByLocation(entities)
     end
 
     local sectionname = Tr("at-secret-locations")
-    local entitiesAtSecretLocations = GetProtectedTableField(entities, "isSecret")
+    local entitiesAtSecretLocations = GetProtectedTableReferenceField(entities, "isSecret")
     Append(out, printEntities(sectionname, entitiesAtSecretLocations))
 
     return out

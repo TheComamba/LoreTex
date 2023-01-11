@@ -7,12 +7,13 @@ local function distanceToHorizon(heightInM)
 end
 
 function AddHeightDescriptor(entity)
-    local heightInM = GetProtectedInheritableField(entity, "height")
+    local heightInM = GetProtectedNullableField(entity, "height", false)
     if heightInM == nil then
         return
     end
     local toHorizon = distanceToHorizon(heightInM)
-    local toHorizonString = RoundedNumString(toHorizon, -1)
+    local decimals = -math.floor(math.log(toHorizon / 10, 10))
+    local toHorizonString = RoundedNumString(toHorizon, decimals)
     local out = {}
     Append(out, heightInM)
     Append(out, "m (")

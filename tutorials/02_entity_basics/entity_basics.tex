@@ -5,7 +5,7 @@
 
 \begin{document}
 
-For \RpgTex{}, an entity can be almost anything that resides within the game world. The core idea of this project is to give the computer a whole bunch of entities making up the world, writing a story or adventure, and letting \RpgTex{} generate an encyclopaedia containing exactly those entities that are important.
+For \LoreTex{}, an entity can be almost anything that resides within the game world. The core idea of this project is to give the computer a whole bunch of entities making up the world, writing a story or adventure, and letting \LoreTex{} generate an encyclopaedia containing exactly those entities that are important.
 
 This last step is invoked using the automatedChapters command, which should come at the end of the document. Any entities created or used afterwards will not be included.
 
@@ -25,7 +25,7 @@ We could create another, less important item called \mention{glamdring}:
 	\newEntity{items}{glamdring}{}{Glamdring}
 \end{verbatim}
 \newEntity{items}{glamdring}{}{Glamdring}
-If we don't want \mention{glamdring} to get its own entry, we can refer to it using the mention command. \RpgTex{} will then create a chapter called Only Mentioned and list it there.
+If we don't want \mention{glamdring} to get its own entry, we can refer to it using the mention command. \LoreTex{} will then create a chapter called Only Mentioned and list it there.
 
 If you want an entity to have an entry without printing its name, use the makeEntityPrimary command instead.
 \makeEntityPrimary{nenya}

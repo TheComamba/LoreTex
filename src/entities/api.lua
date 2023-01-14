@@ -46,8 +46,8 @@ local function automatedChapters()
     Append(output, PrintOnlyMentionedChapter(processOut.mentioned))
     if HasError() then
         Append(output, TexCmd("chapter", "Logging Messages"))
-        Append(output, TexCmd("RpgTex"))
-        Append(output, " encountered errors. Call PrintRpgTexErrors to show them.")
+        Append(output, TexCmd("LoreTex"))
+        Append(output, " encountered errors. Call PrintLoreTexErrors to show them.")
     end
     if IsBenchmarkingActivated ~= nil and IsBenchmarkingActivated() then
         return {}

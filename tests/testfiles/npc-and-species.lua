@@ -40,12 +40,12 @@ local expected = {
     [[\subsubsection{Test Species}]],
     [[\label{test-species}]],
     [[\paragraph{]] .. CapFirst(Tr("lifestages")) .. [[}]],
-    [[\subparagraph{\RpgTexSort{1}]] .. CapFirst(Tr("child")) .. [[}]], [[0-12 ]] .. Tr("years"),
-    [[\subparagraph{\RpgTexSort{2}]] .. CapFirst(Tr("juvenile")) .. [[}]], [[12-20 ]] .. Tr("years"),
-    [[\subparagraph{\RpgTexSort{3}]] .. CapFirst(Tr("young")) .. [[}]], [[20-30 ]] .. Tr("years"),
-    [[\subparagraph{\RpgTexSort{4}]] .. CapFirst(Tr("adult")) .. [[}]], [[30-60 ]] .. Tr("years"),
-    [[\subparagraph{\RpgTexSort{5}]] .. CapFirst(Tr("old")) .. [[}]], [[60-90 ]] .. Tr("years"),
-    [[\subparagraph{\RpgTexSort{6}]] .. CapFirst(Tr("ancient")) .. [[}]], [[90+ ]] .. Tr("years")
+    [[\subparagraph{\LoreTexSort{1}]] .. CapFirst(Tr("child")) .. [[}]], [[0-12 ]] .. Tr("years"),
+    [[\subparagraph{\LoreTexSort{2}]] .. CapFirst(Tr("juvenile")) .. [[}]], [[12-20 ]] .. Tr("years"),
+    [[\subparagraph{\LoreTexSort{3}]] .. CapFirst(Tr("young")) .. [[}]], [[20-30 ]] .. Tr("years"),
+    [[\subparagraph{\LoreTexSort{4}]] .. CapFirst(Tr("adult")) .. [[}]], [[30-60 ]] .. Tr("years"),
+    [[\subparagraph{\LoreTexSort{5}]] .. CapFirst(Tr("old")) .. [[}]], [[60-90 ]] .. Tr("years"),
+    [[\subparagraph{\LoreTexSort{6}]] .. CapFirst(Tr("ancient")) .. [[}]], [[90+ ]] .. Tr("years")
 }
 
 Assert("npc-and-species", expected, out)

@@ -240,7 +240,7 @@ end
 local function printResults()
     local out = {}
     Append(out, TexCmd("section*", "Results"))
-    Append(out, TexCmd("RpgTex"))
+    Append(out, TexCmd("LoreTex"))
     Append(out, " ran ")
     Append(out, numSucceeded + numFailed)
     Append(out, " tests, ")
@@ -258,14 +258,14 @@ local function printResults()
         else
             usageStr = " was called " .. usage .. " times."
         end
-        Append(apiFunctionUsageOutput, TexCmd("RpgTexSort", usage) .. key .. usageStr)
+        Append(apiFunctionUsageOutput, TexCmd("LoreTexSort", usage) .. key .. usageStr)
     end
     Sort(apiFunctionUsageOutput, "compareAlphanumerical")
     Append(out, ListAll(apiFunctionUsageOutput))
     return out
 end
 
-function RpgTexTests(testFiles)
+function LoreTexTests(testFiles)
     prepareFunctionsWrappers()
     runTests(testFiles)
     if IsThrowOnError and numFailed > 0 then

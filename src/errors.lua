@@ -59,7 +59,7 @@ function PrintErrors()
     local out = {}
     if #errorMessages > 0 then
         Append(out, TexCmd("section", "Errors"))
-        Append(out, TexCmd("RpgTex"))
+        Append(out, TexCmd("LoreTex"))
         Append(out, " encountered " .. #errorMessages .. " errors:")
         Append(out, ListAll(cleanedErrors()))
         Append(out, "For a traceback, use the ThrowOnError command, rerun, and search the logfile for \"traceback\".")

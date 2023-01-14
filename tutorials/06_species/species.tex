@@ -23,7 +23,7 @@ If mingling between species is a theme in your world, you may also automatically
 \begin{verbatim}
 \setAgeModifierMixing{label-of-species-1}{label-of-species-2}
 \end{verbatim}
-\RpgTex{} then looks up the factors and exponents of the two species (default of 1, if none was specified) and takes the geometric mean:
+\LoreTex{} then looks up the factors and exponents of the two species (default of 1, if none was specified) and takes the geometric mean:
 \begin{equation}
 f_3 = \sqrt{f_1 f_2}
 \hspace{0.3cm}
@@ -33,7 +33,7 @@ e_3 = \sqrt{e_1 e_3}
 \end{equation}
 This means that the mixed species ages somewhere in between the two parent species.
 
-If you want to tell \RpgTex{} what species a character has, you can do so using the setSpecies command with the label of the species as an argument. Their corresponding human age is then calculated and displayed, and them reaching certain life stages is added to their history.
+If you want to tell \LoreTex{} what species a character has, you can do so using the setSpecies command with the label of the species as an argument. Their corresponding human age is then calculated and displayed, and them reaching certain life stages is added to their history.
 
 \setCurrentYear{3019}
 
@@ -56,7 +56,7 @@ If you want to tell \RpgTex{} what species a character has, you can do so using 
 \setAgeFactor{0.03}
 \setAgeExponent{3}
 
-\addDescriptor{Apology}{I am aware that Tolkien's elves are, in principle, immortal. Setting either factor or exponent to 0 tells \RpgTex{} exactly that, but then the AgeModifierMixing for the \nameref{dunedain} is pointless.}
+\addDescriptor{Apology}{I am aware that Tolkien's elves are, in principle, immortal. Setting either factor or exponent to 0 tells \LoreTex{} exactly that, but then the AgeModifierMixing for the \nameref{dunedain} is pointless.}
 
 \newEntity{species}{dunedain}{}{Dunedain}
 \setAgeModifierMixing{human}{elf}

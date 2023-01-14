@@ -1,20 +1,24 @@
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](code_of_conduct.md) 
 
-# RpgTex
+# LoreTex
 
 Have you ever struggled to keep your adventure notes organised? Did you copy and paste parts of your lore to different adventures set in the same world and then they ran out of sync? Do you wish to give your players an up-to-date handout but not reveal your secret details?
 
-RpgTex may not be *the* answer to these problems, but it is *my* answer. It is an extension to the Tex language for compiling pdf documents, providing an interface to define characters, places and more, and then generate a glossary containing those entities that are relevant to your story.
+LoreTex may not be *the* answer to these problems, but it is *my* answer. It is an extension to the Tex language for compiling pdf documents, providing an interface to define characters, places and more, and then generate a glossary containing those entities that are relevant to your story.
 
 ## Prerequisites
 
-RpgTex assumes that you have the LuaLaTex compiler installed.
+LoreTex assumes that you have the LuaLaTex compiler installed.
 
 All required Tex packages are included at the beginning of main.tex. Currently, these are luacode and nameref.
 
 ## Installation
 
-Clone this git repository to some place on your computer.
+Clone this git repository to some place on your computer:
+
+```bash
+git clone https://github.com/TheComamba/LoreTex.git
+```
 
 Alternatively copy the contents of this repository to some place on your computer.
 
@@ -22,7 +26,7 @@ Alternatively copy the contents of this repository to some place on your compute
 
 The tex compiler must be set to LuaLaTex. For example, in TexStudio this can be done via Options -> Configure TexStudio -> Build -> Default Compiler.
 
-The tex file using RpgTex needs to be told where to find main.tex:
+The tex file using LoreTex needs to be told where to find main.tex:
 
 ```latex
 \documentclass{book/memoir}

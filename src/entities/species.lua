@@ -167,7 +167,7 @@ local function lifestagesDescription(species)
 		local begins = stageAndAge[2]
 		begins = ageToYears(begins, factor, exponent)
 		local beginsString = RoundedNumString(begins, 0)
-		local caption = TexCmd("RpgTexSort", i) .. CapFirst(Tr(stage))
+		local caption = TexCmd("LoreTexSort", i) .. CapFirst(Tr(stage))
 		Append(out, TexCmd("subparagraph", caption))
 		Append(out, beginsString)
 		if i < #lifestagesAndAges then

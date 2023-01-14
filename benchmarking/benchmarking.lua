@@ -75,7 +75,7 @@ function PrintBenchmarking()
     if #benchmarkStrings > 0 then
         table.sort(benchmarkStrings, function(a, b) return a[1] > b[1] end)
         Append(out, TexCmd("chapter", "Benchmarking"))
-        Append(out, TexCmd("RpgTex"))
+        Append(out, TexCmd("LoreTex"))
         Append(out, " benchmarked the following functions (sorted by total runtime):")
         Append(out, TexCmd("begin", "itemize"))
         for key, timeAndString in pairs(benchmarkStrings) do

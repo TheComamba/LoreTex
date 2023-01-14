@@ -63,3 +63,12 @@ Debug.printDescriptorsImmediately = function()
         setDescriptorOriginal(arg)
     end
 end
+
+Debug.debugAutomatedChapters = function()
+    local out = TexApi.automatedChapters()
+    tex.print(TexCmd("begin", "verbatim"))
+    for i, line in pairs(out) do
+        tex.print(line)
+    end
+    tex.print(TexCmd("end", "verbatim"))
+end

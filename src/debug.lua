@@ -53,3 +53,13 @@ local function printAllTypes()
 end
 
 Debug.printAllTypes = printAllTypes
+
+Debug.printDescriptorsImmediately = function()
+    local setDescriptorOriginal = TexApi.setDescriptor
+    ---@diagnostic disable-next-line: duplicate-set-field
+    TexApi.setDescriptor = function(arg)
+        tex.print(arg.description)
+        tex.print(arg.descriptor)
+        setDescriptorOriginal(arg)
+    end
+end

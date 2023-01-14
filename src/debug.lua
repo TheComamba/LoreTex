@@ -53,3 +53,22 @@ local function printAllTypes()
 end
 
 Debug.printAllTypes = printAllTypes
+
+Debug.printDescriptorsImmediately = function()
+    local setDescriptorOriginal = TexApi.setDescriptor
+    ---@diagnostic disable-next-line: duplicate-set-field
+    TexApi.setDescriptor = function(arg)
+        tex.print(arg.description)
+        tex.print(arg.descriptor)
+        setDescriptorOriginal(arg)
+    end
+end
+
+Debug.debugAutomatedChapters = function()
+    local out = TexApi.automatedChapters()
+    tex.print(TexCmd("begin", "verbatim"))
+    for i, line in pairs(out) do
+        tex.print(line)
+    end
+    tex.print(TexCmd("end", "verbatim"))
+end

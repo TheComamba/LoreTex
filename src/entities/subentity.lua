@@ -1,4 +1,4 @@
-local generatedLabelFlag = [[GENERATED_LABEL\throwsInTex{}]]
+local generatedLabelFlag = [[GENERATED_LABEL]]
 local labelCounter = 0
 
 StateResetters[#StateResetters + 1] = function()

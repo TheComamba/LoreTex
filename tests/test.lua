@@ -1,5 +1,6 @@
 local allTestFiles = {}
 Append(allTestFiles, "age-modifiers")
+Append(allTestFiles, "aging-subentities")
 Append(allTestFiles, "calendars")
 Append(allTestFiles, "common")
 Append(allTestFiles, "comparer")

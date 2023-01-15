@@ -30,11 +30,22 @@ local function generateLabels(typename, depth)
 end
 
 local function generateEntityFromLabel(label)
-    local _, minusCount = string.gsub(label, "%-", "")
-    local hasChildren = minusCount < 2
+    local labelChain = {}
+    for elem in string.gmatch(label, "([^-]+)") do
+        Append(labelChain, elem)
+    end
+    local hasChildren = #labelChain < 3
+    local parent = ""
+    for i = 1, (#labelChain - 1) do
+        if i == 1 then
+            parent = labelChain[i]
+        else
+            parent = parent .. "-" .. labelChain[i]
+        end
+    end
     local out = {}
-    Append(out, [[subsubsection{]] .. label .. [[}]])
-    Append(out, [[label{]] .. label .. [[}]])
+    Append(out, [[\subsubsection{]] .. label .. [[}]])
+    Append(out, [[\label{]] .. label .. [[}]])
     if hasChildren then
         for key, typename in pairs(types) do
             Append(out, [[\paragraph{]] .. CapFirst(Tr("affiliated")) .. [[ ]] .. Tr(typename) .. [[}]])
@@ -43,13 +54,51 @@ local function generateEntityFromLabel(label)
             Append(out, [[\end{itemize}]])
         end
     end
+    if parent ~= "" then
+        Append(out, [[\paragraph{]] .. CapFirst(Tr("affiliations")) .. [[}]])
+        Append(out, [[\begin{itemize}]])
+        Append(out, [[\item ]] .. CapFirst(Tr("member")) .. [[ ]] .. Tr("of") .. [[ \nameref{]] .. parent .. [[}.]])
+        Append(out, [[\end{itemize}]])
+    end
+    return out
+end
+
+local function generateMentioned(labels)
+    local out = {}
+    for key1, label in pairs(labels) do
+        local labelChain = {}
+        for elem in string.gmatch(label, "([^-]+)") do
+            Append(labelChain, elem)
+        end
+        local hasChildren = #labelChain < 3
+        if hasChildren then
+            for key2, typename in pairs(types) do
+                local child = label .. "-" .. typename
+                if not IsIn(child, labels) then
+                    UniqueAppend(out, child)
+                end
+            end
+        end
+        local parent = ""
+        for i = 1, (#labelChain - 1) do
+            if i == 1 then
+                parent = labelChain[i]
+            else
+                parent = parent .. "-" .. labelChain[i]
+            end
+        end
+        if parent ~= "" and not IsIn(parent, labels) then
+            UniqueAppend(out, parent)
+        end
+    end
     return out
 end
 
 local function generateExpected(arg)
     local out = {}
+    local primaryLabels = {}
+    local mentionedLabels = {}
     if arg.primaryType ~= nil then
-        local primaryLabels = {}
         for depth = 1, 3 do
             Append(primaryLabels, generateLabels(arg.primaryType, depth))
         end
@@ -66,6 +115,16 @@ local function generateExpected(arg)
         Append(out, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
         for key, label in pairs(primaryLabels) do
             Append(out, generateEntityFromLabel(label))
+        end
+    end
+    mentionedLabels = generateMentioned(primaryLabels)
+    Sort(mentionedLabels, "compareAlphanumerical")
+    if #mentionedLabels > 0 then
+        Append(out, [[\chapter{]] .. CapFirst(Tr("only-mentioned")) .. [[}]])
+        for key, label in pairs(mentionedLabels) do
+            Append(out, [[\subparagraph{]] .. label .. [[}]])
+            Append(out, [[\label{]] .. label .. [[}]])
+            Append(out, [[\hspace{1cm}]])
         end
     end
     return out

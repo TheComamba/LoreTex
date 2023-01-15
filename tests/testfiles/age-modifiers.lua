@@ -30,16 +30,11 @@ local function generateAppearance(depth, modification)
     else
         Append(out, "species-1-" .. depth)
     end
-    Append(out, [[}]])
-
+    Append(out, [[}, 100 ]])
+    Append(out, Tr("years-old"))
     if modification == "not-aging" then
-        Append(out, ", " .. Tr("does-not-age"))
-    else
-        Append(out, ", 100 ")
-        Append(out, Tr("years-old"))
-    end
-    
-    if modification == "factor" or modification == "exponent" or modification == "both" or modification == "mixing" then
+        Append(out, " (" .. Tr("does-not-age") .. ")")
+    elseif modification == "factor" or modification == "exponent" or modification == "both" or modification == "mixing" then
         Append(out, " (" .. Tr("corresponding-human-age") .. " ")
         Append(out, generateHumanAgeCentury(modification))
         Append(out, " " .. Tr("years") .. ")")
@@ -112,7 +107,7 @@ local function generateExpected(depth, modification)
     return out
 end
 
-local expexted = {}
+local expected = {}
 local received = {}
 
 for depth = 1, 3 do
@@ -121,7 +116,7 @@ for depth = 1, 3 do
         TexApi.setCurrentYear(100)
 
         newEntity("species-1-", depth)
-        if modification == "normal" then
+        if modification == "not-aging" then
             TexApi.setAgeFactor(0)
         end
         if modification == "normal" then
@@ -147,8 +142,8 @@ for depth = 1, 3 do
         TexApi.born { year = 0, event = "Born." }
         TexApi.makeEntityPrimary("char")
 
-        expexted = generateExpected(depth, modification)
+        expected = generateExpected(depth, modification)
         received = TexApi.automatedChapters()
-        Assert("Age modifications " .. modification .. ", entity depth " .. depth, expexted, received)
+        Assert("Age modifications " .. modification .. ", entity depth " .. depth, expected, received)
     end
 end

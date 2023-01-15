@@ -130,11 +130,11 @@ function AddLifestageHistoryItems(entity)
 	if label == "" then
 		return
 	end
-	local birthyear = GetProtectedNullableField(entity, "born")
+	local birthyear = GetProtectedNullableField(entity, "born", false)
 	if birthyear == nil then
 		return
 	end
-	local species = GetProtectedNullableField(entity, "species")
+	local species = GetProtectedNullableField(entity, "species", false)
 	if species == nil then
 		return
 	end

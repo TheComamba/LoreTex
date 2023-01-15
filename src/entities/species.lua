@@ -6,7 +6,14 @@ lifestagesAndAges[#lifestagesAndAges + 1] = { "adult", 30 }
 lifestagesAndAges[#lifestagesAndAges + 1] = { "old", 60 }
 lifestagesAndAges[#lifestagesAndAges + 1] = { "ancient", 90 }
 
-local function isAges(species)
+local function hasDefinedAging(species)
+	local factor = GetProtectedNullableField(species, "ageFactor", false)
+	local exponent = GetProtectedNullableField(species, "ageExponent", false)
+	local mixing = GetProtectedNullableField(species, "ageMixing", false)
+	return factor ~= nil or exponent ~= nil or mixing ~= nil
+end
+
+local function isAgingSpecies(species)
 	local factor, exponent = GetAgeFactorAndExponent(species)
 	return factor ~= 0 and exponent ~= 0
 end
@@ -73,7 +80,7 @@ local function specificAgeString(entity, age)
 	if species == nil then
 		return ""
 	end
-	if isAges(species) then
+	if isAgingSpecies(species) then
 		return correspondingHumanAgeString(species, age)
 	else
 		return " (" .. Tr("does-not-age") .. ")"
@@ -189,13 +196,11 @@ local function lifestagesDescription(species)
 	return table.concat(out)
 end
 
-function AddLifeStagesToSpecies(entity)
-	if IsType("species", entity) then
-		if isAges(entity) then
-			local lifestages = lifestagesDescription(entity)
-			if lifestages ~= "" then
-				SetDescriptor { entity = entity, descriptor = Tr("lifestages"), description = lifestages }
-			end
+function AddLifeStages(species)
+	if hasDefinedAging(species) and isAgingSpecies(species) then
+		local lifestages = lifestagesDescription(species)
+		if lifestages ~= "" then
+			SetDescriptor { entity = species, descriptor = Tr("lifestages"), description = lifestages }
 		end
 	end
 end

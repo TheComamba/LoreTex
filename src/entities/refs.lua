@@ -4,12 +4,14 @@ UnfoundRefs = {}
 PrimaryRefWhenMentionedTypes = {}
 local refTypes = { "reference", "nameref", "itref", "ref" }
 
-StateResetters[#StateResetters + 1] = function()
+function ResetRefs()
     PrimaryRefs = {}
     MentionedRefs = {}
     UnfoundRefs = {}
     PrimaryRefWhenMentionedTypes = {}
 end
+
+StateResetters[#StateResetters + 1] = ResetRefs
 
 function IsContainsPrimary(list)
     for key, label in pairs(list) do

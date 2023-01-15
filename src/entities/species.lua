@@ -142,7 +142,7 @@ function AddLifestageHistoryItems(entity)
 		return
 	end
 	local species = GetProtectedNullableField(entity, "species", false)
-	if species == nil then
+	if species == nil or not hasDefinedAging(species) then
 		return
 	end
 	local deathyear = GetProtectedNullableField(entity, "died")

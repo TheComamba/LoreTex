@@ -9,7 +9,7 @@ local function newEntity(name, depth)
 end
 
 local function generateHumanAgeCentury(modification)
-    if modification == "none" then
+    if modification == "normal" then
         return 100
     elseif modification == "factor" then
         return 125
@@ -30,9 +30,16 @@ local function generateAppearance(depth, modification)
     else
         Append(out, "species-1-" .. depth)
     end
-    Append(out, [[}, 100 ]])
-    Append(out, Tr("years-old"))
-    if modification ~= "none" then
+    Append(out, [[}]])
+
+    if modification == "not-aging" then
+        Append(out, ", " .. Tr("does-not-age"))
+    else
+        Append(out, ", 100 ")
+        Append(out, Tr("years-old"))
+    end
+    
+    if modification == "factor" or modification == "exponent" or modification == "both" or modification == "mixing" then
         Append(out, " (" .. Tr("corresponding-human-age") .. " ")
         Append(out, generateHumanAgeCentury(modification))
         Append(out, " " .. Tr("years") .. ")")
@@ -44,7 +51,7 @@ end
 local lifeStages = { "juvenile", "young", "adult", "old", "ancient" }
 
 local function generateAgeAtLifestages(modification)
-    if modification == "none" then
+    if modification == "normal" then
         return { 12, 20, 30, 60, 90 }
     elseif modification == "factor" then
         return { 10, 16, 24, 48, 72 }
@@ -54,6 +61,8 @@ local function generateAgeAtLifestages(modification)
         return { 16, 29, 47 }
     elseif modification == "mixing" then
         return { 14, 24, 37, 79 }
+    else
+        return {}
     end
 end
 
@@ -107,11 +116,17 @@ local expexted = {}
 local received = {}
 
 for depth = 1, 3 do
-    for key, modification in pairs({ "none", "factor", "exponent", "both", "mixing" }) do
+    for key, modification in pairs({ "none", "not-aging", "normal", "factor", "exponent", "both", "mixing" }) do
         ResetState()
         TexApi.setCurrentYear(100)
 
         newEntity("species-1-", depth)
+        if modification == "normal" then
+            TexApi.setAgeFactor(0)
+        end
+        if modification == "normal" then
+            TexApi.setAgeFactor(1)
+        end
         if modification == "factor" or modification == "both" or modification == "mixing" then
             TexApi.setAgeFactor(0.8)
         end
@@ -119,6 +134,7 @@ for depth = 1, 3 do
             TexApi.setAgeExponent(1.2)
         end
         newEntity("species-2-", depth)
+        TexApi.setAgeFactor(1)
         newEntity("species-3-", depth)
         TexApi.setAgeModifierMixing("species-1-" .. depth, "species-2-" .. depth)
 

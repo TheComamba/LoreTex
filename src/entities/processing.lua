@@ -17,7 +17,7 @@ end
 local function addAutomatedDescriptors(entity)
     AddAffiliationDescriptors(entity)
     AddSpeciesAndAgeString(entity)
-    AddLifeStagesToSpecies(entity)
+    AddLifeStages(entity)
     AddHeightDescriptor(entity)
     ProcessHistory(entity)
 end

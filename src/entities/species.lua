@@ -81,6 +81,10 @@ local function specificAgeString(entity, age)
 end
 
 local function ageString(entity, year)
+	local born = GetProtectedNullableField(entity, "born", false)
+	if born == nil then
+		return ""
+	end
 	local out = {}
 	if IsDead(entity) then
 		Append(out, Tr("aged"))

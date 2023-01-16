@@ -147,8 +147,7 @@ local function generateMentionedChapter(mentionedLabels)
     return out
 end
 
-local function generateExpected(arg)
-    local out = {}
+local function generatePrimareAndMentioned(arg)
     local primaryLabels = {}
     local mentionedLabels = {}
     if arg.primaryType ~= nil then
@@ -159,7 +158,6 @@ local function generateExpected(arg)
     if arg.primaryParent ~= nil then
         UniqueAppend(primaryLabels, arg.primaryParent)
         UniqueAppend(primaryLabels, generateChildren(arg.primaryParent))
-        UniqueAppend(primaryLabels, generateParent(arg.primaryParent))
     end
     if arg.primaryTypeWhenMentioned ~= nil then
         local hasNotRun = true
@@ -177,6 +175,12 @@ local function generateExpected(arg)
         end
     end
     mentionedLabels = generateMentioned(primaryLabels)
+    return primaryLabels, mentionedLabels
+end
+
+local function generateExpected(arg)
+    local out = {}
+    local primaryLabels, mentionedLabels = generatePrimareAndMentioned(arg)
     Sort(primaryLabels, "compareAlphanumerical")
     Sort(mentionedLabels, "compareAlphanumerical")
 
@@ -208,7 +212,7 @@ for depth = 1, 3 do
             TexApi.makeEntityAndChildrenPrimary(label)
             expected = generateExpected { primaryParent = label }
             out = TexApi.automatedChapters()
-            local testname = "Entity " .. label .. " is primary"
+            local testname = "Entity '" .. label .. "' is primary"
             Assert(testname, expected, out)
 
             for key2, primaryTypename in pairs(types) do

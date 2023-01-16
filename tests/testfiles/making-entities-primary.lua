@@ -94,31 +94,38 @@ local function generateMentioned(labels)
     return out
 end
 
-local function generateExpected(arg)
-    local out = {}
-    local primaryLabels = {}
-    local mentionedLabels = {}
-    if arg.primaryType ~= nil then
-        for depth = 1, 3 do
-            Append(primaryLabels, generateLabels(arg.primaryType, depth))
-        end
-        Sort(primaryLabels, "compareAlphanumerical")
+local function isType(label, typename)
+    return label:sub(-string.len(typename)) == typename
+end
 
-        Append(out, [[\chapter{]] .. CapFirst(Tr(arg.primaryType)) .. [[}]])
-        Append(out, [[\section{]] .. CapFirst(Tr(arg.primaryType)) .. [[}]])
-        Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr(arg.primaryType)) .. [[}]])
-        Append(out, [[\begin{itemize}]])
-        for key, label in pairs(primaryLabels) do
-            Append(out, [[\item \nameref{]] .. label .. [[}]])
-        end
-        Append(out, [[\end{itemize}]])
-        Append(out, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
-        for key, label in pairs(primaryLabels) do
-            Append(out, generateEntityFromLabel(label))
+local function generateChapter(typename, primaryLabels)
+    local labelsOfType = {}
+    for key, label in pairs(primaryLabels) do
+        if isType(label, typename) then
+            Append(labelsOfType, label)
         end
     end
-    mentionedLabels = generateMentioned(primaryLabels)
-    Sort(mentionedLabels, "compareAlphanumerical")
+    if #labelsOfType == 0 then
+        return {}
+    end
+    local out = {}
+    Append(out, [[\chapter{]] .. CapFirst(Tr(typename)) .. [[}]])
+    Append(out, [[\section{]] .. CapFirst(Tr(typename)) .. [[}]])
+    Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr(typename)) .. [[}]])
+    Append(out, [[\begin{itemize}]])
+    for key, label in pairs(labelsOfType) do
+        Append(out, [[\item \nameref{]] .. label .. [[}]])
+    end
+    Append(out, [[\end{itemize}]])
+    Append(out, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
+    for key, label in pairs(labelsOfType) do
+        Append(out, generateEntityFromLabel(label))
+    end
+    return out
+end
+
+local function generateMentionedChapter(mentionedLabels)
+    local out = {}
     if #mentionedLabels > 0 then
         Append(out, [[\chapter{]] .. CapFirst(Tr("only-mentioned")) .. [[}]])
         for key, label in pairs(mentionedLabels) do
@@ -127,6 +134,26 @@ local function generateExpected(arg)
             Append(out, [[\hspace{1cm}]])
         end
     end
+    return out
+end
+
+local function generateExpected(arg)
+    local out = {}
+    local primaryLabels = {}
+    local mentionedLabels = {}
+    if arg.primaryType ~= nil then
+        for depth = 1, 3 do
+            Append(primaryLabels, generateLabels(arg.primaryType, depth))
+        end
+    end
+    mentionedLabels = generateMentioned(primaryLabels)
+    Sort(primaryLabels, "compareAlphanumerical")
+    Sort(mentionedLabels, "compareAlphanumerical")
+
+    for key, typename in pairs(types) do
+        Append(out, generateChapter(typename, primaryLabels))
+    end
+    Append(out, generateMentionedChapter(mentionedLabels))
     return out
 end
 
@@ -152,7 +179,7 @@ for key, typename in pairs(types) do
             label = label .. typename
         end
         TexApi.makeEntityAndChildrenPrimary(label)
-        expected = generateExpected {}
+        expected = generateExpected { primaryParent = label }
         out = TexApi.automatedChapters()
         local testname = "Entity " .. label .. " is primary"
         Assert(testname, expected, out)

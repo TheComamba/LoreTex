@@ -49,7 +49,7 @@ local function generateChildren(label)
     return children
 end
 
-local function generateParents(label)
+local function generateParent(label)
     local labelChain = generateLabelChain(label)
     local parent = ""
     for i = 1, (#labelChain - 1) do
@@ -60,9 +60,9 @@ local function generateParents(label)
         end
     end
     if parent == "" then
-        return {}
+        return nil
     else
-        return { parent }
+        return parent
     end
 end
 
@@ -78,7 +78,8 @@ local function generateEntityFromLabel(label)
             Append(out, [[\end{itemize}]])
         end
     end
-    for key, parent in pairs(generateParents(label)) do
+    local parent = generateParent(label)
+    if parent ~= nil then
         Append(out, [[\paragraph{]] .. CapFirst(Tr("affiliations")) .. [[}]])
         Append(out, [[\begin{itemize}]])
         Append(out, [[\item ]] .. CapFirst(Tr("member")) .. [[ ]] .. Tr("of") .. [[ \nameref{]] .. parent .. [[}.]])
@@ -95,7 +96,7 @@ local function generateMentioned(labels)
                 UniqueAppend(out, child)
             end
         end
-        local parent = generateParents(label)[1]
+        local parent = generateParent(label)
         if parent ~= nil and not IsIn(parent, labels) then
             UniqueAppend(out, parent)
         end
@@ -158,7 +159,22 @@ local function generateExpected(arg)
     if arg.primaryParent ~= nil then
         UniqueAppend(primaryLabels, arg.primaryParent)
         UniqueAppend(primaryLabels, generateChildren(arg.primaryParent))
-        UniqueAppend(primaryLabels, generateParents(arg.primaryParent))
+        UniqueAppend(primaryLabels, generateParent(arg.primaryParent))
+    end
+    if arg.primaryTypeWhenMentioned ~= nil then
+        local hasNotRun = true
+        local somethingChanged = false
+        while hasNotRun or somethingChanged do
+            hasNotRun = false
+            somethingChanged = false
+            local currentlyMentioned = generateMentioned(primaryLabels)
+            for key, label in pairs(currentlyMentioned) do
+                if isType(label, arg.primaryTypeWhenMentioned) and not IsIn(label, primaryLabels) then
+                    UniqueAppend(primaryLabels, label)
+                    somethingChanged = true
+                end
+            end
+        end
     end
     mentionedLabels = generateMentioned(primaryLabels)
     Sort(primaryLabels, "compareAlphanumerical")
@@ -185,25 +201,23 @@ for key, typename in pairs(types) do
     Assert("Type " .. typename .. " is primary", expected, out)
 end
 
-for key, typename in pairs(types) do
-    for depth = 1, 3 do
-        ResetRefs()
-        local label = ""
-        for i = 1, depth do
-            label = label .. typename
-        end
-        TexApi.makeEntityAndChildrenPrimary(label)
-        expected = generateExpected { primaryParent = label }
-        out = TexApi.automatedChapters()
-        local testname = "Entity " .. label .. " is primary"
-        Assert(testname, expected, out)
-
-        for key2, primaryTypename in pairs(types) do
-            TexApi.makeTypePrimaryWhenMentioned(primaryTypename)
-            expected = generateExpected {}
+for depth = 1, 3 do
+    for key1, typename in pairs(types) do
+        for key2, label in pairs(generateLabels(typename, depth)) do
+            ResetRefs()
+            TexApi.makeEntityAndChildrenPrimary(label)
+            expected = generateExpected { primaryParent = label }
             out = TexApi.automatedChapters()
-            testname = testname .. ", type " .. primaryTypename .. " is primary when mentioned"
+            local testname = "Entity " .. label .. " is primary"
             Assert(testname, expected, out)
+
+            for key2, primaryTypename in pairs(types) do
+                TexApi.makeTypePrimaryWhenMentioned(primaryTypename)
+                expected = generateExpected { primaryParent = label, primaryTypeWhenMentioned = primaryTypename }
+                out = TexApi.automatedChapters()
+                local testname2 = testname .. ", type " .. primaryTypename .. " is primary when mentioned"
+                Assert(testname2, expected, out)
+            end
         end
     end
 end

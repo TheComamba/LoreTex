@@ -216,6 +216,8 @@ for depth = 1, 3 do
             Assert(testname, expected, out)
 
             for key2, primaryTypename in pairs(types) do
+                ResetRefs()
+                TexApi.makeEntityAndChildrenPrimary(label)
                 TexApi.makeTypePrimaryWhenMentioned(primaryTypename)
                 expected = generateExpected { primaryParent = label, primaryTypeWhenMentioned = primaryTypename }
                 out = TexApi.automatedChapters()

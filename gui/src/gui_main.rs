@@ -6,7 +6,7 @@ use iced_aw::{style::CardStyles, Card};
 
 use crate::{
     db_col_view::{db_col_view, DbColViewMessage, DbColViewState},
-    sql_operations::{self, get_all_labels},
+    sql_operations::{self, get_all_labels, run_migrations},
 };
 
 #[derive(Debug, Clone)]
@@ -34,6 +34,10 @@ impl Sandbox for SqlGui {
             current_description: String::new(),
             error_message: None,
         };
+        if let Err(e) = run_migrations() {
+            gui.error_message = Some(e.to_string());
+            return gui;
+        }
         gui.update_labels();
         return gui;
     }

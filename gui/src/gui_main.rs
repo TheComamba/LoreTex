@@ -1,5 +1,5 @@
 use iced::{
-    widget::{Container, Row, Scrollable, Text, TextInput},
+    widget::{Container, Row, Scrollable, Text},
     Alignment, Length, Sandbox,
 };
 use iced_aw::{style::CardStyles, Card};
@@ -11,7 +11,6 @@ use crate::{
 
 #[derive(Debug, Clone)]
 pub(crate) enum GuiMessage {
-    DescriptionUpdated(String),
     LabelViewUpdated(DbColViewMessage),
     DescriptorViewUpdated(DbColViewMessage),
     ErrorDialogClosed,
@@ -61,9 +60,6 @@ impl Sandbox for SqlGui {
             GuiMessage::LabelViewUpdated(event) => self.update_label_view(event),
             GuiMessage::DescriptorViewUpdated(event) => self.update_descriptor_view(event),
             GuiMessage::ErrorDialogClosed => self.error_message = None,
-            GuiMessage::DescriptionUpdated(_) => {
-                self.error_message = Some("Not yet implemented".to_string())
-            }
         }
     }
 
@@ -102,12 +98,8 @@ impl SqlGui {
                 &self.descriptor_view_state,
                 GuiMessage::DescriptorViewUpdated,
             ))
-            .push(TextInput::new(
-                "Description",
-                &self.current_description,
-                GuiMessage::DescriptionUpdated,
-            ))
-            .align_items(Alignment::Center)
+            .push(Text::new(&self.current_description).width(Length::Fill))
+            .align_items(Alignment::Start)
             .width(Length::Fill)
             .height(Length::Fill)
             .into();

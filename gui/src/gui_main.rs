@@ -50,7 +50,9 @@ impl Sandbox for SqlGui {
         match message {
             GuiMessage::LabelViewUpdated(DbColViewMessage::Selected(label)) => {
                 self.label_view_state.selected_entry = Some(label);
+                self.descriptor_view_state.selected_entry = None;
                 self.update_descriptors();
+                self.update_description();
             }
             GuiMessage::DescriptorViewUpdated(DbColViewMessage::Selected(descriptor)) => {
                 self.descriptor_view_state.selected_entry = Some(descriptor);
@@ -134,7 +136,10 @@ impl SqlGui {
     fn update_descriptors(&mut self) {
         let label = match &self.label_view_state.selected_entry {
             Some(label) => label,
-            None => return,
+            None => {
+                self.descriptor_view_state.entries = vec![];
+                return;
+            }
         };
         match get_all_descriptors(label) {
             Ok(descriptors) => self.descriptor_view_state.entries = descriptors,
@@ -149,11 +154,17 @@ impl SqlGui {
     fn update_description(&mut self) {
         let label = match &self.label_view_state.selected_entry {
             Some(label) => label,
-            None => return,
+            None => {
+                self.current_description = "".to_string();
+                return;
+            }
         };
         let descriptor = match &self.descriptor_view_state.selected_entry {
             Some(descriptor) => descriptor,
-            None => return,
+            None => {
+                self.current_description = "".to_string();
+                return;
+            }
         };
         match get_description(label, descriptor) {
             Ok(desc) => self.current_description = desc,

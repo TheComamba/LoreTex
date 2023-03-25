@@ -6,7 +6,7 @@ use iced_aw::{style::CardStyles, Card};
 
 use crate::{
     db_col_view::{db_col_view, DbColViewMessage, DbColViewState},
-    sql_operations::{get_all_descriptors, get_all_labels, run_migrations},
+    sql_operations::{get_all_descriptors, get_all_labels, get_description, run_migrations},
 };
 
 #[derive(Debug, Clone)]
@@ -54,6 +54,7 @@ impl Sandbox for SqlGui {
             }
             GuiMessage::DescriptorViewUpdated(DbColViewMessage::Selected(descriptor)) => {
                 self.descriptor_view_state.selected_entry = Some(descriptor);
+                self.update_description();
             }
             GuiMessage::LabelViewUpdated(event) => self.update_label_view(event),
             GuiMessage::DescriptorViewUpdated(event) => self.update_descriptor_view(event),
@@ -135,13 +136,28 @@ impl SqlGui {
             Some(label) => label,
             None => return,
         };
-        let descriptors = match get_all_descriptors(label) {
-            Ok(descriptors) => descriptors,
+        match get_all_descriptors(label) {
+            Ok(descriptors) => self.descriptor_view_state.entries = descriptors,
             Err(e) => {
                 self.error_message = Some(e.to_string());
+                self.descriptor_view_state.entries = vec![];
                 return;
             }
         };
-        self.descriptor_view_state.entries = descriptors;
+    }
+
+    fn update_description(&mut self) {
+        let label = match &self.label_view_state.selected_entry {
+            Some(label) => label,
+            None => return,
+        };
+        let descriptor = match &self.descriptor_view_state.selected_entry {
+            Some(descriptor) => descriptor,
+            None => return,
+        };
+        match get_description(label, descriptor) {
+            Ok(desc) => self.current_description = desc,
+            Err(e) => self.error_message = Some(e.to_string()),
+        };
     }
 }

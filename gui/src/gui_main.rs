@@ -49,10 +49,10 @@ impl Sandbox for SqlGui {
     fn update(&mut self, message: Self::Message) {
         match message {
             GuiMessage::LabelViewUpdated(DbColViewMessage::Selected(label)) => {
-                self.current_description = label
+                self.label_view_state.selected_entry = Some(label);
             }
             GuiMessage::DescriptorViewUpdated(DbColViewMessage::Selected(descriptor)) => {
-                self.current_description = self.current_description.clone() + &descriptor
+                self.descriptor_view_state.selected_entry = Some(descriptor);
             }
             GuiMessage::LabelViewUpdated(event) => self.update_label_view(event),
             GuiMessage::DescriptorViewUpdated(event) => self.update_descriptor_view(event),

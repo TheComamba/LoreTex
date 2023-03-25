@@ -9,6 +9,7 @@ use crate::gui_main::GuiMessage;
 pub(crate) struct DbColViewState {
     pub(crate) search_text: String,
     pub(crate) entries: Vec<String>,
+    pub(crate) selected_entry: Option<String>,
 }
 
 impl DbColViewState {
@@ -16,6 +17,7 @@ impl DbColViewState {
         DbColViewState {
             search_text: "".to_string(),
             entries: vec![],
+            selected_entry: None,
         }
     }
 }

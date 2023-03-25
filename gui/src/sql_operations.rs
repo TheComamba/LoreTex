@@ -62,9 +62,21 @@ pub(crate) fn get_all_labels() -> Result<Vec<String>, GuiError> {
     let mut connection = db_connection()?;
     let labels = entities::table
         .load::<Entity>(&mut connection)
-        .map_err(|_| GuiError::Other("Loading entities failed".to_string()))?
+        .map_err(|_| GuiError::Other("Loading entities to get all labels failed".to_string()))?
         .into_iter()
         .map(|e| e.label)
         .collect();
     return Ok(labels);
+}
+
+pub(crate) fn get_all_descriptors(label: &String) -> Result<Vec<String>, GuiError> {
+    let mut connection = db_connection()?;
+    let descriptors = entities::table
+        .filter(entities::label.eq(label))
+        .load::<Entity>(&mut connection)
+        .map_err(|_| GuiError::Other("Loading entities to get descriptors failed".to_string()))?
+        .into_iter()
+        .map(|c| c.descriptor)
+        .collect();
+    return Ok(descriptors);
 }

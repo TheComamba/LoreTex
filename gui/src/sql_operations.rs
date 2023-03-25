@@ -18,7 +18,7 @@ pub(crate) fn run_migrations() -> Result<(), GuiError> {
 
 #[derive(Insertable, Queryable)]
 #[diesel(table_name = entities)]
-pub(crate) struct Entity {
+pub(crate) struct EntityColumn {
     pub label: String,
     pub descriptor: String,
     pub description: String,
@@ -39,32 +39,13 @@ fn db_connection() -> Result<SqliteConnection, GuiError> {
     });
 }
 
-// pub(crate) fn new_entry(label: String) -> Result<(), GuiError> {
-//     if label.is_empty() {
-//         return Err(GuiError::Other(
-//             "Label of new entity cannot be empty.".to_string(),
-//         ));
-//     }
-//     let entity = Entity {
-//         label,
-//         descriptor: String::new(),
-//         description: String::new(),
-//     };
-//     let mut connection = db_connection()?;
-//     diesel::insert_into(entities::table)
-//         .values(entity)
-//         .execute(&mut connection)
-//         .map_err(|_| GuiError::Other("Failed to insert new entry into database.".to_string()))?;
-//     return Ok(());
-// }
-
 pub(crate) fn get_all_labels() -> Result<Vec<String>, GuiError> {
     let mut connection = db_connection()?;
     let labels = entities::table
-        .load::<Entity>(&mut connection)
+        .load::<EntityColumn>(&mut connection)
         .map_err(|_| GuiError::Other("Loading entities to get all labels failed".to_string()))?
         .into_iter()
-        .map(|e| e.label)
+        .map(|c| c.label)
         .collect();
     return Ok(labels);
 }
@@ -73,7 +54,7 @@ pub(crate) fn get_all_descriptors(label: &String) -> Result<Vec<String>, GuiErro
     let mut connection = db_connection()?;
     let descriptors = entities::table
         .filter(entities::label.eq(label))
-        .load::<Entity>(&mut connection)
+        .load::<EntityColumn>(&mut connection)
         .map_err(|_| GuiError::Other("Loading entities to get descriptors failed".to_string()))?
         .into_iter()
         .map(|c| c.descriptor)

@@ -6,7 +6,7 @@ use iced_aw::{style::CardStyles, Card};
 
 use crate::{
     db_col_view::{db_col_view, DbColViewMessage, DbColViewState},
-    sql_operations::{self, get_all_labels, run_migrations},
+    sql_operations::{get_all_labels, run_migrations},
 };
 
 #[derive(Debug, Clone)]
@@ -74,15 +74,6 @@ impl Sandbox for SqlGui {
 impl SqlGui {
     fn update_label_view(&mut self, message: DbColViewMessage) {
         match message {
-            DbColViewMessage::NewClicked => {
-                match sql_operations::new_entry(self.label_view_state.search_text.clone()) {
-                    Ok(_) => {
-                        self.label_view_state.search_text = "".to_string();
-                        self.update_labels();
-                    }
-                    Err(e) => self.error_message = Some(e.to_string()),
-                }
-            }
             DbColViewMessage::SearchFieldUpdated(text) => self.label_view_state.search_text = text,
             DbColViewMessage::Selected(_) => (), //handled elsewhere
         };
@@ -90,12 +81,6 @@ impl SqlGui {
 
     fn update_descriptor_view(&mut self, message: DbColViewMessage) {
         match message {
-            DbColViewMessage::NewClicked => {
-                match sql_operations::new_entry("Some label".to_string()) {
-                    Ok(_) => (),
-                    Err(e) => self.error_message = Some(e.to_string()),
-                }
-            }
             DbColViewMessage::SearchFieldUpdated(text) => {
                 self.descriptor_view_state.search_text = text
             }

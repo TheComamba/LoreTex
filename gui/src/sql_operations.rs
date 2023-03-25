@@ -39,24 +39,24 @@ fn db_connection() -> Result<SqliteConnection, GuiError> {
     });
 }
 
-pub(crate) fn new_entry(label: String) -> Result<(), GuiError> {
-    if label.is_empty() {
-        return Err(GuiError::Other(
-            "Label of new entity cannot be empty.".to_string(),
-        ));
-    }
-    let entity = Entity {
-        label,
-        descriptor: String::new(),
-        description: String::new(),
-    };
-    let mut connection = db_connection()?;
-    diesel::insert_into(entities::table)
-        .values(entity)
-        .execute(&mut connection)
-        .map_err(|_| GuiError::Other("Failed to insert new entry into database.".to_string()))?;
-    return Ok(());
-}
+// pub(crate) fn new_entry(label: String) -> Result<(), GuiError> {
+//     if label.is_empty() {
+//         return Err(GuiError::Other(
+//             "Label of new entity cannot be empty.".to_string(),
+//         ));
+//     }
+//     let entity = Entity {
+//         label,
+//         descriptor: String::new(),
+//         description: String::new(),
+//     };
+//     let mut connection = db_connection()?;
+//     diesel::insert_into(entities::table)
+//         .values(entity)
+//         .execute(&mut connection)
+//         .map_err(|_| GuiError::Other("Failed to insert new entry into database.".to_string()))?;
+//     return Ok(());
+// }
 
 pub(crate) fn get_all_labels() -> Result<Vec<String>, GuiError> {
     let mut connection = db_connection()?;

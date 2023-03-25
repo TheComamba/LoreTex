@@ -22,7 +22,6 @@ impl DbColViewState {
 
 #[derive(Debug, Clone)]
 pub(crate) enum DbColViewMessage {
-    NewClicked,
     SearchFieldUpdated(String),
     Selected(String),
 }
@@ -34,10 +33,7 @@ pub(crate) fn db_col_view<'a, M>(
 where
     M: 'static + Clone + Fn(DbColViewMessage) -> GuiMessage,
 {
-    let m = messages.clone();
-    let new_button = button("New")
-        .on_press(m(DbColViewMessage::NewClicked))
-        .width(Length::Fill);
+    let new_button = button("New").width(Length::Fill);
     let delete_button = button("Delete").width(Length::Fill);
     let rename_button = button("Rename").width(Length::Fill);
     let m = messages.clone();

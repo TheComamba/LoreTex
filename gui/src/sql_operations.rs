@@ -62,7 +62,8 @@ pub(crate) fn get_all_descriptors(label: &String) -> Result<Vec<String>, GuiErro
         })?
         .into_iter()
         .map(|c| c.descriptor)
-        .collect();
+        .collect()
+        .dedup();
     return Ok(descriptors);
 }
 

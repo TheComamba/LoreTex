@@ -41,12 +41,13 @@ fn db_connection() -> Result<SqliteConnection, GuiError> {
 
 pub(crate) fn get_all_labels() -> Result<Vec<String>, GuiError> {
     let mut connection = db_connection()?;
-    let labels = entities::table
+    let mut labels = entities::table
         .load::<EntityColumn>(&mut connection)
         .map_err(|_| GuiError::Other("Loading entities to get all labels failed.".to_string()))?
         .into_iter()
         .map(|c| c.label)
-        .collect();
+        .collect::<Vec<_>>();
+    labels.dedup();
     return Ok(labels);
 }
 
@@ -62,8 +63,7 @@ pub(crate) fn get_all_descriptors(label: &String) -> Result<Vec<String>, GuiErro
         })?
         .into_iter()
         .map(|c| c.descriptor)
-        .collect()
-        .dedup();
+        .collect();
     return Ok(descriptors);
 }
 

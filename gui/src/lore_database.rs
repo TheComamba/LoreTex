@@ -6,7 +6,17 @@ use diesel::{Connection, Insertable, RunQueryDsl, SqliteConnection};
 use diesel_migrations::{embed_migrations, EmbeddedMigrations, MigrationHarness};
 use dotenvy::dotenv;
 
+pub(crate) struct LoreDatabase {
+    path: String,
+}
+
 pub const MIGRATIONS: EmbeddedMigrations = embed_migrations!();
+
+impl LoreDatabase {
+    pub(crate) fn new(path: String) -> Self {
+        return LoreDatabase { path };
+    }
+}
 
 pub(crate) fn run_migrations() -> Result<(), GuiError> {
     db_connection()?

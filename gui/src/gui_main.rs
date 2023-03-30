@@ -6,7 +6,9 @@ use iced_aw::{style::CardStyles, Card};
 
 use crate::{
     db_col_view::{db_col_view, DbColViewMessage, DbColViewState},
-    sql_operations::{get_all_descriptors, get_all_labels, get_description, run_migrations},
+    lore_database::{
+        get_all_descriptors, get_all_labels, get_description, run_migrations, LoreDatabase,
+    },
 };
 
 #[derive(Debug, Clone)]
@@ -20,6 +22,7 @@ pub(crate) struct SqlGui {
     label_view_state: DbColViewState,
     descriptor_view_state: DbColViewState,
     current_description: String,
+    lore_database: Option<LoreDatabase>,
     error_message: Option<String>,
 }
 
@@ -31,6 +34,7 @@ impl Sandbox for SqlGui {
             label_view_state: DbColViewState::new(),
             descriptor_view_state: DbColViewState::new(),
             current_description: String::new(),
+            lore_database: None,
             error_message: None,
         };
         if let Err(e) = run_migrations() {

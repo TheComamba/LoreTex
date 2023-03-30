@@ -1,6 +1,6 @@
 use iced::{
-    widget::{button, Column, TextInput},
-    Alignment, Length, Renderer,
+    widget::{button, Column, Text, TextInput},
+    Length, Renderer,
 };
 use iced_aw::{style::SelectionListStyles, SelectionList};
 
@@ -29,6 +29,7 @@ pub(crate) enum DbColViewMessage {
 }
 
 pub(crate) fn db_col_view<'a, M>(
+    title: &'a str,
     state: &DbColViewState,
     messages: M,
 ) -> Column<'a, GuiMessage, Renderer>
@@ -52,12 +53,12 @@ where
         SelectionListStyles::Default,
     );
     return Column::new()
+        .push(Text::new(title))
         .push(new_button)
         .push(delete_button)
         .push(rename_button)
         .push(search_field)
         .push(selection_list)
-        .align_items(Alignment::Center)
         .width(Length::Fill)
         .height(Length::Fill)
         .padding(5)

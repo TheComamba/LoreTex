@@ -107,14 +107,23 @@ impl SqlGui {
     fn main_view(&self) -> iced::Element<'_, GuiMessage> {
         return Row::new()
             .push(db_col_view(
+                "Labels",
                 &self.label_view_state,
                 GuiMessage::LabelViewUpdated,
             ))
             .push(db_col_view(
+                "Descriptors",
                 &self.descriptor_view_state,
                 GuiMessage::DescriptorViewUpdated,
             ))
-            .push(Text::new(&self.current_description).width(Length::Fill))
+            .push(
+                Column::new()
+                    .push(Text::new("Description"))
+                    .push(Text::new(&self.current_description))
+                    .padding(5)
+                    .spacing(5)
+                    .width(Length::Fill),
+            )
             .align_items(Alignment::Start)
             .width(Length::Fill)
             .height(Length::Fill)

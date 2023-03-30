@@ -1,5 +1,5 @@
 use iced::{
-    widget::{Container, Row, Scrollable, Text},
+    widget::{Button, Column, Container, Row, Scrollable, Text},
     Alignment, Length, Sandbox,
 };
 use iced_aw::{style::CardStyles, Card};
@@ -65,7 +65,12 @@ impl Sandbox for SqlGui {
 
     fn view(&self) -> iced::Element<'_, Self::Message> {
         match self.error_message.clone() {
-            None => return self.main_view(),
+            None => {
+                return Column::new()
+                    .push(self.menu_bar())
+                    .push(self.main_view())
+                    .into()
+            }
             Some(message) => return self.error_dialog(message),
         }
     }
@@ -86,6 +91,16 @@ impl SqlGui {
             }
             DbColViewMessage::Selected(_) => (), //handled elsewhere
         };
+    }
+
+    fn menu_bar(&self) -> iced::Element<'_, GuiMessage> {
+        return Row::new()
+            .push(Button::new("New Lore Database"))
+            .push(Button::new("Open Lore Database"))
+            .align_items(Alignment::Center)
+            .width(Length::Fill)
+            .padding(10)
+            .into();
     }
 
     fn main_view(&self) -> iced::Element<'_, GuiMessage> {

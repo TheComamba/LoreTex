@@ -13,8 +13,15 @@ pub(crate) struct LoreDatabase {
 pub const MIGRATIONS: EmbeddedMigrations = embed_migrations!();
 
 impl LoreDatabase {
-    pub(crate) fn new(path: String) -> Self {
-        return LoreDatabase { path };
+    pub(crate) fn new(path: String) -> Result<Self, GuiError> {
+        db_connection()?
+            .run_pending_migrations(MIGRATIONS)
+            .map_err(|_| GuiError::Other("Failed to run SQL database migrations.".to_string()))?;
+        return Ok(LoreDatabase { path });
+    }
+
+    pub(crate) fn open(path: String) -> Result<Self, GuiError> {
+        return Ok(LoreDatabase { path });
     }
 }
 

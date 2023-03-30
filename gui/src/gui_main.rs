@@ -13,6 +13,8 @@ use crate::{
 
 #[derive(Debug, Clone)]
 pub(crate) enum GuiMessage {
+    NewDatabase,
+    DatabaseOpened,
     LabelViewUpdated(DbColViewMessage),
     DescriptorViewUpdated(DbColViewMessage),
     ErrorDialogClosed,
@@ -51,6 +53,24 @@ impl Sandbox for SqlGui {
 
     fn update(&mut self, message: Self::Message) {
         match message {
+            GuiMessage::NewDatabase => {
+                self.lore_database = match LoreDatabase::new("dummy".to_string()) {
+                    Ok(db) => Some(db),
+                    Err(e) => {
+                        self.error_message = Some(e.to_string());
+                        None
+                    }
+                };
+            }
+            GuiMessage::DatabaseOpened => {
+                self.lore_database = match LoreDatabase::open("dummy".to_string()) {
+                    Ok(db) => Some(db),
+                    Err(e) => {
+                        self.error_message = Some(e.to_string());
+                        None
+                    }
+                };
+            }
             GuiMessage::LabelViewUpdated(DbColViewMessage::Selected(label)) => {
                 self.label_view_state.selected_entry = Some(label);
                 self.descriptor_view_state.selected_entry = None;
@@ -99,8 +119,8 @@ impl SqlGui {
 
     fn menu_bar(&self) -> iced::Element<'_, GuiMessage> {
         return Row::new()
-            .push(Button::new("New Lore Database"))
-            .push(Button::new("Open Lore Database"))
+            .push(Button::new("New Lore Database").on_press(GuiMessage::NewDatabase))
+            .push(Button::new("Open Lore Database").on_press(GuiMessage::DatabaseOpened))
             .align_items(Alignment::Center)
             .width(Length::Fill)
             .padding(5)

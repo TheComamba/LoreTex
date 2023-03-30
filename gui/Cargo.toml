@@ -11,3 +11,4 @@ iced_aw = { version = "0.4.1", default-features = false, features = ["card", "se
 diesel = {version = "2.0.3", features = ["sqlite"]}
 diesel_migrations = {version = "2.0.0"}
 dotenvy = "0.15.6"
+rfd = "0.11.3"

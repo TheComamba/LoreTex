@@ -6,6 +6,7 @@ use iced_aw::{style::CardStyles, Card};
 
 use crate::{
     db_col_view::{db_col_view, DbColViewMessage, DbColViewState},
+    file_dialogs,
     lore_database::{
         get_all_descriptors, get_all_labels, get_description, run_migrations, LoreDatabase,
     },
@@ -14,7 +15,7 @@ use crate::{
 #[derive(Debug, Clone)]
 pub(crate) enum GuiMessage {
     NewDatabase,
-    DatabaseOpened,
+    OpenDatabase,
     LabelViewUpdated(DbColViewMessage),
     DescriptorViewUpdated(DbColViewMessage),
     ErrorDialogClosed,
@@ -62,8 +63,12 @@ impl Sandbox for SqlGui {
                     }
                 };
             }
-            GuiMessage::DatabaseOpened => {
-                self.lore_database = match LoreDatabase::open("dummy".to_string()) {
+            GuiMessage::OpenDatabase => {
+                let path = match file_dialogs::open() {
+                    Some(path) => path,
+                    None => return,
+                };
+                self.lore_database = match LoreDatabase::open(path) {
                     Ok(db) => Some(db),
                     Err(e) => {
                         self.error_message = Some(e.to_string());
@@ -120,7 +125,7 @@ impl SqlGui {
     fn menu_bar(&self) -> iced::Element<'_, GuiMessage> {
         return Row::new()
             .push(Button::new("New Lore Database").on_press(GuiMessage::NewDatabase))
-            .push(Button::new("Open Lore Database").on_press(GuiMessage::DatabaseOpened))
+            .push(Button::new("Open Lore Database").on_press(GuiMessage::OpenDatabase))
             .align_items(Alignment::Center)
             .width(Length::Fill)
             .padding(5)

@@ -60,5 +60,6 @@ where
         .align_items(Alignment::Center)
         .width(Length::Fill)
         .height(Length::Fill)
-        .padding(10);
+        .padding(5)
+        .spacing(5);
 }

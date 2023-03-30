@@ -99,7 +99,8 @@ impl SqlGui {
             .push(Button::new("Open Lore Database"))
             .align_items(Alignment::Center)
             .width(Length::Fill)
-            .padding(10)
+            .padding(5)
+            .spacing(5)
             .into();
     }
 

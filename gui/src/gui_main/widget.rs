@@ -1,4 +1,8 @@
-use crate::db_col_view::{db_col_view, DbColViewMessage, DbColViewState};
+use crate::{
+    db_col_view::{db_col_view, DbColViewMessage, DbColViewState},
+    user_preferences::load_database_path,
+    APP_TITLE,
+};
 
 use super::{gui_message::GuiMessage, SqlGui};
 use iced::{
@@ -11,24 +15,27 @@ impl Sandbox for SqlGui {
     type Message = GuiMessage;
 
     fn new() -> Self {
-        let gui = SqlGui {
+        let mut gui = SqlGui {
             label_view_state: DbColViewState::new(),
             descriptor_view_state: DbColViewState::new(),
             current_description: String::new(),
             lore_database: None,
             error_message: None,
         };
+        if let Some(path) = load_database_path() {
+            gui.open_database(path);
+        }
         return gui;
     }
 
     fn title(&self) -> String {
-        "LoreTex SQL GUI".to_string()
+        APP_TITLE.to_string()
     }
 
     fn update(&mut self, message: Self::Message) {
         match message {
-            GuiMessage::NewDatabase => self.new_database(),
-            GuiMessage::OpenDatabase => self.open_database(),
+            GuiMessage::NewDatabase => self.new_database_from_dialog(),
+            GuiMessage::OpenDatabase => self.open_database_from_dialog(),
             GuiMessage::LabelViewUpdated(DbColViewMessage::Selected(label)) => {
                 self.label_view_state.selected_entry = Some(label);
                 self.descriptor_view_state.selected_entry = None;

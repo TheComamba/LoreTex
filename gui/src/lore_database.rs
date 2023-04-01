@@ -32,6 +32,10 @@ impl LoreDatabase {
         return Ok(LoreDatabase { path });
     }
 
+    pub(crate) fn path_as_string(&self) -> String {
+        return self.path.to_string_lossy().to_string();
+    }
+
     fn db_connection(&self) -> Result<SqliteConnection, GuiError> {
         let path = match self.path.to_str() {
             Some(str) => str,

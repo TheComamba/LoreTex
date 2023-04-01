@@ -56,6 +56,7 @@ impl Sandbox for SqlGui {
             None => {
                 return Column::new()
                     .push(self.menu_bar())
+                    .push(self.current_database_display())
                     .push(self.main_view())
                     .into()
             }
@@ -74,6 +75,14 @@ impl SqlGui {
             .padding(5)
             .spacing(5)
             .into();
+    }
+
+    fn current_database_display(&self) -> iced::Element<'_, GuiMessage> {
+        let content = match self.lore_database.as_ref() {
+            Some(db) => db.path_as_string(),
+            None => "[No database loaded]".to_string(),
+        };
+        return Container::new(Text::new(content)).padding(5).into();
     }
 
     fn main_view(&self) -> iced::Element<'_, GuiMessage> {

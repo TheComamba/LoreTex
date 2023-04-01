@@ -5,5 +5,9 @@ pub(crate) fn open() -> Option<PathBuf> {
         Ok(path) => path,
         Err(_) => PathBuf::default(),
     };
-    return rfd::FileDialog::new().set_directory(&path).pick_file();
+    return rfd::FileDialog::new()
+        .add_filter("Lore Database (.db)", &["db"])
+        .add_filter("Any", &["*"])
+        .set_directory(&path)
+        .pick_file();
 }

@@ -4,7 +4,6 @@ use crate::{errors::GuiError, schema::entities};
 use ::diesel::prelude::*;
 use diesel::{Connection, Insertable, RunQueryDsl, SqliteConnection};
 use diesel_migrations::{embed_migrations, EmbeddedMigrations, MigrationHarness};
-use dotenvy::dotenv;
 
 pub(crate) struct LoreDatabase {
     path: PathBuf,
@@ -34,16 +33,16 @@ impl LoreDatabase {
     }
 
     fn db_connection(&self) -> Result<SqliteConnection, GuiError> {
-        dotenv().ok();
-        let database_path = match env::var("DATABASE_URL") {
-            Ok(path) => path,
-            Err(_) => {
-                return Err(GuiError::Other(
-                    "The database path must be set in the .env file.".to_string(),
-                ))
-            }
+        let path = match self.path.to_str() {
+            Some(str) => str,
+            None => return Err(GuiError::Other(
+                "Could not open database path.".to_string()
+                    + "This is likely because it contains characters that can not be UTF-8 encoded."
+                    + "The lossy path conversion reads:\n"
+                    + &self.path.to_string_lossy(),
+            )),
         };
-        return SqliteConnection::establish(&database_path).map_err(|_| {
+        return SqliteConnection::establish(path).map_err(|_| {
             GuiError::Other("Failed to establish a connection to the database.".to_string())
         });
     }

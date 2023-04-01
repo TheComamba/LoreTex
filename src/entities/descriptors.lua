@@ -1,14 +1,12 @@
 local function setDescriptorAsKeyValPair(arg)
-    if type(arg.description) == "string" and IsEmpty(arg.subdescriptor) then
-        arg.subdescriptor = GetProtectedDescriptor("content")
-    end
-    if IsEmpty(arg.subdescriptor) then
+    local currentDescription = arg.entity[arg.descriptor]
+    if type(arg.description) == "string" and IsEntity(currentDescription) then
+        currentDescription[GetProtectedDescriptor("content")] = arg.description
+    elseif type(currentDescription) == "string" and IsEntity(arg.description) then
+        arg.description[GetProtectedDescriptor("content")] = currentDescription
         arg.entity[arg.descriptor] = arg.description
     else
-        if arg.entity[arg.descriptor] == nil then
-            arg.entity[arg.descriptor] = {}
-        end
-        arg.entity[arg.descriptor][arg.subdescriptor] = arg.description
+        arg.entity[arg.descriptor] = arg.description
     end
 end
 
@@ -26,12 +24,15 @@ function SetDescriptor(arg)
         arg.description = ContentToMap(arg.description)
     elseif not IsEmpty(arg.subdescriptor) then
         local content = arg.description
-        if arg.entity[arg.descriptor] == nil then
+        local currentDescription = arg.entity[arg.descriptor]
+        if IsEmpty(currentDescription) or not IsEntity(currentDescription) then
             local entityLabel = GetProtectedStringField(arg.entity, "label")
             local subLabel = NewUniqueLabel(entityLabel .. "-" .. arg.descriptor)
-            arg.description = GetMutableEntityFromAll(subLabel)
+            local subEntity = GetMutableEntityFromAll(subLabel)
+            SetProtectedField(subEntity, "name", arg.descriptor)
+            arg.description = subEntity
         else
-            arg.description = arg.entity[arg.descriptor]
+            arg.description = currentDescription
         end
         SetDescriptor { entity = arg.description, descriptor = arg.subdescriptor, description = content }
         MakePartOf { subEntity = arg.description, mainEntity = arg.entity }

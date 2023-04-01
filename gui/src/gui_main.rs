@@ -141,6 +141,12 @@ impl SqlGui {
         .into()
     }
 
+    fn reset_selections(&mut self) {
+        self.label_view_state.selected_entry = None;
+        self.descriptor_view_state.selected_entry = None;
+        self.current_description = String::new();
+    }
+
     fn new_database(&mut self) {
         let path = match file_dialogs::new() {
             Some(path) => path,
@@ -153,6 +159,7 @@ impl SqlGui {
                 None
             }
         };
+        self.reset_selections();
         self.update_labels();
     }
 
@@ -168,6 +175,7 @@ impl SqlGui {
                 None
             }
         };
+        self.reset_selections();
         self.update_labels();
     }
 

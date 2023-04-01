@@ -1,14 +1,12 @@
 local function setDescriptorAsKeyValPair(arg)
-    if type(arg.description) == "string" and IsEmpty(arg.subdescriptor) then
-        arg.subdescriptor = GetProtectedDescriptor("content")
-    end
-    if IsEmpty(arg.subdescriptor) then
+    local currentDescription = arg.entity[arg.descriptor]
+    if type(arg.description) == "string" and IsEntity(currentDescription) then
+        currentDescription[GetProtectedDescriptor("content")] = arg.description
+    elseif type(currentDescription) == "string" and IsEntity(arg.description) then
+        arg.description[GetProtectedDescriptor("content")] = currentDescription
         arg.entity[arg.descriptor] = arg.description
     else
-        if arg.entity[arg.descriptor] == nil then
-            arg.entity[arg.descriptor] = {}
-        end
-        arg.entity[arg.descriptor][arg.subdescriptor] = arg.description
+        arg.entity[arg.descriptor] = arg.description
     end
 end
 
@@ -18,13 +16,27 @@ function SetDescriptor(arg)
     end
 
     Replace([[\reference]], [[\nameref]], arg.description)
+    AddMentions(arg.entity, arg.description)
     if not IsEmpty(ScanForCmd(arg.description, "label")) then
         arg.description = ContentToEntity { name = arg.descriptor, content = arg.description }
         MakePartOf { subEntity = arg.description, mainEntity = arg.entity }
     elseif not IsEmpty(ScanForCmd(arg.description, "subparagraph")) then
         arg.description = ContentToMap(arg.description)
-    else
-        AddMentions(arg.entity, arg.description)
+    elseif not IsEmpty(arg.subdescriptor) then
+        local content = arg.description
+        local currentDescription = arg.entity[arg.descriptor]
+        if IsEmpty(currentDescription) or not IsEntity(currentDescription) then
+            local entityLabel = GetProtectedStringField(arg.entity, "label")
+            local subLabel = NewUniqueLabel(entityLabel .. "-" .. arg.descriptor)
+            local subEntity = GetMutableEntityFromAll(subLabel)
+            SetProtectedField(subEntity, "name", arg.descriptor)
+            arg.description = subEntity
+        else
+            arg.description = currentDescription
+        end
+        SetDescriptor { entity = arg.description, descriptor = arg.subdescriptor, description = content }
+        MakePartOf { subEntity = arg.description, mainEntity = arg.entity }
+        arg.subdescriptor = nil
     end
     setDescriptorAsKeyValPair(arg)
 end

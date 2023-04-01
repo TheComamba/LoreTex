@@ -1,11 +1,11 @@
-local generatedLabelFlag = [[GENERATED_LABEL_]]
+local generatedLabelFlag = [[GENERATED-LABEL-]]
 local labelCounter = 0
 
 StateResetters[#StateResetters + 1] = function()
     labelCounter = 0
 end
 
-local function newUniqueLabel(name)
+function NewUniqueLabel(name)
     labelCounter = labelCounter + 1
     return generatedLabelFlag .. LabelFromName(name) .. "-" .. labelCounter
 end
@@ -22,7 +22,7 @@ local function extractLabel(arg)
     if #labels > 0 then
         return labels[1]
     else
-        return newUniqueLabel(arg.name)
+        return NewUniqueLabel(arg.name)
     end
 end
 

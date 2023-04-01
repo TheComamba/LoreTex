@@ -1,4 +1,4 @@
-use std::env;
+use std::{env, path::PathBuf};
 
 use crate::{errors::GuiError, schema::entities};
 use ::diesel::prelude::*;
@@ -7,20 +7,20 @@ use diesel_migrations::{embed_migrations, EmbeddedMigrations, MigrationHarness};
 use dotenvy::dotenv;
 
 pub(crate) struct LoreDatabase {
-    path: String,
+    path: PathBuf,
 }
 
 pub const MIGRATIONS: EmbeddedMigrations = embed_migrations!();
 
 impl LoreDatabase {
-    pub(crate) fn new(path: String) -> Result<Self, GuiError> {
+    pub(crate) fn new(path: PathBuf) -> Result<Self, GuiError> {
         db_connection()?
             .run_pending_migrations(MIGRATIONS)
             .map_err(|_| GuiError::Other("Failed to run SQL database migrations.".to_string()))?;
         return Ok(LoreDatabase { path });
     }
 
-    pub(crate) fn open(path: String) -> Result<Self, GuiError> {
+    pub(crate) fn open(path: PathBuf) -> Result<Self, GuiError> {
         return Ok(LoreDatabase { path });
     }
 }

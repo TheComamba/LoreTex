@@ -1,3 +1,5 @@
+use std::path::PathBuf;
+
 use iced::{
     widget::{Button, Column, Container, Row, Scrollable, Text},
     Alignment, Length, Sandbox,
@@ -55,7 +57,7 @@ impl Sandbox for SqlGui {
     fn update(&mut self, message: Self::Message) {
         match message {
             GuiMessage::NewDatabase => {
-                self.lore_database = match LoreDatabase::new("dummy".to_string()) {
+                self.lore_database = match LoreDatabase::new(PathBuf::from("dummy.db")) {
                     Ok(db) => Some(db),
                     Err(e) => {
                         self.error_message = Some(e.to_string());

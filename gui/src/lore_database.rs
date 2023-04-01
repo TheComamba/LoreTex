@@ -89,31 +89,31 @@ impl LoreDatabase {
             .load::<EntityColumn>(&mut connection)
             .map_err(|_| {
                 GuiError::Other(
-                    "Loading entities to for label ".to_string()
+                    "Loading entities for label '".to_string()
                         + label
-                        + " and descriptor "
+                        + "' and descriptor '"
                         + descriptor
-                        + " failed.",
+                        + "' failed.",
                 )
             })?;
         if descriptions.len() > 1 {
             return Err(GuiError::Other(
-                "More than one description found for label ".to_string()
+                "More than one description found for label '".to_string()
                     + label
-                    + " and descriptor "
+                    + "' and descriptor '"
                     + descriptor
-                    + ".",
+                    + "'.",
             ));
         } else {
             let description = match descriptions.first() {
                 Some(col) => col.description.to_owned(),
                 None => {
                     return Err(GuiError::Other(
-                        "No description found for label ".to_string()
+                        "No description found for label '".to_string()
                             + label
-                            + " and descriptor "
+                            + "' and descriptor '"
                             + descriptor
-                            + ".",
+                            + "'.",
                     ))
                 }
             };

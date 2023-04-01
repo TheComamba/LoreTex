@@ -172,14 +172,15 @@ impl SqlGui {
     }
 
     fn update_labels(&mut self) {
-        if let Some(db) = self.lore_database.as_ref() {
-            match db.get_all_labels() {
+        match self.lore_database.as_ref() {
+            Some(db) => match db.get_all_labels() {
                 Ok(labels) => self.label_view_state.entries = labels,
                 Err(e) => {
                     self.error_message = Some(e.to_string());
                     self.label_view_state.entries = vec![];
                 }
-            };
+            },
+            None => self.label_view_state = DbColViewState::new(),
         }
         self.update_descriptors();
     }
@@ -192,15 +193,16 @@ impl SqlGui {
                 return;
             }
         };
-        if let Some(db) = self.lore_database.as_ref() {
-            match db.get_all_descriptors(label) {
+        match self.lore_database.as_ref() {
+            Some(db) => match db.get_all_descriptors(label) {
                 Ok(descriptors) => self.descriptor_view_state.entries = descriptors,
                 Err(e) => {
                     self.error_message = Some(e.to_string());
                     self.descriptor_view_state.entries = vec![];
                     return;
                 }
-            };
+            },
+            None => self.descriptor_view_state = DbColViewState::new(),
         }
         self.update_description();
     }
@@ -220,11 +222,12 @@ impl SqlGui {
                 return;
             }
         };
-        if let Some(db) = self.lore_database.as_ref() {
-            match db.get_description(label, descriptor) {
+        match self.lore_database.as_ref() {
+            Some(db) => match db.get_description(label, descriptor) {
                 Ok(desc) => self.current_description = desc,
                 Err(e) => self.error_message = Some(e.to_string()),
-            };
+            },
+            None => self.current_description = String::new(),
         }
     }
 }

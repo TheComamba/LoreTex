@@ -20,7 +20,7 @@ pub(crate) fn store_database_path(path: PathBuf) -> Result<(), GuiError> {
                 + &path.to_string_lossy(),
         )
     })?;
-    return Ok(());
+    Ok(())
 }
 
 pub(crate) fn load_database_path() -> Option<PathBuf> {
@@ -28,8 +28,5 @@ pub(crate) fn load_database_path() -> Option<PathBuf> {
         Ok(pref) => pref,
         Err(_) => return None,
     };
-    return match path_pref.get(DATABASE_PATH_KEY) {
-        Some(path) => Some(path.into()),
-        None => None,
-    };
+    path_pref.get(DATABASE_PATH_KEY).map(|path| path.into())
 }

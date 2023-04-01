@@ -5,6 +5,6 @@ pub(crate) enum GuiError {
 
 impl ToString for GuiError {
     fn to_string(&self) -> String {
-        return format!("{:?}", self);
+        format!("{:?}", self)
     }
 }

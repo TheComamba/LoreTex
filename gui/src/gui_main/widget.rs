@@ -25,7 +25,7 @@ impl Sandbox for SqlGui {
         if let Some(path) = load_database_path() {
             gui.open_database(path);
         }
-        return gui;
+        gui
     }
 
     fn title(&self) -> String {
@@ -53,28 +53,26 @@ impl Sandbox for SqlGui {
 
     fn view(&self) -> iced::Element<'_, Self::Message> {
         match self.error_message.clone() {
-            None => {
-                return Column::new()
-                    .push(self.menu_bar())
-                    .push(self.current_database_display())
-                    .push(self.main_view())
-                    .into()
-            }
-            Some(message) => return self.error_dialog(message),
+            None => Column::new()
+                .push(self.menu_bar())
+                .push(self.current_database_display())
+                .push(self.main_view())
+                .into(),
+            Some(message) => self.error_dialog(message),
         }
     }
 }
 
 impl SqlGui {
     fn menu_bar(&self) -> iced::Element<'_, GuiMessage> {
-        return Row::new()
+        Row::new()
             .push(Button::new("New Lore Database").on_press(GuiMessage::NewDatabase))
             .push(Button::new("Open Lore Database").on_press(GuiMessage::OpenDatabase))
             .align_items(Alignment::Center)
             .width(Length::Fill)
             .padding(5)
             .spacing(5)
-            .into();
+            .into()
     }
 
     fn current_database_display(&self) -> iced::Element<'_, GuiMessage> {
@@ -82,11 +80,11 @@ impl SqlGui {
             Some(db) => db.path_as_string(),
             None => "[No database loaded]".to_string(),
         };
-        return Container::new(Text::new(content)).padding(5).into();
+        Container::new(Text::new(content)).padding(5).into()
     }
 
     fn main_view(&self) -> iced::Element<'_, GuiMessage> {
-        return Row::new()
+        Row::new()
             .push(db_col_view(
                 "Labels",
                 &self.label_view_state,
@@ -108,7 +106,7 @@ impl SqlGui {
             .align_items(Alignment::Start)
             .width(Length::Fill)
             .height(Length::Fill)
-            .into();
+            .into()
     }
 
     fn error_dialog(&self, text: String) -> iced::Element<'_, GuiMessage> {

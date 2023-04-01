@@ -25,15 +25,15 @@ impl LoreDatabase {
         db.db_connection()?
             .run_pending_migrations(MIGRATIONS)
             .map_err(|_| GuiError::Other("Failed to run SQL database migrations.".to_string()))?;
-        return Ok(db);
+        Ok(db)
     }
 
     pub(crate) fn open(path: PathBuf) -> Result<Self, GuiError> {
-        return Ok(LoreDatabase { path });
+        Ok(LoreDatabase { path })
     }
 
     pub(crate) fn path_as_string(&self) -> String {
-        return self.path.to_string_lossy().to_string();
+        self.path.to_string_lossy().to_string()
     }
 
     fn db_connection(&self) -> Result<SqliteConnection, GuiError> {
@@ -46,9 +46,9 @@ impl LoreDatabase {
                     + &self.path.to_string_lossy(),
             )),
         };
-        return SqliteConnection::establish(path).map_err(|_| {
+        SqliteConnection::establish(path).map_err(|_| {
             GuiError::Other("Failed to establish a connection to the database.".to_string())
-        });
+        })
     }
 
     pub(crate) fn get_all_labels(&self) -> Result<Vec<String>, GuiError> {
@@ -60,7 +60,7 @@ impl LoreDatabase {
             .map(|c| c.label)
             .collect::<Vec<_>>();
         labels.dedup();
-        return Ok(labels);
+        Ok(labels)
     }
 
     pub(crate) fn get_all_descriptors(&self, label: &String) -> Result<Vec<String>, GuiError> {
@@ -78,7 +78,7 @@ impl LoreDatabase {
             .into_iter()
             .map(|c| c.descriptor)
             .collect();
-        return Ok(descriptors);
+        Ok(descriptors)
     }
 
     pub(crate) fn get_description(
@@ -101,13 +101,13 @@ impl LoreDatabase {
                 )
             })?;
         if descriptions.len() > 1 {
-            return Err(GuiError::Other(
+            Err(GuiError::Other(
                 "More than one description found for label '".to_string()
                     + label
                     + "' and descriptor '"
                     + descriptor
                     + "'.",
-            ));
+            ))
         } else {
             let description = match descriptions.first() {
                 Some(col) => col.description.to_owned(),
@@ -121,7 +121,7 @@ impl LoreDatabase {
                     ))
                 }
             };
-            return Ok(description);
+            Ok(description)
         }
     }
 }

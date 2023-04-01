@@ -44,7 +44,7 @@ where
         m(DbColViewMessage::SearchFieldUpdated(str))
     })
     .width(Length::Fill);
-    let m = messages.clone();
+    let m = messages;
     let selection_list = SelectionList::new_with(
         state.entries.clone(),
         move |str| m(DbColViewMessage::Selected(str)),

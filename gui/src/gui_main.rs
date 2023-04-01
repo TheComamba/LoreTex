@@ -7,9 +7,7 @@ use iced_aw::{style::CardStyles, Card};
 use crate::{
     db_col_view::{db_col_view, DbColViewMessage, DbColViewState},
     file_dialogs,
-    lore_database::{
-        get_all_descriptors, get_all_labels, get_description, run_migrations, LoreDatabase,
-    },
+    lore_database::LoreDatabase,
 };
 
 #[derive(Debug, Clone)]
@@ -33,18 +31,13 @@ impl Sandbox for SqlGui {
     type Message = GuiMessage;
 
     fn new() -> Self {
-        let mut gui = SqlGui {
+        let gui = SqlGui {
             label_view_state: DbColViewState::new(),
             descriptor_view_state: DbColViewState::new(),
             current_description: String::new(),
             lore_database: None,
             error_message: None,
         };
-        if let Err(e) = run_migrations() {
-            gui.error_message = Some(e.to_string());
-            return gui;
-        }
-        gui.update_labels();
         return gui;
     }
 
@@ -174,13 +167,15 @@ impl SqlGui {
     }
 
     fn update_labels(&mut self) {
-        match get_all_labels() {
-            Ok(labels) => self.label_view_state.entries = labels,
-            Err(e) => {
-                self.error_message = Some(e.to_string());
-                self.label_view_state.entries = vec![];
-            }
-        };
+        if let Some(db) = self.lore_database.as_ref() {
+            match db.get_all_labels() {
+                Ok(labels) => self.label_view_state.entries = labels,
+                Err(e) => {
+                    self.error_message = Some(e.to_string());
+                    self.label_view_state.entries = vec![];
+                }
+            };
+        }
     }
 
     fn update_descriptors(&mut self) {
@@ -191,14 +186,16 @@ impl SqlGui {
                 return;
             }
         };
-        match get_all_descriptors(label) {
-            Ok(descriptors) => self.descriptor_view_state.entries = descriptors,
-            Err(e) => {
-                self.error_message = Some(e.to_string());
-                self.descriptor_view_state.entries = vec![];
-                return;
-            }
-        };
+        if let Some(db) = self.lore_database.as_ref() {
+            match db.get_all_descriptors(label) {
+                Ok(descriptors) => self.descriptor_view_state.entries = descriptors,
+                Err(e) => {
+                    self.error_message = Some(e.to_string());
+                    self.descriptor_view_state.entries = vec![];
+                    return;
+                }
+            };
+        }
     }
 
     fn update_description(&mut self) {
@@ -216,9 +213,11 @@ impl SqlGui {
                 return;
             }
         };
-        match get_description(label, descriptor) {
-            Ok(desc) => self.current_description = desc,
-            Err(e) => self.error_message = Some(e.to_string()),
-        };
+        if let Some(db) = self.lore_database.as_ref() {
+            match db.get_description(label, descriptor) {
+                Ok(desc) => self.current_description = desc,
+                Err(e) => self.error_message = Some(e.to_string()),
+            };
+        }
     }
 }

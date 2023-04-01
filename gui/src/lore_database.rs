@@ -1,4 +1,4 @@
-use std::{env, path::PathBuf};
+use std::path::PathBuf;
 
 use crate::{errors::GuiError, schema::entities};
 use ::diesel::prelude::*;

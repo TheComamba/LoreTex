@@ -9,7 +9,7 @@ fn current_path() -> PathBuf {
 
 pub(crate) fn new() -> Option<PathBuf> {
     return rfd::FileDialog::new()
-        .set_file_name("new_lore_darabase.db")
+        .set_file_name("new_lore_database.db")
         .set_directory(&current_path())
         .save_file();
 }

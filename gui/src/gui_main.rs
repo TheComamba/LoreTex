@@ -47,37 +47,12 @@ impl Sandbox for SqlGui {
 
     fn update(&mut self, message: Self::Message) {
         match message {
-            GuiMessage::NewDatabase => {
-                let path = match file_dialogs::new() {
-                    Some(path) => path,
-                    None => return,
-                };
-                self.lore_database = match LoreDatabase::new(path) {
-                    Ok(db) => Some(db),
-                    Err(e) => {
-                        self.error_message = Some(e.to_string());
-                        None
-                    }
-                };
-            }
-            GuiMessage::OpenDatabase => {
-                let path = match file_dialogs::open() {
-                    Some(path) => path,
-                    None => return,
-                };
-                self.lore_database = match LoreDatabase::open(path) {
-                    Ok(db) => Some(db),
-                    Err(e) => {
-                        self.error_message = Some(e.to_string());
-                        None
-                    }
-                };
-            }
+            GuiMessage::NewDatabase => self.new_database(),
+            GuiMessage::OpenDatabase => self.open_database(),
             GuiMessage::LabelViewUpdated(DbColViewMessage::Selected(label)) => {
                 self.label_view_state.selected_entry = Some(label);
                 self.descriptor_view_state.selected_entry = None;
                 self.update_descriptors();
-                self.update_description();
             }
             GuiMessage::DescriptorViewUpdated(DbColViewMessage::Selected(descriptor)) => {
                 self.descriptor_view_state.selected_entry = Some(descriptor);
@@ -166,6 +141,36 @@ impl SqlGui {
         .into()
     }
 
+    fn new_database(&mut self) {
+        let path = match file_dialogs::new() {
+            Some(path) => path,
+            None => return,
+        };
+        self.lore_database = match LoreDatabase::new(path) {
+            Ok(db) => Some(db),
+            Err(e) => {
+                self.error_message = Some(e.to_string());
+                None
+            }
+        };
+        self.update_labels();
+    }
+
+    fn open_database(&mut self) {
+        let path = match file_dialogs::open() {
+            Some(path) => path,
+            None => return,
+        };
+        self.lore_database = match LoreDatabase::open(path) {
+            Ok(db) => Some(db),
+            Err(e) => {
+                self.error_message = Some(e.to_string());
+                None
+            }
+        };
+        self.update_labels();
+    }
+
     fn update_labels(&mut self) {
         if let Some(db) = self.lore_database.as_ref() {
             match db.get_all_labels() {
@@ -176,6 +181,7 @@ impl SqlGui {
                 }
             };
         }
+        self.update_descriptors();
     }
 
     fn update_descriptors(&mut self) {
@@ -196,6 +202,7 @@ impl SqlGui {
                 }
             };
         }
+        self.update_description();
     }
 
     fn update_description(&mut self) {

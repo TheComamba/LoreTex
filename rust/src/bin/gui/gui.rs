@@ -4,7 +4,6 @@ mod db_col_view;
 mod errors;
 mod file_dialogs;
 mod gui_main;
-mod lore_database;
 mod schema;
 mod user_preferences;
 

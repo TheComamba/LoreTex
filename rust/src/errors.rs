@@ -1,9 +1,10 @@
 #[derive(Debug, Clone)]
-pub enum GuiError {
-    Other(String),
+pub enum LoreTexError {
+    SqlError(String),
+    FileError(String)
 }
 
-impl ToString for GuiError {
+impl ToString for LoreTexError {
     fn to_string(&self) -> String {
         format!("{:?}", self)
     }

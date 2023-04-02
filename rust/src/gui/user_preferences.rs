@@ -1,6 +1,6 @@
 use std::path::PathBuf;
 
-use lore_tex_sql_gui::errors::GuiError;
+use lore_tex_sql_gui::errors::LoreTexError;
 use preferences::{AppInfo, Preferences, PreferencesMap};
 
 use crate::APP_TITLE;
@@ -12,11 +12,11 @@ const APP_INFO: AppInfo = AppInfo {
 
 const DATABASE_PATH_KEY: &str = "database_path";
 
-pub(crate) fn store_database_path(path: PathBuf) -> Result<(), GuiError> {
+pub(crate) fn store_database_path(path: PathBuf) -> Result<(), LoreTexError> {
     let mut path_pref: PreferencesMap<PathBuf> = PreferencesMap::new();
     path_pref.insert(DATABASE_PATH_KEY.to_string(), path.clone());
     path_pref.save(&APP_INFO, DATABASE_PATH_KEY).map_err(|_| {
-        GuiError::Other(
+        LoreTexError::FileError(
             "The following database path could not be stored as user preference:\n".to_string()
                 + &path.to_string_lossy(),
         )

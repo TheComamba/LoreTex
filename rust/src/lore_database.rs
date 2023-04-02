@@ -1,6 +1,6 @@
 use std::path::PathBuf;
 
-use crate::{errors::GuiError, schema::entities};
+use crate::{errors::LoreTexError, schema::entities};
 use ::diesel::prelude::*;
 use diesel::{Connection, Insertable, RunQueryDsl, SqliteConnection};
 use diesel_migrations::{embed_migrations, EmbeddedMigrations, MigrationHarness};
@@ -20,15 +20,17 @@ pub(crate) struct EntityColumn {
 const MIGRATIONS: EmbeddedMigrations = embed_migrations!();
 
 impl LoreDatabase {
-    pub fn new(path: PathBuf) -> Result<Self, GuiError> {
+    pub fn new(path: PathBuf) -> Result<Self, LoreTexError> {
         let db = LoreDatabase { path };
         db.db_connection()?
             .run_pending_migrations(MIGRATIONS)
-            .map_err(|_| GuiError::Other("Failed to run SQL database migrations.".to_string()))?;
+            .map_err(|_| {
+                LoreTexError::SqlError("Failed to run SQL database migrations.".to_string())
+            })?;
         Ok(db)
     }
 
-    pub fn open(path: PathBuf) -> Result<Self, GuiError> {
+    pub fn open(path: PathBuf) -> Result<Self, LoreTexError> {
         Ok(LoreDatabase { path })
     }
 
@@ -36,10 +38,10 @@ impl LoreDatabase {
         self.path.to_string_lossy().to_string()
     }
 
-    fn db_connection(&self) -> Result<SqliteConnection, GuiError> {
+    fn db_connection(&self) -> Result<SqliteConnection, LoreTexError> {
         let path = match self.path.to_str() {
             Some(str) => str,
-            None => return Err(GuiError::Other(
+            None => return Err(LoreTexError::FileError(
                 "Could not open database path.".to_string()
                     + "This is likely because it contains characters that can not be UTF-8 encoded."
                     + "The lossy path conversion reads:\n"
@@ -47,15 +49,17 @@ impl LoreDatabase {
             )),
         };
         SqliteConnection::establish(path).map_err(|_| {
-            GuiError::Other("Failed to establish a connection to the database.".to_string())
+            LoreTexError::SqlError("Failed to establish a connection to the database.".to_string())
         })
     }
 
-    pub fn get_all_labels(&self) -> Result<Vec<String>, GuiError> {
+    pub fn get_all_labels(&self) -> Result<Vec<String>, LoreTexError> {
         let mut connection = self.db_connection()?;
         let mut labels = entities::table
             .load::<EntityColumn>(&mut connection)
-            .map_err(|_| GuiError::Other("Loading entities to get all labels failed.".to_string()))?
+            .map_err(|_| {
+                LoreTexError::SqlError("Loading entities to get all labels failed.".to_string())
+            })?
             .into_iter()
             .map(|c| c.label)
             .collect::<Vec<_>>();
@@ -63,13 +67,13 @@ impl LoreDatabase {
         Ok(labels)
     }
 
-    pub fn get_all_descriptors(&self, label: &String) -> Result<Vec<String>, GuiError> {
+    pub fn get_all_descriptors(&self, label: &String) -> Result<Vec<String>, LoreTexError> {
         let mut connection = self.db_connection()?;
         let descriptors = entities::table
             .filter(entities::label.eq(label))
             .load::<EntityColumn>(&mut connection)
             .map_err(|_| {
-                GuiError::Other(
+                LoreTexError::SqlError(
                     "Loading entities to get descriptors for label ".to_string()
                         + label
                         + " failed.",
@@ -81,14 +85,18 @@ impl LoreDatabase {
         Ok(descriptors)
     }
 
-    pub fn get_description(&self, label: &String, descriptor: &String) -> Result<String, GuiError> {
+    pub fn get_description(
+        &self,
+        label: &String,
+        descriptor: &String,
+    ) -> Result<String, LoreTexError> {
         let mut connection = self.db_connection()?;
         let descriptions = entities::table
             .filter(entities::label.eq(label))
             .filter(entities::descriptor.eq(descriptor))
             .load::<EntityColumn>(&mut connection)
             .map_err(|_| {
-                GuiError::Other(
+                LoreTexError::SqlError(
                     "Loading entities for label '".to_string()
                         + label
                         + "' and descriptor '"
@@ -97,7 +105,7 @@ impl LoreDatabase {
                 )
             })?;
         if descriptions.len() > 1 {
-            Err(GuiError::Other(
+            Err(LoreTexError::SqlError(
                 "More than one description found for label '".to_string()
                     + label
                     + "' and descriptor '"
@@ -108,7 +116,7 @@ impl LoreDatabase {
             let description = match descriptions.first() {
                 Some(col) => col.description.to_owned(),
                 None => {
-                    return Err(GuiError::Other(
+                    return Err(LoreTexError::SqlError(
                         "No description found for label '".to_string()
                             + label
                             + "' and descriptor '"

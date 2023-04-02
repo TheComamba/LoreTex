@@ -1,8 +1,9 @@
 use std::path::PathBuf;
 
+use lore_tex_sql_gui::errors::GuiError;
 use preferences::{AppInfo, Preferences, PreferencesMap};
 
-use crate::{errors::GuiError, APP_TITLE};
+use crate::APP_TITLE;
 
 const APP_INFO: AppInfo = AppInfo {
     name: APP_TITLE,

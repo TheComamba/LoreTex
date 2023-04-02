@@ -1,3 +1,3 @@
-mod lore_database;
-mod errors;
-mod schema;
+pub mod errors;
+pub mod lore_database;
+pub mod schema;

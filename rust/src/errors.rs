@@ -1,5 +1,5 @@
 #[derive(Debug, Clone)]
-pub(crate) enum GuiError {
+pub enum GuiError {
     Other(String),
 }
 

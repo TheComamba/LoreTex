@@ -1,8 +1,8 @@
 use super::SqlGui;
-use crate::db_col_view::DbColViewMessage;
+use crate::gui::db_col_view::DbColViewMessage;
 
 #[derive(Debug, Clone)]
-pub(crate) enum GuiMessage {
+pub enum GuiMessage {
     NewDatabase,
     OpenDatabase,
     LabelViewUpdated(DbColViewMessage),

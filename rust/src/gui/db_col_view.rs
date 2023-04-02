@@ -4,7 +4,7 @@ use iced::{
 };
 use iced_aw::{style::SelectionListStyles, SelectionList};
 
-use crate::gui_main::gui_message::GuiMessage;
+use crate::gui::gui_main::gui_message::GuiMessage;
 
 pub(crate) struct DbColViewState {
     pub(crate) search_text: String,
@@ -23,7 +23,7 @@ impl DbColViewState {
 }
 
 #[derive(Debug, Clone)]
-pub(crate) enum DbColViewMessage {
+pub enum DbColViewMessage {
     SearchFieldUpdated(String),
     Selected(String),
 }

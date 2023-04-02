@@ -5,7 +5,7 @@ use ::diesel::prelude::*;
 use diesel::{Connection, Insertable, RunQueryDsl, SqliteConnection};
 use diesel_migrations::{embed_migrations, EmbeddedMigrations, MigrationHarness};
 
-pub(crate) struct LoreDatabase {
+pub struct LoreDatabase {
     path: PathBuf,
 }
 
@@ -20,7 +20,7 @@ pub(crate) struct EntityColumn {
 const MIGRATIONS: EmbeddedMigrations = embed_migrations!();
 
 impl LoreDatabase {
-    pub(crate) fn new(path: PathBuf) -> Result<Self, GuiError> {
+    pub fn new(path: PathBuf) -> Result<Self, GuiError> {
         let db = LoreDatabase { path };
         db.db_connection()?
             .run_pending_migrations(MIGRATIONS)
@@ -28,11 +28,11 @@ impl LoreDatabase {
         Ok(db)
     }
 
-    pub(crate) fn open(path: PathBuf) -> Result<Self, GuiError> {
+    pub fn open(path: PathBuf) -> Result<Self, GuiError> {
         Ok(LoreDatabase { path })
     }
 
-    pub(crate) fn path_as_string(&self) -> String {
+    pub fn path_as_string(&self) -> String {
         self.path.to_string_lossy().to_string()
     }
 
@@ -51,7 +51,7 @@ impl LoreDatabase {
         })
     }
 
-    pub(crate) fn get_all_labels(&self) -> Result<Vec<String>, GuiError> {
+    pub fn get_all_labels(&self) -> Result<Vec<String>, GuiError> {
         let mut connection = self.db_connection()?;
         let mut labels = entities::table
             .load::<EntityColumn>(&mut connection)
@@ -63,7 +63,7 @@ impl LoreDatabase {
         Ok(labels)
     }
 
-    pub(crate) fn get_all_descriptors(&self, label: &String) -> Result<Vec<String>, GuiError> {
+    pub fn get_all_descriptors(&self, label: &String) -> Result<Vec<String>, GuiError> {
         let mut connection = self.db_connection()?;
         let descriptors = entities::table
             .filter(entities::label.eq(label))
@@ -81,11 +81,7 @@ impl LoreDatabase {
         Ok(descriptors)
     }
 
-    pub(crate) fn get_description(
-        &self,
-        label: &String,
-        descriptor: &String,
-    ) -> Result<String, GuiError> {
+    pub fn get_description(&self, label: &String, descriptor: &String) -> Result<String, GuiError> {
         let mut connection = self.db_connection()?;
         let descriptions = entities::table
             .filter(entities::label.eq(label))

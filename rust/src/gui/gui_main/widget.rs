@@ -1,6 +1,8 @@
 use crate::{
-    db_col_view::{db_col_view, DbColViewMessage, DbColViewState},
-    user_preferences::load_database_path,
+    gui::{
+        db_col_view::{db_col_view, DbColViewMessage, DbColViewState},
+        user_preferences::load_database_path,
+    },
     APP_TITLE,
 };
 

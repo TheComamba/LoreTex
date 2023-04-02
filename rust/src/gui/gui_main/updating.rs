@@ -1,6 +1,8 @@
 use std::path::PathBuf;
 
-use crate::{db_col_view::DbColViewState, file_dialogs, lore_database::LoreDatabase};
+use lore_tex_sql_gui::lore_database::LoreDatabase;
+
+use crate::{gui::db_col_view::DbColViewState, gui::file_dialogs};
 
 use super::SqlGui;
 
@@ -17,7 +19,7 @@ impl SqlGui {
             None => return,
         };
         self.new_database(path.clone());
-        if let Err(e) = crate::user_preferences::store_database_path(path) {
+        if let Err(e) = crate::gui::user_preferences::store_database_path(path) {
             self.error_message = Some(e.to_string());
         };
     }
@@ -40,7 +42,7 @@ impl SqlGui {
             None => return,
         };
         self.open_database(path.clone());
-        if let Err(e) = crate::user_preferences::store_database_path(path) {
+        if let Err(e) = crate::gui::user_preferences::store_database_path(path) {
             self.error_message = Some(e.to_string());
         };
     }

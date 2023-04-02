@@ -1,11 +1,6 @@
 use iced::{Sandbox, Settings};
 
-mod db_col_view;
-mod errors;
-mod file_dialogs;
-mod gui_main;
-mod schema;
-mod user_preferences;
+mod gui;
 
 const APP_TITLE: &str = "LoreTex SQL GUI";
 

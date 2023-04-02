@@ -1,6 +1,6 @@
 use std::path::PathBuf;
 
-use crate::{errors::LoreTexError, schema::entities};
+use crate::{errors::LoreTexError, sql::schema::entities};
 use ::diesel::prelude::*;
 use diesel::{Connection, Insertable, RunQueryDsl, SqliteConnection};
 use diesel_migrations::{embed_migrations, EmbeddedMigrations, MigrationHarness};

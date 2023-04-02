@@ -1,7 +1,7 @@
 #[derive(Debug, Clone)]
 pub enum LoreTexError {
     SqlError(String),
-    FileError(String)
+    FileError(String),
 }
 
 impl ToString for LoreTexError {

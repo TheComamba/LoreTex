@@ -6,7 +6,7 @@ use crate::{
     APP_TITLE,
 };
 
-use super::{gui_message::GuiMessage, SqlGui};
+use super::{message_handling::GuiMessage, SqlGui};
 use iced::{
     widget::{Button, Column, Container, Row, Scrollable, Text},
     Alignment, Length, Sandbox,

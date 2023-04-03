@@ -2,7 +2,7 @@ use lore_tex_sql_gui::sql::lore_database::LoreDatabase;
 
 use crate::gui::db_col_view::DbColViewState;
 
-pub mod gui_message;
+pub mod message_handling;
 mod updating;
 pub mod widget;
 

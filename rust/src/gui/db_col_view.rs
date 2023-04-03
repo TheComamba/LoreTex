@@ -30,15 +30,13 @@ pub enum DbColViewMessage {
 
 pub(crate) fn db_col_view<'a, M>(
     title: &'a str,
+    button_texts: Vec<&'a str>,
     state: &DbColViewState,
     messages: M,
 ) -> Column<'a, GuiMessage, Renderer>
 where
     M: 'static + Clone + Fn(DbColViewMessage) -> GuiMessage,
 {
-    let new_button = button("New").width(Length::Fill);
-    let delete_button = button("Delete").width(Length::Fill);
-    let rename_button = button("Rename").width(Length::Fill);
     let m = messages.clone();
     let search_field = TextInput::new("Type to search...", &state.search_text, move |str| {
         m(DbColViewMessage::SearchFieldUpdated(str))
@@ -52,15 +50,17 @@ where
         0.0,
         SelectionListStyles::Default,
     );
-    return Column::new()
-        .push(Text::new(title))
-        .push(new_button)
-        .push(delete_button)
-        .push(rename_button)
+    let mut col = Column::new().push(Text::new(title));
+    for text in button_texts.into_iter() {
+        let button = button(text).width(Length::Fill);
+        col = col.push(button);
+    }
+    col = col
         .push(search_field)
         .push(selection_list)
         .width(Length::Fill)
         .height(Length::Fill)
         .padding(5)
         .spacing(5);
+    col
 }

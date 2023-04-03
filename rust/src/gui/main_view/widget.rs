@@ -89,11 +89,13 @@ impl SqlGui {
         Row::new()
             .push(db_col_view(
                 "Labels",
+                vec!["New Entity", "Delete Entity", "Relabel Entity"],
                 &self.label_view_state,
                 GuiMessage::LabelViewUpdated,
             ))
             .push(db_col_view(
                 "Descriptors",
+                vec!["New Descriptor", "Delete Descriptor", "Rename Descriptor"],
                 &self.descriptor_view_state,
                 GuiMessage::DescriptorViewUpdated,
             ))

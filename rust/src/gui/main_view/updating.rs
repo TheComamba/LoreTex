@@ -59,7 +59,7 @@ impl SqlGui {
         self.update_labels();
     }
 
-    fn update_labels(&mut self) {
+    pub(super) fn update_labels(&mut self) {
         match self.lore_database.as_ref() {
             Some(db) => match db.get_all_labels() {
                 Ok(labels) => self.label_view_state.entries = labels,

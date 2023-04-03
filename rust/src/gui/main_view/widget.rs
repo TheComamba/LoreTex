@@ -85,25 +85,49 @@ impl SqlGui {
         Container::new(Text::new(content)).padding(5).into()
     }
 
+    fn label_button_infos(&self) -> Vec<(&str, Option<DbColViewMessage>)> {
+        let are_enabled = self.lore_database.is_some();
+        vec![
+            (
+                "New Entity",
+                if are_enabled {
+                    Some(DbColViewMessage::New)
+                } else {
+                    None
+                },
+            ),
+            ("Delete Entity", None),
+            ("Relabel Entity", None),
+        ]
+    }
+
+    fn descriptor_button_infos(&self) -> Vec<(&str, Option<DbColViewMessage>)> {
+        let are_enabled = self.label_view_state.selected_entry.is_some();
+        vec![
+            (
+                "New Descriptor",
+                if are_enabled {
+                    Some(DbColViewMessage::New)
+                } else {
+                    None
+                },
+            ),
+            ("Delete Descriptor", None),
+            ("Rename Descriptor", None),
+        ]
+    }
+
     fn main_view(&self) -> iced::Element<'_, GuiMessage> {
         Row::new()
             .push(db_col_view(
                 "Labels",
-                vec![
-                    ("New Entity", None),
-                    ("Delete Entity", None),
-                    ("Relabel Entity", None),
-                ],
+                self.label_button_infos(),
                 &self.label_view_state,
                 GuiMessage::LabelViewUpdated,
             ))
             .push(db_col_view(
                 "Descriptors",
-                vec![
-                    ("New Descriptor", Some(DbColViewMessage::New)),
-                    ("Delete Descriptor", None),
-                    ("Rename Descriptor", None),
-                ],
+                self.descriptor_button_infos(),
                 &self.descriptor_view_state,
                 GuiMessage::DescriptorViewUpdated,
             ))

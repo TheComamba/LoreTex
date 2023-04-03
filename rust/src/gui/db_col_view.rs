@@ -24,13 +24,14 @@ impl DbColViewState {
 
 #[derive(Debug, Clone)]
 pub enum DbColViewMessage {
+    New,
     SearchFieldUpdated(String),
     Selected(String),
 }
 
 pub(crate) fn db_col_view<'a, M>(
     title: &'a str,
-    button_texts: Vec<&'a str>,
+    button_infos: Vec<(&'a str, Option<DbColViewMessage>)>,
     state: &DbColViewState,
     messages: M,
 ) -> Column<'a, GuiMessage, Renderer>
@@ -42,7 +43,7 @@ where
         m(DbColViewMessage::SearchFieldUpdated(str))
     })
     .width(Length::Fill);
-    let m = messages;
+    let m = messages.clone();
     let selection_list = SelectionList::new_with(
         state.entries.clone(),
         move |str| m(DbColViewMessage::Selected(str)),
@@ -51,8 +52,13 @@ where
         SelectionListStyles::Default,
     );
     let mut col = Column::new().push(Text::new(title));
-    for text in button_texts.into_iter() {
-        let button = button(text).width(Length::Fill);
+    for info in button_infos.into_iter() {
+        let (text, press_message) = info;
+        let mut button = button(text).width(Length::Fill);
+        if let Some(message) = press_message {
+            let m = messages.clone();
+            button = button.on_press(m(message));
+        }
         col = col.push(button);
     }
     col = col

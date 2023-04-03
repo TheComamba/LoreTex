@@ -13,6 +13,7 @@ pub enum GuiMessage {
 impl SqlGui {
     pub(super) fn update_label_view(&mut self, message: DbColViewMessage) {
         match message {
+            DbColViewMessage::New => todo!(),
             DbColViewMessage::SearchFieldUpdated(text) => self.label_view_state.search_text = text,
             DbColViewMessage::Selected(_) => (), //handled elsewhere
         };
@@ -20,6 +21,7 @@ impl SqlGui {
 
     pub(super) fn update_descriptor_view(&mut self, message: DbColViewMessage) {
         match message {
+            DbColViewMessage::New => todo!(),
             DbColViewMessage::SearchFieldUpdated(text) => {
                 self.descriptor_view_state.search_text = text
             }

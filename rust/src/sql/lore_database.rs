@@ -11,7 +11,7 @@ pub struct LoreDatabase {
 
 #[derive(Insertable, Queryable)]
 #[diesel(table_name = entities)]
-pub(crate) struct EntityColumn {
+pub struct EntityColumn {
     pub label: String,
     pub descriptor: String,
     pub description: String,
@@ -51,6 +51,17 @@ impl LoreDatabase {
         SqliteConnection::establish(path).map_err(|_| {
             LoreTexError::SqlError("Failed to establish a connection to the database.".to_string())
         })
+    }
+
+    pub fn write_column(&self, col: EntityColumn) -> Result<(), LoreTexError> {
+        let mut connection = self.db_connection()?;
+        let _ = diesel::insert_into(entities::table)
+            .values(&col)
+            .execute(&mut connection)
+            .map_err(|_| {
+                LoreTexError::SqlError("Writing column to database failed.".to_string())
+            })?;
+        Ok(())
     }
 
     pub fn get_all_labels(&self) -> Result<Vec<String>, LoreTexError> {

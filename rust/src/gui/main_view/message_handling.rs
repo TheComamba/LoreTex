@@ -1,4 +1,4 @@
-use lore_tex_sql_gui::{errors::LoreTexError, sql::lore_database::EntityColumn};
+use lore_tex::{errors::LoreTexError, sql::lore_database::EntityColumn};
 
 use super::SqlGui;
 use crate::gui::db_col_view::DbColViewMessage;

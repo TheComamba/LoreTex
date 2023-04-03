@@ -1,4 +1,4 @@
-use lore_tex_sql_gui::sql::lore_database::LoreDatabase;
+use lore_tex::sql::lore_database::LoreDatabase;
 
 use crate::gui::db_col_view::DbColViewState;
 

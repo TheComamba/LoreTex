@@ -1441,7 +1441,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "lore_tex_sql_gui"
+name = "lore_tex_gui"
 version = "0.1.0"
 dependencies = [
  "diesel",

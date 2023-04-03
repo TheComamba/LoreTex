@@ -85,33 +85,35 @@ impl SqlGui {
         Container::new(Text::new(content)).padding(5).into()
     }
 
+    fn new_entity_msg(&self) -> Option<DbColViewMessage> {
+        if self.lore_database.is_some() && !self.label_view_state.search_text.is_empty() {
+            Some(DbColViewMessage::New)
+        } else {
+            None
+        }
+    }
+
+    fn new_descriptor_msg(&self) -> Option<DbColViewMessage> {
+        if self.label_view_state.selected_entry.is_some()
+            && !self.descriptor_view_state.search_text.is_empty()
+        {
+            Some(DbColViewMessage::New)
+        } else {
+            None
+        }
+    }
+
     fn label_button_infos(&self) -> Vec<(&str, Option<DbColViewMessage>)> {
-        let are_enabled = self.lore_database.is_some();
         vec![
-            (
-                "New Entity",
-                if are_enabled {
-                    Some(DbColViewMessage::New)
-                } else {
-                    None
-                },
-            ),
+            ("New Entity", self.new_entity_msg()),
             ("Delete Entity", None),
             ("Relabel Entity", None),
         ]
     }
 
     fn descriptor_button_infos(&self) -> Vec<(&str, Option<DbColViewMessage>)> {
-        let are_enabled = self.label_view_state.selected_entry.is_some();
         vec![
-            (
-                "New Descriptor",
-                if are_enabled {
-                    Some(DbColViewMessage::New)
-                } else {
-                    None
-                },
-            ),
+            ("New Descriptor", self.new_descriptor_msg()),
             ("Delete Descriptor", None),
             ("Rename Descriptor", None),
         ]

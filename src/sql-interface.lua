@@ -15,8 +15,9 @@ If you're running from a terminal, call the \verb'lualatex' command with the \ve
         return
     end
 
-    local rust_lib = ffi.load("./rust/target/debug/liblore_tex.so")
-    if rust_lib == nil then
+    local libPath = RelativePath .. [[../rust/target/debug/liblore_tex.so]]
+    local rustLib = ffi.load(libPath)
+    if rustLib == nil then
         LogError("Cannot load rust library.")
         return
     end
@@ -25,7 +26,7 @@ If you're running from a terminal, call the \verb'lualatex' command with the \ve
         int test();
     ]]
 
-    testresult = rust_lib.test()
+    testresult = rustLib.test()
     tex.print(testresult)
     LogError("writeEntityToDatabase is not yet implemented.")
 end

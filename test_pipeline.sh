@@ -2,7 +2,7 @@
 
 cd tests
 echo "Running tests..."
-lualatex --interaction=batchmode run_tests.tex
+lualatex --interaction=batchmode --enable-write18 run_tests.tex
 if [ $? -ne 0 ] ; then
     echo "Some tests failed."
     exit 1

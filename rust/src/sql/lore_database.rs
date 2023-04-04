@@ -11,6 +11,7 @@ pub struct LoreDatabase {
 
 #[derive(Insertable, Queryable)]
 #[diesel(table_name = entities)]
+#[repr(C)]
 pub struct EntityColumn {
     pub label: String,
     pub descriptor: String,

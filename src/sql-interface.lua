@@ -44,19 +44,20 @@ local function getLib()
         return nil
     end
 
-    return rustLib
+    return rustLib, ffi
 end
 
 
 local function writeEntityToDatabase(entity)
-    local rustLib = getLib()
-    if not rustLib then return nil end
+    local rustLib, ffi = getLib()
+    if not rustLib or not ffi then return nil end
 
     local dbPath = RelativePath .. [[../tmp_sql_example/example.db]]
 
-    result = rustLib.write_database_column(dbPath, "finny", "ninny", "willigreg")
-    if result ~= 0 then
-        LogError("Something went wrong during writeEntityToDatabase. No idea what, though.")
+    local result = rustLib.write_database_column(dbPath, "finny", "ninny", "willigreg")
+    local errorMessage = ffi.string(result)
+    if errorMessage ~= "" then
+        LogError(errorMessage)
         return
     end
 end

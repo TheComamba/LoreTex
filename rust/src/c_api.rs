@@ -1,4 +1,4 @@
-use std::path::PathBuf;
+use std::{path::PathBuf, ffi::{CStr, CString}};
 
 use crate::{
     errors::LoreTexError,
@@ -18,11 +18,15 @@ fn to_entity_column(
 
 fn char_pointer_to_string(string: *const libc::c_char) -> Result<String, LoreTexError> {
     let string: &str = unsafe {
-        std::ffi::CStr::from_ptr(string).to_str().map_err(|_| {
+        CStr::from_ptr(string).to_str().map_err(|_| {
             LoreTexError::InputError("Could not convert characterpointer to string.".to_string())
         })?
     };
     Ok(string.to_string())
+}
+
+fn char_ptr(message: &str) -> *const libc::c_char {
+    CString::new(message).unwrap().into_raw()
 }
 
 #[no_mangle]
@@ -31,23 +35,23 @@ pub unsafe extern "C" fn write_database_column(
     label: *const libc::c_char,
     descriptor: *const libc::c_char,
     description: *const libc::c_char,
-) -> i32 {
+) -> *const libc::c_char {
     let db_path = match char_pointer_to_string(db_path) {
         Ok(s) => s,
-        Err(_) => return 1,
+        Err(_) => return char_ptr("Database path is not a valid string."),
     };
     let db_path = PathBuf::from(db_path);
     let column = match to_entity_column(label, descriptor, description) {
         Ok(c) => c,
-        Err(_) => return 2,
+        Err(_) => return char_ptr("Could not transform input to entity column."),
     };
     let db = match LoreDatabase::open(db_path) {
         Ok(db) => db,
-        Err(_) => return 3,
+        Err(_) => return char_ptr("Could not open database."),
     };
     if db.write_column(column).is_err() {
-        4
+        char_ptr("Could not write column.")
     } else {
-        0
+        char_ptr("")
     }
 }

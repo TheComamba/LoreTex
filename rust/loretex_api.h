@@ -1,9 +1,3 @@
-#include <cstdarg>
-#include <cstdint>
-#include <cstdlib>
-#include <ostream>
-#include <new>
-
 struct UnsafeEntityColumn {
   const char *label;
   const char *descriptor;

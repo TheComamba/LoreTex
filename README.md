@@ -6,13 +6,15 @@ Have you ever struggled to keep your adventure notes organised? Did you copy and
 
 LoreTex may not be *the* answer to these problems, but it is *my* answer. It is an extension to the Tex language for compiling pdf documents, providing an interface to define characters, places and more, and then generate a glossary containing those entities that are relevant to your story.
 
-## Prerequisites
+## Setup
+
+### Prerequisites
 
 LoreTex assumes that you have the LuaLaTex compiler installed.
 
 All required Tex packages are included at the beginning of main.tex. Currently, these are luacode and nameref.
 
-## Installation
+### Installation [Outdated!!!]
 
 Clone this git repository to some place on your computer:
 
@@ -22,9 +24,23 @@ git clone https://github.com/TheComamba/LoreTex.git
 
 Alternatively copy the contents of this repository to some place on your computer.
 
-## Usage
+LoreTex uses the Lua scripting language, and can thus only be compiled using LuaLaTex. It further needs to load a library, which due to security reasons is only possible in shell-escape mode. Hence, to compile from a terminal you need to call:
 
-The tex compiler must be set to LuaLaTex. For example, in TexStudio this can be done via Options -> Configure TexStudio -> Build -> Default Compiler.
+```bash
+lualatex -shell-escape <your tex document>
+```
+
+If you're running from a GUI (and why wouldn't you?) you have to modify it to alco include this option in the compilation.
+
+For example, in TexStudio this can be done via the menu bar item Options -> Configure TexStudio -> Build -> Default Compiler. Here you need to enter:
+
+```bash
+txs:///lualatex/{%.tex} -shell-escape "%.tex"
+```
+
+(Note that this contains a bit of a hack, see [this discussion](https://github.com/texstudio-org/texstudio/discussions/3062).)
+
+### Usage
 
 The tex file using LoreTex needs to be told where to find main.tex:
 

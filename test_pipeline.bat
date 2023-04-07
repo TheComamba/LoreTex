@@ -2,7 +2,7 @@ echo off
 
 cd tests
 echo "Running tests..."
-lualatex --interaction=batchmode --enable-write18 run_tests.tex || goto :error
+lualatex --interaction=batchmode --shell-escape run_tests.tex || goto :error
 cd ..
 
 cd tutorials

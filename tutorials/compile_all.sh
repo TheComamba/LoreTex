@@ -5,7 +5,7 @@ for dir in */ ; do
     cd "$dir"
     for file in *.tex ; do
 		echo Compiling "$file"...
-        lualatex --interaction=batchmode --enable-write18 "$file"
+        lualatex --interaction=batchmode --shell-escape "$file"
 
         if [ $? -ne 0 ] ; then
             echo "An error occurred during compilation."

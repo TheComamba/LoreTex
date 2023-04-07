@@ -8,8 +8,8 @@ local function getFFIModule()
     if ffi["load"] == nil then
         LogError[[
 LuaLaTex has been called in restricted mode, which does not allow the loading of external libraries.
-
-If you're running from a terminal, call the \verb'lualatex' command with the \verb'--enable-write18' option.
+You need to call it with the \verb'--shell-escape' option.
+See the installation section of README.md on how to do that.
 ]]
         return nil
     end
@@ -21,7 +21,7 @@ local function getCHeader()
     local headerPath = RelativePath .. [[../rust/loretex_api.h]]
     local file = io.open(headerPath, "r")
     if not file then
-        LogError("Cann load header file.")
+        LogError("Cannot load header file.")
         return nil
     end
     local content = file:read "*all"
@@ -52,7 +52,7 @@ local function writeEntityToDatabase(entity)
     local rustLib = getLib()
     if not rustLib then return nil end
 
-    local dbPath = RelativePath .. [[../rust/example.db]]
+    local dbPath = RelativePath .. [[../tmp_sql_example/example.db]]
 
     result = rustLib.write_database_column(dbPath, "finny", "ninny", "willigreg")
     if result ~= 0 then

@@ -1,4 +1,7 @@
-use std::{path::PathBuf, ffi::{CStr, CString}};
+use std::{
+    ffi::{CStr, CString},
+    path::PathBuf,
+};
 
 use crate::{
     errors::LoreTexError,
@@ -8,7 +11,8 @@ use crate::{
 fn to_entity_column(
     label: *const libc::c_char,
     descriptor: *const libc::c_char,
-    description: *const libc::c_char,) -> Result<EntityColumn, LoreTexError> {
+    description: *const libc::c_char,
+) -> Result<EntityColumn, LoreTexError> {
     Ok(EntityColumn {
         label: char_pointer_to_string(label)?,
         descriptor: char_pointer_to_string(descriptor)?,
@@ -29,6 +33,20 @@ fn char_ptr(message: &str) -> *const libc::c_char {
     CString::new(message).unwrap().into_raw()
 }
 
+fn c_write_database_column(
+    db_path: *const libc::c_char,
+    label: *const libc::c_char,
+    descriptor: *const libc::c_char,
+    description: *const libc::c_char,
+) -> Result<(), LoreTexError> {
+    let db_path = char_pointer_to_string(db_path)?;
+    let db_path = PathBuf::from(db_path);
+    let column = to_entity_column(label, descriptor, description)?;
+    let db = LoreDatabase::open(db_path)?;
+    db.write_column(column)?;
+    Ok(())
+}
+
 #[no_mangle]
 pub unsafe extern "C" fn write_database_column(
     db_path: *const libc::c_char,
@@ -36,22 +54,8 @@ pub unsafe extern "C" fn write_database_column(
     descriptor: *const libc::c_char,
     description: *const libc::c_char,
 ) -> *const libc::c_char {
-    let db_path = match char_pointer_to_string(db_path) {
-        Ok(s) => s,
-        Err(_) => return char_ptr("Database path is not a valid string."),
-    };
-    let db_path = PathBuf::from(db_path);
-    let column = match to_entity_column(label, descriptor, description) {
-        Ok(c) => c,
-        Err(_) => return char_ptr("Could not transform input to entity column."),
-    };
-    let db = match LoreDatabase::open(db_path) {
-        Ok(db) => db,
-        Err(_) => return char_ptr("Could not open database."),
-    };
-    if db.write_column(column).is_err() {
-        char_ptr("Could not write column.")
-    } else {
-        char_ptr("")
+    match c_write_database_column(db_path, label, descriptor, description) {
+        Ok(()) => char_ptr(""),
+        Err(e) => char_ptr(&e.to_string()),
     }
 }

@@ -1,6 +1,6 @@
 use std::path::PathBuf;
 
-use lore_tex::sql::lore_database::LoreDatabase;
+use loretex::sql::lore_database::LoreDatabase;
 
 use crate::{gui::db_col_view::DbColViewState, gui::file_dialogs};
 

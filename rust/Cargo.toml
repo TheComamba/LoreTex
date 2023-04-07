@@ -1,10 +1,10 @@
 [package]
-name = "lore_tex_gui"
+name = "loretex"
 version = "0.1.0"
 edition = "2021"
 
 [lib]
-name         = "lore_tex"
+name         = "loretex"
 crate-type   = ["rlib", "cdylib"]
 
 [dependencies]

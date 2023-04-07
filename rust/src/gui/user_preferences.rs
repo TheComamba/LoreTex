@@ -1,6 +1,6 @@
 use std::path::PathBuf;
 
-use lore_tex::errors::LoreTexError;
+use loretex::errors::LoreTexError;
 use preferences::{AppInfo, Preferences, PreferencesMap};
 
 use crate::APP_TITLE;

@@ -15,7 +15,7 @@ If you're running from a terminal, call the \verb'lualatex' command with the \ve
         return
     end
 
-    local libPath = RelativePath .. [[../rust/target/debug/liblore_tex.so]]
+    local libPath = RelativePath .. [[../rust/target/debug/libloretex.so]]
     local rustLib = ffi.load(libPath)
     if rustLib == nil then
         LogError("Cannot load rust library.")

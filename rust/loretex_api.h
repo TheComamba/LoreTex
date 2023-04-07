@@ -1,11 +1,7 @@
-struct UnsafeEntityColumn {
+typedef struct UnsafeEntityColumn {
   const char *label;
   const char *descriptor;
   const char *description;
-};
+} UnsafeEntityColumn;
 
-extern "C" {
-
-int32_t write_database_column(const char *db_path, UnsafeEntityColumn column);
-
-} // extern "C"
+int32_t write_database_column(const char *db_path, struct UnsafeEntityColumn column);

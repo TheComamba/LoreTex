@@ -52,7 +52,7 @@ local function writeEntityToDatabase(entity)
     local rustLib = getLib()
     if not rustLib then return nil end
     result = rustLib.write_database_column()
-    if result != 0 then
+    if result ~= 0 then
         LogError("Something went wrong during writeEntityToDatabase. No idea what, though.")
         return
     end

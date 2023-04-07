@@ -5,24 +5,15 @@ use crate::{
     sql::lore_database::{EntityColumn, LoreDatabase},
 };
 
-#[repr(C)]
-pub struct UnsafeEntityColumn {
+fn to_entity_column(
     label: *const libc::c_char,
     descriptor: *const libc::c_char,
-    description: *const libc::c_char,
-}
-
-impl UnsafeEntityColumn {
-    fn to_entity_column(&self) -> Result<EntityColumn, LoreTexError> {
-        let label = char_pointer_to_string(self.label)?;
-        let descriptor = char_pointer_to_string(self.descriptor)?;
-        let description = char_pointer_to_string(self.description)?;
-        Ok(EntityColumn {
-            label,
-            descriptor,
-            description,
-        })
-    }
+    description: *const libc::c_char,) -> Result<EntityColumn, LoreTexError> {
+    Ok(EntityColumn {
+        label: char_pointer_to_string(label)?,
+        descriptor: char_pointer_to_string(descriptor)?,
+        description: char_pointer_to_string(description)?,
+    })
 }
 
 fn char_pointer_to_string(string: *const libc::c_char) -> Result<String, LoreTexError> {
@@ -37,14 +28,16 @@ fn char_pointer_to_string(string: *const libc::c_char) -> Result<String, LoreTex
 #[no_mangle]
 pub unsafe extern "C" fn write_database_column(
     db_path: *const libc::c_char,
-    column: UnsafeEntityColumn,
+    label: *const libc::c_char,
+    descriptor: *const libc::c_char,
+    description: *const libc::c_char,
 ) -> i32 {
     let db_path = match char_pointer_to_string(db_path) {
         Ok(s) => s,
         Err(_) => return 1,
     };
     let db_path = PathBuf::from(db_path);
-    let column = match column.to_entity_column() {
+    let column = match to_entity_column(label, descriptor, description) {
         Ok(c) => c,
         Err(_) => return 2,
     };

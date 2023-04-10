@@ -25,7 +25,7 @@ impl SqlGui {
     }
 
     pub(super) fn new_database(&mut self, path: PathBuf) {
-        self.lore_database = match LoreDatabase::new(path) {
+        self.lore_database = match LoreDatabase::open(path) {
             Ok(db) => Some(db),
             Err(e) => {
                 self.error_message = Some(e.to_string());

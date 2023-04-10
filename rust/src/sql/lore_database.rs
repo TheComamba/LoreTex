@@ -21,7 +21,7 @@ pub struct EntityColumn {
 const MIGRATIONS: EmbeddedMigrations = embed_migrations!();
 
 impl LoreDatabase {
-    pub fn new(path: PathBuf) -> Result<Self, LoreTexError> {
+    pub fn open(path: PathBuf) -> Result<Self, LoreTexError> {
         let db = LoreDatabase { path };
         db.db_connection()?
             .run_pending_migrations(MIGRATIONS)
@@ -29,10 +29,6 @@ impl LoreDatabase {
                 LoreTexError::SqlError("Failed to run SQL database migrations.".to_string())
             })?;
         Ok(db)
-    }
-
-    pub fn open(path: PathBuf) -> Result<Self, LoreTexError> {
-        Ok(LoreDatabase { path })
     }
 
     pub fn path_as_string(&self) -> String {

@@ -30,15 +30,19 @@ LoreTex uses the Lua scripting language, and can thus only be compiled using Lua
 lualatex -shell-escape <your tex document>
 ```
 
-If you're running from a GUI (and why wouldn't you?) you have to modify it to alco include this option in the compilation.
-
-For example, in TexStudio this can be done via the menu bar item Options -> Configure TexStudio -> Build -> Default Compiler. Here you need to enter:
+If you're running from a GUI that supports ["magic comments"/"advanced headers"](https://texstudio-org.github.io/advanced.html#advanced-header-usage), you can add the line
 
 ```bash
-txs:///lualatex/{%.tex} -shell-escape "%.tex"
+% !TeX TXS-program:compile = txs:///lualatex/{%.tex} -shell-escape "%.tex"
 ```
 
+to your document.
+
 (Note that this contains a bit of a hack, see [this discussion](https://github.com/texstudio-org/texstudio/discussions/3062).)
+
+__A note on security:__
+
+In principle, you could set your default compiler to the value provided above. Do not do this! This allows the execution of basically arbitrary code once you hit compile.
 
 ### Usage
 

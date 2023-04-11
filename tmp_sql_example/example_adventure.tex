@@ -1,0 +1,114 @@
+% !TeX document-id = {258f45cd-6a57-4c4b-95e0-21f4ef37ea21}
+% !TeX TXS-program:compile = txs:///lualatex/{%.tex} -shell-escape "%.tex"
+\documentclass{book}
+
+\input{../src/main.tex}
+\loadLuacode{../src/}
+
+\setCurrentYear{311}
+\setCurrentDay{114}
+\setDaysPerYear{365}
+
+\begin{document}
+
+\newEntity{places}{allheit}{}{Die Allheit}
+
+\addHistory{-13000}{Event}
+
+\addHistory{0}{Mentions \nameref{tortuum} and \nameref{quarin}.}
+
+\newEntity{places}{pendana}{}{Pendana}
+\setLocation{allheit}
+
+\newEntity{places}{galogan}{}{Galogan}
+\setLocation{allheit}
+
+\newEntity{places}{kalheim}{Kalheim}{Kalheim}
+\setLocation{galogan}
+
+\born{-1040}{Mentions \nameref{kalheim}  and \nameref{kaliana}.}
+
+\newEntity{places}{pyrir}{}{Pyrir}
+\setLocation{pendana}
+
+\born{4}{Mentions \nameref{pyrir} and \nameref{quarin}.}
+
+\newEntity{places}{kriniara}{}{Kriniara}
+\setLocation{pendana}
+
+\newEntity{places}{arboria}{}{Arboria}
+\setLocation{pendana}
+
+\newEntity{places}{planis}{}{Planis}
+\setLocation{pendana}
+
+\born{-811}{Mentions \nameref{planis} and \nameref{pendana}.}
+
+\died{296}{Mentions \nameref{planis}.}
+
+\newEntity{other}{gryphus}{Gryphus}{Die Gryphus}
+
+
+\addDescriptor{Description}{
+Skyship.
+}
+
+\newEntity{other}{physeter}{Physeter}{Die Physeter}
+
+\addDescriptor{Description}{Seaship.}
+
+\newNPC{krokonur}{Krokonur}{Krokonur, the blue Dragon}
+
+\addDescriptor{Stats}{Young Bronze Dragon}
+
+\newNPC{marla}{Marla}{Captain Marla}
+
+\addDescriptor{Stats}{
+AC13, 20HP
+}
+
+\born{276}{Mentions \nameref{marla} and \nameref{arboria}.}
+
+\addHistory{292}{Mentions \nameref{marla}.}
+
+\addHistory{308}{Mentions \nameref{marla} and \nameref{physeter}.
+\birthof{physeter}}
+
+\died[100]{311}{Mentions \nameref{physeter}.
+\deathof{marla}
+\deathof{physeter}}
+
+\addHistory[100]{311}{Mentions \nameref{marla}, \nameref{kaliana} and \nameref{kalheim}.
+\notconcerns{kalheim}}
+
+\addHistory[105]{311}{Mentions \nameref{marla}, \nameref{pyrir} and \nameref{gryphus}.}
+
+\newNPC{aguno}{Aguno}{Aguno, the Mage}
+
+\addDescriptor{Stats}{AC12, 30 HP, Arcana +7}
+
+\newEntity{npcs}{kaliana}{Kaliana}{Kaliana, Goddess of the Sea}
+
+\born{-1113}{Mentions \nameref{kaliana}.}
+
+\addHistory{-1045}{Mentions \nameref{kaliana}.}
+
+\addHistory{31}{Mentions \nameref{kaliana} and \nameref{quarin}.}
+
+\addHistory{62}{Mentions \nameref{tortuum} and \nameref{kaliana}.}
+
+\addHistory{250}{Mentions \nameref{kaliana}.}
+
+\newEntity{npcs}{tortuum}{Tortu'um}{Tortu'um, God of Storm and economic Growth}
+
+\newEntity{other}{quarin}{}{Quarin}
+
+\addDescriptor{Description}{Blue crystal.}
+
+\writeLoreToDatabase
+
+\makeAllEntitiesPrimary
+\automatedChapters
+\printLoreTexErrors
+
+\end{document}

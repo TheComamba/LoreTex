@@ -1,6 +1,8 @@
 use std::path::PathBuf;
 
-use crate::{db_col_view::DbColViewState, file_dialogs, lore_database::LoreDatabase};
+use loretex::sql::lore_database::LoreDatabase;
+
+use crate::{gui::db_col_view::DbColViewState, gui::file_dialogs};
 
 use super::SqlGui;
 
@@ -17,13 +19,13 @@ impl SqlGui {
             None => return,
         };
         self.new_database(path.clone());
-        if let Err(e) = crate::user_preferences::store_database_path(path) {
+        if let Err(e) = crate::gui::user_preferences::store_database_path(path) {
             self.error_message = Some(e.to_string());
         };
     }
 
     pub(super) fn new_database(&mut self, path: PathBuf) {
-        self.lore_database = match LoreDatabase::new(path) {
+        self.lore_database = match LoreDatabase::open(path) {
             Ok(db) => Some(db),
             Err(e) => {
                 self.error_message = Some(e.to_string());
@@ -40,7 +42,7 @@ impl SqlGui {
             None => return,
         };
         self.open_database(path.clone());
-        if let Err(e) = crate::user_preferences::store_database_path(path) {
+        if let Err(e) = crate::gui::user_preferences::store_database_path(path) {
             self.error_message = Some(e.to_string());
         };
     }
@@ -57,7 +59,7 @@ impl SqlGui {
         self.update_labels();
     }
 
-    fn update_labels(&mut self) {
+    pub(super) fn update_labels(&mut self) {
         match self.lore_database.as_ref() {
             Some(db) => match db.get_all_labels() {
                 Ok(labels) => self.label_view_state.entries = labels,

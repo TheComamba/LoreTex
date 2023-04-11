@@ -1,10 +1,12 @@
 use crate::{
-    db_col_view::{db_col_view, DbColViewMessage, DbColViewState},
-    user_preferences::load_database_path,
+    gui::{
+        db_col_view::{db_col_view, DbColViewMessage, DbColViewState},
+        user_preferences::load_database_path,
+    },
     APP_TITLE,
 };
 
-use super::{gui_message::GuiMessage, SqlGui};
+use super::{message_handling::GuiMessage, SqlGui};
 use iced::{
     widget::{Button, Column, Container, Row, Scrollable, Text},
     Alignment, Length, Sandbox,
@@ -83,15 +85,51 @@ impl SqlGui {
         Container::new(Text::new(content)).padding(5).into()
     }
 
+    fn new_entity_msg(&self) -> Option<DbColViewMessage> {
+        if self.lore_database.is_some() && !self.label_view_state.search_text.is_empty() {
+            Some(DbColViewMessage::New)
+        } else {
+            None
+        }
+    }
+
+    fn new_descriptor_msg(&self) -> Option<DbColViewMessage> {
+        if self.label_view_state.selected_entry.is_some()
+            && !self.descriptor_view_state.search_text.is_empty()
+        {
+            Some(DbColViewMessage::New)
+        } else {
+            None
+        }
+    }
+
+    fn label_button_infos(&self) -> Vec<(&str, Option<DbColViewMessage>)> {
+        vec![
+            ("New Entity", self.new_entity_msg()),
+            ("Delete Entity", None),
+            ("Relabel Entity", None),
+        ]
+    }
+
+    fn descriptor_button_infos(&self) -> Vec<(&str, Option<DbColViewMessage>)> {
+        vec![
+            ("New Descriptor", self.new_descriptor_msg()),
+            ("Delete Descriptor", None),
+            ("Rename Descriptor", None),
+        ]
+    }
+
     fn main_view(&self) -> iced::Element<'_, GuiMessage> {
         Row::new()
             .push(db_col_view(
                 "Labels",
+                self.label_button_infos(),
                 &self.label_view_state,
                 GuiMessage::LabelViewUpdated,
             ))
             .push(db_col_view(
                 "Descriptors",
+                self.descriptor_button_infos(),
                 &self.descriptor_view_state,
                 GuiMessage::DescriptorViewUpdated,
             ))

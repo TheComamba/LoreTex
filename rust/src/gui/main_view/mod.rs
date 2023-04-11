@@ -1,10 +1,12 @@
-use crate::{db_col_view::DbColViewState, lore_database::LoreDatabase};
+use loretex::sql::lore_database::LoreDatabase;
 
-pub(crate) mod gui_message;
+use crate::gui::db_col_view::DbColViewState;
+
+pub mod message_handling;
 mod updating;
-mod widget;
+pub mod widget;
 
-pub(crate) struct SqlGui {
+pub struct SqlGui {
     label_view_state: DbColViewState,
     descriptor_view_state: DbColViewState,
     current_description: String,

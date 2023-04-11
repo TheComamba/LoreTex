@@ -47,7 +47,7 @@ local function automatedChapters()
     if HasError() then
         Append(output, TexCmd("chapter", "Logging Messages"))
         Append(output, TexCmd("LoreTex"))
-        Append(output, " encountered errors. Call PrintLoreTexErrors to show them.")
+        Append(output, [[ encountered errors. Call \verb'\printLoreTexErrors' to show them.]])
     end
     if IsBenchmarkingActivated ~= nil and IsBenchmarkingActivated() then
         return {}

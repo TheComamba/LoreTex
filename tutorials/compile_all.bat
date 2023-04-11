@@ -5,7 +5,7 @@ FOR /D %%d IN (*) DO (
 	cd %%d
 	FOR %%f IN ( *.tex ) DO (
 		echo Compiling %%f...
-		lualatex --interaction=batchmode %%f || goto :error
+		lualatex --interaction=batchmode --shell-escape %%f || goto :error
 	)
 	cd ..
 )

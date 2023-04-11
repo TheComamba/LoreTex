@@ -25,8 +25,10 @@ impl LoreDatabase {
         let db = LoreDatabase { path };
         db.db_connection()?
             .run_pending_migrations(MIGRATIONS)
-            .map_err(|_| {
-                LoreTexError::SqlError("Failed to run SQL database migrations.".to_string())
+            .map_err(|e| {
+                LoreTexError::SqlError(
+                    "Failed to run SQL database migrations: ".to_string() + &e.to_string(),
+                )
             })?;
         Ok(db)
     }
@@ -45,8 +47,10 @@ impl LoreDatabase {
                     + &self.path.to_string_lossy(),
             )),
         };
-        SqliteConnection::establish(path).map_err(|_| {
-            LoreTexError::SqlError("Failed to establish a connection to the database.".to_string())
+        SqliteConnection::establish(path).map_err(|e| {
+            LoreTexError::SqlError(
+                "Failed to establish a connection to the database: ".to_string() + &e.to_string(),
+            )
         })
     }
 
@@ -55,8 +59,10 @@ impl LoreDatabase {
         let _ = diesel::insert_into(entities::table)
             .values(&col)
             .execute(&mut connection)
-            .map_err(|_| {
-                LoreTexError::SqlError("Writing column to database failed.".to_string())
+            .map_err(|e| {
+                LoreTexError::SqlError(
+                    "Writing column to database failed: ".to_string() + &e.to_string(),
+                )
             })?;
         Ok(())
     }
@@ -65,8 +71,10 @@ impl LoreDatabase {
         let mut connection = self.db_connection()?;
         let mut labels = entities::table
             .load::<EntityColumn>(&mut connection)
-            .map_err(|_| {
-                LoreTexError::SqlError("Loading entities to get all labels failed.".to_string())
+            .map_err(|e| {
+                LoreTexError::SqlError(
+                    "Loading entities to get all labels failed: ".to_string() + &e.to_string(),
+                )
             })?
             .into_iter()
             .map(|c| c.label)
@@ -80,11 +88,12 @@ impl LoreDatabase {
         let descriptors = entities::table
             .filter(entities::label.eq(label))
             .load::<EntityColumn>(&mut connection)
-            .map_err(|_| {
+            .map_err(|e| {
                 LoreTexError::SqlError(
                     "Loading entities to get descriptors for label ".to_string()
                         + label
-                        + " failed.",
+                        + " failed: "
+                        + &e.to_string(),
                 )
             })?
             .into_iter()
@@ -103,13 +112,14 @@ impl LoreDatabase {
             .filter(entities::label.eq(label))
             .filter(entities::descriptor.eq(descriptor))
             .load::<EntityColumn>(&mut connection)
-            .map_err(|_| {
+            .map_err(|e| {
                 LoreTexError::SqlError(
                     "Loading entities for label '".to_string()
                         + label
                         + "' and descriptor '"
                         + descriptor
-                        + "' failed.",
+                        + "' failed: "
+                        + &e.to_string(),
                 )
             })?;
         if descriptions.len() > 1 {

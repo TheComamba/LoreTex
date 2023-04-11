@@ -22,8 +22,10 @@ fn to_entity_column(
 
 fn char_pointer_to_string(string: *const libc::c_char) -> Result<String, LoreTexError> {
     let string: &str = unsafe {
-        CStr::from_ptr(string).to_str().map_err(|_| {
-            LoreTexError::InputError("Could not convert characterpointer to string.".to_string())
+        CStr::from_ptr(string).to_str().map_err(|e| {
+            LoreTexError::InputError(
+                "Could not convert characterpointer to string.".to_string() + &e.to_string(),
+            )
         })?
     };
     Ok(string.to_string())

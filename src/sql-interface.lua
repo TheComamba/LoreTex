@@ -54,11 +54,19 @@ local function writeEntityToDatabase(entity)
 
     local dbPath = RelativePath .. [[../tmp_sql_example/example.db]]
 
-    local result = rustLib.write_database_column(dbPath, "finny", "ninny", "willigreg")
-    local errorMessage = ffi.string(result)
-    if errorMessage ~= "" then
-        LogError(errorMessage)
-        return
+    local label = GetProtectedStringField(entity, "label")
+    for key, value in pairs(entity) do
+        if IsEntity(value) then
+            value = [[ENTITY{]] .. GetProtectedStringField(value, "label") .. [[}]]
+        elseif type(value) == "table" then
+            LogError([[Value to key \verb|]] .. key .. [[| is a table.]])
+            value = DebugPrint(value)
+        end
+        local result = rustLib.write_database_column(dbPath, label, key, tostring(value))
+        local errorMessage = ffi.string(result)
+        if errorMessage ~= "" then
+            LogError(errorMessage)
+        end
     end
 end
 

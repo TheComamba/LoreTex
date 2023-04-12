@@ -1,6 +1,6 @@
 use crate::{
     gui::{
-        db_col_view::{db_col_view, DbColViewMessage, DbColViewState},
+        db_col_view::{DbColView, DbColViewMessage, DbColViewState},
         user_preferences::load_database_path,
     },
     APP_TITLE,
@@ -12,6 +12,7 @@ use iced::{
     Alignment, Length, Sandbox,
 };
 use iced_aw::{style::CardStyles, Card};
+use iced_lazy::component;
 
 impl Sandbox for SqlGui {
     type Message = GuiMessage;
@@ -121,18 +122,16 @@ impl SqlGui {
 
     fn main_view(&self) -> iced::Element<'_, GuiMessage> {
         Row::new()
-            .push(db_col_view(
+            .push(component(DbColView::new(
                 "Labels",
                 self.label_button_infos(),
-                &self.label_view_state,
                 GuiMessage::LabelViewUpdated,
-            ))
-            .push(db_col_view(
+            )))
+            .push(component(DbColView::new(
                 "Descriptors",
                 self.descriptor_button_infos(),
-                &self.descriptor_view_state,
                 GuiMessage::DescriptorViewUpdated,
-            ))
+            )))
             .push(
                 Column::new()
                     .push(Text::new("Description"))

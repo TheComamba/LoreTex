@@ -3,4 +3,4 @@ CREATE TABLE entities (
   descriptor TEXT NOT NULL,
   description TEXT NOT NULL,
   PRIMARY KEY (label, descriptor)
-)
+);

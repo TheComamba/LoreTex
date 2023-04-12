@@ -1,15 +1,18 @@
-use loretex::sql::lore_database::LoreDatabase;
+use loretex::{errors::LoreTexError, sql::lore_database::LoreDatabase};
 
-use crate::gui::db_col_view::DbColViewState;
+use super::entities_view::EntitiesViewState;
 
-pub mod message_handling;
 mod updating;
 pub mod widget;
 
 pub struct SqlGui {
-    label_view_state: DbColViewState,
-    descriptor_view_state: DbColViewState,
-    current_description: String,
+    entites_view_state: EntitiesViewState,
     lore_database: Option<LoreDatabase>,
     error_message: Option<String>,
+}
+
+impl SqlGui {
+    pub fn set_err(&mut self, e: LoreTexError) {
+        self.error_message = Some(e.to_string());
+    }
 }

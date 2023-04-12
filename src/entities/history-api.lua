@@ -1,3 +1,9 @@
+AllHistoryItems = {}
+
+StateResetters[#StateResetters + 1] = function()
+    AllHistoryItems = {}
+end
+
 local function IsHistoryItemOk(caller, item)
 	local required = {}
 	Append(required, GetProtectedDescriptor("content"))
@@ -14,9 +20,11 @@ end
 
 function NewHistoryItem()
 	local label = NewUniqueLabel("HISTORY-ITEM")
-	local item = GetMutableEntityFromAll(label)
+	local item = {}
+	SetProtectedField(item, "label", label)
 	SetProtectedField(item, "isSecret", false)
 	SetProtectedField(item, "isConcernsOthers", true)
+	AllHistoryItems[#AllHistoryItems + 1] = item
 	return item
 end
 

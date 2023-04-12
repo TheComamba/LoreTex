@@ -1,15 +1,15 @@
-local historyItemCounter = 1
+AllHistoryItems = {}
 
 StateResetters[#StateResetters + 1] = function()
-	historyItemCounter = 1
+    AllHistoryItems = {}
 end
 
 local function IsHistoryItemOk(caller, item)
 	local required = {}
-	Append(required, GetProtectedDescriptor("counter"))
 	Append(required, GetProtectedDescriptor("content"))
 	Append(required, GetProtectedDescriptor("isConcernsOthers"))
 	Append(required, GetProtectedDescriptor("isSecret"))
+	Append(required, GetProtectedDescriptor("label"))
 	Append(required, GetProtectedDescriptor("year"))
 	local optional = {}
 	Append(optional, GetProtectedDescriptor("day"))
@@ -19,11 +19,12 @@ local function IsHistoryItemOk(caller, item)
 end
 
 function NewHistoryItem()
+	local label = NewUniqueLabel("HISTORY-ITEM")
 	local item = {}
+	SetProtectedField(item, "label", label)
 	SetProtectedField(item, "isSecret", false)
 	SetProtectedField(item, "isConcernsOthers", true)
-	SetProtectedField(item, "counter", historyItemCounter)
-	historyItemCounter = historyItemCounter + 1
+	AllHistoryItems[#AllHistoryItems + 1] = item
 	return item
 end
 

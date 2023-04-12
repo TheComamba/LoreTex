@@ -4,7 +4,7 @@ use iced::{
 };
 use iced_aw::{style::SelectionListStyles, SelectionList};
 
-use super::messages::GuiMessage;
+use crate::gui::main_view::message_handling::GuiMessage;
 
 pub(crate) struct DbColViewState {
     pub(crate) search_text: String,

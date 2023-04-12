@@ -1,11 +1,19 @@
 use loretex::{errors::LoreTexError, sql::lore_database::EntityColumn};
 
+use super::SqlGui;
 use crate::gui::db_col_view::DbColViewMessage;
 
-use super::EntitiesViewState;
+#[derive(Debug, Clone)]
+pub enum GuiMessage {
+    NewDatabase,
+    OpenDatabase,
+    LabelViewUpdated(DbColViewMessage),
+    DescriptorViewUpdated(DbColViewMessage),
+    ErrorDialogClosed,
+}
 
-impl EntitiesViewState {
-    pub fn update_label_view(&mut self, message: DbColViewMessage) {
+impl SqlGui {
+    pub(super) fn update_label_view(&mut self, message: DbColViewMessage) {
         match message {
             DbColViewMessage::New => {
                 if let Err(e) = self.new_entity() {
@@ -17,7 +25,7 @@ impl EntitiesViewState {
         };
     }
 
-    pub fn update_descriptor_view(&mut self, message: DbColViewMessage) {
+    pub(super) fn update_descriptor_view(&mut self, message: DbColViewMessage) {
         match message {
             DbColViewMessage::New => {
                 if let Err(e) = self.new_descriptor() {

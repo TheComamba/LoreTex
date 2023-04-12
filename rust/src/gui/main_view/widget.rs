@@ -1,14 +1,12 @@
 use crate::{
     gui::{
-        db_col_view::DbColViewMessage,
-        entities_view::{widget::entities_view, EntitiesViewState},
-        messages::GuiMessage,
+        db_col_view::{db_col_view, DbColViewMessage, DbColViewState},
         user_preferences::load_database_path,
     },
     APP_TITLE,
 };
 
-use super::SqlGui;
+use super::{message_handling::GuiMessage, SqlGui};
 use iced::{
     widget::{Button, Column, Container, Row, Scrollable, Text},
     Alignment, Length, Sandbox,
@@ -20,7 +18,9 @@ impl Sandbox for SqlGui {
 
     fn new() -> Self {
         let mut gui = SqlGui {
-            entites_view_state: EntitiesViewState::new(),
+            label_view_state: DbColViewState::new(),
+            descriptor_view_state: DbColViewState::new(),
+            current_description: String::new(),
             lore_database: None,
             error_message: None,
         };
@@ -39,18 +39,16 @@ impl Sandbox for SqlGui {
             GuiMessage::NewDatabase => self.new_database_from_dialog(),
             GuiMessage::OpenDatabase => self.open_database_from_dialog(),
             GuiMessage::LabelViewUpdated(DbColViewMessage::Selected(label)) => {
-                self.entites_view_state.label_view_state.selected_entry = Some(label);
-                self.entites_view_state.descriptor_view_state.selected_entry = None;
-                self.entites_view_state.update_descriptors();
+                self.label_view_state.selected_entry = Some(label);
+                self.descriptor_view_state.selected_entry = None;
+                self.update_descriptors();
             }
             GuiMessage::DescriptorViewUpdated(DbColViewMessage::Selected(descriptor)) => {
-                self.entites_view_state.descriptor_view_state.selected_entry = Some(descriptor);
-                self.entites_view_state.update_description();
+                self.descriptor_view_state.selected_entry = Some(descriptor);
+                self.update_description();
             }
-            GuiMessage::LabelViewUpdated(event) => self.entites_view_state.update_label_view(event),
-            GuiMessage::DescriptorViewUpdated(event) => {
-                self.entites_view_state.update_descriptor_view(event)
-            }
+            GuiMessage::LabelViewUpdated(event) => self.update_label_view(event),
+            GuiMessage::DescriptorViewUpdated(event) => self.update_descriptor_view(event),
             GuiMessage::ErrorDialogClosed => self.error_message = None,
         }
     }
@@ -60,7 +58,7 @@ impl Sandbox for SqlGui {
             None => Column::new()
                 .push(self.menu_bar())
                 .push(self.current_database_display())
-                .push(entities_view(&self.entites_view_state))
+                .push(self.main_view())
                 .into(),
             Some(message) => self.error_dialog(message),
         }
@@ -85,6 +83,68 @@ impl SqlGui {
             None => "[No database loaded]".to_string(),
         };
         Container::new(Text::new(content)).padding(5).into()
+    }
+
+    fn new_entity_msg(&self) -> Option<DbColViewMessage> {
+        if self.lore_database.is_some() && !self.label_view_state.search_text.is_empty() {
+            Some(DbColViewMessage::New)
+        } else {
+            None
+        }
+    }
+
+    fn new_descriptor_msg(&self) -> Option<DbColViewMessage> {
+        if self.label_view_state.selected_entry.is_some()
+            && !self.descriptor_view_state.search_text.is_empty()
+        {
+            Some(DbColViewMessage::New)
+        } else {
+            None
+        }
+    }
+
+    fn label_button_infos(&self) -> Vec<(&str, Option<DbColViewMessage>)> {
+        vec![
+            ("New Entity", self.new_entity_msg()),
+            ("Delete Entity", None),
+            ("Relabel Entity", None),
+        ]
+    }
+
+    fn descriptor_button_infos(&self) -> Vec<(&str, Option<DbColViewMessage>)> {
+        vec![
+            ("New Descriptor", self.new_descriptor_msg()),
+            ("Delete Descriptor", None),
+            ("Rename Descriptor", None),
+        ]
+    }
+
+    fn main_view(&self) -> iced::Element<'_, GuiMessage> {
+        Row::new()
+            .push(db_col_view(
+                "Labels",
+                self.label_button_infos(),
+                &self.label_view_state,
+                GuiMessage::LabelViewUpdated,
+            ))
+            .push(db_col_view(
+                "Descriptors",
+                self.descriptor_button_infos(),
+                &self.descriptor_view_state,
+                GuiMessage::DescriptorViewUpdated,
+            ))
+            .push(
+                Column::new()
+                    .push(Text::new("Description"))
+                    .push(Text::new(&self.current_description))
+                    .padding(5)
+                    .spacing(5)
+                    .width(Length::Fill),
+            )
+            .align_items(Alignment::Start)
+            .width(Length::Fill)
+            .height(Length::Fill)
+            .into()
     }
 
     fn error_dialog(&self, text: String) -> iced::Element<'_, GuiMessage> {

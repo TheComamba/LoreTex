@@ -1,3 +1,4 @@
+use super::{message_handling::GuiMessage, SqlGui, ViewType};
 use crate::{
     gui::{
         entity_view::{EntityView, EntityViewState},
@@ -7,8 +8,6 @@ use crate::{
     },
     APP_TITLE,
 };
-
-use super::{message_handling::GuiMessage, SqlGui, ViewType};
 use iced::{
     widget::{button, Button, Column, Container, Row, Scrollable, Text},
     Alignment, Element, Length, Sandbox,

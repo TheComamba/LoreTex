@@ -3,19 +3,19 @@ use loretex::sql::lore_database::LoreDatabase;
 
 mod widget;
 
-pub struct EntityView<'a> {
+pub(super) struct EntityView<'a> {
     state: &'a EntityViewState,
     lore_database: &'a Option<LoreDatabase>,
 }
 
-pub struct EntityViewState {
-    pub(crate) label_view_state: DbColViewState,
-    pub(crate) descriptor_view_state: DbColViewState,
-    pub current_description: String,
+pub(super) struct EntityViewState {
+    pub(super) label_view_state: DbColViewState,
+    pub(super) descriptor_view_state: DbColViewState,
+    pub(super) current_description: String,
 }
 
 impl<'a> EntityView<'a> {
-    pub fn new(state: &'a EntityViewState, lore_database: &'a Option<LoreDatabase>) -> Self {
+    pub(super) fn new(state: &'a EntityViewState, lore_database: &'a Option<LoreDatabase>) -> Self {
         Self {
             state,
             lore_database,
@@ -24,7 +24,7 @@ impl<'a> EntityView<'a> {
 }
 
 impl EntityViewState {
-    pub fn new() -> Self {
+    pub(super) fn new() -> Self {
         Self {
             label_view_state: DbColViewState::new(),
             descriptor_view_state: DbColViewState::new(),

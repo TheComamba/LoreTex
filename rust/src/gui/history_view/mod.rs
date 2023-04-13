@@ -1,9 +1,9 @@
 mod widget;
 
-pub(crate) struct HistoryView {}
+pub(super) struct HistoryView {}
 
 impl HistoryView {
-    pub(crate) fn new() -> Self {
+    pub(super) fn new() -> Self {
         Self {}
     }
 }

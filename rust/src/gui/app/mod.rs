@@ -1,12 +1,12 @@
 use super::entity_view::EntityViewState;
 use loretex::sql::lore_database::LoreDatabase;
 
-pub mod message_handling;
+pub(super) mod message_handling;
 mod updating;
-pub mod updating_entity_view;
-pub mod widget;
+mod updating_entity_view;
+mod widget;
 
-pub struct SqlGui {
+pub(crate) struct SqlGui {
     selected_view: ViewType,
     entity_view_state: EntityViewState,
     lore_database: Option<LoreDatabase>,
@@ -14,7 +14,7 @@ pub struct SqlGui {
 }
 
 #[derive(Debug, Clone)]
-pub enum ViewType {
+pub(crate) enum ViewType {
     Entity,
     History,
     Relationship,

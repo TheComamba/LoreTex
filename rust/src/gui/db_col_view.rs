@@ -1,3 +1,4 @@
+use super::app::message_handling::GuiMessage;
 use iced::{
     widget::{button, Column, Text, TextInput},
     Element, Length, Renderer,
@@ -5,9 +6,7 @@ use iced::{
 use iced_aw::{style::SelectionListStyles, SelectionList};
 use iced_lazy::{component, Component};
 
-use super::app::message_handling::GuiMessage;
-
-pub(crate) struct DbColView<'a, M> {
+pub(super) struct DbColView<'a, M> {
     title: &'a str,
     button_infos: Vec<(String, Option<DbColViewMessage>)>,
     gui_message: M,
@@ -18,7 +17,7 @@ impl<'a, M> DbColView<'a, M>
 where
     M: 'static + Clone + Fn(DbColViewMessage) -> GuiMessage,
 {
-    pub(crate) fn new(
+    pub(super) fn new(
         title: &'a str,
         button_infos: Vec<(String, Option<DbColViewMessage>)>,
         gui_message: M,
@@ -87,14 +86,14 @@ where
 }
 
 #[derive(Debug, Clone)]
-pub(crate) struct DbColViewState {
-    pub(crate) search_text: String,
-    pub(crate) entries: Vec<String>,
-    pub(crate) selected_entry: Option<String>,
+pub(super) struct DbColViewState {
+    pub(super) search_text: String,
+    pub(super) entries: Vec<String>,
+    pub(super) selected_entry: Option<String>,
 }
 
 impl DbColViewState {
-    pub(crate) fn new() -> Self {
+    pub(super) fn new() -> Self {
         DbColViewState {
             search_text: "".to_string(),
             entries: vec![],
@@ -110,7 +109,7 @@ impl Default for DbColViewState {
 }
 
 #[derive(Debug, Clone)]
-pub enum DbColViewMessage {
+pub(crate) enum DbColViewMessage {
     New,
     SearchFieldUpdated(String),
     Selected(String),

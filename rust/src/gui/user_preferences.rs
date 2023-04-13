@@ -1,7 +1,6 @@
-use std::path::PathBuf;
-
 use loretex::errors::LoreTexError;
 use preferences::{AppInfo, Preferences, PreferencesMap};
+use std::path::PathBuf;
 
 use crate::APP_TITLE;
 
@@ -12,7 +11,7 @@ const APP_INFO: AppInfo = AppInfo {
 
 const DATABASE_PATH_KEY: &str = "database_path";
 
-pub(crate) fn store_database_path(path: PathBuf) -> Result<(), LoreTexError> {
+pub(super) fn store_database_path(path: PathBuf) -> Result<(), LoreTexError> {
     let mut path_pref: PreferencesMap<PathBuf> = PreferencesMap::new();
     path_pref.insert(DATABASE_PATH_KEY.to_string(), path.clone());
     path_pref.save(&APP_INFO, DATABASE_PATH_KEY).map_err(|_| {
@@ -24,7 +23,7 @@ pub(crate) fn store_database_path(path: PathBuf) -> Result<(), LoreTexError> {
     Ok(())
 }
 
-pub(crate) fn load_database_path() -> Option<PathBuf> {
+pub(super) fn load_database_path() -> Option<PathBuf> {
     let path_pref = match PreferencesMap::<PathBuf>::load(&APP_INFO, DATABASE_PATH_KEY) {
         Ok(pref) => pref,
         Err(_) => return None,

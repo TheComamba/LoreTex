@@ -7,14 +7,14 @@ fn current_path() -> PathBuf {
     }
 }
 
-pub(crate) fn new() -> Option<PathBuf> {
+pub(super) fn new() -> Option<PathBuf> {
     rfd::FileDialog::new()
         .set_file_name("new_lore_database.db")
         .set_directory(current_path())
         .save_file()
 }
 
-pub(crate) fn open() -> Option<PathBuf> {
+pub(super) fn open() -> Option<PathBuf> {
     rfd::FileDialog::new()
         .add_filter("Lore Database (.db)", &["db"])
         .add_filter("Any", &["*"])

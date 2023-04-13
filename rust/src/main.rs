@@ -5,6 +5,6 @@ mod gui;
 
 const APP_TITLE: &str = "LoreTex SQL GUI";
 
-pub fn main() -> iced::Result {
+fn main() -> iced::Result {
     SqlGui::run(Settings::default())
 }

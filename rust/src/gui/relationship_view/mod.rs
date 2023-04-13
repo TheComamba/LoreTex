@@ -1,9 +1,9 @@
 mod widget;
 
-pub(crate) struct RelationshipView {}
+pub(super) struct RelationshipView {}
 
 impl RelationshipView {
-    pub(crate) fn new() -> Self {
+    pub(super) fn new() -> Self {
         Self {}
     }
 }

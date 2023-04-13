@@ -1,10 +1,9 @@
-use loretex::{errors::LoreTexError, sql::lore_database::EntityColumn};
-
 use super::{SqlGui, ViewType};
 use crate::gui::db_col_view::DbColViewMessage;
+use loretex::{errors::LoreTexError, sql::lore_database::EntityColumn};
 
 #[derive(Debug, Clone)]
-pub enum GuiMessage {
+pub(crate) enum GuiMessage {
     ViewSelected(ViewType),
     NewDatabase,
     OpenDatabase,
@@ -14,7 +13,7 @@ pub enum GuiMessage {
 }
 
 impl SqlGui {
-    pub(crate) fn handle_message(&mut self, message: GuiMessage) -> Result<(), LoreTexError> {
+    pub(super) fn handle_message(&mut self, message: GuiMessage) -> Result<(), LoreTexError> {
         match message {
             GuiMessage::ViewSelected(view) => self.selected_view = view,
             GuiMessage::NewDatabase => self.new_database_from_dialog(),

@@ -1,6 +1,5 @@
 use crate::{
     gui::{
-        db_col_view::DbColViewMessage,
         entity_view::{EntityView, EntityViewState},
         user_preferences::load_database_path,
     },
@@ -35,21 +34,8 @@ impl Sandbox for SqlGui {
     }
 
     fn update(&mut self, message: Self::Message) {
-        match message {
-            GuiMessage::NewDatabase => self.new_database_from_dialog(),
-            GuiMessage::OpenDatabase => self.open_database_from_dialog(),
-            GuiMessage::LabelViewUpdated(DbColViewMessage::Selected(label)) => {
-                self.entity_view_state.label_view_state.selected_entry = Some(label);
-                self.entity_view_state.descriptor_view_state.selected_entry = None;
-                self.update_descriptors();
-            }
-            GuiMessage::DescriptorViewUpdated(DbColViewMessage::Selected(descriptor)) => {
-                self.entity_view_state.descriptor_view_state.selected_entry = Some(descriptor);
-                self.update_description();
-            }
-            GuiMessage::LabelViewUpdated(event) => self.update_label_view(event),
-            GuiMessage::DescriptorViewUpdated(event) => self.update_descriptor_view(event),
-            GuiMessage::ErrorDialogClosed => self.error_message = None,
+        if let Err(e) = self.handle_message(message) {
+            self.error_message = Some(e.to_string());
         }
     }
 

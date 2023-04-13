@@ -13,33 +13,46 @@ pub enum GuiMessage {
 }
 
 impl SqlGui {
-    pub(super) fn update_label_view(&mut self, message: DbColViewMessage) {
+    pub(crate) fn handle_message(&mut self, message: GuiMessage) -> Result<(), LoreTexError> {
         match message {
-            DbColViewMessage::New => {
-                if let Err(e) = self.new_entity() {
-                    self.error_message = Some(e.to_string())
-                }
-            }
+            GuiMessage::NewDatabase => self.new_database_from_dialog(),
+            GuiMessage::OpenDatabase => self.open_database_from_dialog(),
+            GuiMessage::LabelViewUpdated(event) => self.update_label_view(event)?,
+            GuiMessage::DescriptorViewUpdated(event) => self.update_descriptor_view(event)?,
+            GuiMessage::ErrorDialogClosed => self.error_message = None,
+        }
+        Ok(())
+    }
+
+    fn update_label_view(&mut self, message: DbColViewMessage) -> Result<(), LoreTexError> {
+        match message {
+            DbColViewMessage::New => self.new_entity()?,
             DbColViewMessage::SearchFieldUpdated(text) => {
                 self.entity_view_state.label_view_state.search_text = text
             }
-            DbColViewMessage::Selected(_) => (), //handled elsewhere
+            DbColViewMessage::Selected(label) => {
+                self.entity_view_state.label_view_state.selected_entry = Some(label);
+                self.entity_view_state.descriptor_view_state.selected_entry = None;
+                self.update_descriptors();
+            }
         };
+        Ok(())
     }
 
-    pub(super) fn update_descriptor_view(&mut self, message: DbColViewMessage) {
+    fn update_descriptor_view(&mut self, message: DbColViewMessage) -> Result<(), LoreTexError> {
         match message {
-            DbColViewMessage::New => {
-                if let Err(e) = self.new_descriptor() {
-                    self.error_message = Some(e.to_string())
-                }
-            }
+            DbColViewMessage::New => self.new_descriptor()?,
             DbColViewMessage::SearchFieldUpdated(text) => {
                 self.entity_view_state.descriptor_view_state.search_text = text
             }
-            DbColViewMessage::Selected(_) => (), //handled elsewhere
+            DbColViewMessage::Selected(descriptor) => {
+                self.entity_view_state.descriptor_view_state.selected_entry = Some(descriptor);
+                self.update_description();
+            }
         };
+        Ok(())
     }
+
     fn new_entity(&mut self) -> Result<(), LoreTexError> {
         let label = self.entity_view_state.label_view_state.search_text.clone();
         if label.is_empty() {

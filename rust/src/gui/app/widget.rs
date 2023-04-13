@@ -6,10 +6,10 @@ use crate::{
     APP_TITLE,
 };
 
-use super::{message_handling::GuiMessage, SqlGui};
+use super::{message_handling::GuiMessage, SqlGui, ViewType};
 use iced::{
-    widget::{Button, Column, Container, Row, Scrollable, Text},
-    Alignment, Length, Sandbox,
+    widget::{button, Button, Column, Container, Row, Scrollable, Text},
+    Alignment, Element, Length, Sandbox,
 };
 use iced_aw::{style::CardStyles, Card};
 
@@ -18,6 +18,7 @@ impl Sandbox for SqlGui {
 
     fn new() -> Self {
         let mut gui = SqlGui {
+            selected_view: super::ViewType::Entity,
             entity_view_state: EntityViewState::new(),
             lore_database: None,
             error_message: None,
@@ -43,6 +44,7 @@ impl Sandbox for SqlGui {
             None => Column::new()
                 .push(self.menu_bar())
                 .push(self.current_database_display())
+                .push(self.view_selection_bar())
                 .push(EntityView::new(
                     &self.entity_view_state,
                     &self.lore_database,
@@ -54,7 +56,7 @@ impl Sandbox for SqlGui {
 }
 
 impl SqlGui {
-    fn menu_bar(&self) -> iced::Element<'_, GuiMessage> {
+    fn menu_bar(&self) -> Element<'_, GuiMessage> {
         Row::new()
             .push(Button::new("New Lore Database").on_press(GuiMessage::NewDatabase))
             .push(Button::new("Open Lore Database").on_press(GuiMessage::OpenDatabase))
@@ -65,7 +67,7 @@ impl SqlGui {
             .into()
     }
 
-    fn current_database_display(&self) -> iced::Element<'_, GuiMessage> {
+    fn current_database_display(&self) -> Element<'_, GuiMessage> {
         let content = match self.lore_database.as_ref() {
             Some(db) => db.path_as_string(),
             None => "[No database loaded]".to_string(),
@@ -73,7 +75,24 @@ impl SqlGui {
         Container::new(Text::new(content)).padding(5).into()
     }
 
-    fn error_dialog(&self, text: String) -> iced::Element<'_, GuiMessage> {
+    fn view_selection_bar(&self) -> Element<'_, GuiMessage> {
+        let entity_button =
+            button(Text::new("Entities")).on_press(GuiMessage::ViewSelected(ViewType::Entity));
+        let history_items_button = button(Text::new("History Items"))
+            .on_press(GuiMessage::ViewSelected(ViewType::History));
+        let relationships_button = button(Text::new("Relationships"))
+            .on_press(GuiMessage::ViewSelected(ViewType::Relationship));
+        Row::new()
+            .push(entity_button)
+            .push(history_items_button)
+            .push(relationships_button)
+            .width(Length::Fill)
+            .padding(5)
+            .spacing(5)
+            .into()
+    }
+
+    fn error_dialog(&self, text: String) -> Element<'_, GuiMessage> {
         Container::new(Scrollable::new(
             Card::new(Text::new("Error"), Text::new(text))
                 .style(CardStyles::Danger)

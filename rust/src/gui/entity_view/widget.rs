@@ -66,20 +66,26 @@ impl<'a> EntityView<'a> {
         }
     }
 
-    fn label_button_infos(&self) -> Vec<(&str, Option<DbColViewMessage>)> {
+    fn label_button_infos(&self) -> Vec<(String, Option<DbColViewMessage>)> {
         vec![
             ("New Entity", self.new_entity_msg()),
             ("Delete Entity", None),
             ("Relabel Entity", None),
         ]
+        .into_iter()
+        .map(|(s, m)| (s.to_string(), m))
+        .collect()
     }
 
-    fn descriptor_button_infos(&self) -> Vec<(&str, Option<DbColViewMessage>)> {
+    fn descriptor_button_infos(&self) -> Vec<(String, Option<DbColViewMessage>)> {
         vec![
             ("New Descriptor", self.new_descriptor_msg()),
             ("Delete Descriptor", None),
             ("Rename Descriptor", None),
         ]
+        .into_iter()
+        .map(|(s, m)| (s.to_string(), m))
+        .collect()
     }
 }
 

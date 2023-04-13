@@ -9,7 +9,7 @@ use super::app::message_handling::GuiMessage;
 
 pub(crate) struct DbColView<'a, M> {
     title: &'a str,
-    button_infos: Vec<(&'a str, Option<DbColViewMessage>)>,
+    button_infos: Vec<(String, Option<DbColViewMessage>)>,
     gui_message: M,
     state: &'a DbColViewState,
 }
@@ -20,7 +20,7 @@ where
 {
     pub(crate) fn new(
         title: &'a str,
-        button_infos: Vec<(&'a str, Option<DbColViewMessage>)>,
+        button_infos: Vec<(String, Option<DbColViewMessage>)>,
         gui_message: M,
         state: &'a DbColViewState,
     ) -> Self {
@@ -60,7 +60,7 @@ where
         let mut col = Column::new().push(Text::new(self.title));
         for info in self.button_infos.iter() {
             let (text, press_message) = info;
-            let mut button = button(text.clone()).width(Length::Fill);
+            let mut button = button(Text::new(text)).width(Length::Fill);
             if let Some(message) = press_message.clone() {
                 button = button.on_press(message);
             }

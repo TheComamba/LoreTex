@@ -1,6 +1,7 @@
 use crate::{
     gui::{
-        db_col_view::{DbColView, DbColViewMessage, DbColViewState},
+        db_col_view::{DbColViewMessage, DbColViewState},
+        entity_view::EntityView,
         user_preferences::load_database_path,
     },
     APP_TITLE,
@@ -59,7 +60,7 @@ impl Sandbox for SqlGui {
             None => Column::new()
                 .push(self.menu_bar())
                 .push(self.current_database_display())
-                .push(self.main_view())
+                .push(component(EntityView::new(&self.lore_database)))
                 .into(),
             Some(message) => self.error_dialog(message),
         }
@@ -84,68 +85,6 @@ impl SqlGui {
             None => "[No database loaded]".to_string(),
         };
         Container::new(Text::new(content)).padding(5).into()
-    }
-
-    fn new_entity_msg(&self) -> Option<DbColViewMessage> {
-        if self.lore_database.is_some() && !self.label_view_state.search_text.is_empty() {
-            Some(DbColViewMessage::New)
-        } else {
-            None
-        }
-    }
-
-    fn new_descriptor_msg(&self) -> Option<DbColViewMessage> {
-        if self.label_view_state.selected_entry.is_some()
-            && !self.descriptor_view_state.search_text.is_empty()
-        {
-            Some(DbColViewMessage::New)
-        } else {
-            None
-        }
-    }
-
-    fn label_button_infos(&self) -> Vec<(&str, Option<DbColViewMessage>)> {
-        vec![
-            ("New Entity", self.new_entity_msg()),
-            ("Delete Entity", None),
-            ("Relabel Entity", None),
-        ]
-    }
-
-    fn descriptor_button_infos(&self) -> Vec<(&str, Option<DbColViewMessage>)> {
-        vec![
-            ("New Descriptor", self.new_descriptor_msg()),
-            ("Delete Descriptor", None),
-            ("Rename Descriptor", None),
-        ]
-    }
-
-    fn main_view(&self) -> iced::Element<'_, GuiMessage> {
-        Row::new()
-            .push(component(DbColView::new(
-                "Labels",
-                self.label_button_infos(),
-                GuiMessage::LabelViewUpdated,
-                &self.label_view_state,
-            )))
-            .push(component(DbColView::new(
-                "Descriptors",
-                self.descriptor_button_infos(),
-                GuiMessage::DescriptorViewUpdated,
-                &self.descriptor_view_state,
-            )))
-            .push(
-                Column::new()
-                    .push(Text::new("Description"))
-                    .push(Text::new(&self.current_description))
-                    .padding(5)
-                    .spacing(5)
-                    .width(Length::Fill),
-            )
-            .align_items(Alignment::Start)
-            .width(Length::Fill)
-            .height(Length::Fill)
-            .into()
     }
 
     fn error_dialog(&self, text: String) -> iced::Element<'_, GuiMessage> {

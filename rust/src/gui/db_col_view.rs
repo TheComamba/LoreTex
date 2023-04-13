@@ -5,7 +5,7 @@ use iced::{
 use iced_aw::{style::SelectionListStyles, SelectionList};
 use iced_lazy::Component;
 
-use crate::gui::main_view::message_handling::GuiMessage;
+use super::entity_view::message_handling::EntityViewMessage;
 
 pub(crate) struct DbColView<'a, M> {
     title: &'a str,
@@ -16,7 +16,7 @@ pub(crate) struct DbColView<'a, M> {
 
 impl<'a, M> DbColView<'a, M>
 where
-    M: 'static + Clone + Fn(DbColViewMessage) -> GuiMessage,
+    M: 'static + Clone + Fn(DbColViewMessage) -> EntityViewMessage,
 {
     pub(crate) fn new(
         title: &'a str,
@@ -33,15 +33,19 @@ where
     }
 }
 
-impl<'a, M> Component<GuiMessage, Renderer> for DbColView<'a, M>
+impl<'a, M> Component<EntityViewMessage, Renderer> for DbColView<'a, M>
 where
-    M: 'static + Clone + Fn(DbColViewMessage) -> GuiMessage,
+    M: 'static + Clone + Fn(DbColViewMessage) -> EntityViewMessage,
 {
     type State = DbColViewState;
 
     type Event = DbColViewMessage;
 
-    fn update(&mut self, _state: &mut Self::State, event: Self::Event) -> Option<GuiMessage> {
+    fn update(
+        &mut self,
+        _state: &mut Self::State,
+        event: Self::Event,
+    ) -> Option<EntityViewMessage> {
         let m = self.gui_message.clone();
         Some(m(event))
     }

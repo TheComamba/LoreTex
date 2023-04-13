@@ -1,4 +1,4 @@
-use gui::main_view::SqlGui;
+use gui::app::SqlGui;
 use iced::{Sandbox, Settings};
 
 mod gui;

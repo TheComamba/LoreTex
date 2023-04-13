@@ -5,8 +5,8 @@ use iced::{
 use iced_lazy::{component, Component};
 
 use crate::gui::{
+    app::message_handling::GuiMessage,
     db_col_view::{DbColView, DbColViewMessage},
-    main_view::message_handling::GuiMessage,
 };
 
 use super::EntityView;

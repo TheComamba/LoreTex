@@ -1,5 +1,5 @@
+pub(crate) mod app;
 mod db_col_view;
 pub(crate) mod entity_view;
 mod file_dialogs;
-pub(crate) mod main_view;
 mod user_preferences;

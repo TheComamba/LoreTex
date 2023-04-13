@@ -5,7 +5,7 @@ use iced::{
 use iced_aw::{style::SelectionListStyles, SelectionList};
 use iced_lazy::Component;
 
-use super::main_view::message_handling::GuiMessage;
+use super::app::message_handling::GuiMessage;
 
 pub(crate) struct DbColView<'a, M> {
     title: &'a str,

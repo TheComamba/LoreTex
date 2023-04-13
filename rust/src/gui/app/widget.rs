@@ -1,6 +1,8 @@
 use crate::{
     gui::{
         entity_view::{EntityView, EntityViewState},
+        history_view::HistoryView,
+        relationship_view::RelationshipView,
         user_preferences::load_database_path,
     },
     APP_TITLE,
@@ -40,22 +42,32 @@ impl Sandbox for SqlGui {
     }
 
     fn view(&self) -> iced::Element<'_, Self::Message> {
-        match self.error_message.clone() {
-            None => Column::new()
-                .push(self.menu_bar())
-                .push(self.current_database_display())
-                .push(self.view_selection_bar())
-                .push(EntityView::new(
-                    &self.entity_view_state,
-                    &self.lore_database,
-                ))
-                .into(),
+        match self.error_message.as_ref() {
             Some(message) => self.error_dialog(message),
+            None => self.main_view(),
         }
     }
 }
 
 impl SqlGui {
+    fn main_view(&self) -> Element<'_, GuiMessage> {
+        let mut col = Column::new()
+            .push(self.menu_bar())
+            .push(self.current_database_display())
+            .push(self.view_selection_bar());
+        match self.selected_view {
+            ViewType::Entity => {
+                col = col.push(EntityView::new(
+                    &self.entity_view_state,
+                    &self.lore_database,
+                ))
+            }
+            ViewType::History => col = col.push(HistoryView::new()),
+            ViewType::Relationship => col = col.push(RelationshipView::new()),
+        }
+        col.into()
+    }
+
     fn menu_bar(&self) -> Element<'_, GuiMessage> {
         Row::new()
             .push(Button::new("New Lore Database").on_press(GuiMessage::NewDatabase))
@@ -92,7 +104,7 @@ impl SqlGui {
             .into()
     }
 
-    fn error_dialog(&self, text: String) -> Element<'_, GuiMessage> {
+    fn error_dialog<'a>(&self, text: &'a String) -> Element<'a, GuiMessage> {
         Container::new(Scrollable::new(
             Card::new(Text::new("Error"), Text::new(text))
                 .style(CardStyles::Danger)

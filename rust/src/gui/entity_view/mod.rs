@@ -1,6 +1,5 @@
-use loretex::sql::lore_database::LoreDatabase;
-
 use super::db_col_view::DbColViewState;
+use loretex::sql::lore_database::LoreDatabase;
 
 mod widget;
 

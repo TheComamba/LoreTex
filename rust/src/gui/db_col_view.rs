@@ -3,7 +3,7 @@ use iced::{
     Element, Length, Renderer,
 };
 use iced_aw::{style::SelectionListStyles, SelectionList};
-use iced_lazy::Component;
+use iced_lazy::{component, Component};
 
 use super::app::message_handling::GuiMessage;
 
@@ -77,7 +77,15 @@ where
     }
 }
 
-//--------------------------
+impl<'a, M> From<DbColView<'a, M>> for Element<'a, GuiMessage>
+where
+    M: 'static + Clone + Fn(DbColViewMessage) -> GuiMessage,
+{
+    fn from(entity_view: DbColView<'a, M>) -> Self {
+        component(entity_view)
+    }
+}
+
 #[derive(Debug, Clone)]
 pub(crate) struct DbColViewState {
     pub(crate) search_text: String,

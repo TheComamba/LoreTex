@@ -1,15 +1,13 @@
+use super::EntityView;
+use crate::gui::{
+    app::message_handling::GuiMessage,
+    db_col_view::{DbColView, DbColViewMessage},
+};
 use iced::{
     widget::{Column, Row, Text},
     Alignment, Element, Length, Renderer,
 };
 use iced_lazy::{component, Component};
-
-use crate::gui::{
-    app::message_handling::GuiMessage,
-    db_col_view::{DbColView, DbColViewMessage},
-};
-
-use super::EntityView;
 
 impl<'a> Component<GuiMessage, Renderer> for EntityView<'a> {
     type State = ();
@@ -22,18 +20,18 @@ impl<'a> Component<GuiMessage, Renderer> for EntityView<'a> {
 
     fn view(&self, _state: &Self::State) -> Element<'_, Self::Event, Renderer> {
         Row::new()
-            .push(component(DbColView::new(
+            .push(DbColView::new(
                 "Labels",
                 self.label_button_infos(),
                 GuiMessage::LabelViewUpdated,
                 &self.state.label_view_state,
-            )))
-            .push(component(DbColView::new(
+            ))
+            .push(DbColView::new(
                 "Descriptors",
                 self.descriptor_button_infos(),
                 GuiMessage::DescriptorViewUpdated,
                 &self.state.descriptor_view_state,
-            )))
+            ))
             .push(
                 Column::new()
                     .push(Text::new("Description"))
@@ -82,5 +80,11 @@ impl<'a> EntityView<'a> {
             ("Delete Descriptor", None),
             ("Rename Descriptor", None),
         ]
+    }
+}
+
+impl<'a> From<EntityView<'a>> for Element<'a, GuiMessage> {
+    fn from(entity_view: EntityView<'a>) -> Self {
+        component(entity_view)
     }
 }

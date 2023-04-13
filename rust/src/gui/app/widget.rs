@@ -12,7 +12,6 @@ use iced::{
     Alignment, Length, Sandbox,
 };
 use iced_aw::{style::CardStyles, Card};
-use iced_lazy::component;
 
 impl Sandbox for SqlGui {
     type Message = GuiMessage;
@@ -44,10 +43,10 @@ impl Sandbox for SqlGui {
             None => Column::new()
                 .push(self.menu_bar())
                 .push(self.current_database_display())
-                .push(component(EntityView::new(
+                .push(EntityView::new(
                     &self.entity_view_state,
                     &self.lore_database,
-                )))
+                ))
                 .into(),
             Some(message) => self.error_dialog(message),
         }

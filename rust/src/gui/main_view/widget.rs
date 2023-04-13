@@ -126,11 +126,13 @@ impl SqlGui {
                 "Labels",
                 self.label_button_infos(),
                 GuiMessage::LabelViewUpdated,
+                &self.label_view_state,
             )))
             .push(component(DbColView::new(
                 "Descriptors",
                 self.descriptor_button_infos(),
                 GuiMessage::DescriptorViewUpdated,
+                &self.descriptor_view_state,
             )))
             .push(
                 Column::new()

@@ -11,6 +11,7 @@ pub(crate) struct DbColView<'a, M> {
     title: &'a str,
     button_infos: Vec<(&'a str, Option<DbColViewMessage>)>,
     gui_message: M,
+    state: &'a DbColViewState,
 }
 
 impl<'a, M> DbColView<'a, M>
@@ -21,11 +22,13 @@ where
         title: &'a str,
         button_infos: Vec<(&'a str, Option<DbColViewMessage>)>,
         gui_message: M,
+        state: &'a DbColViewState,
     ) -> Self {
         Self {
             title,
             button_infos,
             gui_message,
+            state,
         }
     }
 }
@@ -43,12 +46,12 @@ where
         Some(m(event))
     }
 
-    fn view(&self, state: &Self::State) -> Element<'_, Self::Event, Renderer> {
-        let search_field = TextInput::new("Type to search...", &state.search_text)
+    fn view(&self, _state: &Self::State) -> Element<'_, Self::Event, Renderer> {
+        let search_field = TextInput::new("Type to search...", &self.state.search_text)
             .on_input(|str| DbColViewMessage::SearchFieldUpdated(str))
             .width(Length::Fill);
         let selection_list = SelectionList::new_with(
-            state.entries.clone(),
+            self.state.entries.clone(),
             |str| DbColViewMessage::Selected(str),
             20.0,
             0.0,

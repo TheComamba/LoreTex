@@ -9,28 +9,15 @@ use crate::gui::{
     main_view::message_handling::GuiMessage,
 };
 
-use super::{message_handling::EntityViewMessage, EntityView};
+use super::EntityView;
 
 impl<'a> Component<GuiMessage, Renderer> for EntityView<'a> {
     type State = ();
 
-    type Event = EntityViewMessage;
+    type Event = GuiMessage;
 
     fn update(&mut self, _state: &mut Self::State, event: Self::Event) -> Option<GuiMessage> {
-        match event {
-            EntityViewMessage::LabelViewUpdated(DbColViewMessage::Selected(label)) => {
-                self.label_view_state.selected_entry = Some(label);
-                self.descriptor_view_state.selected_entry = None;
-                self.update_descriptors();
-            }
-            EntityViewMessage::DescriptorViewUpdated(DbColViewMessage::Selected(descriptor)) => {
-                self.descriptor_view_state.selected_entry = Some(descriptor);
-                self.update_description();
-            }
-            EntityViewMessage::LabelViewUpdated(event) => self.update_label_view(event),
-            EntityViewMessage::DescriptorViewUpdated(event) => self.update_descriptor_view(event),
-        }
-        None
+        Some(event)
     }
 
     fn view(&self, _state: &Self::State) -> Element<'_, Self::Event, Renderer> {
@@ -38,19 +25,19 @@ impl<'a> Component<GuiMessage, Renderer> for EntityView<'a> {
             .push(component(DbColView::new(
                 "Labels",
                 self.label_button_infos(),
-                EntityViewMessage::LabelViewUpdated,
-                &self.label_view_state,
+                GuiMessage::LabelViewUpdated,
+                &self.state.label_view_state,
             )))
             .push(component(DbColView::new(
                 "Descriptors",
                 self.descriptor_button_infos(),
-                EntityViewMessage::DescriptorViewUpdated,
-                &self.descriptor_view_state,
+                GuiMessage::DescriptorViewUpdated,
+                &self.state.descriptor_view_state,
             )))
             .push(
                 Column::new()
                     .push(Text::new("Description"))
-                    .push(Text::new(&self.current_description))
+                    .push(Text::new(&self.state.current_description))
                     .padding(5)
                     .spacing(5)
                     .width(Length::Fill),
@@ -64,7 +51,7 @@ impl<'a> Component<GuiMessage, Renderer> for EntityView<'a> {
 
 impl<'a> EntityView<'a> {
     fn new_entity_msg(&self) -> Option<DbColViewMessage> {
-        if self.lore_database.is_some() && !self.label_view_state.search_text.is_empty() {
+        if self.lore_database.is_some() && !self.state.label_view_state.search_text.is_empty() {
             Some(DbColViewMessage::New)
         } else {
             None
@@ -72,8 +59,8 @@ impl<'a> EntityView<'a> {
     }
 
     fn new_descriptor_msg(&self) -> Option<DbColViewMessage> {
-        if self.label_view_state.selected_entry.is_some()
-            && !self.descriptor_view_state.search_text.is_empty()
+        if self.state.label_view_state.selected_entry.is_some()
+            && !self.state.descriptor_view_state.search_text.is_empty()
         {
             Some(DbColViewMessage::New)
         } else {

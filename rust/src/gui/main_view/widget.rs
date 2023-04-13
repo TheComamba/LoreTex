@@ -1,6 +1,8 @@
 use crate::{
     gui::{
-        db_col_view::DbColViewState, entity_view::EntityView, user_preferences::load_database_path,
+        db_col_view::DbColViewMessage,
+        entity_view::{EntityView, EntityViewState},
+        user_preferences::load_database_path,
     },
     APP_TITLE,
 };
@@ -18,9 +20,7 @@ impl Sandbox for SqlGui {
 
     fn new() -> Self {
         let mut gui = SqlGui {
-            label_view_state: DbColViewState::new(),
-            descriptor_view_state: DbColViewState::new(),
-            current_description: String::new(),
+            entity_view_state: EntityViewState::new(),
             lore_database: None,
             error_message: None,
         };
@@ -38,6 +38,17 @@ impl Sandbox for SqlGui {
         match message {
             GuiMessage::NewDatabase => self.new_database_from_dialog(),
             GuiMessage::OpenDatabase => self.open_database_from_dialog(),
+            GuiMessage::LabelViewUpdated(DbColViewMessage::Selected(label)) => {
+                self.entity_view_state.label_view_state.selected_entry = Some(label);
+                self.entity_view_state.descriptor_view_state.selected_entry = None;
+                self.update_descriptors();
+            }
+            GuiMessage::DescriptorViewUpdated(DbColViewMessage::Selected(descriptor)) => {
+                self.entity_view_state.descriptor_view_state.selected_entry = Some(descriptor);
+                self.update_description();
+            }
+            GuiMessage::LabelViewUpdated(event) => self.update_label_view(event),
+            GuiMessage::DescriptorViewUpdated(event) => self.update_descriptor_view(event),
             GuiMessage::ErrorDialogClosed => self.error_message = None,
         }
     }
@@ -47,7 +58,10 @@ impl Sandbox for SqlGui {
             None => Column::new()
                 .push(self.menu_bar())
                 .push(self.current_database_display())
-                .push(component(EntityView::new(&self.lore_database)))
+                .push(component(EntityView::new(
+                    &self.entity_view_state,
+                    &self.lore_database,
+                )))
                 .into(),
             Some(message) => self.error_dialog(message),
         }

@@ -1,8 +1,6 @@
 use crate::{
     gui::{
-        db_col_view::{DbColViewMessage, DbColViewState},
-        entity_view::EntityView,
-        user_preferences::load_database_path,
+        db_col_view::DbColViewState, entity_view::EntityView, user_preferences::load_database_path,
     },
     APP_TITLE,
 };
@@ -40,17 +38,6 @@ impl Sandbox for SqlGui {
         match message {
             GuiMessage::NewDatabase => self.new_database_from_dialog(),
             GuiMessage::OpenDatabase => self.open_database_from_dialog(),
-            GuiMessage::LabelViewUpdated(DbColViewMessage::Selected(label)) => {
-                self.label_view_state.selected_entry = Some(label);
-                self.descriptor_view_state.selected_entry = None;
-                self.update_descriptors();
-            }
-            GuiMessage::DescriptorViewUpdated(DbColViewMessage::Selected(descriptor)) => {
-                self.descriptor_view_state.selected_entry = Some(descriptor);
-                self.update_description();
-            }
-            GuiMessage::LabelViewUpdated(event) => self.update_label_view(event),
-            GuiMessage::DescriptorViewUpdated(event) => self.update_descriptor_view(event),
             GuiMessage::ErrorDialogClosed => self.error_message = None,
         }
     }

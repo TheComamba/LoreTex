@@ -3,6 +3,7 @@ use loretex::sql::lore_database::LoreDatabase;
 use super::db_col_view::DbColViewState;
 
 pub(crate) mod message_handling;
+mod updating;
 mod widget;
 
 pub struct EntityView<'a> {

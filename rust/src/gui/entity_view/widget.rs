@@ -17,6 +17,19 @@ impl<'a> Component<GuiMessage, Renderer> for EntityView<'a> {
     type Event = EntityViewMessage;
 
     fn update(&mut self, _state: &mut Self::State, event: Self::Event) -> Option<GuiMessage> {
+        match event {
+            EntityViewMessage::LabelViewUpdated(DbColViewMessage::Selected(label)) => {
+                self.label_view_state.selected_entry = Some(label);
+                self.descriptor_view_state.selected_entry = None;
+                self.update_descriptors();
+            }
+            EntityViewMessage::DescriptorViewUpdated(DbColViewMessage::Selected(descriptor)) => {
+                self.descriptor_view_state.selected_entry = Some(descriptor);
+                self.update_description();
+            }
+            EntityViewMessage::LabelViewUpdated(event) => self.update_label_view(event),
+            EntityViewMessage::DescriptorViewUpdated(event) => self.update_descriptor_view(event),
+        }
         None
     }
 

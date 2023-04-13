@@ -32,3 +32,9 @@ impl EntityViewState {
         }
     }
 }
+
+impl Default for EntityViewState {
+    fn default() -> Self {
+        Self::new()
+    }
+}

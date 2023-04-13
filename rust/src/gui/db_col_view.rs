@@ -48,11 +48,11 @@ where
 
     fn view(&self, _state: &Self::State) -> Element<'_, Self::Event, Renderer> {
         let search_field = TextInput::new("Type to search...", &self.state.search_text)
-            .on_input(|str| DbColViewMessage::SearchFieldUpdated(str))
+            .on_input(DbColViewMessage::SearchFieldUpdated)
             .width(Length::Fill);
         let selection_list = SelectionList::new_with(
             self.state.entries.clone(),
-            |str| DbColViewMessage::Selected(str),
+            DbColViewMessage::Selected,
             20.0,
             0.0,
             SelectionListStyles::Default,

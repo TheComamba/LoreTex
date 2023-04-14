@@ -14,7 +14,7 @@ pub struct EntityColumn {
 }
 
 impl LoreDatabase {
-    pub fn write_column(&self, col: EntityColumn) -> Result<(), LoreTexError> {
+    pub fn write_entity_column(&self, col: EntityColumn) -> Result<(), LoreTexError> {
         let mut connection = self.db_connection()?;
         let _ = diesel::insert_into(entities::table)
             .values(&col)

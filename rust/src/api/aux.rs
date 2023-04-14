@@ -1,11 +1,10 @@
-use std::{
-    ffi::{CStr, CString},
-    path::PathBuf,
-};
-
 use crate::{
     errors::LoreTexError,
     sql::{entity::EntityColumn, lore_database::LoreDatabase},
+};
+use std::{
+    ffi::{CStr, CString},
+    path::PathBuf,
 };
 
 fn to_entity_column(
@@ -31,11 +30,11 @@ fn char_pointer_to_string(string: *const libc::c_char) -> Result<String, LoreTex
     Ok(string.to_string())
 }
 
-fn char_ptr(message: &str) -> *const libc::c_char {
+pub(super) fn char_ptr(message: &str) -> *const libc::c_char {
     CString::new(message).unwrap().into_raw()
 }
 
-fn c_write_database_column(
+pub(super) fn c_write_entity_column(
     db_path: *const libc::c_char,
     label: *const libc::c_char,
     descriptor: *const libc::c_char,
@@ -45,19 +44,6 @@ fn c_write_database_column(
     let db_path = PathBuf::from(db_path);
     let column = to_entity_column(label, descriptor, description)?;
     let db = LoreDatabase::open(db_path)?;
-    db.write_column(column)?;
+    db.write_entity_column(column)?;
     Ok(())
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn write_database_column(
-    db_path: *const libc::c_char,
-    label: *const libc::c_char,
-    descriptor: *const libc::c_char,
-    description: *const libc::c_char,
-) -> *const libc::c_char {
-    match c_write_database_column(db_path, label, descriptor, description) {
-        Ok(()) => char_ptr(""),
-        Err(e) => char_ptr(&e.to_string()),
-    }
 }

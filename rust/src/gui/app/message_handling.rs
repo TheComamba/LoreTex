@@ -76,7 +76,7 @@ impl SqlGui {
                 ));
             }
         };
-        db.write_column(new_col)?;
+        db.write_entity_column(new_col)?;
         self.update_labels();
         Ok(())
     }
@@ -119,7 +119,7 @@ impl SqlGui {
                 ));
             }
         };
-        db.write_column(new_col)?;
+        db.write_entity_column(new_col)?;
         self.update_descriptors();
         Ok(())
     }

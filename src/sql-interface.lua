@@ -6,7 +6,7 @@ local function getFFIModule()
     end
 
     if ffi["load"] == nil then
-        LogError[[
+        LogError [[
 LuaLaTex has been called in restricted mode, which does not allow the loading of external libraries.
 You need to call it with the \verb'--shell-escape' option.
 See the installation section of README.md on how to do that.
@@ -47,31 +47,68 @@ local function getLib()
     return rustLib, ffi
 end
 
+local function optionalEntityToString(inp)
+    if IsEntity(inp) then
+        local label = GetProtectedStringField(inp, "label")
+        return [[ENTITY{]] .. label .. [[}]]
+    else
+        return ""
+    end
+end
 
-local function writeEntityToDatabase(entity)
+
+local function writeEntityToDatabase(dbPath, entity)
     local rustLib, ffi = getLib()
     if not rustLib or not ffi then return nil end
 
-    local dbPath = RelativePath .. [[../tmp_sql_example/example.db]]
-
     local label = GetProtectedStringField(entity, "label")
     for key, value in pairs(entity) do
-        if IsEntity(value) then
-            value = [[ENTITY{]] .. GetProtectedStringField(value, "label") .. [[}]]
-        elseif type(value) == "table" then
-            LogError([[Value to key \verb|]] .. key .. [[| is a table.]])
-            value = DebugPrint(value)
-        end
-        local result = rustLib.write_database_column(dbPath, label, key, tostring(value))
-        local errorMessage = ffi.string(result)
-        if errorMessage ~= "" then
-            LogError(errorMessage)
+        if key ~= GetProtectedDescriptor("historyItems") then
+            if IsEntity(value) then
+                value = optionalEntityToString(value)
+            elseif type(value) == "table" then
+                LogError([[Value to key \verb|]] .. key .. [[| is a table.]])
+                value = DebugPrint(value)
+            end
+
+            local result = rustLib.write_entity_column(dbPath, label, key, tostring(value))
+            local errorMessage = ffi.string(result)
+            if errorMessage ~= "" then
+                LogError(errorMessage)
+            end
         end
     end
 end
 
-TexApi.writeLoreToDatabase = function(path)
+local function writeHistoryItemToDatabase(dbPath, item)
+    local rustLib, ffi = getLib()
+    if not rustLib or not ffi then return nil end
+
+    local label = GetProtectedStringField(item, "label")
+    local content = GetProtectedStringField(item, "content")
+    local isConcernsOthers = GetProtectedNullableField(item, "isConcernsOthers")
+    local isSecret = GetProtectedNullableField(item, "isSecret")
+    local year = GetProtectedNullableField(item, "year")
+    local day = GetProtectedNullableField(item, "day")
+    -- if day == nil then day = 0 end
+    local originator = GetProtectedNullableField(item, "originator")
+    originator = optionalEntityToString(originator)
+    local yearFormat = GetProtectedNullableField(item, "yearFormat")
+    yearFormat = optionalEntityToString(yearFormat)
+
+    local result = rustLib.write_history_item(dbPath, label, content, isConcernsOthers, isSecret, year, day, originator,
+    yearFormat)
+    local errorMessage = ffi.string(result)
+    if errorMessage ~= "" then
+        LogError(errorMessage)
+    end
+end
+
+TexApi.writeLoreToDatabase = function(dbPath)
     for key, entity in pairs(AllEntities) do
-        writeEntityToDatabase(entity)
+        writeEntityToDatabase(dbPath, entity)
+    end
+    for key, item in pairs(AllHistoryItems) do
+        writeHistoryItemToDatabase(dbPath, item)
     end
 end

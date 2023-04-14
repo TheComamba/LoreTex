@@ -22,7 +22,7 @@ pub struct HistoryItem {
 impl LoreDatabase {
     pub fn write_history_item(&self, col: HistoryItem) -> Result<(), LoreTexError> {
         let mut connection = self.db_connection()?;
-        let _ = diesel::insert_into(history_items::table)
+        diesel::insert_into(history_items::table)
             .values(&col)
             .execute(&mut connection)
             .map_err(|e| {
@@ -31,5 +31,20 @@ impl LoreDatabase {
                 )
             })?;
         Ok(())
+    }
+
+    pub fn get_history_labels(&self) -> Result<Vec<String>, LoreTexError> {
+        let mut connection = self.db_connection()?;
+        let labels = history_items::table
+            .load::<HistoryItem>(&mut connection)
+            .map_err(|e| {
+                LoreTexError::SqlError(
+                    "Loading history items to get all labels failed: ".to_string() + &e.to_string(),
+                )
+            })?
+            .into_iter()
+            .map(|c| c.label)
+            .collect::<Vec<_>>();
+        Ok(labels)
     }
 }

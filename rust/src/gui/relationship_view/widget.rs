@@ -9,7 +9,7 @@ impl Component<GuiMessage, Renderer> for RelationshipView {
     type Event = GuiMessage;
 
     fn update(&mut self, _state: &mut Self::State, event: Self::Event) -> Option<GuiMessage> {
-        None
+        Some(event)
     }
 
     fn view(&self, _state: &Self::State) -> Element<'_, Self::Event, Renderer> {

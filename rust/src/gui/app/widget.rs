@@ -2,7 +2,7 @@ use super::{message_handling::GuiMessage, SqlGui, ViewType};
 use crate::{
     gui::{
         entity_view::{EntityView, EntityViewState},
-        history_view::HistoryView,
+        history_view::{HistoryView, HistoryViewState},
         relationship_view::RelationshipView,
         user_preferences::load_database_path,
     },
@@ -21,6 +21,7 @@ impl Sandbox for SqlGui {
         let mut gui = SqlGui {
             selected_view: super::ViewType::Entity,
             entity_view_state: EntityViewState::new(),
+            history_view_state: HistoryViewState::new(),
             lore_database: None,
             error_message: None,
         };
@@ -61,7 +62,7 @@ impl SqlGui {
                     &self.lore_database,
                 ))
             }
-            ViewType::History => col = col.push(HistoryView::new()),
+            ViewType::History => col = col.push(HistoryView::new(&self.history_view_state)),
             ViewType::Relationship => col = col.push(RelationshipView::new()),
         }
         col.into()

@@ -1,9 +1,12 @@
 use super::HistoryView;
-use crate::gui::app::message_handling::GuiMessage;
+use crate::gui::{
+    app::message_handling::GuiMessage,
+    db_col_view::{DbColView, DbColViewMessage},
+};
 use iced::{widget::Row, Element, Renderer};
 use iced_lazy::{component, Component};
 
-impl Component<GuiMessage, Renderer> for HistoryView {
+impl<'a> Component<GuiMessage, Renderer> for HistoryView<'a> {
     type State = ();
 
     type Event = GuiMessage;
@@ -13,12 +16,28 @@ impl Component<GuiMessage, Renderer> for HistoryView {
     }
 
     fn view(&self, _state: &Self::State) -> Element<'_, Self::Event, Renderer> {
-        Row::new().into()
+        Row::new()
+            .push(DbColView::new(
+                "Labels",
+                self.label_button_infos(),
+                GuiMessage::LabelViewUpdated,
+                &self.state.label_view_state,
+            ))
+            .into()
     }
 }
 
-impl From<HistoryView> for Element<'_, GuiMessage> {
-    fn from(entity_view: HistoryView) -> Self {
+impl<'a> HistoryView<'a> {
+    fn label_button_infos(&self) -> Vec<(String, Option<DbColViewMessage>)> {
+        vec![("New History Item", None), ("Delete History Item", None)]
+            .into_iter()
+            .map(|(s, m)| (s.to_string(), m))
+            .collect()
+    }
+}
+
+impl<'a> From<HistoryView<'a>> for Element<'a, GuiMessage> {
+    fn from(entity_view: HistoryView<'a>) -> Self {
         component(entity_view)
     }
 }

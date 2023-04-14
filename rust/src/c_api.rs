@@ -5,7 +5,7 @@ use std::{
 
 use crate::{
     errors::LoreTexError,
-    sql::lore_database::{EntityColumn, LoreDatabase},
+    sql::{entities::EntityColumn, lore_database::LoreDatabase},
 };
 
 fn to_entity_column(

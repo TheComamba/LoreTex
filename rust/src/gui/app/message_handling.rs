@@ -1,6 +1,6 @@
 use super::{SqlGui, ViewType};
 use crate::gui::db_col_view::DbColViewMessage;
-use loretex::{errors::LoreTexError, sql::lore_database::EntityColumn};
+use loretex::{errors::LoreTexError, sql::entities::EntityColumn};
 
 #[derive(Debug, Clone)]
 pub(crate) enum GuiMessage {

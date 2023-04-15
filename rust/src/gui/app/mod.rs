@@ -2,8 +2,9 @@ use super::{entity_view::EntityViewState, history_view::HistoryViewState};
 use loretex::sql::lore_database::LoreDatabase;
 
 pub(super) mod message_handling;
-mod updating;
+mod updating_database;
 mod updating_entity_view;
+mod updating_history_view;
 mod widget;
 
 pub(crate) struct SqlGui {

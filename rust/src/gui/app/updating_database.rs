@@ -8,8 +8,8 @@ use super::SqlGui;
 
 impl SqlGui {
     fn update_database_derived_data(&mut self) {
-        self.reset_selections();
-        self.update_entity_labels();
+        self.reset_entity_view();
+        self.reset_history_view();
     }
 
     pub(super) fn new_database_from_dialog(&mut self) {

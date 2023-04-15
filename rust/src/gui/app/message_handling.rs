@@ -23,7 +23,7 @@ impl SqlGui {
             GuiMessage::OpenDatabase => self.open_database_from_dialog()?,
             GuiMessage::EntityLabelViewUpdated(event) => self.update_entity_label_view(event)?,
             GuiMessage::DescriptorViewUpdated(event) => self.update_descriptor_view(event)?,
-            GuiMessage::YearViewUpdated(_) => (),
+            GuiMessage::YearViewUpdated(event) => self.update_year_view(event)?,
             GuiMessage::DayViewUpdated(_) => (),
             GuiMessage::HistoryLabelViewUpdated(_) => (),
             GuiMessage::ErrorDialogClosed => self.error_message = None,

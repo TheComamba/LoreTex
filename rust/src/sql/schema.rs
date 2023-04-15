@@ -21,4 +21,12 @@ diesel::table! {
     }
 }
 
-diesel::allow_tables_to_appear_in_same_query!(entities, history_items,);
+diesel::table! {
+    relationships (parent, child) {
+        parent -> Text,
+        child -> Text,
+        role -> Text,
+    }
+}
+
+diesel::allow_tables_to_appear_in_same_query!(entities, history_items, relationships,);

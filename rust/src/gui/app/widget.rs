@@ -26,7 +26,10 @@ impl Sandbox for SqlGui {
             error_message: None,
         };
         if let Some(path) = load_database_path() {
-            gui.open_database(path);
+            match gui.open_database(path) {
+                Ok(_) => (),
+                Err(e) => gui.error_message = Some(e.to_string()),
+            };
         }
         gui
     }

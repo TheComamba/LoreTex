@@ -3,7 +3,7 @@ use crate::{
     gui::{
         entity_view::{EntityView, EntityViewState},
         history_view::{HistoryView, HistoryViewState},
-        relationship_view::RelationshipView,
+        relationship_view::{RelationshipView, RelationshipViewState},
         user_preferences::load_database_path,
     },
     APP_TITLE,
@@ -22,6 +22,7 @@ impl Sandbox for SqlGui {
             selected_view: super::ViewType::Entity,
             entity_view_state: EntityViewState::new(),
             history_view_state: HistoryViewState::new(),
+            relationship_view_state: RelationshipViewState::new(),
             lore_database: None,
             error_message: None,
         };
@@ -66,7 +67,9 @@ impl SqlGui {
                 ))
             }
             ViewType::History => col = col.push(HistoryView::new(&self.history_view_state)),
-            ViewType::Relationship => col = col.push(RelationshipView::new()),
+            ViewType::Relationship => {
+                col = col.push(RelationshipView::new(&self.relationship_view_state))
+            }
         }
         col.into()
     }

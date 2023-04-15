@@ -6,6 +6,12 @@ pub(super) struct HistoryView<'a> {
     state: &'a HistoryViewState,
 }
 
+impl<'a> HistoryView<'a> {
+    pub(super) fn new(state: &'a HistoryViewState) -> Self {
+        Self { state }
+    }
+}
+
 pub(super) struct HistoryViewState {
     pub(super) year_view_state: DbColViewState,
     pub(super) day_view_state: DbColViewState,
@@ -21,11 +27,5 @@ impl HistoryViewState {
             label_view_state: DbColViewState::new(),
             current_content: String::new(),
         }
-    }
-}
-
-impl<'a> HistoryView<'a> {
-    pub(super) fn new(state: &'a HistoryViewState) -> Self {
-        Self { state }
     }
 }

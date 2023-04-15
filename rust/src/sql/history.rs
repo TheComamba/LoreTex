@@ -69,9 +69,11 @@ impl LoreDatabase {
         Ok(days)
     }
 
-    pub fn get_history_labels(&self) -> Result<Vec<String>, LoreTexError> {
+    pub fn get_all_history_labels(&self, year: i32, day: i32) -> Result<Vec<String>, LoreTexError> {
         let mut connection = self.db_connection()?;
         let labels = history_items::table
+            .filter(history_items::year.eq(year))
+            .filter(history_items::day.eq(day))
             .load::<HistoryItem>(&mut connection)
             .map_err(|e| {
                 LoreTexError::SqlError(

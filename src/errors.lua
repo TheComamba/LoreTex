@@ -19,7 +19,6 @@ function LogError(errorMessage)
     end
     local caller = debug.getinfo(2).name
     if caller ~= nil and type(caller) == "string" then
-        caller = string.gsub(caller, [[_]], [[\_]])
         errorMessage = "In function \"" .. caller .. "\": " .. errorMessage
     end
     if IsErrorsChronologicallySorted then
@@ -28,7 +27,7 @@ function LogError(errorMessage)
     if IsThrowOnError then
         error(errorMessage)
     else
-        errorMessages[#errorMessages + 1] = errorMessage
+        errorMessages[#errorMessages + 1] = string.gsub(errorMessage, [[_]], [[\_]])
     end
 end
 

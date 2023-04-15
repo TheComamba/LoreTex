@@ -5,6 +5,7 @@ use iced::{
 };
 use iced_aw::{style::SelectionListStyles, SelectionList};
 use iced_lazy::{component, Component};
+use loretex::errors::LoreTexError;
 
 pub(super) struct DbColView<'a, M> {
     title: &'a str,
@@ -99,6 +100,15 @@ impl DbColViewState {
             entries: vec![],
             selected_entry: None,
         }
+    }
+
+    pub(super) fn get_selected_int(&self) -> Result<Option<i32>, LoreTexError>  {
+        let year = match self.selected_entry.as_ref() {
+            Some(year) => year.parse::<i32>()
+            .map_err(|e| LoreTexError::InputError(e.to_string()))?,
+            None => return Ok(None)
+        };
+        Ok(Some(year))
     }
 }
 

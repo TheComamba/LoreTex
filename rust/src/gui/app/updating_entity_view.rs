@@ -9,7 +9,7 @@ impl SqlGui {
         self.entity_view_state.current_description = String::new();
     }
 
-    pub(super) fn update_labels(&mut self) {
+    pub(super) fn update_entity_labels(&mut self) {
         match self.lore_database.as_ref() {
             Some(db) => match db.get_all_labels() {
                 Ok(labels) => self.entity_view_state.label_view_state.entries = labels,

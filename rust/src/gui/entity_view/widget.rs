@@ -23,7 +23,7 @@ impl<'a> Component<GuiMessage, Renderer> for EntityView<'a> {
             .push(DbColView::new(
                 "Label",
                 self.label_button_infos(),
-                GuiMessage::LabelViewUpdated,
+                GuiMessage::EntityLabelViewUpdated,
                 &self.state.label_view_state,
             ))
             .push(DbColView::new(

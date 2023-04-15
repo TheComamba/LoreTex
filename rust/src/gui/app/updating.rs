@@ -7,6 +7,11 @@ use crate::gui::file_dialogs;
 use super::SqlGui;
 
 impl SqlGui {
+    fn update_database_derived_data(&mut self) {
+        self.reset_selections();
+        self.update_entity_labels();
+    }
+
     pub(super) fn new_database_from_dialog(&mut self) {
         let path = match file_dialogs::new() {
             Some(path) => path,
@@ -26,8 +31,7 @@ impl SqlGui {
                 None
             }
         };
-        self.reset_selections();
-        self.update_labels();
+        self.update_database_derived_data();
     }
 
     pub(super) fn open_database_from_dialog(&mut self) {
@@ -49,7 +53,6 @@ impl SqlGui {
                 None
             }
         };
-        self.reset_selections();
-        self.update_labels();
+        self.update_database_derived_data();
     }
 }

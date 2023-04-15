@@ -7,7 +7,7 @@ pub(crate) enum GuiMessage {
     ViewSelected(ViewType),
     NewDatabase,
     OpenDatabase,
-    LabelViewUpdated(DbColViewMessage),
+    EntityLabelViewUpdated(DbColViewMessage),
     DescriptorViewUpdated(DbColViewMessage),
     YearViewUpdated(DbColViewMessage),
     DayViewUpdated(DbColViewMessage),
@@ -21,7 +21,7 @@ impl SqlGui {
             GuiMessage::ViewSelected(view) => self.selected_view = view,
             GuiMessage::NewDatabase => self.new_database_from_dialog(),
             GuiMessage::OpenDatabase => self.open_database_from_dialog(),
-            GuiMessage::LabelViewUpdated(event) => self.update_label_view(event)?,
+            GuiMessage::EntityLabelViewUpdated(event) => self.update_entity_label_view(event)?,
             GuiMessage::DescriptorViewUpdated(event) => self.update_descriptor_view(event)?,
             GuiMessage::YearViewUpdated(_) => (),
             GuiMessage::DayViewUpdated(_) => (),
@@ -31,7 +31,7 @@ impl SqlGui {
         Ok(())
     }
 
-    fn update_label_view(&mut self, message: DbColViewMessage) -> Result<(), LoreTexError> {
+    fn update_entity_label_view(&mut self, message: DbColViewMessage) -> Result<(), LoreTexError> {
         match message {
             DbColViewMessage::New => self.new_entity()?,
             DbColViewMessage::SearchFieldUpdated(text) => {
@@ -83,7 +83,7 @@ impl SqlGui {
             }
         };
         db.write_entity_column(new_col)?;
-        self.update_labels();
+        self.update_entity_labels();
         Ok(())
     }
 

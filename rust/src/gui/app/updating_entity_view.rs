@@ -1,11 +1,10 @@
-use loretex::{
-    errors::LoreTexError,
-    sql::{entity::EntityColumn, lore_database::LoreDatabase},
-};
-
 use crate::gui::{
     db_col_view::{DbColViewMessage, DbColViewState},
     entity_view::EntityViewState,
+};
+use loretex::{
+    errors::LoreTexError,
+    sql::{entity::EntityColumn, lore_database::LoreDatabase},
 };
 
 impl EntityViewState {

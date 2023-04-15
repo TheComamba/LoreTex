@@ -1,9 +1,8 @@
-use loretex::{errors::LoreTexError, sql::lore_database::LoreDatabase};
-
 use crate::gui::{
     db_col_view::{DbColViewMessage, DbColViewState},
     history_view::HistoryViewState,
 };
+use loretex::{errors::LoreTexError, sql::lore_database::LoreDatabase};
 
 impl HistoryViewState {
     pub(super) fn update_year_view(

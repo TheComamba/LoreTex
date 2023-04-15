@@ -1,10 +1,7 @@
-use std::path::PathBuf;
-
-use loretex::{errors::LoreTexError, sql::lore_database::LoreDatabase};
-
-use crate::gui::file_dialogs;
-
 use super::SqlGui;
+use crate::gui::file_dialogs;
+use loretex::{errors::LoreTexError, sql::lore_database::LoreDatabase};
+use std::path::PathBuf;
 
 impl SqlGui {
     fn update_database_derived_data(&mut self) -> Result<(), LoreTexError> {

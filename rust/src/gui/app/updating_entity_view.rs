@@ -9,22 +9,19 @@ use crate::gui::{
 };
 
 impl EntityViewState {
-    pub(super) fn reset_entity_view(
-        &mut self,
-        db: &Option<LoreDatabase>,
-    ) -> Result<(), LoreTexError> {
-        self.reset_entity_view_selections();
-        self.update_entity_labels(db)?;
+    pub(super) fn reset(&mut self, db: &Option<LoreDatabase>) -> Result<(), LoreTexError> {
+        self.reset_selections();
+        self.update_labels(db)?;
         Ok(())
     }
 
-    fn reset_entity_view_selections(&mut self) {
+    fn reset_selections(&mut self) {
         self.label_view_state.selected_entry = None;
         self.descriptor_view_state.selected_entry = None;
         self.current_description = String::new();
     }
 
-    fn update_entity_labels(&mut self, db: &Option<LoreDatabase>) -> Result<(), LoreTexError> {
+    fn update_labels(&mut self, db: &Option<LoreDatabase>) -> Result<(), LoreTexError> {
         match db {
             Some(db) => self.label_view_state.entries = db.get_all_entity_labels()?,
             None => self.label_view_state = DbColViewState::new(),
@@ -128,7 +125,7 @@ impl EntityViewState {
                 ));
             }
         };
-        self.update_entity_labels(db)?;
+        self.update_labels(db)?;
         Ok(())
     }
 

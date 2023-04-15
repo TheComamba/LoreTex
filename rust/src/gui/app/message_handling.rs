@@ -27,7 +27,9 @@ impl SqlGui {
             GuiMessage::DescriptorViewUpdated(event) => self
                 .entity_view_state
                 .update_descriptor_view(event, &self.lore_database)?,
-            GuiMessage::YearViewUpdated(event) => self.update_year_view(event)?,
+            GuiMessage::YearViewUpdated(event) => self
+                .history_view_state
+                .update_year_view(event, &self.lore_database)?,
             GuiMessage::DayViewUpdated(_) => (),
             GuiMessage::HistoryLabelViewUpdated(_) => (),
             GuiMessage::ErrorDialogClosed => self.error_message = None,

@@ -7,12 +7,16 @@ pub(super) struct HistoryView<'a> {
 }
 
 pub(super) struct HistoryViewState {
+    pub(super) year_view_state: DbColViewState,
+    pub(super) day_view_state: DbColViewState,
     pub(super) label_view_state: DbColViewState,
 }
 
 impl HistoryViewState {
     pub(super) fn new() -> Self {
         Self {
+            year_view_state: DbColViewState::new(),
+            day_view_state: DbColViewState::new(),
             label_view_state: DbColViewState::new(),
         }
     }

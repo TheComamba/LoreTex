@@ -9,6 +9,9 @@ pub(crate) enum GuiMessage {
     OpenDatabase,
     LabelViewUpdated(DbColViewMessage),
     DescriptorViewUpdated(DbColViewMessage),
+    YearViewUpdated(DbColViewMessage),
+    DayViewUpdated(DbColViewMessage),
+    HistoryLabelViewUpdated(DbColViewMessage),
     ErrorDialogClosed,
 }
 
@@ -20,6 +23,9 @@ impl SqlGui {
             GuiMessage::OpenDatabase => self.open_database_from_dialog(),
             GuiMessage::LabelViewUpdated(event) => self.update_label_view(event)?,
             GuiMessage::DescriptorViewUpdated(event) => self.update_descriptor_view(event)?,
+            GuiMessage::YearViewUpdated(_) => (),
+            GuiMessage::DayViewUpdated(_) => (),
+            GuiMessage::HistoryLabelViewUpdated(_) => (),
             GuiMessage::ErrorDialogClosed => self.error_message = None,
         }
         Ok(())

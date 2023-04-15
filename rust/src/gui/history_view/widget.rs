@@ -1,8 +1,5 @@
 use super::HistoryView;
-use crate::gui::{
-    app::message_handling::GuiMessage,
-    db_col_view::{DbColView, DbColViewMessage},
-};
+use crate::gui::{app::message_handling::GuiMessage, db_col_view::DbColView};
 use iced::{widget::Row, Element, Renderer};
 use iced_lazy::{component, Component};
 
@@ -18,21 +15,24 @@ impl<'a> Component<GuiMessage, Renderer> for HistoryView<'a> {
     fn view(&self, _state: &Self::State) -> Element<'_, Self::Event, Renderer> {
         Row::new()
             .push(DbColView::new(
-                "Labels",
-                self.label_button_infos(),
-                GuiMessage::LabelViewUpdated,
+                "Year",
+                vec![],
+                GuiMessage::YearViewUpdated,
+                &self.state.year_view_state,
+            ))
+            .push(DbColView::new(
+                "Day",
+                vec![],
+                GuiMessage::DayViewUpdated,
+                &self.state.day_view_state,
+            ))
+            .push(DbColView::new(
+                "Label",
+                vec![],
+                GuiMessage::HistoryLabelViewUpdated,
                 &self.state.label_view_state,
             ))
             .into()
-    }
-}
-
-impl<'a> HistoryView<'a> {
-    fn label_button_infos(&self) -> Vec<(String, Option<DbColViewMessage>)> {
-        vec![("New History Item", None), ("Delete History Item", None)]
-            .into_iter()
-            .map(|(s, m)| (s.to_string(), m))
-            .collect()
     }
 }
 

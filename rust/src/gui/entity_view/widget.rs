@@ -21,13 +21,13 @@ impl<'a> Component<GuiMessage, Renderer> for EntityView<'a> {
     fn view(&self, _state: &Self::State) -> Element<'_, Self::Event, Renderer> {
         Row::new()
             .push(DbColView::new(
-                "Labels",
+                "Label",
                 self.label_button_infos(),
                 GuiMessage::LabelViewUpdated,
                 &self.state.label_view_state,
             ))
             .push(DbColView::new(
-                "Descriptors",
+                "Descriptor",
                 self.descriptor_button_infos(),
                 GuiMessage::DescriptorViewUpdated,
                 &self.state.descriptor_view_state,

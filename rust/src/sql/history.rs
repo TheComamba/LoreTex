@@ -33,6 +33,22 @@ impl LoreDatabase {
         Ok(())
     }
 
+    pub fn get_all_years(&self) -> Result<Vec<i32>, LoreTexError> {
+        let mut connection = self.db_connection()?;
+        let mut years = history_items::table
+            .load::<HistoryItem>(&mut connection)
+            .map_err(|e| {
+                LoreTexError::SqlError(
+                    "Loading history item to get all years failed: ".to_string() + &e.to_string(),
+                )
+            })?
+            .into_iter()
+            .map(|c| c.year)
+            .collect::<Vec<_>>();
+        years.dedup();
+        Ok(years)
+    }
+
     pub fn get_history_labels(&self) -> Result<Vec<String>, LoreTexError> {
         let mut connection = self.db_connection()?;
         let labels = history_items::table

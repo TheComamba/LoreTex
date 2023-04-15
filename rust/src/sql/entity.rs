@@ -27,7 +27,7 @@ impl LoreDatabase {
         Ok(())
     }
 
-    pub fn get_all_labels(&self) -> Result<Vec<String>, LoreTexError> {
+    pub fn get_all_entity_labels(&self) -> Result<Vec<String>, LoreTexError> {
         let mut connection = self.db_connection()?;
         let mut labels = entities::table
             .load::<EntityColumn>(&mut connection)

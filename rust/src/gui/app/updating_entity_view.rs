@@ -6,11 +6,11 @@ use super::SqlGui;
 
 impl SqlGui {
     pub(super) fn reset_entity_view(&mut self) {
-        self.reset_selections();
+        self.reset_entity_view_selections();
         self.update_entity_labels();
     }
 
-    fn reset_selections(&mut self) {
+    fn reset_entity_view_selections(&mut self) {
         self.entity_view_state.label_view_state.selected_entry = None;
         self.entity_view_state.descriptor_view_state.selected_entry = None;
         self.entity_view_state.current_description = String::new();
@@ -18,7 +18,7 @@ impl SqlGui {
 
     fn update_entity_labels(&mut self) {
         match self.lore_database.as_ref() {
-            Some(db) => match db.get_all_labels() {
+            Some(db) => match db.get_all_entity_labels() {
                 Ok(labels) => self.entity_view_state.label_view_state.entries = labels,
                 Err(e) => {
                     self.error_message = Some(e.to_string());

@@ -1,6 +1,9 @@
 use super::HistoryView;
 use crate::gui::{app::message_handling::GuiMessage, db_col_view::DbColView};
-use iced::{widget::Row, Element, Renderer};
+use iced::{
+    widget::{Column, Row, Text},
+    Element, Length, Renderer,
+};
 use iced_lazy::{component, Component};
 
 impl<'a> Component<GuiMessage, Renderer> for HistoryView<'a> {
@@ -32,6 +35,14 @@ impl<'a> Component<GuiMessage, Renderer> for HistoryView<'a> {
                 GuiMessage::HistoryLabelViewUpdated,
                 &self.state.label_view_state,
             ))
+            .push(
+                Column::new()
+                    .push(Text::new("Content"))
+                    .push(Text::new(&self.state.current_content))
+                    .padding(5)
+                    .spacing(5)
+                    .width(Length::Fill),
+            )
             .into()
     }
 }

@@ -10,6 +10,7 @@ pub(super) struct HistoryViewState {
     pub(super) year_view_state: DbColViewState,
     pub(super) day_view_state: DbColViewState,
     pub(super) label_view_state: DbColViewState,
+    pub(super) current_content: String,
 }
 
 impl HistoryViewState {
@@ -18,6 +19,7 @@ impl HistoryViewState {
             year_view_state: DbColViewState::new(),
             day_view_state: DbColViewState::new(),
             label_view_state: DbColViewState::new(),
+            current_content: String::new(),
         }
     }
 }

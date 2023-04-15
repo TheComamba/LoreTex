@@ -1,8 +1,7 @@
+use super::lore_database::LoreDatabase;
 use crate::{errors::LoreTexError, sql::schema::entities};
 use ::diesel::prelude::*;
 use diesel::{Insertable, RunQueryDsl};
-
-use super::lore_database::LoreDatabase;
 
 #[derive(Insertable, Queryable)]
 #[diesel(table_name = entities)]

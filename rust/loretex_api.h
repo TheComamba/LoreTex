@@ -12,3 +12,8 @@ const char *write_history_item(const char *db_path,
                                int32_t day,
                                const char *originator,
                                const char *year_format);
+
+const char *write_relationship(const char *db_path,
+                               const char *parent,
+                               const char *child,
+                               const char *role);

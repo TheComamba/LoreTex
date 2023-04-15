@@ -1,9 +1,7 @@
+use super::{lore_database::LoreDatabase, schema::history_items};
+use crate::errors::LoreTexError;
 use ::diesel::prelude::*;
 use diesel::Insertable;
-
-use crate::errors::LoreTexError;
-
-use super::{lore_database::LoreDatabase, schema::history_items};
 
 #[derive(Insertable, Queryable)]
 #[diesel(table_name = history_items)]

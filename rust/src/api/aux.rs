@@ -1,6 +1,9 @@
 use crate::{
     errors::LoreTexError,
-    sql::{entity::EntityColumn, history::HistoryItem, lore_database::LoreDatabase},
+    sql::{
+        entity::EntityColumn, history::HistoryItem, lore_database::LoreDatabase,
+        relationships::EntityRelationship,
+    },
 };
 use std::{
     ffi::{CStr, CString},
@@ -107,5 +110,31 @@ pub(super) fn c_write_history_item(
     )?;
     let db = LoreDatabase::open(db_path)?;
     db.write_history_item(item)?;
+    Ok(())
+}
+
+fn to_relationship(
+    parent: *const libc::c_char,
+    child: *const libc::c_char,
+    role: *const libc::c_char,
+) -> Result<EntityRelationship, LoreTexError> {
+    Ok(EntityRelationship {
+        parent: char_pointer_to_string(parent)?,
+        child: char_pointer_to_string(child)?,
+        role: char_pointer_to_optional_string(role)?,
+    })
+}
+
+pub(super) fn c_write_relationship(
+    db_path: *const libc::c_char,
+    parent: *const libc::c_char,
+    child: *const libc::c_char,
+    role: *const libc::c_char,
+) -> Result<(), LoreTexError> {
+    let db_path = char_pointer_to_string(db_path)?;
+    let db_path = PathBuf::from(db_path);
+    let relationship = to_relationship(parent, child, role)?;
+    let db = LoreDatabase::open(db_path)?;
+    db.write_relationship(relationship)?;
     Ok(())
 }

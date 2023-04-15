@@ -1,4 +1,4 @@
-use super::aux::{c_write_entity_column, c_write_history_item, char_ptr};
+use super::aux::{c_write_entity_column, c_write_history_item, c_write_relationship, char_ptr};
 
 #[no_mangle]
 pub unsafe extern "C" fn write_entity_column(
@@ -36,6 +36,19 @@ pub unsafe extern "C" fn write_history_item(
         originator,
         year_format,
     ) {
+        Ok(()) => char_ptr(""),
+        Err(e) => char_ptr(&e.to_string()),
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn write_relationship(
+    db_path: *const libc::c_char,
+    parent: *const libc::c_char,
+    child: *const libc::c_char,
+    role: *const libc::c_char,
+) -> *const libc::c_char {
+    match c_write_relationship(db_path, parent, child, role) {
         Ok(()) => char_ptr(""),
         Err(e) => char_ptr(&e.to_string()),
     }

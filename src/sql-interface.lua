@@ -56,27 +56,64 @@ local function optionalEntityToString(inp)
     end
 end
 
+local function isDescriptorWrittenToDatabase(descriptor)
+    if descriptor == GetProtectedDescriptor("historyItems") then
+        return false
+    elseif descriptor == GetProtectedDescriptor("children") then
+        return false
+    else
+        return true
+    end
+end
+
+local function writeRelationshipToDatabase(loreCore, ffi, dbPath, parentLabel, childlabel, role)
+    local result = loreCore.write_relationship(dbPath, parentLabel, childlabel, role)
+    local errorMessage = ffi.string(result)
+    if errorMessage ~= "" then
+        LogError(errorMessage)
+    end
+end
+
+local function writeParentRelationshipsToDatabase(loreCore, ffi, dbPath, childlabel, parentsAndRoles)
+    for key, parentAndRole in pairs(parentsAndRoles) do
+        local parent = parentAndRole[1]
+        local role = parentAndRole[2]
+        local parentLabel = GetProtectedStringField(parent, "label")
+        writeRelationshipToDatabase(loreCore, ffi, dbPath, parentLabel, childlabel, role)
+    end
+end
+
+local function writeEntityColumnToDatabase(loreCore, ffi, dbPath, label, descriptor, description)
+    if not isDescriptorWrittenToDatabase(descriptor) then
+        return
+    end
+
+    if descriptor == GetProtectedDescriptor("parents") then
+        writeParentRelationshipsToDatabase(loreCore, ffi, dbPath, label, description)
+        return
+    end
+
+    if IsEntity(description) then
+        description = optionalEntityToString(description)
+    elseif type(description) == "table" then
+        LogError([[Value to key \verb|]] .. descriptor .. [[| is a table.]])
+        description = DebugPrint(description)
+    end
+
+    local result = loreCore.write_entity_column(dbPath, label, descriptor, tostring(description))
+    local errorMessage = ffi.string(result)
+    if errorMessage ~= "" then
+        LogError(errorMessage)
+    end
+end
 
 local function writeEntityToDatabase(dbPath, entity)
     local rustLib, ffi = getLib()
     if not rustLib or not ffi then return nil end
 
     local label = GetProtectedStringField(entity, "label")
-    for key, value in pairs(entity) do
-        if key ~= GetProtectedDescriptor("historyItems") then
-            if IsEntity(value) then
-                value = optionalEntityToString(value)
-            elseif type(value) == "table" then
-                LogError([[Value to key \verb|]] .. key .. [[| is a table.]])
-                value = DebugPrint(value)
-            end
-
-            local result = rustLib.write_entity_column(dbPath, label, key, tostring(value))
-            local errorMessage = ffi.string(result)
-            if errorMessage ~= "" then
-                LogError(errorMessage)
-            end
-        end
+    for descriptor, description in pairs(entity) do
+        writeEntityColumnToDatabase(rustLib, ffi, dbPath, label, descriptor, description)
     end
 end
 
@@ -90,14 +127,13 @@ local function writeHistoryItemToDatabase(dbPath, item)
     local isSecret = GetProtectedNullableField(item, "isSecret")
     local year = GetProtectedNullableField(item, "year")
     local day = GetProtectedNullableField(item, "day")
-    -- if day == nil then day = 0 end
     local originator = GetProtectedNullableField(item, "originator")
     originator = optionalEntityToString(originator)
     local yearFormat = GetProtectedNullableField(item, "yearFormat")
     yearFormat = optionalEntityToString(yearFormat)
 
     local result = rustLib.write_history_item(dbPath, label, content, isConcernsOthers, isSecret, year, day, originator,
-    yearFormat)
+        yearFormat)
     local errorMessage = ffi.string(result)
     if errorMessage ~= "" then
         LogError(errorMessage)

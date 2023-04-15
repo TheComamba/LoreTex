@@ -8,7 +8,8 @@ use super::SqlGui;
 
 impl SqlGui {
     fn update_database_derived_data(&mut self) -> Result<(), LoreTexError> {
-        self.reset_entity_view()?;
+        self.entity_view_state
+            .reset_entity_view(&self.lore_database)?;
         self.reset_history_view()?;
         Ok(())
     }

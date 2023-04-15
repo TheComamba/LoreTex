@@ -33,7 +33,9 @@ impl SqlGui {
             GuiMessage::DayViewUpdated(event) => self
                 .history_view_state
                 .update_day_view(event, &self.lore_database)?,
-            GuiMessage::HistoryLabelViewUpdated(_) => (),
+            GuiMessage::HistoryLabelViewUpdated(event) => self
+                .history_view_state
+                .update_label_view(event, &self.lore_database)?,
             GuiMessage::ErrorDialogClosed => self.error_message = None,
         }
         Ok(())

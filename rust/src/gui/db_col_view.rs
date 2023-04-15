@@ -102,11 +102,12 @@ impl DbColViewState {
         }
     }
 
-    pub(super) fn get_selected_int(&self) -> Result<Option<i32>, LoreTexError>  {
+    pub(super) fn get_selected_int(&self) -> Result<Option<i32>, LoreTexError> {
         let year = match self.selected_entry.as_ref() {
-            Some(year) => year.parse::<i32>()
-            .map_err(|e| LoreTexError::InputError(e.to_string()))?,
-            None => return Ok(None)
+            Some(year) => year
+                .parse::<i32>()
+                .map_err(|e| LoreTexError::InputError(e.to_string()))?,
+            None => return Ok(None),
         };
         Ok(Some(year))
     }

@@ -85,4 +85,34 @@ impl LoreDatabase {
             .collect::<Vec<_>>();
         Ok(labels)
     }
+
+    pub fn get_history_item_content(&self, label: &String) -> Result<String, LoreTexError> {
+        let mut connection = self.db_connection()?;
+        let items = history_items::table
+            .filter(history_items::label.eq(label))
+            .load::<HistoryItem>(&mut connection)
+            .map_err(|e| {
+                LoreTexError::SqlError(
+                    "Loading history item for label '".to_string()
+                        + label
+                        + "' failed: "
+                        + &e.to_string(),
+                )
+            })?;
+        if items.len() > 1 {
+            Err(LoreTexError::SqlError(
+                "More than one entry found for label '".to_string() + label + "'.",
+            ))
+        } else {
+            let content = match items.first() {
+                Some(item) => item.content.to_owned(),
+                None => {
+                    return Err(LoreTexError::SqlError(
+                        "No content found for label '".to_string() + label + "'.",
+                    ))
+                }
+            };
+            Ok(content)
+        }
+    }
 }

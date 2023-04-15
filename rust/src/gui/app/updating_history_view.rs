@@ -14,8 +14,8 @@ impl HistoryViewState {
         match message {
             DbColViewMessage::New => (),
             DbColViewMessage::SearchFieldUpdated(text) => self.year_view_state.search_text = text,
-            DbColViewMessage::Selected(label) => {
-                self.year_view_state.selected_entry = Some(label);
+            DbColViewMessage::Selected(year) => {
+                self.year_view_state.selected_entry = Some(year);
                 self.day_view_state.selected_entry = None;
                 self.update_days(db)?;
             }
@@ -31,10 +31,26 @@ impl HistoryViewState {
         match message {
             DbColViewMessage::New => (),
             DbColViewMessage::SearchFieldUpdated(text) => self.day_view_state.search_text = text,
-            DbColViewMessage::Selected(label) => {
-                self.day_view_state.selected_entry = Some(label);
+            DbColViewMessage::Selected(day) => {
+                self.day_view_state.selected_entry = Some(day);
                 self.label_view_state.selected_entry = None;
                 self.update_labels(db)?;
+            }
+        };
+        Ok(())
+    }
+
+    pub(super) fn update_label_view(
+        &mut self,
+        message: DbColViewMessage,
+        db: &Option<LoreDatabase>,
+    ) -> Result<(), LoreTexError> {
+        match message {
+            DbColViewMessage::New => (),
+            DbColViewMessage::SearchFieldUpdated(text) => self.label_view_state.search_text = text,
+            DbColViewMessage::Selected(label) => {
+                self.label_view_state.selected_entry = Some(label);
+                self.update_content(db)?;
             }
         };
         Ok(())
@@ -112,6 +128,22 @@ impl HistoryViewState {
         match db {
             Some(db) => self.label_view_state.entries = db.get_all_history_labels(year, day)?,
             None => self.label_view_state = DbColViewState::new(),
+        }
+        self.update_content(db)?;
+        Ok(())
+    }
+
+    fn update_content(&mut self, db: &Option<LoreDatabase>) -> Result<(), LoreTexError> {
+        let label = match &self.label_view_state.selected_entry {
+            Some(label) => label,
+            None => {
+                self.current_content = "".to_string();
+                return Ok(());
+            }
+        };
+        match db {
+            Some(db) => self.current_content = db.get_history_item_content(label)?,
+            None => self.current_content = String::new(),
         }
         Ok(())
     }

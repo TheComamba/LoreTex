@@ -1,5 +1,8 @@
 use super::lore_database::LoreDatabase;
-use crate::{errors::LoreTexError, sql::schema::entities};
+use crate::{
+    errors::{sql_loading_error_message, LoreTexError},
+    sql::schema::entities,
+};
 use ::diesel::prelude::*;
 use diesel::{Insertable, RunQueryDsl};
 
@@ -42,18 +45,21 @@ impl LoreDatabase {
         Ok(labels)
     }
 
-    pub fn get_all_descriptors(&self, label: &String) -> Result<Vec<String>, LoreTexError> {
+    pub fn get_descriptors(&self, label: &Option<String>) -> Result<Vec<String>, LoreTexError> {
         let mut connection = self.db_connection()?;
-        let descriptors = entities::table
-            .filter(entities::label.eq(label))
+        let mut query = entities::table.into_boxed();
+        if let Some(label) = label {
+            query = query.filter(entities::label.eq(label));
+        }
+        let descriptors = query
             .load::<EntityColumn>(&mut connection)
             .map_err(|e| {
-                LoreTexError::SqlError(
-                    "Loading entities to get descriptors for label ".to_string()
-                        + label
-                        + " failed: "
-                        + &e.to_string(),
-                )
+                LoreTexError::SqlError(sql_loading_error_message(
+                    "entities",
+                    "descriptors",
+                    vec![("label", label)],
+                    e,
+                ))
             })?
             .into_iter()
             .map(|c| c.descriptor)

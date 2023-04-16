@@ -30,15 +30,9 @@ impl EntityViewState {
     }
 
     fn update_descriptors(&mut self, db: &Option<LoreDatabase>) -> Result<(), LoreTexError> {
-        let label = match &self.label_view_state.selected_entry {
-            Some(label) => label,
-            None => {
-                self.descriptor_view_state.entries = vec![];
-                return Ok(());
-            }
-        };
+        let label = &self.label_view_state.selected_entry;
         match db {
-            Some(db) => self.descriptor_view_state.entries = db.get_all_descriptors(label)?,
+            Some(db) => self.descriptor_view_state.entries = db.get_descriptors(label)?,
             None => self.descriptor_view_state = DbColViewState::new(),
         }
         self.update_description(db)?;

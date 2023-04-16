@@ -20,13 +20,13 @@ impl<'a> Component<GuiMessage, Renderer> for RelationshipView<'a> {
             .push(DbColView::new(
                 "Parent",
                 vec![],
-                GuiMessage::YearViewUpdated,
+                GuiMessage::ParentViewUpdated,
                 &self.state.parent_view_state,
             ))
             .push(DbColView::new(
                 "Child",
                 vec![],
-                GuiMessage::YearViewUpdated,
+                GuiMessage::ChildViewUpdated,
                 &self.state.child_view_state,
             ))
             .push(self.role_view())

@@ -12,6 +12,8 @@ pub(crate) enum GuiMessage {
     YearViewUpdated(DbColViewMessage),
     DayViewUpdated(DbColViewMessage),
     HistoryLabelViewUpdated(DbColViewMessage),
+    ParentViewUpdated(DbColViewMessage),
+    ChildViewUpdated(DbColViewMessage),
     ErrorDialogClosed,
 }
 
@@ -36,6 +38,12 @@ impl SqlGui {
             GuiMessage::HistoryLabelViewUpdated(event) => self
                 .history_view_state
                 .update_label_view(event, &self.lore_database)?,
+            GuiMessage::ParentViewUpdated(event) => self
+                .relationship_view_state
+                .update_parent_view(event, &self.lore_database)?,
+            GuiMessage::ChildViewUpdated(event) => self
+                .relationship_view_state
+                .update_child_view(event, &self.lore_database)?,
             GuiMessage::ErrorDialogClosed => self.error_message = None,
         }
         Ok(())

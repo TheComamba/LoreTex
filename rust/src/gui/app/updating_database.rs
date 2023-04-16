@@ -7,6 +7,7 @@ impl SqlGui {
     fn update_database_derived_data(&mut self) -> Result<(), LoreTexError> {
         self.entity_view_state.reset(&self.lore_database)?;
         self.history_view_state.reset(&self.lore_database)?;
+        self.relationship_view_state.reset(&self.lore_database)?;
         Ok(())
     }
 

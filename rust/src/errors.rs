@@ -11,13 +11,21 @@ impl ToString for LoreTexError {
     }
 }
 
-pub(super) fn sql_loading_error_message<E>(
+pub(super) fn sql_loading_error_message_no_params<E>(loadee: &str, target: &str, err: E) -> String
+where
+    E: ToString,
+{
+    sql_loading_error_message::<String, E>(loadee, target, vec![], err)
+}
+
+pub(super) fn sql_loading_error_message<T, E>(
     loadee: &str,
     target: &str,
-    params: Vec<(&str, &Option<String>)>,
+    params: Vec<(&str, &Option<T>)>,
     err: E,
 ) -> String
 where
+    T: ToString,
     E: ToString,
 {
     let mut string = "Loading ".to_string() + loadee + " to get " + target;
@@ -32,7 +40,7 @@ where
             }
             string += name;
             string += "='";
-            string += value;
+            string += &value.to_string();
             string += "'";
         }
     }

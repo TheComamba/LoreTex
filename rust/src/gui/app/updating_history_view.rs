@@ -88,13 +88,7 @@ impl HistoryViewState {
     }
 
     fn update_days(&mut self, db: &Option<LoreDatabase>) -> Result<(), LoreTexError> {
-        let year = match self.year_view_state.get_selected_int()? {
-            Some(year) => year,
-            None => {
-                self.day_view_state.entries = vec![];
-                return Ok(());
-            }
-        };
+        let year = self.year_view_state.get_selected_int()?;
         match db {
             Some(db) => {
                 self.day_view_state.entries = db
@@ -110,20 +104,8 @@ impl HistoryViewState {
     }
 
     fn update_labels(&mut self, db: &Option<LoreDatabase>) -> Result<(), LoreTexError> {
-        let year = match self.year_view_state.get_selected_int()? {
-            Some(year) => year,
-            None => {
-                self.day_view_state.entries = vec![];
-                return Ok(());
-            }
-        };
-        let day = match self.day_view_state.get_selected_int()? {
-            Some(day) => day,
-            None => {
-                self.label_view_state.entries = vec![];
-                return Ok(());
-            }
-        };
+        let year = self.year_view_state.get_selected_int()?;
+        let day = self.day_view_state.get_selected_int()?;
         match db {
             Some(db) => self.label_view_state.entries = db.get_all_history_labels(year, day)?,
             None => self.label_view_state = DbColViewState::new(),

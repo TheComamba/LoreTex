@@ -1,5 +1,5 @@
 use super::{lore_database::LoreDatabase, schema::history_items};
-use crate::errors::LoreTexError;
+use crate::errors::{sql_loading_error_message, sql_loading_error_message_no_params, LoreTexError};
 use ::diesel::prelude::*;
 use diesel::Insertable;
 
@@ -36,9 +36,11 @@ impl LoreDatabase {
         let mut years = history_items::table
             .load::<HistoryItem>(&mut connection)
             .map_err(|e| {
-                LoreTexError::SqlError(
-                    "Loading history item to get all years failed: ".to_string() + &e.to_string(),
-                )
+                LoreTexError::SqlError(sql_loading_error_message_no_params(
+                    "history items",
+                    "all years",
+                    e,
+                ))
             })?
             .into_iter()
             .map(|c| c.year)
@@ -47,18 +49,21 @@ impl LoreDatabase {
         Ok(years)
     }
 
-    pub fn get_all_days(&self, year: i32) -> Result<Vec<Option<i32>>, LoreTexError> {
+    pub fn get_all_days(&self, year: Option<i32>) -> Result<Vec<Option<i32>>, LoreTexError> {
         let mut connection = self.db_connection()?;
-        let mut days = history_items::table
-            .filter(history_items::year.eq(year))
+        let mut query = history_items::table.into_boxed();
+        if let Some(year) = year {
+            query = query.filter(history_items::year.eq(year));
+        }
+        let mut days = query
             .load::<HistoryItem>(&mut connection)
             .map_err(|e| {
-                LoreTexError::SqlError(
-                    "Loading history items to get days for year ".to_string()
-                        + &year.to_string()
-                        + " failed: "
-                        + &e.to_string(),
-                )
+                LoreTexError::SqlError(sql_loading_error_message(
+                    "history items",
+                    "days",
+                    vec![("year", &year)],
+                    e,
+                ))
             })?
             .into_iter()
             .map(|item| item.day)
@@ -67,16 +72,28 @@ impl LoreDatabase {
         Ok(days)
     }
 
-    pub fn get_all_history_labels(&self, year: i32, day: i32) -> Result<Vec<String>, LoreTexError> {
+    pub fn get_all_history_labels(
+        &self,
+        year: Option<i32>,
+        day: Option<i32>,
+    ) -> Result<Vec<String>, LoreTexError> {
         let mut connection = self.db_connection()?;
-        let labels = history_items::table
-            .filter(history_items::year.eq(year))
-            .filter(history_items::day.eq(day))
+        let mut query = history_items::table.into_boxed();
+        if let Some(year) = year {
+            query = query.filter(history_items::year.eq(year));
+        }
+        if let Some(day) = day {
+            query = query.filter(history_items::day.eq(day));
+        }
+        let labels = query
             .load::<HistoryItem>(&mut connection)
             .map_err(|e| {
-                LoreTexError::SqlError(
-                    "Loading history items to get all labels failed: ".to_string() + &e.to_string(),
-                )
+                LoreTexError::SqlError(sql_loading_error_message(
+                    "history items",
+                    "labels",
+                    vec![("year", &year), ("day", &day)],
+                    e,
+                ))
             })?
             .into_iter()
             .map(|c| c.label)

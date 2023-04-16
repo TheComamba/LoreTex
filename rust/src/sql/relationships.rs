@@ -55,7 +55,7 @@ impl LoreDatabase {
                 sql_loading_error("relationships", "children", vec![("parent", parent)], e)
             })?
             .into_iter()
-            .map(|r| r.parent)
+            .map(|r| r.child)
             .collect::<Vec<_>>();
         children.dedup();
         Ok(children)

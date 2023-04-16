@@ -1,5 +1,5 @@
 use super::{lore_database::LoreDatabase, schema::relationships};
-use crate::errors::LoreTexError;
+use crate::errors::{sql_loading_error, LoreTexError};
 use ::diesel::prelude::*;
 use diesel::Insertable;
 use diesel::{QueryDsl, Queryable, RunQueryDsl};
@@ -27,16 +27,15 @@ impl LoreDatabase {
         Ok(())
     }
 
-    pub fn get_parents(&self, child: &String) -> Result<Vec<String>, LoreTexError> {
+    pub fn get_parents(&self, child: &Option<&String>) -> Result<Vec<String>, LoreTexError> {
         let mut connection = self.db_connection()?;
-        let mut parents = relationships::table
-            .filter(relationships::child.eq(child))
+        let mut query = relationships::table.into_boxed();
+        if let Some(child) = child {
+            query = query.filter(relationships::child.eq(child));
+        }
+        let mut parents = query
             .load::<EntityRelationship>(&mut connection)
-            .map_err(|e| {
-                LoreTexError::SqlError(
-                    "Loading relationships to get parents failed: ".to_string() + &e.to_string(),
-                )
-            })?
+            .map_err(|e| sql_loading_error("relationships", "parents", vec![("child", child)], e))?
             .into_iter()
             .map(|r| r.parent)
             .collect::<Vec<_>>();
@@ -44,15 +43,16 @@ impl LoreDatabase {
         Ok(parents)
     }
 
-    pub fn get_children(&self, parent: &String) -> Result<Vec<String>, LoreTexError> {
+    pub fn get_children(&self, parent: &Option<&String>) -> Result<Vec<String>, LoreTexError> {
         let mut connection = self.db_connection()?;
-        let mut children = relationships::table
-            .filter(relationships::parent.eq(parent))
+        let mut query = relationships::table.into_boxed();
+        if let Some(parent) = parent {
+            query = query.filter(relationships::parent.eq(parent))
+        }
+        let mut children = query
             .load::<EntityRelationship>(&mut connection)
             .map_err(|e| {
-                LoreTexError::SqlError(
-                    "Loading relationships to get children failed: ".to_string() + &e.to_string(),
-                )
+                sql_loading_error("relationships", "children", vec![("parent", parent)], e)
             })?
             .into_iter()
             .map(|r| r.parent)
@@ -72,13 +72,11 @@ impl LoreDatabase {
             .filter(relationships::child.eq(child))
             .load::<EntityRelationship>(&mut connection)
             .map_err(|e| {
-                LoreTexError::SqlError(
-                    "Loading role for relationship between parent '".to_string()
-                        + parent
-                        + "' and child '"
-                        + child
-                        + "' failed: "
-                        + &e.to_string(),
+                sql_loading_error(
+                    "relationship",
+                    "role",
+                    vec![("parent", &Some(parent)), ("child", &Some(child))],
+                    e,
                 )
             })?;
         if relationships.len() > 1 {

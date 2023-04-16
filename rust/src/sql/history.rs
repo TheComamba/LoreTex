@@ -1,5 +1,5 @@
 use super::{lore_database::LoreDatabase, schema::history_items};
-use crate::errors::{sql_loading_error_message, sql_loading_error_message_no_params, LoreTexError};
+use crate::errors::{sql_loading_error, sql_loading_error_no_params, LoreTexError};
 use ::diesel::prelude::*;
 use diesel::Insertable;
 
@@ -35,13 +35,7 @@ impl LoreDatabase {
         let mut connection = self.db_connection()?;
         let mut years = history_items::table
             .load::<HistoryItem>(&mut connection)
-            .map_err(|e| {
-                LoreTexError::SqlError(sql_loading_error_message_no_params(
-                    "history items",
-                    "all years",
-                    e,
-                ))
-            })?
+            .map_err(|e| sql_loading_error_no_params("history items", "all years", e))?
             .into_iter()
             .map(|c| c.year)
             .collect::<Vec<_>>();
@@ -57,14 +51,7 @@ impl LoreDatabase {
         }
         let mut days = query
             .load::<HistoryItem>(&mut connection)
-            .map_err(|e| {
-                LoreTexError::SqlError(sql_loading_error_message(
-                    "history items",
-                    "days",
-                    vec![("year", &year)],
-                    e,
-                ))
-            })?
+            .map_err(|e| sql_loading_error("history items", "days", vec![("year", &year)], e))?
             .into_iter()
             .map(|item| item.day)
             .collect::<Vec<_>>();
@@ -88,12 +75,12 @@ impl LoreDatabase {
         let labels = query
             .load::<HistoryItem>(&mut connection)
             .map_err(|e| {
-                LoreTexError::SqlError(sql_loading_error_message(
+                sql_loading_error(
                     "history items",
                     "labels",
                     vec![("year", &year), ("day", &day)],
                     e,
-                ))
+                )
             })?
             .into_iter()
             .map(|c| c.label)
@@ -107,12 +94,7 @@ impl LoreDatabase {
             .filter(history_items::label.eq(label))
             .load::<HistoryItem>(&mut connection)
             .map_err(|e| {
-                LoreTexError::SqlError(
-                    "Loading history item for label '".to_string()
-                        + label
-                        + "' failed: "
-                        + &e.to_string(),
-                )
+                sql_loading_error("history item", "content", vec![("label", &Some(label))], e)
             })?;
         if items.len() > 1 {
             Err(LoreTexError::SqlError(

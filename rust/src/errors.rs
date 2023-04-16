@@ -11,40 +11,40 @@ impl ToString for LoreTexError {
     }
 }
 
-pub(super) fn sql_loading_error_message_no_params<E>(loadee: &str, target: &str, err: E) -> String
+pub(super) fn sql_loading_error_no_params<E>(loadee: &str, target: &str, err: E) -> LoreTexError
 where
     E: ToString,
 {
-    sql_loading_error_message::<String, E>(loadee, target, vec![], err)
+    sql_loading_error::<String, E>(loadee, target, vec![], err)
 }
 
-pub(super) fn sql_loading_error_message<T, E>(
+pub(super) fn sql_loading_error<T, E>(
     loadee: &str,
     target: &str,
     params: Vec<(&str, &Option<T>)>,
     err: E,
-) -> String
+) -> LoreTexError
 where
     T: ToString,
     E: ToString,
 {
-    let mut string = "Loading ".to_string() + loadee + " to get " + target;
+    let mut message = "Loading ".to_string() + loadee + " to get " + target;
     let mut is_any_param_printed = false;
     for (name, value) in params {
         if let Some(value) = value {
             if !is_any_param_printed {
-                string += " for parameters ";
+                message += " for parameters ";
                 is_any_param_printed = true;
             } else {
-                string += ", "
+                message += ", "
             }
-            string += name;
-            string += "='";
-            string += &value.to_string();
-            string += "'";
+            message += name;
+            message += "='";
+            message += &value.to_string();
+            message += "'";
         }
     }
-    string += " failed: ";
-    string += &err.to_string();
-    string
+    message += " failed: ";
+    message += &err.to_string();
+    LoreTexError::SqlError(message)
 }

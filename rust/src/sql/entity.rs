@@ -1,6 +1,6 @@
 use super::lore_database::LoreDatabase;
 use crate::{
-    errors::{sql_loading_error_message, LoreTexError},
+    errors::{sql_loading_error, sql_loading_error_no_params, LoreTexError},
     sql::schema::entities,
 };
 use ::diesel::prelude::*;
@@ -33,11 +33,7 @@ impl LoreDatabase {
         let mut connection = self.db_connection()?;
         let mut labels = entities::table
             .load::<EntityColumn>(&mut connection)
-            .map_err(|e| {
-                LoreTexError::SqlError(
-                    "Loading entities to get all labels failed: ".to_string() + &e.to_string(),
-                )
-            })?
+            .map_err(|e| sql_loading_error_no_params("entities", "all labels", e))?
             .into_iter()
             .map(|c| c.label)
             .collect::<Vec<_>>();
@@ -45,7 +41,7 @@ impl LoreDatabase {
         Ok(labels)
     }
 
-    pub fn get_descriptors(&self, label: &Option<String>) -> Result<Vec<String>, LoreTexError> {
+    pub fn get_descriptors(&self, label: &Option<&String>) -> Result<Vec<String>, LoreTexError> {
         let mut connection = self.db_connection()?;
         let mut query = entities::table.into_boxed();
         if let Some(label) = label {
@@ -53,14 +49,7 @@ impl LoreDatabase {
         }
         let descriptors = query
             .load::<EntityColumn>(&mut connection)
-            .map_err(|e| {
-                LoreTexError::SqlError(sql_loading_error_message(
-                    "entities",
-                    "descriptors",
-                    vec![("label", label)],
-                    e,
-                ))
-            })?
+            .map_err(|e| sql_loading_error("entities", "descriptors", vec![("label", label)], e))?
             .into_iter()
             .map(|c| c.descriptor)
             .collect();
@@ -78,13 +67,11 @@ impl LoreDatabase {
             .filter(entities::descriptor.eq(descriptor))
             .load::<EntityColumn>(&mut connection)
             .map_err(|e| {
-                LoreTexError::SqlError(
-                    "Loading entities for label '".to_string()
-                        + label
-                        + "' and descriptor '"
-                        + descriptor
-                        + "' failed: "
-                        + &e.to_string(),
+                sql_loading_error(
+                    "entities",
+                    "description",
+                    vec![("label", &Some(label)), ("descriptor", &Some(descriptor))],
+                    e,
                 )
             })?;
         if descriptions.len() > 1 {

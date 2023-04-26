@@ -36,6 +36,15 @@ where
         header(self.title)
     }
 
+    fn selected(&self) -> Text {
+        let content = "Selected: ".to_string()
+            + match self.state.get_selected() {
+                Some(sel) => sel,
+                None => "[None]",
+            };
+        Text::new(content)
+    }
+
     fn search_field(&self) -> TextInput<DbColViewMessage> {
         TextInput::new("Type to search...", &self.state.search_text)
             .on_input(DbColViewMessage::SearchFieldUpdated)
@@ -79,6 +88,7 @@ where
     fn view(&self, _state: &Self::State) -> Element<'_, Self::Event, Renderer> {
         let mut col = Column::new()
             .push(self.title())
+            .push(self.selected())
             .push(self.search_field())
             .push(self.selection_list());
 

@@ -1,4 +1,4 @@
-use super::app::message_handling::GuiMessage;
+use super::{app::message_handling::GuiMessage, style::header};
 use iced::{
     widget::{button, Column, Text, TextInput},
     Element, Length, Renderer,
@@ -57,7 +57,8 @@ where
             0.0,
             SelectionListStyles::Default,
         );
-        let mut col = Column::new().push(Text::new(self.title));
+        let mut col = Column::new();
+        col = col.push(header(self.title));
         for info in self.button_infos.iter() {
             let (text, press_message) = info;
             let mut button = button(Text::new(text)).width(Length::Fill);

@@ -2,6 +2,7 @@ use super::EntityView;
 use crate::gui::{
     app::message_handling::GuiMessage,
     db_col_view::{DbColView, DbColViewMessage},
+    style::header,
 };
 use iced::{
     widget::{Column, Row, Text},
@@ -34,7 +35,7 @@ impl<'a> Component<GuiMessage, Renderer> for EntityView<'a> {
             ))
             .push(
                 Column::new()
-                    .push(Text::new("Description"))
+                    .push(header("Description"))
                     .push(Text::new(&self.state.current_description))
                     .padding(5)
                     .spacing(5)

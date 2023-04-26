@@ -1,5 +1,5 @@
 use super::RelationshipView;
-use crate::gui::{app::message_handling::GuiMessage, db_col_view::DbColView};
+use crate::gui::{app::message_handling::GuiMessage, db_col_view::DbColView, style::header};
 use iced::{
     widget::{Column, Row, Text},
     Element, Length, Renderer,
@@ -36,7 +36,7 @@ impl<'a> Component<GuiMessage, Renderer> for RelationshipView<'a> {
 
 impl<'a> RelationshipView<'a> {
     fn role_view(&self) -> Element<'a, GuiMessage> {
-        let mut col = Column::new().push(Text::new("Role"));
+        let mut col = Column::new().push(header("Role"));
         if let Some(role) = self.state.current_role.as_ref() {
             col = col.push(Text::new(role));
         }

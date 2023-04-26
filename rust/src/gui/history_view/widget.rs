@@ -1,5 +1,5 @@
 use super::HistoryView;
-use crate::gui::{app::message_handling::GuiMessage, db_col_view::DbColView};
+use crate::gui::{app::message_handling::GuiMessage, db_col_view::DbColView, style::header};
 use iced::{
     widget::{Column, Row, Text},
     Element, Length, Renderer,
@@ -37,7 +37,7 @@ impl<'a> Component<GuiMessage, Renderer> for HistoryView<'a> {
             ))
             .push(
                 Column::new()
-                    .push(Text::new("Content"))
+                    .push(header("Content"))
                     .push(Text::new(&self.state.current_content))
                     .padding(5)
                     .spacing(5)

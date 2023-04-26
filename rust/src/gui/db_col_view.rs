@@ -51,7 +51,7 @@ where
             .on_input(DbColViewMessage::SearchFieldUpdated)
             .width(Length::Fill);
         let selection_list = SelectionList::new_with(
-            self.state.entries.clone(),
+            self.state.get_visible_entries(),
             DbColViewMessage::Selected,
             20.0,
             0.0,
@@ -135,6 +135,21 @@ impl DbColViewState {
 
     pub(super) fn get_selected(&self) -> &Option<String> {
         &self.selected_entry
+    }
+
+    fn get_visible_entries(&self) -> Vec<String> {
+        match self.search_text.is_empty() {
+            true => self.entries.clone(),
+            false => {
+                let mut visible = vec![String::new()];
+                for entry in self.entries.iter() {
+                    if entry.contains(&self.search_text) {
+                        visible.push(entry.clone());
+                    }
+                }
+                visible
+            }
+        }
     }
 }
 

@@ -33,13 +33,12 @@ impl LoreDatabase {
 
     pub fn get_all_years(&self) -> Result<Vec<i32>, LoreTexError> {
         let mut connection = self.db_connection()?;
-        let mut years = history_items::table
+        let years = history_items::table
             .load::<HistoryItem>(&mut connection)
             .map_err(|e| sql_loading_error_no_params("history items", "all years", e))?
             .into_iter()
             .map(|c| c.year)
             .collect::<Vec<_>>();
-        years.dedup();
         Ok(years)
     }
 
@@ -49,13 +48,12 @@ impl LoreDatabase {
         if let Some(year) = year {
             query = query.filter(history_items::year.eq(year));
         }
-        let mut days = query
+        let days = query
             .load::<HistoryItem>(&mut connection)
             .map_err(|e| sql_loading_error("history items", "days", vec![("year", &year)], e))?
             .into_iter()
             .map(|item| item.day)
             .collect::<Vec<_>>();
-        days.dedup();
         Ok(days)
     }
 

@@ -112,7 +112,9 @@ impl DbColViewState {
         Ok(Some(year))
     }
 
-    pub(super) fn set_entries(&mut self, entries: Vec<String>) {
+    pub(super) fn set_entries(&mut self, mut entries: Vec<String>) {
+        entries.dedup();
+        entries.sort();
         self.entries = entries;
     }
 }

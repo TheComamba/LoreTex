@@ -33,13 +33,12 @@ impl LoreDatabase {
         if let Some(child) = child {
             query = query.filter(relationships::child.eq(child));
         }
-        let mut parents = query
+        let parents = query
             .load::<EntityRelationship>(&mut connection)
             .map_err(|e| sql_loading_error("relationships", "parents", vec![("child", child)], e))?
             .into_iter()
             .map(|r| r.parent)
             .collect::<Vec<_>>();
-        parents.dedup();
         Ok(parents)
     }
 
@@ -49,7 +48,7 @@ impl LoreDatabase {
         if let Some(parent) = parent {
             query = query.filter(relationships::parent.eq(parent))
         }
-        let mut children = query
+        let children = query
             .load::<EntityRelationship>(&mut connection)
             .map_err(|e| {
                 sql_loading_error("relationships", "children", vec![("parent", parent)], e)
@@ -57,7 +56,6 @@ impl LoreDatabase {
             .into_iter()
             .map(|r| r.child)
             .collect::<Vec<_>>();
-        children.dedup();
         Ok(children)
     }
 

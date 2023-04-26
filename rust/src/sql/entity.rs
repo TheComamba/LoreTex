@@ -31,13 +31,12 @@ impl LoreDatabase {
 
     pub fn get_all_entity_labels(&self) -> Result<Vec<String>, LoreTexError> {
         let mut connection = self.db_connection()?;
-        let mut labels = entities::table
+        let labels = entities::table
             .load::<EntityColumn>(&mut connection)
             .map_err(|e| sql_loading_error_no_params("entities", "all labels", e))?
             .into_iter()
             .map(|c| c.label)
             .collect::<Vec<_>>();
-        labels.dedup();
         Ok(labels)
     }
 

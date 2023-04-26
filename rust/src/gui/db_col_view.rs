@@ -1,6 +1,6 @@
 use super::{app::message_handling::GuiMessage, style::header};
 use iced::{
-    widget::{button, Column, Text, TextInput},
+    widget::{button, Column, Container, Text, TextInput},
     Element, Length, Renderer,
 };
 use iced_aw::{style::SelectionListStyles, SelectionList};
@@ -58,7 +58,10 @@ where
             SelectionListStyles::Default,
         );
         let mut col = Column::new();
-        col = col.push(header(self.title));
+        col = col
+            .push(header(self.title))
+            .push(search_field)
+            .push(Container::new(selection_list).height(Length::Fill));
         for info in self.button_infos.iter() {
             let (text, press_message) = info;
             let mut button = button(Text::new(text)).width(Length::Fill);
@@ -67,14 +70,11 @@ where
             }
             col = col.push(button);
         }
-        col = col
-            .push(search_field)
-            .push(selection_list)
-            .width(Length::Fill)
+        col.width(Length::Fill)
             .height(Length::Fill)
             .padding(5)
-            .spacing(5);
-        col.into()
+            .spacing(5)
+            .into()
     }
 }
 

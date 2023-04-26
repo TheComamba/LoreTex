@@ -31,6 +31,36 @@ where
             state,
         }
     }
+
+    fn title(&self) -> Text {
+        header(self.title)
+    }
+
+    fn search_field(&self) -> TextInput<DbColViewMessage> {
+        TextInput::new("Type to search...", &self.state.search_text)
+            .on_input(DbColViewMessage::SearchFieldUpdated)
+            .width(Length::Fill)
+    }
+
+    fn selection_list(&self) -> Element<DbColViewMessage> {
+        let selection_list = SelectionList::new_with(
+            self.state.get_visible_entries(),
+            DbColViewMessage::Selected,
+            20.0,
+            0.0,
+            SelectionListStyles::Default,
+        );
+        Container::new(selection_list).height(Length::Fill).into()
+    }
+
+    fn button(info: &(String, Option<DbColViewMessage>)) -> Element<DbColViewMessage> {
+        let (text, press_message) = info;
+        let mut button = button(Text::new(text)).width(Length::Fill);
+        if let Some(message) = press_message.clone() {
+            button = button.on_press(message);
+        }
+        button.into()
+    }
 }
 
 impl<'a, M> Component<GuiMessage, Renderer> for DbColView<'a, M>
@@ -47,29 +77,15 @@ where
     }
 
     fn view(&self, _state: &Self::State) -> Element<'_, Self::Event, Renderer> {
-        let search_field = TextInput::new("Type to search...", &self.state.search_text)
-            .on_input(DbColViewMessage::SearchFieldUpdated)
-            .width(Length::Fill);
-        let selection_list = SelectionList::new_with(
-            self.state.get_visible_entries(),
-            DbColViewMessage::Selected,
-            20.0,
-            0.0,
-            SelectionListStyles::Default,
-        );
-        let mut col = Column::new();
-        col = col
-            .push(header(self.title))
-            .push(search_field)
-            .push(Container::new(selection_list).height(Length::Fill));
+        let mut col = Column::new()
+            .push(self.title())
+            .push(self.search_field())
+            .push(self.selection_list());
+
         for info in self.button_infos.iter() {
-            let (text, press_message) = info;
-            let mut button = button(Text::new(text)).width(Length::Fill);
-            if let Some(message) = press_message.clone() {
-                button = button.on_press(message);
-            }
-            col = col.push(button);
+            col = col.push(Self::button(info));
         }
+
         col.width(Length::Fill)
             .height(Length::Fill)
             .padding(5)

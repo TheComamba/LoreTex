@@ -53,8 +53,10 @@ impl RelationshipViewState {
     fn update_parents(&mut self, db: &Option<LoreDatabase>) -> Result<(), LoreTexError> {
         let child = &self.child_view_state.selected_entry;
         match db {
-            Some(db) => self.parent_view_state.entries = db.get_parents(&child.as_ref())?,
-            None => self.parent_view_state.entries = vec![],
+            Some(db) => self
+                .parent_view_state
+                .set_entries(db.get_parents(&child.as_ref())?),
+            None => self.parent_view_state.set_entries(vec![]),
         }
         Ok(())
     }
@@ -62,8 +64,10 @@ impl RelationshipViewState {
     fn update_children(&mut self, db: &Option<LoreDatabase>) -> Result<(), LoreTexError> {
         let parent = &self.parent_view_state.selected_entry;
         match db {
-            Some(db) => self.child_view_state.entries = db.get_children(&parent.as_ref())?,
-            None => self.child_view_state.entries = vec![],
+            Some(db) => self
+                .child_view_state
+                .set_entries(db.get_children(&parent.as_ref())?),
+            None => self.child_view_state.set_entries(vec![]),
         }
         Ok(())
     }

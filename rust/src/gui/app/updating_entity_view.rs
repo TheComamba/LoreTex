@@ -22,7 +22,9 @@ impl EntityViewState {
 
     fn update_labels(&mut self, db: &Option<LoreDatabase>) -> Result<(), LoreTexError> {
         match db {
-            Some(db) => self.label_view_state.entries = db.get_all_entity_labels()?,
+            Some(db) => self
+                .label_view_state
+                .set_entries(db.get_all_entity_labels()?),
             None => self.label_view_state = DbColViewState::new(),
         }
         self.update_descriptors(db)?;
@@ -32,7 +34,9 @@ impl EntityViewState {
     fn update_descriptors(&mut self, db: &Option<LoreDatabase>) -> Result<(), LoreTexError> {
         let label = &self.label_view_state.selected_entry;
         match db {
-            Some(db) => self.descriptor_view_state.entries = db.get_descriptors(&label.as_ref())?,
+            Some(db) => self
+                .descriptor_view_state
+                .set_entries(db.get_descriptors(&label.as_ref())?),
             None => self.descriptor_view_state = DbColViewState::new(),
         }
         self.update_description(db)?;

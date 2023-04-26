@@ -89,7 +89,7 @@ where
 #[derive(Debug, Clone)]
 pub(super) struct DbColViewState {
     pub(super) search_text: String,
-    pub(super) entries: Vec<String>,
+    entries: Vec<String>,
     pub(super) selected_entry: Option<String>,
 }
 
@@ -110,6 +110,10 @@ impl DbColViewState {
             None => return Ok(None),
         };
         Ok(Some(year))
+    }
+
+    pub(super) fn set_entries(&mut self, entries: Vec<String>) {
+        self.entries = entries;
     }
 }
 

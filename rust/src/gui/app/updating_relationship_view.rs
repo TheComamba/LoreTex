@@ -12,7 +12,7 @@ impl RelationshipViewState {
             DbColViewMessage::New => (),
             DbColViewMessage::SearchFieldUpdated(text) => self.parent_view_state.search_text = text,
             DbColViewMessage::Selected(parent) => {
-                self.parent_view_state.selected_entry = Some(parent);
+                self.parent_view_state.set_selected(parent);
                 self.update_children(db)?;
                 self.update_role(db)?;
             }
@@ -29,7 +29,7 @@ impl RelationshipViewState {
             DbColViewMessage::New => (),
             DbColViewMessage::SearchFieldUpdated(text) => self.child_view_state.search_text = text,
             DbColViewMessage::Selected(child) => {
-                self.child_view_state.selected_entry = Some(child);
+                self.child_view_state.set_selected(child);
                 self.update_parents(db)?;
                 self.update_role(db)?;
             }
@@ -45,13 +45,13 @@ impl RelationshipViewState {
     }
 
     fn reset_selections(&mut self) {
-        self.parent_view_state.selected_entry = None;
-        self.child_view_state.selected_entry = None;
+        self.parent_view_state.set_selected_none();
+        self.child_view_state.set_selected_none();
         self.current_role = None;
     }
 
     fn update_parents(&mut self, db: &Option<LoreDatabase>) -> Result<(), LoreTexError> {
-        let child = &self.child_view_state.selected_entry;
+        let child = self.child_view_state.get_selected();
         match db {
             Some(db) => self
                 .parent_view_state
@@ -62,7 +62,7 @@ impl RelationshipViewState {
     }
 
     fn update_children(&mut self, db: &Option<LoreDatabase>) -> Result<(), LoreTexError> {
-        let parent = &self.parent_view_state.selected_entry;
+        let parent = self.parent_view_state.get_selected();
         match db {
             Some(db) => self
                 .child_view_state
@@ -73,14 +73,14 @@ impl RelationshipViewState {
     }
 
     fn update_role(&mut self, db: &Option<LoreDatabase>) -> Result<(), LoreTexError> {
-        let parent = match &self.parent_view_state.selected_entry {
+        let parent = match self.parent_view_state.get_selected() {
             Some(parent) => parent,
             None => {
                 self.current_role = None;
                 return Ok(());
             }
         };
-        let child = match &self.child_view_state.selected_entry {
+        let child = match self.child_view_state.get_selected() {
             Some(child) => child,
             None => {
                 self.current_role = None;

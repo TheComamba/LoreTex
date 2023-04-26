@@ -90,7 +90,7 @@ where
 pub(super) struct DbColViewState {
     pub(super) search_text: String,
     entries: Vec<String>,
-    pub(super) selected_entry: Option<String>,
+    selected_entry: Option<String>,
 }
 
 impl DbColViewState {
@@ -113,9 +113,28 @@ impl DbColViewState {
     }
 
     pub(super) fn set_entries(&mut self, mut entries: Vec<String>) {
+        if !entries.contains(&String::new()) {
+            entries.push(String::new());
+        }
         entries.sort();
         entries.dedup();
         self.entries = entries;
+    }
+
+    pub(super) fn set_selected(&mut self, entry: String) {
+        if entry.is_empty() {
+            self.selected_entry = None;
+        } else {
+            self.selected_entry = Some(entry);
+        }
+    }
+
+    pub(super) fn set_selected_none(&mut self) {
+        self.selected_entry = None;
+    }
+
+    pub(super) fn get_selected(&self) -> &Option<String> {
+        &self.selected_entry
     }
 }
 

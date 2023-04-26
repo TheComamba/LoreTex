@@ -15,8 +15,8 @@ impl EntityViewState {
     }
 
     fn reset_selections(&mut self) {
-        self.label_view_state.selected_entry = None;
-        self.descriptor_view_state.selected_entry = None;
+        self.label_view_state.set_selected_none();
+        self.descriptor_view_state.set_selected_none();
         self.current_description = String::new();
     }
 
@@ -32,7 +32,7 @@ impl EntityViewState {
     }
 
     fn update_descriptors(&mut self, db: &Option<LoreDatabase>) -> Result<(), LoreTexError> {
-        let label = &self.label_view_state.selected_entry;
+        let label = self.label_view_state.get_selected();
         match db {
             Some(db) => self
                 .descriptor_view_state
@@ -44,14 +44,14 @@ impl EntityViewState {
     }
 
     fn update_description(&mut self, db: &Option<LoreDatabase>) -> Result<(), LoreTexError> {
-        let label = match &self.label_view_state.selected_entry {
+        let label = match self.label_view_state.get_selected() {
             Some(label) => label,
             None => {
                 self.current_description = "".to_string();
                 return Ok(());
             }
         };
-        let descriptor = match &self.descriptor_view_state.selected_entry {
+        let descriptor = match self.descriptor_view_state.get_selected() {
             Some(descriptor) => descriptor,
             None => {
                 self.current_description = "".to_string();
@@ -74,8 +74,8 @@ impl EntityViewState {
             DbColViewMessage::New => self.new_entity(db)?,
             DbColViewMessage::SearchFieldUpdated(text) => self.label_view_state.search_text = text,
             DbColViewMessage::Selected(label) => {
-                self.label_view_state.selected_entry = Some(label);
-                self.descriptor_view_state.selected_entry = None;
+                self.label_view_state.set_selected(label);
+                self.descriptor_view_state.set_selected_none();
                 self.update_descriptors(db)?;
             }
         };
@@ -93,7 +93,7 @@ impl EntityViewState {
                 self.descriptor_view_state.search_text = text
             }
             DbColViewMessage::Selected(descriptor) => {
-                self.descriptor_view_state.selected_entry = Some(descriptor);
+                self.descriptor_view_state.set_selected(descriptor);
                 self.update_description(db)?;
             }
         };
@@ -127,7 +127,7 @@ impl EntityViewState {
     }
 
     fn new_descriptor(&mut self, db: &Option<LoreDatabase>) -> Result<(), LoreTexError> {
-        let label = match self.label_view_state.selected_entry.as_ref() {
+        let label = match self.label_view_state.get_selected().as_ref() {
             Some(label) => label.clone(),
             None => {
                 return Err(LoreTexError::InputError(

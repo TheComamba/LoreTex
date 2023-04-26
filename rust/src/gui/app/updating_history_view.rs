@@ -14,8 +14,8 @@ impl HistoryViewState {
             DbColViewMessage::New => (),
             DbColViewMessage::SearchFieldUpdated(text) => self.year_view_state.search_text = text,
             DbColViewMessage::Selected(year) => {
-                self.year_view_state.selected_entry = Some(year);
-                self.day_view_state.selected_entry = None;
+                self.year_view_state.set_selected(year);
+                self.day_view_state.set_selected_none();
                 self.update_days(db)?;
             }
         };
@@ -31,8 +31,8 @@ impl HistoryViewState {
             DbColViewMessage::New => (),
             DbColViewMessage::SearchFieldUpdated(text) => self.day_view_state.search_text = text,
             DbColViewMessage::Selected(day) => {
-                self.day_view_state.selected_entry = Some(day);
-                self.label_view_state.selected_entry = None;
+                self.day_view_state.set_selected(day);
+                self.label_view_state.set_selected_none();
                 self.update_labels(db)?;
             }
         };
@@ -48,7 +48,7 @@ impl HistoryViewState {
             DbColViewMessage::New => (),
             DbColViewMessage::SearchFieldUpdated(text) => self.label_view_state.search_text = text,
             DbColViewMessage::Selected(label) => {
-                self.label_view_state.selected_entry = Some(label);
+                self.label_view_state.set_selected(label);
                 self.update_content(db)?;
             }
         };
@@ -62,9 +62,9 @@ impl HistoryViewState {
     }
 
     fn reset_selections(&mut self) {
-        self.year_view_state.selected_entry = None;
-        self.day_view_state.selected_entry = None;
-        self.label_view_state.selected_entry = None;
+        self.year_view_state.set_selected_none();
+        self.day_view_state.set_selected_none();
+        self.label_view_state.set_selected_none();
         self.current_content = String::new();
     }
 
@@ -118,7 +118,7 @@ impl HistoryViewState {
     }
 
     fn update_content(&mut self, db: &Option<LoreDatabase>) -> Result<(), LoreTexError> {
-        let label = match &self.label_view_state.selected_entry {
+        let label = match self.label_view_state.get_selected() {
             Some(label) => label,
             None => {
                 self.current_content = "".to_string();

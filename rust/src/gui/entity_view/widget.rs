@@ -57,7 +57,7 @@ impl<'a> EntityView<'a> {
     }
 
     fn new_descriptor_msg(&self) -> Option<DbColViewMessage> {
-        if self.state.label_view_state.selected_entry.is_some()
+        if self.state.label_view_state.get_selected().is_some()
             && !self.state.descriptor_view_state.search_text.is_empty()
         {
             Some(DbColViewMessage::New)

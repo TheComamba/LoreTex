@@ -1,5 +1,5 @@
 use super::{SqlGui, ViewType};
-use crate::gui::db_col_view::DbColViewMessage;
+use crate::gui::{db_col_view::DbColViewMessage, dialog::DialogMessage};
 use loretex::errors::LoreTexError;
 
 #[derive(Debug, Clone)]
@@ -14,6 +14,7 @@ pub(crate) enum GuiMessage {
     HistoryLabelViewUpdated(DbColViewMessage),
     ParentViewUpdated(DbColViewMessage),
     ChildViewUpdated(DbColViewMessage),
+    DialogUpdated(DialogMessage),
     DialogClosed,
 }
 
@@ -30,6 +31,7 @@ impl SqlGui {
             GuiMessage::HistoryLabelViewUpdated(event) => self.update_history_label_view(event)?,
             GuiMessage::ParentViewUpdated(event) => self.update_parent_view(event)?,
             GuiMessage::ChildViewUpdated(event) => self.update_child_view(event)?,
+            GuiMessage::DialogUpdated(event) => self.update_dialog(event),
             GuiMessage::DialogClosed => self.dialog = None,
         }
         Ok(())

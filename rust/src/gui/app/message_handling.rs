@@ -44,10 +44,7 @@ impl SqlGui {
             GuiMessage::ChildViewUpdated(event) => self
                 .relationship_view_state
                 .update_child_view(event, &self.lore_database)?,
-            GuiMessage::DialogClosed => {
-                self.error_message = None;
-                self.dialog = None;
-            }
+            GuiMessage::DialogClosed => self.dialog = None,
         }
         Ok(())
     }

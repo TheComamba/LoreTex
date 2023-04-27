@@ -17,7 +17,6 @@ pub(crate) struct SqlGui {
     history_view_state: HistoryViewState,
     relationship_view_state: RelationshipViewState,
     lore_database: Option<LoreDatabase>,
-    error_message: Option<String>,
     dialog: Option<Dialog>,
 }
 

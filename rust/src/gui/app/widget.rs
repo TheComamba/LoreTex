@@ -25,13 +25,12 @@ impl Sandbox for SqlGui {
             history_view_state: HistoryViewState::new(),
             relationship_view_state: RelationshipViewState::new(),
             lore_database: None,
-            error_message: None,
             dialog: None,
         };
         if let Some(path) = load_database_path() {
             match gui.open_database(path) {
                 Ok(_) => (),
-                Err(e) => gui.error_message = Some(e.to_string()),
+                Err(e) => gui.dialog = Some(Dialog::error(e)),
             };
         }
         gui
@@ -43,7 +42,6 @@ impl Sandbox for SqlGui {
 
     fn update(&mut self, message: Self::Message) {
         if let Err(e) = self.handle_message(message) {
-            self.error_message = Some(e.to_string());
             self.dialog = Some(Dialog::error(e));
         }
     }

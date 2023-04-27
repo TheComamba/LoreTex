@@ -14,7 +14,7 @@ pub(crate) enum GuiMessage {
     HistoryLabelViewUpdated(DbColViewMessage),
     ParentViewUpdated(DbColViewMessage),
     ChildViewUpdated(DbColViewMessage),
-    ErrorDialogClosed,
+    DialogClosed,
 }
 
 impl SqlGui {
@@ -44,7 +44,10 @@ impl SqlGui {
             GuiMessage::ChildViewUpdated(event) => self
                 .relationship_view_state
                 .update_child_view(event, &self.lore_database)?,
-            GuiMessage::ErrorDialogClosed => self.error_message = None,
+            GuiMessage::DialogClosed => {
+                self.error_message = None;
+                self.dialog = None;
+            }
         }
         Ok(())
     }

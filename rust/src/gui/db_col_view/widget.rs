@@ -108,7 +108,7 @@ impl<'a, M> From<DbColView<'a, M>> for Element<'a, GuiMessage>
 where
     M: 'static + Clone + Fn(DbColViewMessage) -> GuiMessage,
 {
-    fn from(entity_view: DbColView<'a, M>) -> Self {
-        component(entity_view)
+    fn from(col_view: DbColView<'a, M>) -> Self {
+        component(col_view)
     }
 }

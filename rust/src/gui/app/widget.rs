@@ -48,7 +48,6 @@ impl Sandbox for SqlGui {
     fn view(&self) -> iced::Element<'_, Self::Message> {
         let show_err = self.error_message.is_some();
         Modal::new(show_err, self.main_view(), move || self.dialog().into())
-            .backdrop(GuiMessage::ErrorDialogClosed)
             .on_esc(GuiMessage::ErrorDialogClosed)
             .into()
     }
@@ -112,16 +111,20 @@ impl SqlGui {
     }
 
     fn dialog(&self) -> Element<'_, GuiMessage> {
-        let content = match self.error_message.as_ref() {
-            Some(message) => self.error_dialog_content(message),
-            None => Row::new().into(),
+        let (header, content) = match self.error_message.as_ref() {
+            Some(message) => self.error_dialog_contents(message),
+            None => (Row::new().into(), Row::new().into()),
         };
-        Container::new(Scrollable::new(content)).padding(10).into()
+        let card = Card::new(header, content)
+            .style(CardStyles::Danger)
+            .on_close(GuiMessage::ErrorDialogClosed);
+        Container::new(Scrollable::new(card)).padding(100).into()
     }
 
-    fn error_dialog_content<'a>(&self, text: &'a String) -> Element<'a, GuiMessage> {
-        Card::new(Text::new("Error"), Text::new(text))
-            .style(CardStyles::Danger)
-            .into()
+    fn error_dialog_contents<'a>(
+        &self,
+        text: &'a String,
+    ) -> (Element<'a, GuiMessage>, Element<'a, GuiMessage>) {
+        (Text::new("Error").into(), Text::new(text).into())
     }
 }

@@ -11,7 +11,6 @@ use super::app::message_handling::GuiMessage;
 pub(crate) struct Dialog {
     dialog_type: DialogType,
     header: String,
-    text: String,
 }
 
 impl Dialog {
@@ -19,31 +18,29 @@ impl Dialog {
         Dialog {
             dialog_type: DialogType::NewEntity,
             header: "Create new Entity".to_string(),
-            text: "Stuff'n'stuff".to_string(),
         }
     }
 
     pub(crate) fn error(error: LoreTexError) -> Self {
         Dialog {
-            dialog_type: DialogType::Error,
+            dialog_type: DialogType::Error { error },
             header: "Error".to_string(),
-            text: error.to_string(),
         }
     }
 
     fn content<'a>(&self) -> Element<'a, GuiMessage> {
-        match self.dialog_type {
+        match &self.dialog_type {
             DialogType::NewEntity => self.new_entity_content(),
-            DialogType::Error => self.error_content(),
+            DialogType::Error { error } => self.error_content(error),
         }
     }
 
     fn new_entity_content<'a>(&self) -> Element<'a, GuiMessage> {
-        Text::new(self.text.clone()).into()
+        Text::new("".to_string()).into()
     }
 
-    fn error_content<'a>(&self) -> Element<'a, GuiMessage> {
-        Text::new(self.text.clone()).into()
+    fn error_content<'a>(&self, error: &LoreTexError) -> Element<'a, GuiMessage> {
+        Text::new(error.to_string()).into()
     }
 }
 
@@ -56,17 +53,20 @@ impl<'a> From<Dialog> for Element<'a, GuiMessage> {
             content.into(),
         )
         .on_close(GuiMessage::DialogClosed);
-        if dialog.dialog_type == DialogType::Error {
-            card = card.style(CardStyles::Danger);
-        } else {
-            card = card.style(CardStyles::Primary);
+        match dialog.dialog_type {
+            DialogType::Error { error: _ } => {
+                card = card.style(CardStyles::Danger);
+            }
+            _ => {
+                card = card.style(CardStyles::Primary);
+            }
         }
         Container::new(Scrollable::new(card)).padding(100).into()
     }
 }
 
-#[derive(Clone, PartialEq)]
+#[derive(Clone)]
 pub(crate) enum DialogType {
     NewEntity,
-    Error,
+    Error { error: LoreTexError },
 }

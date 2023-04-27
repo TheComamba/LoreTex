@@ -1,19 +1,17 @@
 use super::HistoryView;
-use crate::gui::{
-    app::message_handling::GuiMessage, db_col_view::widget::DbColView, style::header,
-};
+use crate::gui::{app::message_handling::GuiMes, db_col_view::widget::DbColView, style::header};
 use iced::{
     widget::{Column, Row, Text},
     Element, Length, Renderer,
 };
 use iced_lazy::{component, Component};
 
-impl<'a> Component<GuiMessage, Renderer> for HistoryView<'a> {
+impl<'a> Component<GuiMes, Renderer> for HistoryView<'a> {
     type State = ();
 
-    type Event = GuiMessage;
+    type Event = GuiMes;
 
-    fn update(&mut self, _state: &mut Self::State, event: Self::Event) -> Option<GuiMessage> {
+    fn update(&mut self, _state: &mut Self::State, event: Self::Event) -> Option<GuiMes> {
         Some(event)
     }
 
@@ -22,19 +20,19 @@ impl<'a> Component<GuiMessage, Renderer> for HistoryView<'a> {
             .push(DbColView::new(
                 "Year",
                 vec![],
-                GuiMessage::YearViewUpdated,
+                GuiMes::YearViewUpd,
                 &self.state.year_view_state,
             ))
             .push(DbColView::new(
                 "Day",
                 vec![],
-                GuiMessage::DayViewUpdated,
+                GuiMes::DayViewUpd,
                 &self.state.day_view_state,
             ))
             .push(DbColView::new(
                 "Label",
                 vec![],
-                GuiMessage::HistoryLabelViewUpdated,
+                GuiMes::HistoryLabelViewUpd,
                 &self.state.label_view_state,
             ))
             .push(
@@ -49,7 +47,7 @@ impl<'a> Component<GuiMessage, Renderer> for HistoryView<'a> {
     }
 }
 
-impl<'a> From<HistoryView<'a>> for Element<'a, GuiMessage> {
+impl<'a> From<HistoryView<'a>> for Element<'a, GuiMes> {
     fn from(entity_view: HistoryView<'a>) -> Self {
         component(entity_view)
     }

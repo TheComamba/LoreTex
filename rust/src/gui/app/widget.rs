@@ -1,4 +1,4 @@
-use super::{message_handling::GuiMessage, SqlGui, ViewType};
+use super::{message_handling::GuiMes, SqlGui, ViewType};
 use crate::{
     gui::{
         dialog::Dialog,
@@ -16,7 +16,7 @@ use iced::{
 use iced_aw::Modal;
 
 impl Sandbox for SqlGui {
-    type Message = GuiMessage;
+    type Message = GuiMes;
 
     fn new() -> Self {
         let mut gui = SqlGui {
@@ -50,13 +50,13 @@ impl Sandbox for SqlGui {
         Modal::new(self.dialog.is_some(), self.main_view(), move || {
             self.dialog()
         })
-        .on_esc(GuiMessage::DialogClosed)
+        .on_esc(GuiMes::DialogClosed)
         .into()
     }
 }
 
 impl SqlGui {
-    fn main_view(&self) -> Element<'_, GuiMessage> {
+    fn main_view(&self) -> Element<'_, GuiMes> {
         let mut col = Column::new()
             .push(self.menu_bar())
             .push(self.current_database_display())
@@ -76,10 +76,10 @@ impl SqlGui {
         col.into()
     }
 
-    fn menu_bar(&self) -> Element<'_, GuiMessage> {
+    fn menu_bar(&self) -> Element<'_, GuiMes> {
         Row::new()
-            .push(Button::new("New Lore Database").on_press(GuiMessage::NewDatabase))
-            .push(Button::new("Open Lore Database").on_press(GuiMessage::OpenDatabase))
+            .push(Button::new("New Lore Database").on_press(GuiMes::NewDatabase))
+            .push(Button::new("Open Lore Database").on_press(GuiMes::OpenDatabase))
             .align_items(Alignment::Center)
             .width(Length::Fill)
             .padding(5)
@@ -87,7 +87,7 @@ impl SqlGui {
             .into()
     }
 
-    fn current_database_display(&self) -> Element<'_, GuiMessage> {
+    fn current_database_display(&self) -> Element<'_, GuiMes> {
         let content = match self.lore_database.as_ref() {
             Some(db) => db.path_as_string(),
             None => "[No database loaded]".to_string(),
@@ -95,13 +95,13 @@ impl SqlGui {
         Container::new(Text::new(content)).padding(5).into()
     }
 
-    fn view_selection_bar(&self) -> Element<'_, GuiMessage> {
+    fn view_selection_bar(&self) -> Element<'_, GuiMes> {
         let entity_button =
-            button(Text::new("Entities")).on_press(GuiMessage::ViewSelected(ViewType::Entity));
-        let history_items_button = button(Text::new("History Items"))
-            .on_press(GuiMessage::ViewSelected(ViewType::History));
+            button(Text::new("Entities")).on_press(GuiMes::ViewSelected(ViewType::Entity));
+        let history_items_button =
+            button(Text::new("History Items")).on_press(GuiMes::ViewSelected(ViewType::History));
         let relationships_button = button(Text::new("Relationships"))
-            .on_press(GuiMessage::ViewSelected(ViewType::Relationship));
+            .on_press(GuiMes::ViewSelected(ViewType::Relationship));
         Row::new()
             .push(entity_button)
             .push(history_items_button)
@@ -112,7 +112,7 @@ impl SqlGui {
             .into()
     }
 
-    fn dialog(&self) -> Element<'_, GuiMessage> {
+    fn dialog(&self) -> Element<'_, GuiMes> {
         if let Some(dialog) = self.dialog.as_ref() {
             dialog.clone().into()
         } else {

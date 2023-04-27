@@ -1,7 +1,7 @@
 use super::EntityView;
 use crate::gui::{
-    app::message_handling::GuiMessage,
-    db_col_view::{widget::DbColView, DbColViewMessage},
+    app::message_handling::GuiMes,
+    db_col_view::{widget::DbColView, ColViewMes},
     style::header,
 };
 use iced::{
@@ -10,12 +10,12 @@ use iced::{
 };
 use iced_lazy::{component, Component};
 
-impl<'a> Component<GuiMessage, Renderer> for EntityView<'a> {
+impl<'a> Component<GuiMes, Renderer> for EntityView<'a> {
     type State = ();
 
-    type Event = GuiMessage;
+    type Event = GuiMes;
 
-    fn update(&mut self, _state: &mut Self::State, event: Self::Event) -> Option<GuiMessage> {
+    fn update(&mut self, _state: &mut Self::State, event: Self::Event) -> Option<GuiMes> {
         Some(event)
     }
 
@@ -24,13 +24,13 @@ impl<'a> Component<GuiMessage, Renderer> for EntityView<'a> {
             .push(DbColView::new(
                 "Label",
                 self.label_button_infos(),
-                GuiMessage::EntityLabelViewUpdated,
+                GuiMes::EntityLabelViewUpd,
                 &self.state.label_view_state,
             ))
             .push(DbColView::new(
                 "Descriptor",
                 self.descriptor_button_infos(),
-                GuiMessage::DescriptorViewUpdated,
+                GuiMes::DescriptorViewUpd,
                 &self.state.descriptor_view_state,
             ))
             .push(
@@ -49,25 +49,25 @@ impl<'a> Component<GuiMessage, Renderer> for EntityView<'a> {
 }
 
 impl<'a> EntityView<'a> {
-    fn new_entity_msg(&self) -> Option<DbColViewMessage> {
+    fn new_entity_msg(&self) -> Option<ColViewMes> {
         if self.lore_database.is_some() {
-            Some(DbColViewMessage::New)
+            Some(ColViewMes::New)
         } else {
             None
         }
     }
 
-    fn new_descriptor_msg(&self) -> Option<DbColViewMessage> {
+    fn new_descriptor_msg(&self) -> Option<ColViewMes> {
         if self.state.label_view_state.get_selected().is_some()
             && !self.state.descriptor_view_state.search_text.is_empty()
         {
-            Some(DbColViewMessage::New)
+            Some(ColViewMes::New)
         } else {
             None
         }
     }
 
-    fn label_button_infos(&self) -> Vec<(String, Option<DbColViewMessage>)> {
+    fn label_button_infos(&self) -> Vec<(String, Option<ColViewMes>)> {
         vec![
             ("New Entity Label", self.new_entity_msg()),
             ("Delete Entity", None),
@@ -78,7 +78,7 @@ impl<'a> EntityView<'a> {
         .collect()
     }
 
-    fn descriptor_button_infos(&self) -> Vec<(String, Option<DbColViewMessage>)> {
+    fn descriptor_button_infos(&self) -> Vec<(String, Option<ColViewMes>)> {
         vec![
             ("New Descriptor", self.new_descriptor_msg()),
             ("Delete Descriptor", None),
@@ -90,7 +90,7 @@ impl<'a> EntityView<'a> {
     }
 }
 
-impl<'a> From<EntityView<'a>> for Element<'a, GuiMessage> {
+impl<'a> From<EntityView<'a>> for Element<'a, GuiMes> {
     fn from(entity_view: EntityView<'a>) -> Self {
         component(entity_view)
     }

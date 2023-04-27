@@ -5,7 +5,7 @@ use iced::{
 use iced_aw::{style::CardStyles, Card};
 use loretex::errors::LoreTexError;
 
-use super::app::{message_handling::GuiMessage, SqlGui};
+use super::app::{message_handling::GuiMes, SqlGui};
 
 #[derive(Clone)]
 pub(crate) struct Dialog {
@@ -14,12 +14,12 @@ pub(crate) struct Dialog {
 }
 
 impl SqlGui {
-    pub(crate) fn update_dialog(&mut self, event: DialogMessage) {
+    pub(crate) fn update_dialog(&mut self, event: DialogMes) {
         match event {
-            DialogMessage::NewEntity(event) => match event {
-                NewEntityMessage::LabelUpdated(str) => self.dialog = Some(Dialog::new_entity()),
-                NewEntityMessage::TypeUpdated(str) => self.dialog = Some(Dialog::new_entity()),
-                NewEntityMessage::Submit => self.dialog = None,
+            DialogMes::NewEntity(event) => match event {
+                NewEntityMes::LabelUpd(str) => self.dialog = Some(Dialog::new_entity()),
+                NewEntityMes::TypeUpd(str) => self.dialog = Some(Dialog::new_entity()),
+                NewEntityMes::Submit => self.dialog = None,
             },
         }
     }
@@ -43,24 +43,20 @@ impl Dialog {
         }
     }
 
-    fn content<'a>(&self) -> Element<'a, GuiMessage> {
+    fn content<'a>(&self) -> Element<'a, GuiMes> {
         match &self.dialog_type {
             DialogType::NewEntity { label, ent_type } => self.new_entity_content(label, ent_type),
             DialogType::Error { error } => self.error_content(error),
         }
     }
 
-    fn new_entity_content<'a>(&self, label: &String, ent_type: &String) -> Element<'a, GuiMessage> {
-        let label_input = TextInput::new("", label).on_input(|str| {
-            GuiMessage::DialogUpdated(DialogMessage::NewEntity(NewEntityMessage::LabelUpdated(
-                str,
-            )))
-        });
-        let type_input = TextInput::new("", &ent_type).on_input(|str| {
-            GuiMessage::DialogUpdated(DialogMessage::NewEntity(NewEntityMessage::TypeUpdated(str)))
-        });
-        let submit_button = Button::new(Text::new("Create")).on_press(GuiMessage::DialogUpdated(
-            DialogMessage::NewEntity(NewEntityMessage::Submit),
+    fn new_entity_content<'a>(&self, label: &String, ent_type: &String) -> Element<'a, GuiMes> {
+        let label_input = TextInput::new("", label)
+            .on_input(|str| GuiMes::DialogUpd(DialogMes::NewEntity(NewEntityMes::LabelUpd(str))));
+        let type_input = TextInput::new("", &ent_type)
+            .on_input(|str| GuiMes::DialogUpd(DialogMes::NewEntity(NewEntityMes::TypeUpd(str))));
+        let submit_button = Button::new(Text::new("Create")).on_press(GuiMes::DialogUpd(
+            DialogMes::NewEntity(NewEntityMes::Submit),
         ));
         Column::new()
             .push(Text::new("Label:"))
@@ -73,20 +69,18 @@ impl Dialog {
             .into()
     }
 
-    fn error_content<'a>(&self, error: &LoreTexError) -> Element<'a, GuiMessage> {
+    fn error_content<'a>(&self, error: &LoreTexError) -> Element<'a, GuiMes> {
         Text::new(error.to_string()).into()
     }
 }
 
-impl<'a> From<Dialog> for Element<'a, GuiMessage> {
+impl<'a> From<Dialog> for Element<'a, GuiMes> {
     fn from(dialog: Dialog) -> Self {
         let header: Text<'a, Renderer> = Text::new(dialog.header.clone());
         let content = dialog.content();
-        let mut card = Card::new::<Element<'a, GuiMessage>, Element<'a, GuiMessage>>(
-            header.into(),
-            content.into(),
-        )
-        .on_close(GuiMessage::DialogClosed);
+        let mut card =
+            Card::new::<Element<'a, GuiMes>, Element<'a, GuiMes>>(header.into(), content.into())
+                .on_close(GuiMes::DialogClosed);
         match dialog.dialog_type {
             DialogType::Error { error: _ } => {
                 card = card.style(CardStyles::Danger);
@@ -106,13 +100,13 @@ pub(crate) enum DialogType {
 }
 
 #[derive(Debug, Clone)]
-pub(crate) enum DialogMessage {
-    NewEntity(NewEntityMessage),
+pub(crate) enum DialogMes {
+    NewEntity(NewEntityMes),
 }
 
 #[derive(Debug, Clone)]
-pub(crate) enum NewEntityMessage {
-    LabelUpdated(String),
-    TypeUpdated(String),
+pub(crate) enum NewEntityMes {
+    LabelUpd(String),
+    TypeUpd(String),
     Submit,
 }

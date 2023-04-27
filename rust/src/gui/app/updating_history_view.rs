@@ -1,5 +1,5 @@
 use crate::gui::{
-    db_col_view::{state::DbColViewState, DbColViewMessage},
+    db_col_view::{state::DbColViewState, ColViewMes},
     history_view::HistoryViewState,
 };
 use loretex::{errors::LoreTexError, sql::lore_database::LoreDatabase};
@@ -7,12 +7,12 @@ use loretex::{errors::LoreTexError, sql::lore_database::LoreDatabase};
 use super::SqlGui;
 
 impl SqlGui {
-    pub(super) fn update_year_view(&mut self, event: DbColViewMessage) -> Result<(), LoreTexError> {
+    pub(super) fn update_year_view(&mut self, event: ColViewMes) -> Result<(), LoreTexError> {
         let state = &mut self.history_view_state;
         match event {
-            DbColViewMessage::New => (),
-            DbColViewMessage::SearchFieldUpdated(text) => state.year_view_state.search_text = text,
-            DbColViewMessage::Selected(year) => {
+            ColViewMes::New => (),
+            ColViewMes::SearchFieldUpd(text) => state.year_view_state.search_text = text,
+            ColViewMes::Selected(year) => {
                 state.year_view_state.set_selected(year);
                 state.day_view_state.set_selected_none();
                 state.update_days(&self.lore_database)?;
@@ -21,12 +21,12 @@ impl SqlGui {
         Ok(())
     }
 
-    pub(super) fn update_day_view(&mut self, event: DbColViewMessage) -> Result<(), LoreTexError> {
+    pub(super) fn update_day_view(&mut self, event: ColViewMes) -> Result<(), LoreTexError> {
         let state = &mut self.history_view_state;
         match event {
-            DbColViewMessage::New => (),
-            DbColViewMessage::SearchFieldUpdated(text) => state.day_view_state.search_text = text,
-            DbColViewMessage::Selected(day) => {
+            ColViewMes::New => (),
+            ColViewMes::SearchFieldUpd(text) => state.day_view_state.search_text = text,
+            ColViewMes::Selected(day) => {
                 state.day_view_state.set_selected(day);
                 state.label_view_state.set_selected_none();
                 state.update_labels(&self.lore_database)?;
@@ -37,13 +37,13 @@ impl SqlGui {
 
     pub(super) fn update_history_label_view(
         &mut self,
-        event: DbColViewMessage,
+        event: ColViewMes,
     ) -> Result<(), LoreTexError> {
         let state = &mut self.history_view_state;
         match event {
-            DbColViewMessage::New => (),
-            DbColViewMessage::SearchFieldUpdated(text) => state.label_view_state.search_text = text,
-            DbColViewMessage::Selected(label) => {
+            ColViewMes::New => (),
+            ColViewMes::SearchFieldUpd(text) => state.label_view_state.search_text = text,
+            ColViewMes::Selected(label) => {
                 state.label_view_state.set_selected(label);
                 state.update_content(&self.lore_database)?;
             }

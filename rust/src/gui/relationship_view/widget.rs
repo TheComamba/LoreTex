@@ -1,19 +1,17 @@
 use super::RelationshipView;
-use crate::gui::{
-    app::message_handling::GuiMessage, db_col_view::widget::DbColView, style::header,
-};
+use crate::gui::{app::message_handling::GuiMes, db_col_view::widget::DbColView, style::header};
 use iced::{
     widget::{Column, Row, Text},
     Element, Length, Renderer,
 };
 use iced_lazy::{component, Component};
 
-impl<'a> Component<GuiMessage, Renderer> for RelationshipView<'a> {
+impl<'a> Component<GuiMes, Renderer> for RelationshipView<'a> {
     type State = ();
 
-    type Event = GuiMessage;
+    type Event = GuiMes;
 
-    fn update(&mut self, _state: &mut Self::State, event: Self::Event) -> Option<GuiMessage> {
+    fn update(&mut self, _state: &mut Self::State, event: Self::Event) -> Option<GuiMes> {
         Some(event)
     }
 
@@ -22,13 +20,13 @@ impl<'a> Component<GuiMessage, Renderer> for RelationshipView<'a> {
             .push(DbColView::new(
                 "Parent",
                 vec![],
-                GuiMessage::ParentViewUpdated,
+                GuiMes::ParentViewUpd,
                 &self.state.parent_view_state,
             ))
             .push(DbColView::new(
                 "Child",
                 vec![],
-                GuiMessage::ChildViewUpdated,
+                GuiMes::ChildViewUpd,
                 &self.state.child_view_state,
             ))
             .push(self.role_view())
@@ -37,7 +35,7 @@ impl<'a> Component<GuiMessage, Renderer> for RelationshipView<'a> {
 }
 
 impl<'a> RelationshipView<'a> {
-    fn role_view(&self) -> Element<'a, GuiMessage> {
+    fn role_view(&self) -> Element<'a, GuiMes> {
         let mut col = Column::new().push(header("Role"));
         if let Some(role) = self.state.current_role.as_ref() {
             col = col.push(Text::new(role));
@@ -46,7 +44,7 @@ impl<'a> RelationshipView<'a> {
     }
 }
 
-impl<'a> From<RelationshipView<'a>> for Element<'a, GuiMessage> {
+impl<'a> From<RelationshipView<'a>> for Element<'a, GuiMes> {
     fn from(entity_view: RelationshipView<'a>) -> Self {
         component(entity_view)
     }

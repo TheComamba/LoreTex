@@ -1,6 +1,6 @@
 use super::SqlGui;
 use crate::gui::{
-    db_col_view::{state::DbColViewState, DbColViewMessage},
+    db_col_view::{state::DbColViewState, ColViewMes},
     dialog::Dialog,
     entity_view::EntityViewState,
 };
@@ -10,15 +10,12 @@ use loretex::{
 };
 
 impl SqlGui {
-    pub(super) fn update_label_view(
-        &mut self,
-        event: DbColViewMessage,
-    ) -> Result<(), LoreTexError> {
+    pub(super) fn update_label_view(&mut self, event: ColViewMes) -> Result<(), LoreTexError> {
         let state = &mut self.entity_view_state;
         match event {
-            DbColViewMessage::New => self.dialog = Some(Dialog::new_entity()),
-            DbColViewMessage::SearchFieldUpdated(text) => state.label_view_state.search_text = text,
-            DbColViewMessage::Selected(label) => {
+            ColViewMes::New => self.dialog = Some(Dialog::new_entity()),
+            ColViewMes::SearchFieldUpd(text) => state.label_view_state.search_text = text,
+            ColViewMes::Selected(label) => {
                 state.label_view_state.set_selected(label);
                 state.descriptor_view_state.set_selected_none();
                 state.update_descriptors(&self.lore_database)?;
@@ -27,17 +24,12 @@ impl SqlGui {
         Ok(())
     }
 
-    pub(super) fn update_descriptor_view(
-        &mut self,
-        event: DbColViewMessage,
-    ) -> Result<(), LoreTexError> {
+    pub(super) fn update_descriptor_view(&mut self, event: ColViewMes) -> Result<(), LoreTexError> {
         let state = &mut self.entity_view_state;
         match event {
-            DbColViewMessage::New => (),
-            DbColViewMessage::SearchFieldUpdated(text) => {
-                state.descriptor_view_state.search_text = text
-            }
-            DbColViewMessage::Selected(descriptor) => {
+            ColViewMes::New => (),
+            ColViewMes::SearchFieldUpd(text) => state.descriptor_view_state.search_text = text,
+            ColViewMes::Selected(descriptor) => {
                 state.descriptor_view_state.set_selected(descriptor);
                 state.update_description(&self.lore_database)?;
             }

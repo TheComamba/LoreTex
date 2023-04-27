@@ -1,5 +1,5 @@
-use super::{state::DbColViewState, DbColViewMessage};
-use crate::gui::{app::message_handling::GuiMessage, style::header};
+use super::{state::DbColViewState, ColViewMes};
+use crate::gui::{app::message_handling::GuiMes, style::header};
 use iced::{
     widget::{button, Column, Container, Text, TextInput},
     Element, Length, Renderer,
@@ -9,18 +9,18 @@ use iced_lazy::{component, Component};
 
 pub(crate) struct DbColView<'a, M> {
     title: &'a str,
-    button_infos: Vec<(String, Option<DbColViewMessage>)>,
+    button_infos: Vec<(String, Option<ColViewMes>)>,
     gui_message: M,
     state: &'a DbColViewState,
 }
 
 impl<'a, M> DbColView<'a, M>
 where
-    M: 'static + Clone + Fn(DbColViewMessage) -> GuiMessage,
+    M: 'static + Clone + Fn(ColViewMes) -> GuiMes,
 {
     pub(crate) fn new(
         title: &'a str,
-        button_infos: Vec<(String, Option<DbColViewMessage>)>,
+        button_infos: Vec<(String, Option<ColViewMes>)>,
         gui_message: M,
         state: &'a DbColViewState,
     ) -> Self {
@@ -45,16 +45,16 @@ where
         Text::new(content)
     }
 
-    fn search_field(&self) -> TextInput<DbColViewMessage> {
+    fn search_field(&self) -> TextInput<ColViewMes> {
         TextInput::new("Type to search...", &self.state.search_text)
-            .on_input(DbColViewMessage::SearchFieldUpdated)
+            .on_input(ColViewMes::SearchFieldUpd)
             .width(Length::Fill)
     }
 
-    fn selection_list(&self) -> Element<DbColViewMessage> {
+    fn selection_list(&self) -> Element<ColViewMes> {
         let selection_list = SelectionList::new_with(
             self.state.get_visible_entries(),
-            DbColViewMessage::Selected,
+            ColViewMes::Selected,
             20.0,
             0.0,
             SelectionListStyles::Default,
@@ -62,7 +62,7 @@ where
         Container::new(selection_list).height(Length::Fill).into()
     }
 
-    fn button(info: &(String, Option<DbColViewMessage>)) -> Element<DbColViewMessage> {
+    fn button(info: &(String, Option<ColViewMes>)) -> Element<ColViewMes> {
         let (text, press_message) = info;
         let mut button = button(Text::new(text)).width(Length::Fill);
         if let Some(message) = press_message.clone() {
@@ -72,15 +72,15 @@ where
     }
 }
 
-impl<'a, M> Component<GuiMessage, Renderer> for DbColView<'a, M>
+impl<'a, M> Component<GuiMes, Renderer> for DbColView<'a, M>
 where
-    M: 'static + Clone + Fn(DbColViewMessage) -> GuiMessage,
+    M: 'static + Clone + Fn(ColViewMes) -> GuiMes,
 {
     type State = DbColViewState;
 
-    type Event = DbColViewMessage;
+    type Event = ColViewMes;
 
-    fn update(&mut self, _state: &mut Self::State, event: Self::Event) -> Option<GuiMessage> {
+    fn update(&mut self, _state: &mut Self::State, event: Self::Event) -> Option<GuiMes> {
         let m = self.gui_message.clone();
         Some(m(event))
     }
@@ -104,9 +104,9 @@ where
     }
 }
 
-impl<'a, M> From<DbColView<'a, M>> for Element<'a, GuiMessage>
+impl<'a, M> From<DbColView<'a, M>> for Element<'a, GuiMes>
 where
-    M: 'static + Clone + Fn(DbColViewMessage) -> GuiMessage,
+    M: 'static + Clone + Fn(ColViewMes) -> GuiMes,
 {
     fn from(col_view: DbColView<'a, M>) -> Self {
         component(col_view)

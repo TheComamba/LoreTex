@@ -2,8 +2,8 @@ pub(super) mod state;
 pub(super) mod widget;
 
 #[derive(Debug, Clone)]
-pub(crate) enum DbColViewMessage {
+pub(crate) enum ColViewMes {
     New,
-    SearchFieldUpdated(String),
+    SearchFieldUpd(String),
     Selected(String),
 }

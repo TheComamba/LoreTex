@@ -1,6 +1,6 @@
 use iced::{
     widget::{Container, Scrollable, Text},
-    Element,
+    Element, Renderer,
 };
 use iced_aw::{style::CardStyles, Card};
 use loretex::errors::LoreTexError;
@@ -11,7 +11,7 @@ use super::app::message_handling::GuiMessage;
 pub(crate) struct Dialog {
     dialog_type: DialogType,
     header: String,
-    content: String,
+    text: String,
 }
 
 impl Dialog {
@@ -19,16 +19,31 @@ impl Dialog {
         Dialog {
             dialog_type: DialogType::Error,
             header: "Error".to_string(),
-            content: error.to_string(),
+            text: error.to_string(),
         }
+    }
+
+    fn content<'a>(self) -> Element<'a, GuiMessage> {
+        match self.dialog_type {
+            DialogType::Error => self.error_content(),
+        }
+    }
+
+    fn error_content<'a>(self) -> Element<'a, GuiMessage> {
+        Text::new(self.text.clone()).into()
     }
 }
 
-impl From<Dialog> for Element<'_, GuiMessage> {
+impl<'a> From<Dialog> for Element<'a, GuiMessage> {
     fn from(dialog: Dialog) -> Self {
-        let card = Card::new(Text::new(dialog.header), Text::new(dialog.content))
-            .style(CardStyles::Danger)
-            .on_close(GuiMessage::DialogClosed);
+        let header: Text<'a, Renderer> = Text::new(dialog.header.clone());
+        let content = dialog.content();
+        let card = Card::new::<Element<'a, GuiMessage>, Element<'a, GuiMessage>>(
+            header.into(),
+            content.into(),
+        )
+        .style(CardStyles::Danger)
+        .on_close(GuiMessage::DialogClosed);
         Container::new(Scrollable::new(card)).padding(100).into()
     }
 }

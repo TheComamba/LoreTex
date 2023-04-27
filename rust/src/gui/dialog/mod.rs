@@ -23,13 +23,13 @@ impl Dialog {
         }
     }
 
-    fn content<'a>(self) -> Element<'a, GuiMessage> {
+    fn content<'a>(&self) -> Element<'a, GuiMessage> {
         match self.dialog_type {
             DialogType::Error => self.error_content(),
         }
     }
 
-    fn error_content<'a>(self) -> Element<'a, GuiMessage> {
+    fn error_content<'a>(&self) -> Element<'a, GuiMessage> {
         Text::new(self.text.clone()).into()
     }
 }
@@ -38,17 +38,21 @@ impl<'a> From<Dialog> for Element<'a, GuiMessage> {
     fn from(dialog: Dialog) -> Self {
         let header: Text<'a, Renderer> = Text::new(dialog.header.clone());
         let content = dialog.content();
-        let card = Card::new::<Element<'a, GuiMessage>, Element<'a, GuiMessage>>(
+        let mut card = Card::new::<Element<'a, GuiMessage>, Element<'a, GuiMessage>>(
             header.into(),
             content.into(),
         )
-        .style(CardStyles::Danger)
         .on_close(GuiMessage::DialogClosed);
+        if dialog.dialog_type == DialogType::Error {
+            card = card.style(CardStyles::Danger);
+        } else {
+            card = card.style(CardStyles::Primary);
+        }
         Container::new(Scrollable::new(card)).padding(100).into()
     }
 }
 
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 pub(crate) enum DialogType {
     Error,
 }

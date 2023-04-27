@@ -12,7 +12,7 @@ use iced::{
     widget::{button, Button, Column, Container, Row, Scrollable, Text},
     Alignment, Element, Length, Sandbox,
 };
-use iced_aw::{style::CardStyles, Card};
+use iced_aw::{style::CardStyles, Card, Modal};
 
 impl Sandbox for SqlGui {
     type Message = GuiMessage;
@@ -46,10 +46,11 @@ impl Sandbox for SqlGui {
     }
 
     fn view(&self) -> iced::Element<'_, Self::Message> {
-        match self.error_message.as_ref() {
-            Some(message) => self.error_dialog(message),
-            None => self.main_view(),
-        }
+        let show_err = self.error_message.is_some();
+        Modal::new(show_err, self.main_view(), move || self.dialog().into())
+            .backdrop(GuiMessage::ErrorDialogClosed)
+            .on_esc(GuiMessage::ErrorDialogClosed)
+            .into()
     }
 }
 
@@ -110,13 +111,17 @@ impl SqlGui {
             .into()
     }
 
-    fn error_dialog<'a>(&self, text: &'a String) -> Element<'a, GuiMessage> {
-        Container::new(Scrollable::new(
-            Card::new(Text::new("Error"), Text::new(text))
-                .style(CardStyles::Danger)
-                .on_close(GuiMessage::ErrorDialogClosed),
-        ))
-        .padding(10)
-        .into()
+    fn dialog(&self) -> Element<'_, GuiMessage> {
+        let content = match self.error_message.as_ref() {
+            Some(message) => self.error_dialog_content(message),
+            None => Row::new().into(),
+        };
+        Container::new(Scrollable::new(content)).padding(10).into()
+    }
+
+    fn error_dialog_content<'a>(&self, text: &'a String) -> Element<'a, GuiMessage> {
+        Card::new(Text::new("Error"), Text::new(text))
+            .style(CardStyles::Danger)
+            .into()
     }
 }

@@ -1,5 +1,5 @@
 use super::{
-    entity_view::EntityViewState, history_view::HistoryViewState,
+    dialog::Dialog, entity_view::EntityViewState, history_view::HistoryViewState,
     relationship_view::RelationshipViewState,
 };
 use loretex::sql::lore_database::LoreDatabase;
@@ -18,6 +18,7 @@ pub(crate) struct SqlGui {
     relationship_view_state: RelationshipViewState,
     lore_database: Option<LoreDatabase>,
     error_message: Option<String>,
+    dialog: Option<Dialog>,
 }
 
 #[derive(Debug, Clone)]

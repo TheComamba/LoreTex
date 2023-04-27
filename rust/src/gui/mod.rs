@@ -1,5 +1,5 @@
 pub(super) mod app;
-mod db_col_view;
+pub(super) mod db_col_view;
 mod entity_view;
 mod file_dialogs;
 mod history_view;

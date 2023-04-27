@@ -1,5 +1,7 @@
 use super::HistoryView;
-use crate::gui::{app::message_handling::GuiMessage, db_col_view::DbColView, style::header};
+use crate::gui::{
+    app::message_handling::GuiMessage, db_col_view::widget::DbColView, style::header,
+};
 use iced::{
     widget::{Column, Row, Text},
     Element, Length, Renderer,

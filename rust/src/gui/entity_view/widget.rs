@@ -1,7 +1,7 @@
 use super::EntityView;
 use crate::gui::{
     app::message_handling::GuiMessage,
-    db_col_view::{DbColView, DbColViewMessage},
+    db_col_view::{widget::DbColView, DbColViewMessage},
     style::header,
 };
 use iced::{

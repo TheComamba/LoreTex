@@ -1,4 +1,4 @@
-use super::db_col_view::DbColViewState;
+use crate::gui::db_col_view::state::DbColViewState;
 
 mod widget;
 

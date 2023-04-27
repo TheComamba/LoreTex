@@ -1,13 +1,13 @@
-use super::{app::message_handling::GuiMessage, style::header};
+use super::{state::DbColViewState, DbColViewMessage};
+use crate::gui::{app::message_handling::GuiMessage, style::header};
 use iced::{
     widget::{button, Column, Container, Text, TextInput},
     Element, Length, Renderer,
 };
 use iced_aw::{style::SelectionListStyles, SelectionList};
 use iced_lazy::{component, Component};
-use loretex::errors::LoreTexError;
 
-pub(super) struct DbColView<'a, M> {
+pub(crate) struct DbColView<'a, M> {
     title: &'a str,
     button_infos: Vec<(String, Option<DbColViewMessage>)>,
     gui_message: M,
@@ -18,7 +18,7 @@ impl<'a, M> DbColView<'a, M>
 where
     M: 'static + Clone + Fn(DbColViewMessage) -> GuiMessage,
 {
-    pub(super) fn new(
+    pub(crate) fn new(
         title: &'a str,
         button_infos: Vec<(String, Option<DbColViewMessage>)>,
         gui_message: M,
@@ -111,84 +111,4 @@ where
     fn from(entity_view: DbColView<'a, M>) -> Self {
         component(entity_view)
     }
-}
-
-#[derive(Debug, Clone)]
-pub(super) struct DbColViewState {
-    pub(super) search_text: String,
-    entries: Vec<String>,
-    selected_entry: Option<String>,
-}
-
-impl DbColViewState {
-    pub(super) fn new() -> Self {
-        DbColViewState {
-            search_text: "".to_string(),
-            entries: vec![],
-            selected_entry: None,
-        }
-    }
-
-    pub(super) fn get_selected_int(&self) -> Result<Option<i32>, LoreTexError> {
-        let year = match self.selected_entry.as_ref() {
-            Some(year) => year
-                .parse::<i32>()
-                .map_err(|e| LoreTexError::InputError(e.to_string()))?,
-            None => return Ok(None),
-        };
-        Ok(Some(year))
-    }
-
-    pub(super) fn set_entries(&mut self, mut entries: Vec<String>) {
-        if !entries.contains(&String::new()) {
-            entries.push(String::new());
-        }
-        entries.sort();
-        entries.dedup();
-        self.entries = entries;
-    }
-
-    pub(super) fn set_selected(&mut self, entry: String) {
-        if entry.is_empty() {
-            self.selected_entry = None;
-        } else {
-            self.selected_entry = Some(entry);
-        }
-    }
-
-    pub(super) fn set_selected_none(&mut self) {
-        self.selected_entry = None;
-    }
-
-    pub(super) fn get_selected(&self) -> &Option<String> {
-        &self.selected_entry
-    }
-
-    fn get_visible_entries(&self) -> Vec<String> {
-        match self.search_text.is_empty() {
-            true => self.entries.clone(),
-            false => {
-                let mut visible = vec![String::new()];
-                for entry in self.entries.iter() {
-                    if entry.contains(&self.search_text) {
-                        visible.push(entry.clone());
-                    }
-                }
-                visible
-            }
-        }
-    }
-}
-
-impl Default for DbColViewState {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
-#[derive(Debug, Clone)]
-pub(crate) enum DbColViewMessage {
-    New,
-    SearchFieldUpdated(String),
-    Selected(String),
 }

@@ -1,5 +1,5 @@
 use crate::gui::{
-    db_col_view::{DbColViewMessage, DbColViewState},
+    db_col_view::{state::DbColViewState, DbColViewMessage},
     history_view::HistoryViewState,
 };
 use loretex::{errors::LoreTexError, sql::lore_database::LoreDatabase};

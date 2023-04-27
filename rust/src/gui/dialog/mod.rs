@@ -1,11 +1,15 @@
+use self::new_entity::NewEntityMes;
 use iced::{
-    widget::{Button, Column, Container, Scrollable, Text, TextInput},
+    widget::{Container, Scrollable, Text},
     Element, Renderer,
 };
 use iced_aw::{style::CardStyles, Card};
 use loretex::errors::LoreTexError;
 
 use super::app::{message_handling::GuiMes, SqlGui};
+
+mod error;
+mod new_entity;
 
 #[derive(Clone)]
 pub(crate) struct Dialog {
@@ -16,61 +20,17 @@ pub(crate) struct Dialog {
 impl SqlGui {
     pub(crate) fn update_dialog(&mut self, event: DialogMes) {
         match event {
-            DialogMes::NewEntity(event) => match event {
-                NewEntityMes::LabelUpd(str) => self.dialog = Some(Dialog::new_entity()),
-                NewEntityMes::TypeUpd(str) => self.dialog = Some(Dialog::new_entity()),
-                NewEntityMes::Submit => self.dialog = None,
-            },
+            DialogMes::NewEntity(event) => self.update_new_entity_dialog(event),
         }
     }
 }
 
 impl Dialog {
-    pub(crate) fn new_entity() -> Self {
-        Dialog {
-            dialog_type: DialogType::NewEntity {
-                label: "".to_string(),
-                ent_type: "".to_string(),
-            },
-            header: "Create new Entity".to_string(),
-        }
-    }
-
-    pub(crate) fn error(error: LoreTexError) -> Self {
-        Dialog {
-            dialog_type: DialogType::Error { error },
-            header: "Error".to_string(),
-        }
-    }
-
     fn content<'a>(&self) -> Element<'a, GuiMes> {
         match &self.dialog_type {
             DialogType::NewEntity { label, ent_type } => self.new_entity_content(label, ent_type),
             DialogType::Error { error } => self.error_content(error),
         }
-    }
-
-    fn new_entity_content<'a>(&self, label: &String, ent_type: &String) -> Element<'a, GuiMes> {
-        let label_input = TextInput::new("", label)
-            .on_input(|str| GuiMes::DialogUpd(DialogMes::NewEntity(NewEntityMes::LabelUpd(str))));
-        let type_input = TextInput::new("", &ent_type)
-            .on_input(|str| GuiMes::DialogUpd(DialogMes::NewEntity(NewEntityMes::TypeUpd(str))));
-        let submit_button = Button::new(Text::new("Create")).on_press(GuiMes::DialogUpd(
-            DialogMes::NewEntity(NewEntityMes::Submit),
-        ));
-        Column::new()
-            .push(Text::new("Label:"))
-            .push(label_input)
-            .push(Text::new("Type:"))
-            .push(type_input)
-            .push(submit_button)
-            .padding(5)
-            .spacing(5)
-            .into()
-    }
-
-    fn error_content<'a>(&self, error: &LoreTexError) -> Element<'a, GuiMes> {
-        Text::new(error.to_string()).into()
     }
 }
 
@@ -102,11 +62,4 @@ pub(crate) enum DialogType {
 #[derive(Debug, Clone)]
 pub(crate) enum DialogMes {
     NewEntity(NewEntityMes),
-}
-
-#[derive(Debug, Clone)]
-pub(crate) enum NewEntityMes {
-    LabelUpd(String),
-    TypeUpd(String),
-    Submit,
 }

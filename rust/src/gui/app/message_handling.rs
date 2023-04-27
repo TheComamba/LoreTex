@@ -23,27 +23,13 @@ impl SqlGui {
             GuiMessage::ViewSelected(view) => self.selected_view = view,
             GuiMessage::NewDatabase => self.new_database_from_dialog()?,
             GuiMessage::OpenDatabase => self.open_database_from_dialog()?,
-            GuiMessage::EntityLabelViewUpdated(event) => self
-                .entity_view_state
-                .update_label_view(event, &self.lore_database)?,
-            GuiMessage::DescriptorViewUpdated(event) => self
-                .entity_view_state
-                .update_descriptor_view(event, &self.lore_database)?,
-            GuiMessage::YearViewUpdated(event) => self
-                .history_view_state
-                .update_year_view(event, &self.lore_database)?,
-            GuiMessage::DayViewUpdated(event) => self
-                .history_view_state
-                .update_day_view(event, &self.lore_database)?,
-            GuiMessage::HistoryLabelViewUpdated(event) => self
-                .history_view_state
-                .update_label_view(event, &self.lore_database)?,
-            GuiMessage::ParentViewUpdated(event) => self
-                .relationship_view_state
-                .update_parent_view(event, &self.lore_database)?,
-            GuiMessage::ChildViewUpdated(event) => self
-                .relationship_view_state
-                .update_child_view(event, &self.lore_database)?,
+            GuiMessage::EntityLabelViewUpdated(event) => self.update_label_view(event)?,
+            GuiMessage::DescriptorViewUpdated(event) => self.update_descriptor_view(event)?,
+            GuiMessage::YearViewUpdated(event) => self.update_year_view(event)?,
+            GuiMessage::DayViewUpdated(event) => self.update_day_view(event)?,
+            GuiMessage::HistoryLabelViewUpdated(event) => self.update_history_label_view(event)?,
+            GuiMessage::ParentViewUpdated(event) => self.update_parent_view(event)?,
+            GuiMessage::ChildViewUpdated(event) => self.update_child_view(event)?,
             GuiMessage::DialogClosed => self.dialog = None,
         }
         Ok(())

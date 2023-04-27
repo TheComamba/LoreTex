@@ -15,6 +15,14 @@ pub(crate) struct Dialog {
 }
 
 impl Dialog {
+    pub(crate) fn new_entity() -> Self {
+        Dialog {
+            dialog_type: DialogType::NewEntity,
+            header: "Create new Entity".to_string(),
+            text: "Stuff'n'stuff".to_string(),
+        }
+    }
+
     pub(crate) fn error(error: LoreTexError) -> Self {
         Dialog {
             dialog_type: DialogType::Error,
@@ -25,8 +33,13 @@ impl Dialog {
 
     fn content<'a>(&self) -> Element<'a, GuiMessage> {
         match self.dialog_type {
+            DialogType::NewEntity => self.new_entity_content(),
             DialogType::Error => self.error_content(),
         }
+    }
+
+    fn new_entity_content<'a>(&self) -> Element<'a, GuiMessage> {
+        Text::new(self.text.clone()).into()
     }
 
     fn error_content<'a>(&self) -> Element<'a, GuiMessage> {
@@ -54,5 +67,6 @@ impl<'a> From<Dialog> for Element<'a, GuiMessage> {
 
 #[derive(Clone, PartialEq)]
 pub(crate) enum DialogType {
+    NewEntity,
     Error,
 }

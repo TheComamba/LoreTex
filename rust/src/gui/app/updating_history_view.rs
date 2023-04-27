@@ -4,57 +4,55 @@ use crate::gui::{
 };
 use loretex::{errors::LoreTexError, sql::lore_database::LoreDatabase};
 
-impl HistoryViewState {
-    pub(super) fn update_year_view(
-        &mut self,
-        message: DbColViewMessage,
-        db: &Option<LoreDatabase>,
-    ) -> Result<(), LoreTexError> {
-        match message {
+use super::SqlGui;
+
+impl SqlGui {
+    pub(super) fn update_year_view(&mut self, event: DbColViewMessage) -> Result<(), LoreTexError> {
+        let state = &mut self.history_view_state;
+        match event {
             DbColViewMessage::New => (),
-            DbColViewMessage::SearchFieldUpdated(text) => self.year_view_state.search_text = text,
+            DbColViewMessage::SearchFieldUpdated(text) => state.year_view_state.search_text = text,
             DbColViewMessage::Selected(year) => {
-                self.year_view_state.set_selected(year);
-                self.day_view_state.set_selected_none();
-                self.update_days(db)?;
+                state.year_view_state.set_selected(year);
+                state.day_view_state.set_selected_none();
+                state.update_days(&self.lore_database)?;
             }
         };
         Ok(())
     }
 
-    pub(super) fn update_day_view(
-        &mut self,
-        message: DbColViewMessage,
-        db: &Option<LoreDatabase>,
-    ) -> Result<(), LoreTexError> {
-        match message {
+    pub(super) fn update_day_view(&mut self, event: DbColViewMessage) -> Result<(), LoreTexError> {
+        let state = &mut self.history_view_state;
+        match event {
             DbColViewMessage::New => (),
-            DbColViewMessage::SearchFieldUpdated(text) => self.day_view_state.search_text = text,
+            DbColViewMessage::SearchFieldUpdated(text) => state.day_view_state.search_text = text,
             DbColViewMessage::Selected(day) => {
-                self.day_view_state.set_selected(day);
-                self.label_view_state.set_selected_none();
-                self.update_labels(db)?;
+                state.day_view_state.set_selected(day);
+                state.label_view_state.set_selected_none();
+                state.update_labels(&self.lore_database)?;
             }
         };
         Ok(())
     }
 
-    pub(super) fn update_label_view(
+    pub(super) fn update_history_label_view(
         &mut self,
-        message: DbColViewMessage,
-        db: &Option<LoreDatabase>,
+        event: DbColViewMessage,
     ) -> Result<(), LoreTexError> {
-        match message {
+        let state = &mut self.history_view_state;
+        match event {
             DbColViewMessage::New => (),
-            DbColViewMessage::SearchFieldUpdated(text) => self.label_view_state.search_text = text,
+            DbColViewMessage::SearchFieldUpdated(text) => state.label_view_state.search_text = text,
             DbColViewMessage::Selected(label) => {
-                self.label_view_state.set_selected(label);
-                self.update_content(db)?;
+                state.label_view_state.set_selected(label);
+                state.update_content(&self.lore_database)?;
             }
         };
         Ok(())
     }
+}
 
+impl HistoryViewState {
     pub(super) fn reset(&mut self, db: &Option<LoreDatabase>) -> Result<(), LoreTexError> {
         self.reset_selections();
         self.update_years(db)?;

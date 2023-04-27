@@ -1,20 +1,22 @@
+use super::SqlGui;
+use crate::gui::{db_col_view::DbColViewMessage, relationship_view::RelationshipViewState};
 use loretex::{errors::LoreTexError, sql::lore_database::LoreDatabase};
 
-use crate::gui::{db_col_view::DbColViewMessage, relationship_view::RelationshipViewState};
-
-impl RelationshipViewState {
+impl SqlGui {
     pub(super) fn update_parent_view(
         &mut self,
-        message: DbColViewMessage,
-        db: &Option<LoreDatabase>,
+        event: DbColViewMessage,
     ) -> Result<(), LoreTexError> {
-        match message {
+        let state = &mut self.relationship_view_state;
+        match event {
             DbColViewMessage::New => (),
-            DbColViewMessage::SearchFieldUpdated(text) => self.parent_view_state.search_text = text,
+            DbColViewMessage::SearchFieldUpdated(text) => {
+                state.parent_view_state.search_text = text
+            }
             DbColViewMessage::Selected(parent) => {
-                self.parent_view_state.set_selected(parent);
-                self.update_children(db)?;
-                self.update_role(db)?;
+                state.parent_view_state.set_selected(parent);
+                state.update_children(&self.lore_database)?;
+                state.update_role(&self.lore_database)?;
             }
         };
         Ok(())
@@ -22,21 +24,23 @@ impl RelationshipViewState {
 
     pub(super) fn update_child_view(
         &mut self,
-        message: DbColViewMessage,
-        db: &Option<LoreDatabase>,
+        event: DbColViewMessage,
     ) -> Result<(), LoreTexError> {
-        match message {
+        let state = &mut self.relationship_view_state;
+        match event {
             DbColViewMessage::New => (),
-            DbColViewMessage::SearchFieldUpdated(text) => self.child_view_state.search_text = text,
+            DbColViewMessage::SearchFieldUpdated(text) => state.child_view_state.search_text = text,
             DbColViewMessage::Selected(child) => {
-                self.child_view_state.set_selected(child);
-                self.update_parents(db)?;
-                self.update_role(db)?;
+                state.child_view_state.set_selected(child);
+                state.update_parents(&self.lore_database)?;
+                state.update_role(&self.lore_database)?;
             }
         };
         Ok(())
     }
+}
 
+impl RelationshipViewState {
     pub(super) fn reset(&mut self, db: &Option<LoreDatabase>) -> Result<(), LoreTexError> {
         self.reset_selections();
         self.update_parents(db)?;

@@ -1,11 +1,50 @@
+use super::SqlGui;
 use crate::gui::{
     db_col_view::{state::DbColViewState, DbColViewMessage},
+    dialog::Dialog,
     entity_view::EntityViewState,
 };
 use loretex::{
     errors::LoreTexError,
     sql::{entity::EntityColumn, lore_database::LoreDatabase},
 };
+
+impl SqlGui {
+    pub(super) fn update_label_view(
+        &mut self,
+        event: DbColViewMessage,
+    ) -> Result<(), LoreTexError> {
+        let state = &mut self.entity_view_state;
+        match event {
+            DbColViewMessage::New => self.dialog = Some(Dialog::new_entity()),
+            DbColViewMessage::SearchFieldUpdated(text) => state.label_view_state.search_text = text,
+            DbColViewMessage::Selected(label) => {
+                state.label_view_state.set_selected(label);
+                state.descriptor_view_state.set_selected_none();
+                state.update_descriptors(&self.lore_database)?;
+            }
+        };
+        Ok(())
+    }
+
+    pub(super) fn update_descriptor_view(
+        &mut self,
+        event: DbColViewMessage,
+    ) -> Result<(), LoreTexError> {
+        let state = &mut self.entity_view_state;
+        match event {
+            DbColViewMessage::New => (),
+            DbColViewMessage::SearchFieldUpdated(text) => {
+                state.descriptor_view_state.search_text = text
+            }
+            DbColViewMessage::Selected(descriptor) => {
+                state.descriptor_view_state.set_selected(descriptor);
+                state.update_description(&self.lore_database)?;
+            }
+        };
+        Ok(())
+    }
+}
 
 impl EntityViewState {
     pub(super) fn reset(&mut self, db: &Option<LoreDatabase>) -> Result<(), LoreTexError> {
@@ -62,41 +101,6 @@ impl EntityViewState {
             Some(db) => self.current_description = db.get_description(label, descriptor)?,
             None => self.current_description = String::new(),
         }
-        Ok(())
-    }
-
-    pub(super) fn update_label_view(
-        &mut self,
-        message: DbColViewMessage,
-        db: &Option<LoreDatabase>,
-    ) -> Result<(), LoreTexError> {
-        match message {
-            DbColViewMessage::New => self.new_entity(db)?,
-            DbColViewMessage::SearchFieldUpdated(text) => self.label_view_state.search_text = text,
-            DbColViewMessage::Selected(label) => {
-                self.label_view_state.set_selected(label);
-                self.descriptor_view_state.set_selected_none();
-                self.update_descriptors(db)?;
-            }
-        };
-        Ok(())
-    }
-
-    pub(super) fn update_descriptor_view(
-        &mut self,
-        message: DbColViewMessage,
-        db: &Option<LoreDatabase>,
-    ) -> Result<(), LoreTexError> {
-        match message {
-            DbColViewMessage::New => self.new_descriptor(db)?,
-            DbColViewMessage::SearchFieldUpdated(text) => {
-                self.descriptor_view_state.search_text = text
-            }
-            DbColViewMessage::Selected(descriptor) => {
-                self.descriptor_view_state.set_selected(descriptor);
-                self.update_description(db)?;
-            }
-        };
         Ok(())
     }
 

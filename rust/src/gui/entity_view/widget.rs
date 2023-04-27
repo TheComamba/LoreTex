@@ -50,7 +50,7 @@ impl<'a> Component<GuiMessage, Renderer> for EntityView<'a> {
 
 impl<'a> EntityView<'a> {
     fn new_entity_msg(&self) -> Option<DbColViewMessage> {
-        if self.lore_database.is_some() && !self.state.label_view_state.search_text.is_empty() {
+        if self.lore_database.is_some() {
             Some(DbColViewMessage::New)
         } else {
             None
@@ -69,7 +69,7 @@ impl<'a> EntityView<'a> {
 
     fn label_button_infos(&self) -> Vec<(String, Option<DbColViewMessage>)> {
         vec![
-            ("New Entity", self.new_entity_msg()),
+            ("New Entity Label", self.new_entity_msg()),
             ("Delete Entity", None),
             ("Relabel Entity", None),
         ]

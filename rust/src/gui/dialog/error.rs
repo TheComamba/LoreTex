@@ -6,12 +6,17 @@ use loretex::errors::LoreTexError;
 impl Dialog {
     pub(crate) fn error(error: LoreTexError) -> Self {
         Dialog {
-            dialog_type: DialogType::Error { error },
+            dialog_type: DialogType::Error(ErrorState { error }),
             header: "Error".to_string(),
         }
     }
 
-    pub(super) fn error_content<'a>(&self, error: &LoreTexError) -> Element<'a, GuiMes> {
-        Text::new(error.to_string()).into()
+    pub(super) fn error_content<'a>(&self, state: &ErrorState) -> Element<'a, GuiMes> {
+        Text::new(state.error.to_string()).into()
     }
+}
+
+#[derive(Debug, Clone)]
+pub(crate) struct ErrorState {
+    error: LoreTexError,
 }

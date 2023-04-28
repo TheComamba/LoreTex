@@ -1,12 +1,13 @@
-use self::new_entity::NewEntityMes;
+use self::{
+    error::ErrorState,
+    new_entity::{NewEntityMes, NewEntityState},
+};
+use super::app::{message_handling::GuiMes, SqlGui};
 use iced::{
     widget::{Container, Scrollable, Text},
     Element, Renderer,
 };
 use iced_aw::{style::CardStyles, Card};
-use loretex::errors::LoreTexError;
-
-use super::app::{message_handling::GuiMes, SqlGui};
 
 mod error;
 mod new_entity;
@@ -28,8 +29,8 @@ impl SqlGui {
 impl Dialog {
     fn content<'a>(&self) -> Element<'a, GuiMes> {
         match &self.dialog_type {
-            DialogType::NewEntity { label, ent_type } => self.new_entity_content(label, ent_type),
-            DialogType::Error { error } => self.error_content(error),
+            DialogType::NewEntity(state) => self.new_entity_content(state),
+            DialogType::Error(state) => self.error_content(state),
         }
     }
 }
@@ -42,7 +43,7 @@ impl<'a> From<Dialog> for Element<'a, GuiMes> {
             Card::new::<Element<'a, GuiMes>, Element<'a, GuiMes>>(header.into(), content.into())
                 .on_close(GuiMes::DialogClosed);
         match dialog.dialog_type {
-            DialogType::Error { error: _ } => {
+            DialogType::Error(_) => {
                 card = card.style(CardStyles::Danger);
             }
             _ => {
@@ -55,8 +56,8 @@ impl<'a> From<Dialog> for Element<'a, GuiMes> {
 
 #[derive(Clone)]
 pub(crate) enum DialogType {
-    NewEntity { label: String, ent_type: String },
-    Error { error: LoreTexError },
+    NewEntity(NewEntityState),
+    Error(ErrorState),
 }
 
 #[derive(Debug, Clone)]

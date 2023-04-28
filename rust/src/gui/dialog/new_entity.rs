@@ -1,9 +1,10 @@
-use super::{Dialog, DialogMes, DialogType};
+use super::{Dialog, DialogType};
 use crate::gui::app::{message_handling::GuiMes, SqlGui};
 use iced::{
     widget::{Button, Column, Text, TextInput},
-    Element,
+    Element, Renderer,
 };
+use iced_lazy::{component, Component};
 
 impl SqlGui {
     pub(super) fn update_new_entity_dialog(&mut self, event: NewEntityMes) {
@@ -18,22 +19,38 @@ impl SqlGui {
 impl Dialog {
     pub(crate) fn new_entity() -> Self {
         Dialog {
-            dialog_type: DialogType::NewEntity(NewEntityState {
+            dialog_type: DialogType::NewEntity(NewEntityDialog {
                 label: "".to_string(),
                 ent_type: "".to_string(),
             }),
             header: "Create new Entity".to_string(),
         }
     }
+}
 
-    pub(super) fn new_entity_content<'a>(&self, state: &NewEntityState) -> Element<'a, GuiMes> {
-        let label_input = TextInput::new("", &state.label)
-            .on_input(|str| GuiMes::DialogUpd(DialogMes::NewEntity(NewEntityMes::LabelUpd(str))));
-        let type_input = TextInput::new("", &state.ent_type)
-            .on_input(|str| GuiMes::DialogUpd(DialogMes::NewEntity(NewEntityMes::TypeUpd(str))));
-        let submit_button = Button::new(Text::new("Create")).on_press(GuiMes::DialogUpd(
-            DialogMes::NewEntity(NewEntityMes::Submit),
-        ));
+impl Component<GuiMes, Renderer> for NewEntityDialog {
+    type State = ();
+
+    type Event = NewEntityMes;
+
+    fn update(&mut self, _state: &mut Self::State, event: Self::Event) -> Option<GuiMes> {
+        match event {
+            NewEntityMes::LabelUpd(label) => {
+                self.label = label;
+                None
+            }
+            NewEntityMes::TypeUpd(ent_type) => {
+                self.ent_type = ent_type;
+                None
+            }
+            NewEntityMes::Submit => Some(GuiMes::DialogClosed),
+        }
+    }
+
+    fn view(&self, _state: &Self::State) -> Element<'_, Self::Event, Renderer> {
+        let label_input = TextInput::new("", &self.label).on_input(NewEntityMes::LabelUpd);
+        let type_input = TextInput::new("", &self.ent_type).on_input(NewEntityMes::TypeUpd);
+        let submit_button = Button::new(Text::new("Create")).on_press(NewEntityMes::Submit);
         Column::new()
             .push(Text::new("Label:"))
             .push(label_input)
@@ -47,18 +64,14 @@ impl Dialog {
 }
 
 #[derive(Debug, Clone)]
-pub(crate) struct NewEntityState {
+pub(crate) struct NewEntityDialog {
     label: String,
     ent_type: String,
 }
 
-impl NewEntityState {
-    fn set_label(&mut self, label: String) {
-        self.label = label;
-    }
-
-    fn set_type(&mut self, ent_type: String) {
-        self.ent_type = ent_type;
+impl<'a> From<NewEntityDialog> for Element<'a, GuiMes> {
+    fn from(dialog: NewEntityDialog) -> Self {
+        component(dialog)
     }
 }
 

@@ -1,6 +1,6 @@
 use self::{
-    error::ErrorState,
-    new_entity::{NewEntityMes, NewEntityState},
+    error::ErrorDialog,
+    new_entity::{NewEntityDialog, NewEntityMes},
 };
 use super::app::{message_handling::GuiMes, SqlGui};
 use iced::{
@@ -27,10 +27,10 @@ impl SqlGui {
 }
 
 impl Dialog {
-    fn content<'a>(&self) -> Element<'a, GuiMes> {
-        match &self.dialog_type {
-            DialogType::NewEntity(state) => self.new_entity_content(state),
-            DialogType::Error(state) => self.error_content(state),
+    fn widget<'a>(self) -> Element<'a, GuiMes> {
+        match self.dialog_type {
+            DialogType::NewEntity(dialog) => dialog.into(),
+            DialogType::Error(dialog) => dialog.into(),
         }
     }
 }
@@ -38,11 +38,12 @@ impl Dialog {
 impl<'a> From<Dialog> for Element<'a, GuiMes> {
     fn from(dialog: Dialog) -> Self {
         let header: Text<'a, Renderer> = Text::new(dialog.header.clone());
-        let content = dialog.content();
+        let dialog_type = dialog.dialog_type.clone();
+        let content = dialog.widget();
         let mut card =
             Card::new::<Element<'a, GuiMes>, Element<'a, GuiMes>>(header.into(), content.into())
                 .on_close(GuiMes::DialogClosed);
-        match dialog.dialog_type {
+        match dialog_type {
             DialogType::Error(_) => {
                 card = card.style(CardStyles::Danger);
             }
@@ -56,8 +57,8 @@ impl<'a> From<Dialog> for Element<'a, GuiMes> {
 
 #[derive(Clone)]
 pub(crate) enum DialogType {
-    NewEntity(NewEntityState),
-    Error(ErrorState),
+    NewEntity(NewEntityDialog),
+    Error(ErrorDialog),
 }
 
 #[derive(Debug, Clone)]

@@ -1,0 +1,126 @@
+thread 'main' panicked at 'called `Option::unwrap()` on a `None` value', /home/simon/.cargo/registry/src/github.com-1ecc6299db9ec823/iced_lazy-0.6.1/src/component.rs:139:38
+stack backtrace:
+   0:     0x5567407cc5ca - std::backtrace_rs::backtrace::libunwind::trace::ha271a8a7e1f3d4ef
+                               at /rustc/9eb3afe9ebe9c7d2b84b71002d44f4a0edac95e0/library/std/src/../../backtrace/src/backtrace/libunwind.rs:93:5
+   1:     0x5567407cc5ca - std::backtrace_rs::backtrace::trace_unsynchronized::h85739da0352c791a
+                               at /rustc/9eb3afe9ebe9c7d2b84b71002d44f4a0edac95e0/library/std/src/../../backtrace/src/backtrace/mod.rs:66:5
+   2:     0x5567407cc5ca - std::sys_common::backtrace::_print_fmt::hbc6ebcfb2910b329
+                               at /rustc/9eb3afe9ebe9c7d2b84b71002d44f4a0edac95e0/library/std/src/sys_common/backtrace.rs:65:5
+   3:     0x5567407cc5ca - <std::sys_common::backtrace::_print::DisplayBacktrace as core::fmt::Display>::fmt::he1c117e52d53614f
+                               at /rustc/9eb3afe9ebe9c7d2b84b71002d44f4a0edac95e0/library/std/src/sys_common/backtrace.rs:44:22
+   4:     0x5567407eeffe - core::fmt::write::h25eb51b9526b8e0c
+                               at /rustc/9eb3afe9ebe9c7d2b84b71002d44f4a0edac95e0/library/core/src/fmt/mod.rs:1213:17
+   5:     0x5567407c8815 - std::io::Write::write_fmt::ha9edec5fb1621933
+                               at /rustc/9eb3afe9ebe9c7d2b84b71002d44f4a0edac95e0/library/std/src/io/mod.rs:1682:15
+   6:     0x5567407cc395 - std::sys_common::backtrace::_print::hf8657cd429fc3452
+                               at /rustc/9eb3afe9ebe9c7d2b84b71002d44f4a0edac95e0/library/std/src/sys_common/backtrace.rs:47:5
+   7:     0x5567407cc395 - std::sys_common::backtrace::print::h41b9b18ed86f86bd
+                               at /rustc/9eb3afe9ebe9c7d2b84b71002d44f4a0edac95e0/library/std/src/sys_common/backtrace.rs:34:9
+   8:     0x5567407cdb7f - std::panicking::default_hook::{{closure}}::h22a91871f4454152
+                               at /rustc/9eb3afe9ebe9c7d2b84b71002d44f4a0edac95e0/library/std/src/panicking.rs:267:22
+   9:     0x5567407cd8bb - std::panicking::default_hook::h21ddc36de0cd4ae7
+                               at /rustc/9eb3afe9ebe9c7d2b84b71002d44f4a0edac95e0/library/std/src/panicking.rs:286:9
+  10:     0x5567407ce289 - std::panicking::rust_panic_with_hook::h5059419d6d59b3d0
+                               at /rustc/9eb3afe9ebe9c7d2b84b71002d44f4a0edac95e0/library/std/src/panicking.rs:688:13
+  11:     0x5567407cdfe2 - std::panicking::begin_panic_handler::{{closure}}::h0f383c291cd78343
+                               at /rustc/9eb3afe9ebe9c7d2b84b71002d44f4a0edac95e0/library/std/src/panicking.rs:577:13
+  12:     0x5567407cca7c - std::sys_common::backtrace::__rust_end_short_backtrace::h70ab22f2ad318cdd
+                               at /rustc/9eb3afe9ebe9c7d2b84b71002d44f4a0edac95e0/library/std/src/sys_common/backtrace.rs:137:18
+  13:     0x5567407cdd32 - rust_begin_unwind
+                               at /rustc/9eb3afe9ebe9c7d2b84b71002d44f4a0edac95e0/library/std/src/panicking.rs:575:5
+  14:     0x55673f4c39b3 - core::panicking::panic_fmt::hd1d46bcde3c61d72
+                               at /rustc/9eb3afe9ebe9c7d2b84b71002d44f4a0edac95e0/library/core/src/panicking.rs:64:14
+  15:     0x55673f4c3a4d - core::panicking::panic::h056c466ab4571cf2
+                               at /rustc/9eb3afe9ebe9c7d2b84b71002d44f4a0edac95e0/library/core/src/panicking.rs:114:5
+  16:     0x55673f51cb20 - core::option::Option<T>::unwrap::hce75f3f1f431b1e5
+                               at /rustc/9eb3afe9ebe9c7d2b84b71002d44f4a0edac95e0/library/core/src/option.rs:823:21
+  17:     0x55673f5b051c - iced_lazy::component::Instance<Message,Renderer,Event,S>::rebuild_element_if_necessary::{{closure}}::hbfcfb0653513d959
+                               at /home/simon/.cargo/registry/src/github.com-1ecc6299db9ec823/iced_lazy-0.6.1/src/component.rs:135:33
+  18:     0x55673f567251 - iced_lazy::component::ouroboros_impl_state::State<Message,Renderer,Event,S>::new::hc714fb5b19ffefed
+                               at /home/simon/.cargo/registry/src/github.com-1ecc6299db9ec823/iced_lazy-0.6.1/src/component.rs:94:1
+  19:     0x55673f567f3b - iced_lazy::component::ouroboros_impl_state::StateBuilder<Message,Renderer,Event,S,ElementBuilder_>::build::hb00b8040cfcd8808
+                               at /home/simon/.cargo/registry/src/github.com-1ecc6299db9ec823/iced_lazy-0.6.1/src/component.rs:94:1
+  20:     0x55673f5af04d - iced_lazy::component::Instance<Message,Renderer,Event,S>::rebuild_element_if_necessary::h14a3af5dcf24a4ea
+                               at /home/simon/.cargo/registry/src/github.com-1ecc6299db9ec823/iced_lazy-0.6.1/src/component.rs:128:17
+  21:     0x55673f5ab390 - iced_lazy::component::Instance<Message,Renderer,Event,S>::with_element_mut::h440f99339ac3feaf
+                               at /home/simon/.cargo/registry/src/github.com-1ecc6299db9ec823/iced_lazy-0.6.1/src/component.rs:206:9
+  22:     0x55673f5aa10e - iced_lazy::component::Instance<Message,Renderer,Event,S>::with_element::h4536fc90b6cee1c5
+                               at /home/simon/.cargo/registry/src/github.com-1ecc6299db9ec823/iced_lazy-0.6.1/src/component.rs:199:9
+  23:     0x55673f5a0f6e - <iced_lazy::component::Instance<Message,Renderer,Event,S> as iced_native::widget::Widget<Message,Renderer>>::height::h8134e9dc7402bd86
+                               at /home/simon/.cargo/registry/src/github.com-1ecc6299db9ec823/iced_lazy-0.6.1/src/component.rs:250:9
+  24:     0x55673f557686 - iced_aw::native::card::body_node::hcc9f99c9900802f2
+                               at /home/simon/.cargo/registry/src/github.com-1ecc6299db9ec823/iced_aw-0.5.0/src/native/card.rs:602:17
+  25:     0x55673f555df4 - <iced_aw::native::card::Card<Message,Renderer> as iced_native::widget::Widget<Message,Renderer>>::layout::h8797108b7bead0dd
+                               at /home/simon/.cargo/registry/src/github.com-1ecc6299db9ec823/iced_aw-0.5.0/src/native/card.rs:258:29
+  26:     0x55673f4da45b - <iced_native::widget::scrollable::Scrollable<Message,Renderer> as iced_native::widget::Widget<Message,Renderer>>::layout::{{closure}}::h0752833c08003806
+                               at /home/simon/.cargo/registry/src/github.com-1ecc6299db9ec823/iced_native-0.10.3/src/widget/scrollable.rs:203:17
+  27:     0x55673f4d68d7 - iced_native::widget::scrollable::layout::hd6ce882e95708461
+                               at /home/simon/.cargo/registry/src/github.com-1ecc6299db9ec823/iced_native-0.10.3/src/widget/scrollable.rs:422:19
+  28:     0x55673f4da35a - <iced_native::widget::scrollable::Scrollable<Message,Renderer> as iced_native::widget::Widget<Message,Renderer>>::layout::h7e203f727f0a9b88
+                               at /home/simon/.cargo/registry/src/github.com-1ecc6299db9ec823/iced_native-0.10.3/src/widget/scrollable.rs:196:9
+  29:     0x55673f53683b - <iced_native::widget::container::Container<Message,Renderer> as iced_native::widget::Widget<Message,Renderer>>::layout::{{closure}}::h824cd699fe2be73d
+                               at /home/simon/.cargo/registry/src/github.com-1ecc6299db9ec823/iced_native-0.10.3/src/widget/container.rs:169:17
+  30:     0x55673f535b9f - iced_native::widget::container::layout::he97e8412aab77e7f
+                               at /home/simon/.cargo/registry/src/github.com-1ecc6299db9ec823/iced_native-0.10.3/src/widget/container.rs:309:23
+  31:     0x55673f5367df - <iced_native::widget::container::Container<Message,Renderer> as iced_native::widget::Widget<Message,Renderer>>::layout::hed011c7faa2bcc7c
+                               at /home/simon/.cargo/registry/src/github.com-1ecc6299db9ec823/iced_native-0.10.3/src/widget/container.rs:158:9
+  32:     0x55673f539ae8 - <iced_aw::native::overlay::modal::ModalOverlay<Message,Renderer> as iced_native::overlay::Overlay<Message,Renderer>>::layout::h52f23a2b7825b61e
+                               at /home/simon/.cargo/registry/src/github.com-1ecc6299db9ec823/iced_aw-0.5.0/src/native/overlay/modal.rs:81:27
+  33:     0x55673f5858db - iced_native::overlay::element::Element<Message,Renderer>::layout::h1314e661e8a74bc4
+                               at /home/simon/.cargo/registry/src/github.com-1ecc6299db9ec823/iced_native-0.10.3/src/overlay/element.rs:62:9
+  34:     0x55673f4cdbc2 - iced_native::user_interface::UserInterface<Message,Renderer>::update::h9333695c6c7bd823
+                               at /home/simon/.cargo/registry/src/github.com-1ecc6299db9ec823/iced_native-0.10.3/src/user_interface.rs:208:30
+  35:     0x55673f545cbe - iced_winit::application::run_instance::{{closure}}::haed9ce984ebbb90d
+                               at /home/simon/.cargo/registry/src/github.com-1ecc6299db9ec823/iced_winit-0.9.1/src/application.rs:424:44
+  36:     0x55673f5481f7 - iced_winit::application::run::{{closure}}::h6406029e57455e0b
+                               at /home/simon/.cargo/registry/src/github.com-1ecc6299db9ec823/iced_winit-0.9.1/src/application.rs:251:24
+  37:     0x55673f5727e5 - winit::platform_impl::platform::sticky_exit_callback::hc0b9811a4e6d969b
+                               at /home/simon/.cargo/registry/src/github.com-1ecc6299db9ec823/winit-0.27.5/src/platform_impl/linux/mod.rs:849:9
+  38:     0x55673f5ed47c - winit::platform_impl::platform::x11::EventLoop<T>::run_return::single_iteration::h7304bd82f95a6abf
+                               at /home/simon/.cargo/registry/src/github.com-1ecc6299db9ec823/winit-0.27.5/src/platform_impl/linux/x11/mod.rs:363:17
+  39:     0x55673f5ee006 - winit::platform_impl::platform::x11::EventLoop<T>::run_return::hd32a11eac1df4fc8
+                               at /home/simon/.cargo/registry/src/github.com-1ecc6299db9ec823/winit-0.27.5/src/platform_impl/linux/x11/mod.rs:488:27
+  40:     0x55673f571c3d - winit::platform_impl::platform::EventLoop<T>::run_return::he869fb90bcc2ba69
+                               at /home/simon/.cargo/registry/src/github.com-1ecc6299db9ec823/winit-0.27.5/src/platform_impl/linux/mod.rs:748:56
+  41:     0x55673f5591b3 - <winit::event_loop::EventLoop<T> as winit::platform::run_return::EventLoopExtRunReturn>::run_return::h7b729d8e201aa583
+                               at /home/simon/.cargo/registry/src/github.com-1ecc6299db9ec823/winit-0.27.5/src/platform/run_return.rs:62:9
+  42:     0x55673f56a096 - iced_winit::application::platform::run::hf93b99fcb383469c
+                               at /home/simon/.cargo/registry/src/github.com-1ecc6299db9ec823/iced_winit-0.9.1/src/application.rs:870:17
+  43:     0x55673f547cb9 - iced_winit::application::run::h236fedf19c4e08ed
+                               at /home/simon/.cargo/registry/src/github.com-1ecc6299db9ec823/iced_winit-0.9.1/src/application.rs:226:5
+  44:     0x55673f4cf7a0 - iced::application::Application::run::h85f4e5f8a3104f23
+                               at /home/simon/.cargo/registry/src/github.com-1ecc6299db9ec823/iced-0.9.0/src/application.rs:209:12
+  45:     0x55673f4cfa8d - iced::sandbox::Sandbox::run::h7928b3836510ce5e
+                               at /home/simon/.cargo/registry/src/github.com-1ecc6299db9ec823/iced-0.9.0/src/sandbox.rs:153:9
+  46:     0x55673f5303c8 - loretex::main::h61f4a5576f2f1b20
+                               at /home/simon/git/LoreTex/rust/src/main.rs:9:5
+  47:     0x55673f613502 - core::ops::function::FnOnce::call_once::h13ac5e170909341f
+                               at /rustc/9eb3afe9ebe9c7d2b84b71002d44f4a0edac95e0/library/core/src/ops/function.rs:250:5
+  48:     0x55673f50db65 - std::sys_common::backtrace::__rust_begin_short_backtrace::hcd9ed7a497686fa0
+                               at /rustc/9eb3afe9ebe9c7d2b84b71002d44f4a0edac95e0/library/std/src/sys_common/backtrace.rs:121:18
+  49:     0x55673f59c686 - std::rt::lang_start::{{closure}}::h199a34c2ec776b99
+                               at /rustc/9eb3afe9ebe9c7d2b84b71002d44f4a0edac95e0/library/std/src/rt.rs:166:18
+  50:     0x5567407c3cfc - core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once::h203afb3af230319a
+                               at /rustc/9eb3afe9ebe9c7d2b84b71002d44f4a0edac95e0/library/core/src/ops/function.rs:287:13
+  51:     0x5567407c3cfc - std::panicking::try::do_call::hf68e87013b70f3c5
+                               at /rustc/9eb3afe9ebe9c7d2b84b71002d44f4a0edac95e0/library/std/src/panicking.rs:483:40
+  52:     0x5567407c3cfc - std::panicking::try::h040ea8f298390ba2
+                               at /rustc/9eb3afe9ebe9c7d2b84b71002d44f4a0edac95e0/library/std/src/panicking.rs:447:19
+  53:     0x5567407c3cfc - std::panic::catch_unwind::h1e17b198887a05fa
+                               at /rustc/9eb3afe9ebe9c7d2b84b71002d44f4a0edac95e0/library/std/src/panic.rs:140:14
+  54:     0x5567407c3cfc - std::rt::lang_start_internal::{{closure}}::hfb902d8927e51b86
+                               at /rustc/9eb3afe9ebe9c7d2b84b71002d44f4a0edac95e0/library/std/src/rt.rs:148:48
+  55:     0x5567407c3cfc - std::panicking::try::do_call::h354e6eb41f2e7d42
+                               at /rustc/9eb3afe9ebe9c7d2b84b71002d44f4a0edac95e0/library/std/src/panicking.rs:483:40
+  56:     0x5567407c3cfc - std::panicking::try::h4a39749cd018228c
+                               at /rustc/9eb3afe9ebe9c7d2b84b71002d44f4a0edac95e0/library/std/src/panicking.rs:447:19
+  57:     0x5567407c3cfc - std::panic::catch_unwind::h30bce83b8de61cca
+                               at /rustc/9eb3afe9ebe9c7d2b84b71002d44f4a0edac95e0/library/std/src/panic.rs:140:14
+  58:     0x5567407c3cfc - std::rt::lang_start_internal::h8f7e70b1a2558118
+                               at /rustc/9eb3afe9ebe9c7d2b84b71002d44f4a0edac95e0/library/std/src/rt.rs:148:20
+  59:     0x55673f59c65a - std::rt::lang_start::he179fa4f35b85a74
+                               at /rustc/9eb3afe9ebe9c7d2b84b71002d44f4a0edac95e0/library/std/src/rt.rs:165:17
+  60:     0x55673f5303fe - main
+  61:     0x7f8c338c9d0a - __libc_start_main
+  62:     0x55673f4c404a - _start
+  63:                0x0 - <unknown>

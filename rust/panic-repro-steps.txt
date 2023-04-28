@@ -1,0 +1,1 @@
+cargo run, click on "New Entity Label" button (down left).

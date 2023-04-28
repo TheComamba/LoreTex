@@ -1,20 +1,10 @@
 use super::{Dialog, DialogType};
-use crate::gui::app::{message_handling::GuiMes, SqlGui};
+use crate::gui::app::message_handling::GuiMes;
 use iced::{
     widget::{Button, Column, Text, TextInput},
     Element, Renderer,
 };
 use iced_lazy::{component, Component};
-
-impl SqlGui {
-    pub(super) fn update_new_entity_dialog(&mut self, event: NewEntityMes) {
-        match event {
-            NewEntityMes::LabelUpd(str) => self.dialog = Some(Dialog::new_entity()),
-            NewEntityMes::TypeUpd(str) => self.dialog = Some(Dialog::new_entity()),
-            NewEntityMes::Submit => self.dialog = None,
-        };
-    }
-}
 
 impl Dialog {
     pub(crate) fn new_entity() -> Self {

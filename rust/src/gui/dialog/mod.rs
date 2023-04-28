@@ -1,8 +1,5 @@
-use self::{
-    error::ErrorDialog,
-    new_entity::{NewEntityDialog, NewEntityMes},
-};
-use super::app::{message_handling::GuiMes, SqlGui};
+use self::{error::ErrorDialog, new_entity::NewEntityDialog};
+use super::app::message_handling::GuiMes;
 use iced::{
     widget::{Container, Scrollable, Text},
     Element, Renderer,
@@ -18,16 +15,8 @@ pub(crate) struct Dialog {
     header: String,
 }
 
-impl SqlGui {
-    pub(crate) fn update_dialog(&mut self, event: DialogMes) {
-        match event {
-            DialogMes::NewEntity(event) => self.update_new_entity_dialog(event),
-        }
-    }
-}
-
 impl Dialog {
-    fn widget<'a>(self) -> Element<'a, GuiMes> {
+    fn body<'a>(self) -> Element<'a, GuiMes> {
         match self.dialog_type {
             DialogType::NewEntity(dialog) => dialog.into(),
             DialogType::Error(dialog) => dialog.into(),
@@ -39,9 +28,9 @@ impl<'a> From<Dialog> for Element<'a, GuiMes> {
     fn from(dialog: Dialog) -> Self {
         let header: Text<'a, Renderer> = Text::new(dialog.header.clone());
         let dialog_type = dialog.dialog_type.clone();
-        let content = dialog.widget();
+        let body = dialog.body();
         let mut card =
-            Card::new::<Element<'a, GuiMes>, Element<'a, GuiMes>>(header.into(), content.into())
+            Card::new::<Element<'a, GuiMes>, Element<'a, GuiMes>>(header.into(), body.into())
                 .on_close(GuiMes::DialogClosed);
         match dialog_type {
             DialogType::Error(_) => {
@@ -59,9 +48,4 @@ impl<'a> From<Dialog> for Element<'a, GuiMes> {
 pub(crate) enum DialogType {
     NewEntity(NewEntityDialog),
     Error(ErrorDialog),
-}
-
-#[derive(Debug, Clone)]
-pub(crate) enum DialogMes {
-    NewEntity(NewEntityMes),
 }

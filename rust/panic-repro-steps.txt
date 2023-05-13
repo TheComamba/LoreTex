@@ -1,3 +1,0 @@
-git checkout 408ea0d34f8e415ce075891da0decd53966f9798
-cargo run
-[click on "New Entity Label" button (down left).]

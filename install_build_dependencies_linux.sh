@@ -4,7 +4,7 @@ set -e
 if ! command -v lualatex &> /dev/null
 then
     echo "Installing lualatex"
-    sudo apt-get install lualatex
+    sudo apt-get install texlive-lualatex
 fi
 
 url=$(<required_lorecore_release.txt)

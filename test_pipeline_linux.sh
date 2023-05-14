@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 ./install_build_dependencies_linux.sh
 

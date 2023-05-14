@@ -1,9 +1,10 @@
 #!/bin/bash
+set -e
 
 if ! command -v lualatex &> /dev/null
 then
     echo "Installing lualatex"
-    sudo aptitude install lualatex
+    sudo brew install lualatex
 fi
 
 url=$(<required_lorecore_release.txt)

@@ -1,5 +1,7 @@
 echo off
 
+.\install_build_dependencies_windows.bat || goto :error
+
 cd tests
 echo "Running tests..."
 lualatex --interaction=batchmode --shell-escape run_tests.tex || goto :error

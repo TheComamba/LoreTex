@@ -1,5 +1,7 @@
 #!/bin/bash
 
+./install_build_dependencies_macos.sh
+
 cd tests
 echo "Running tests..."
 lualatex --interaction=batchmode --shell-escape run_tests.tex

@@ -5,10 +5,12 @@ echo "Running tests..."
 lualatex --interaction=batchmode --shell-escape run_tests.tex || goto :error
 cd ..
 
-cd tutorials
-echo "Compiling tutorials..."
-compile_all.bat || goto :error
-cd ..
+for folder in examples tutorials; do
+    cd $folder
+    echo "Compiling $folder..."
+    compile_all.bat || goto :error
+    cd ..
+done
 
 exit 0
 :error

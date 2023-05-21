@@ -12,7 +12,7 @@ jobs:
         run: ./install_dependencies_linux.sh
 
       - name: Run Tests
-        run: ./test_linux.sh
+        run: ./run_tests.sh
 
   windows:
     runs-on: windows-latest
@@ -23,7 +23,7 @@ jobs:
         run: .\install_dependencies_windows.bat
 
       - name: Run Tests
-        run: .\test_windows.bat
+        run: .\run_tests.bat
 
   macOS:
     runs-on: ubuntu-latest
@@ -34,4 +34,4 @@ jobs:
         run: ./install_dependencies_macos.sh
 
       - name: Run Tests
-        run: ./test_macos.sh
+        run: ./run_tests.sh

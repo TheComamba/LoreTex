@@ -4,7 +4,7 @@ set -e
 if ! command -v lualatex &> /dev/null
 then
     echo "Installing lualatex"
-    sudo port install texlive-lualatex
+    brew install texlive-full
 fi
 
 url=$(<required_lorecore_release.txt)

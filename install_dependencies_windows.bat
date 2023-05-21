@@ -2,7 +2,7 @@ echo off
 
 if not exist "C:\texlive\2019\bin\win32\lualatex.exe" (
     echo "Installing lualatex..."
-    tlmgr install luatex || goto :error
+    choco install texlive || goto :error
 )
 
 set /p url=<required_lorecore_release.txt

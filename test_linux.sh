@@ -1,8 +1,6 @@
 #!/bin/bash
 set -e
 
-./install_build_dependencies_linux.sh
-
 cd tests
 echo "Running tests..."
 lualatex --interaction=batchmode --shell-escape run_tests.tex

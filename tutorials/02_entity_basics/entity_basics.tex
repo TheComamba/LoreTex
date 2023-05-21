@@ -16,22 +16,22 @@ The command to declare an entity is:
 \end{verbatim}
 For example, we could create an item called \reference{sting} using:
 \begin{verbatim}
-	\newEntity{items}{sting}{}{Sting}
+	\newEntity{other}{sting}{}{Sting}
 \end{verbatim}
-\newEntity{items}{sting}{}{Sting}
+\newEntity{other}{sting}{}{Sting}
 If \reference{sting} is important to our story, we can refer to it using the reference command, with the label as the argument. If you have a look at the code of this document, you will notice that it is possible to refer to \reference{sting} even before it has been created as an entity.
 
 We could create another, less important item called \mention{glamdring}:
 \begin{verbatim}
-	\newEntity{items}{glamdring}{}{Glamdring}
+	\newEntity{other}{glamdring}{}{Glamdring}
 \end{verbatim}
-\newEntity{items}{glamdring}{}{Glamdring}
+\newEntity{other}{glamdring}{}{Glamdring}
 If we don't want \mention{glamdring} to get its own entry, we can refer to it using the mention command. \LoreTex{} will then create a chapter called Only Mentioned and list it there.
 
 If you want an entity to have an entry without printing its name, use the makeEntityPrimary command instead.
 \makeEntityPrimary{nenya}
 
-\newEntity{items}{nenya}{}{Nenya}
+\newEntity{other}{nenya}{}{Nenya}
 
 Now all that's left is to call:
 \begin{verbatim}

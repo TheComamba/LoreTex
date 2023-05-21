@@ -18,10 +18,10 @@ See the installation section of README.md on how to do that.
 end
 
 local function getCHeader()
-    local headerPath = RelativePath .. [[../rust/loretex_api.h]]
+    local headerPath = RelativePath .. [[../dependencies/lorecore_api.h]]
     local file = io.open(headerPath, "r")
     if not file then
-        LogError("Cannot load header file.")
+        LogError("Cannot load header file at " .. headerPath .. ".")
         return nil
     end
     local content = file:read "*all"
@@ -37,7 +37,7 @@ local function getLib()
     if not header then return nil end
     ffi.cdef(header)
 
-    local libPath = RelativePath .. [[../rust/target/debug/libloretex.so]]
+    local libPath = RelativePath .. [[../dependencies/liblorecore.so]]
     local rustLib = ffi.load(libPath)
     if not rustLib then
         LogError("Cannot load rust library.")

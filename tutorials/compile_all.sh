@@ -4,6 +4,7 @@ for dir in */ ; do
 	echo Entering folder "$dir"...
     cd "$dir"
     for file in *.tex ; do
+		echo ""
 		echo Compiling "$file"...
         lualatex --interaction=batchmode --shell-escape "$file"
 

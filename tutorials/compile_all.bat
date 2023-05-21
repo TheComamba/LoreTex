@@ -4,6 +4,7 @@ FOR /D %%d IN (*) DO (
 	echo Entering folder %%d...
 	cd %%d
 	FOR %%f IN ( *.tex ) DO (
+		echo ""
 		echo Compiling %%f...
 		lualatex --interaction=batchmode --shell-escape %%f || goto :error
 	)

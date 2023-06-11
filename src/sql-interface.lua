@@ -1,7 +1,10 @@
-local loreCore, ffi
+local ffi
+local loreCore
 
 local function getFFIModule()
-    local ffi = require("ffi")
+    if ffi then return ffi end
+
+    ffi = require("ffi")
     if ffi == nil then
         LogError("Cannot load ffi module.")
         return nil
@@ -33,7 +36,7 @@ local function getCHeader()
 end
 
 local function getLib()
-    if loreCore then return loreCore, ffi end
+    if loreCore then return loreCore end
 
     ffi = getFFIModule()
     if not ffi then return nil end
@@ -49,7 +52,7 @@ local function getLib()
         return nil
     end
 
-    return loreCore, ffi
+    return loreCore
 end
 
 local function optionalEntityToString(inp)
@@ -72,7 +75,8 @@ local function shouldDescriptorBeWrittenToDatabase(descriptor)
 end
 
 local function writeRelationshipToDatabase(dbPath, relationship)
-    loreCore, ffi = getLib()
+    ffi = getFFIModule()
+    loreCore = getLib()
     if not loreCore or not ffi then return nil end
 
     local result = loreCore.write_relationship(dbPath, relationship)
@@ -83,11 +87,14 @@ local function writeRelationshipToDatabase(dbPath, relationship)
 end
 
 local function writeParentRelationshipsToDatabase(dbPath, childlabel, parentsAndRoles)
+    ffi = getFFIModule()
+    if not ffi then return nil end
+
     for key, parentAndRole in pairs(parentsAndRoles) do
         local parent = parentAndRole[1]
         local role = parentAndRole[2]
         local parentLabel = GetProtectedStringField(parent, "label")
-        local relationship = {}
+        local relationship = ffi.new("CRelationship")
         relationship.parent = parentLabel
         relationship.child = childlabel
         relationship.role = role
@@ -96,14 +103,17 @@ local function writeParentRelationshipsToDatabase(dbPath, childlabel, parentsAnd
 end
 
 local function createEntityColumn(label, descriptor, description)
-    local column = {};
+    ffi = getFFIModule()
+    if not ffi then return nil end
+
+    local column = ffi.new("CEntityColumn");
 
     column.label = label
 
     if not shouldDescriptorBeWrittenToDatabase(descriptor) then
-        return {}
+        return nil
     elseif descriptor == GetProtectedDescriptor("parents") then
-        return {}
+        return nil
     else
         column.descriptor = descriptor
     end
@@ -112,7 +122,7 @@ local function createEntityColumn(label, descriptor, description)
         column.description = optionalEntityToString(description)
     elseif type(description) == "table" then
         LogError([[Value to key \verb|]] .. descriptor .. [[| is a table.]])
-        return {}
+        return nil
     else
         column.description = tostring(description)
     end
@@ -121,7 +131,8 @@ local function createEntityColumn(label, descriptor, description)
 end
 
 local function writeEntityColumnToDatabase(dbPath, column)
-    loreCore, ffi = getLib()
+    ffi = getFFIModule()
+    loreCore = getLib()
     if not loreCore or not ffi then return nil end
 
     if IsEmpty(column) then
@@ -139,19 +150,24 @@ local function writeEntityToDatabase(dbPath, entity)
     local label = GetProtectedStringField(entity, "label")
     for descriptor, description in pairs(entity) do
         local column = createEntityColumn(label, descriptor, description)
-        if column.descriptor == GetProtectedDescriptor("parents") then
-            writeParentRelationshipsToDatabase(dbPath, column.label, column.description)
+        if not column then
+            LogError("Could not create column for descriptor " .. descriptor .. ".")
         else
-            writeEntityColumnToDatabase(dbPath, column)
+            if column.descriptor == GetProtectedDescriptor("parents") then
+                writeParentRelationshipsToDatabase(dbPath, column.label, column.description)
+            else
+                writeEntityColumnToDatabase(dbPath, column)
+            end
         end
     end
 end
 
 local function writeHistoryItemToDatabase(dbPath, itemEntity)
-    loreCore, ffi = getLib()
+    ffi = getFFIModule()
+    loreCore = getLib()
     if not loreCore or not ffi then return nil end
 
-    local item = {}
+    local item = ffi.new("CHistoryItem")
     item.label = GetProtectedStringField(itemEntity, "label")
     item.content = GetProtectedStringField(itemEntity, "content")
     item.isConcernsOthers = GetProtectedNullableField(itemEntity, "isConcernsOthers")
@@ -171,6 +187,7 @@ local function writeHistoryItemToDatabase(dbPath, itemEntity)
 end
 
 TexApi.writeLoreToDatabase = function(dbPath)
+    getLib() --Load the library if it hasn't been loaded yet.
     for key, entity in pairs(AllEntities) do
         writeEntityToDatabase(dbPath, entity)
     end

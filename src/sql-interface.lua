@@ -124,7 +124,7 @@ local function writeEntityColumnToDatabase(dbPath, column)
     loreCore, ffi = getLib()
     if not loreCore or not ffi then return nil end
 
-    if #column == 0 then
+    if IsEmpty(column) then
         return
     end
 
@@ -147,20 +147,20 @@ local function writeEntityToDatabase(dbPath, entity)
     end
 end
 
-local function writeHistoryItemToDatabase(dbPath, item)
+local function writeHistoryItemToDatabase(dbPath, itemEntity)
     loreCore, ffi = getLib()
     if not loreCore or not ffi then return nil end
 
     local item = {}
-    item.label = GetProtectedStringField(item, "label")
-    item.content = GetProtectedStringField(item, "content")
-    item.isConcernsOthers = GetProtectedNullableField(item, "isConcernsOthers")
-    item.isSecret = GetProtectedNullableField(item, "isSecret")
-    item.year = GetProtectedNullableField(item, "year")
-    item.day = GetProtectedNullableField(item, "day")
-    local originator = GetProtectedNullableField(item, "originator")
+    item.label = GetProtectedStringField(itemEntity, "label")
+    item.content = GetProtectedStringField(itemEntity, "content")
+    item.isConcernsOthers = GetProtectedNullableField(itemEntity, "isConcernsOthers")
+    item.isSecret = GetProtectedNullableField(itemEntity, "isSecret")
+    item.year = GetProtectedNullableField(itemEntity, "year")
+    item.day = GetProtectedNullableField(itemEntity, "day")
+    local originator = GetProtectedNullableField(itemEntity, "originator")
     item.originator = optionalEntityToString(originator)
-    local yearFormat = GetProtectedNullableField(item, "yearFormat")
+    local yearFormat = GetProtectedNullableField(itemEntity, "yearFormat")
     item.yearFormat = optionalEntityToString(yearFormat)
 
     local result = loreCore.write_history_item(dbPath, item)

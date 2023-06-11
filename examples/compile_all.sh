@@ -3,6 +3,10 @@
 for dir in */ ; do
 	echo Entering folder "$dir"...
     cd "$dir"
+    for file in *.db; do
+        echo Deleting "$file"...
+        rm "$file"
+    done
     for file in *.tex ; do
         echo ""
 		echo Compiling "$file"...

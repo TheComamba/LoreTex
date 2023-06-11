@@ -1,3 +1,5 @@
+local loreCore, ffi
+
 local function getFFIModule()
     local ffi = require("ffi")
     if ffi == nil then
@@ -7,7 +9,8 @@ local function getFFIModule()
 
     if ffi["load"] == nil then
         LogError [[
-LuaLaTex has been called in restricted mode, which does not allow the loading of external libraries.
+LuaLaTex cannot access the ffi (foreign function interface) library.
+This is most likely because it has been called in restricted mode, which does not allow the loading of external libraries.
 You need to call it with the \verb'--shell-escape' option.
 See the installation section of README.md on how to do that.
 ]]
@@ -30,7 +33,9 @@ local function getCHeader()
 end
 
 local function getLib()
-    local ffi = getFFIModule()
+    if loreCore then return loreCore, ffi end
+
+    ffi = getFFIModule()
     if not ffi then return nil end
 
     local header = getCHeader()
@@ -38,13 +43,13 @@ local function getLib()
     ffi.cdef(header)
 
     local libPath = RelativePath .. [[../dependencies/liblorecore.so]]
-    local rustLib = ffi.load(libPath)
-    if not rustLib then
+    loreCore = ffi.load(libPath)
+    if not loreCore then
         LogError("Cannot load rust library.")
         return nil
     end
 
-    return rustLib, ffi
+    return loreCore, ffi
 end
 
 local function optionalEntityToString(inp)
@@ -56,7 +61,7 @@ local function optionalEntityToString(inp)
     end
 end
 
-local function isDescriptorWrittenToDatabase(descriptor)
+local function shouldDescriptorBeWrittenToDatabase(descriptor)
     if descriptor == GetProtectedDescriptor("historyItems") then
         return false
     elseif descriptor == GetProtectedDescriptor("children") then
@@ -66,41 +71,64 @@ local function isDescriptorWrittenToDatabase(descriptor)
     end
 end
 
-local function writeRelationshipToDatabase(loreCore, ffi, dbPath, parentLabel, childlabel, role)
-    local result = loreCore.write_relationship(dbPath, parentLabel, childlabel, role)
+local function writeRelationshipToDatabase(dbPath, relationship)
+    loreCore, ffi = getLib()
+    if not loreCore or not ffi then return nil end
+
+    local result = loreCore.write_relationship(dbPath, relationship)
     local errorMessage = ffi.string(result)
     if errorMessage ~= "" then
         LogError(errorMessage)
     end
 end
 
-local function writeParentRelationshipsToDatabase(loreCore, ffi, dbPath, childlabel, parentsAndRoles)
+local function writeParentRelationshipsToDatabase(dbPath, childlabel, parentsAndRoles)
     for key, parentAndRole in pairs(parentsAndRoles) do
         local parent = parentAndRole[1]
         local role = parentAndRole[2]
         local parentLabel = GetProtectedStringField(parent, "label")
-        writeRelationshipToDatabase(loreCore, ffi, dbPath, parentLabel, childlabel, role)
+        local relationship = {}
+        relationship.parent = parentLabel
+        relationship.child = childlabel
+        relationship.role = role
+        writeRelationshipToDatabase(dbPath, relationship)
     end
 end
 
-local function writeEntityColumnToDatabase(loreCore, ffi, dbPath, label, descriptor, description)
-    if not isDescriptorWrittenToDatabase(descriptor) then
-        return
-    end
+local function createEntityColumn(label, descriptor, description)
+    local column = {};
 
-    if descriptor == GetProtectedDescriptor("parents") then
-        writeParentRelationshipsToDatabase(loreCore, ffi, dbPath, label, description)
-        return
+    column.label = label
+
+    if not shouldDescriptorBeWrittenToDatabase(descriptor) then
+        return {}
+    elseif descriptor == GetProtectedDescriptor("parents") then
+        return {}
+    else
+        column.descriptor = descriptor
     end
 
     if IsEntity(description) then
-        description = optionalEntityToString(description)
+        column.description = optionalEntityToString(description)
     elseif type(description) == "table" then
         LogError([[Value to key \verb|]] .. descriptor .. [[| is a table.]])
-        description = DebugPrint(description)
+        return {}
+    else
+        column.description = tostring(description)
     end
 
-    local result = loreCore.write_entity_column(dbPath, label, descriptor, tostring(description))
+    return column
+end
+
+local function writeEntityColumnToDatabase(dbPath, column)
+    loreCore, ffi = getLib()
+    if not loreCore or not ffi then return nil end
+
+    if #column == 0 then
+        return
+    end
+
+    local result = loreCore.write_entity_column(dbPath, column)
     local errorMessage = ffi.string(result)
     if errorMessage ~= "" then
         LogError(errorMessage)
@@ -108,32 +136,34 @@ local function writeEntityColumnToDatabase(loreCore, ffi, dbPath, label, descrip
 end
 
 local function writeEntityToDatabase(dbPath, entity)
-    local rustLib, ffi = getLib()
-    if not rustLib or not ffi then return nil end
-
     local label = GetProtectedStringField(entity, "label")
     for descriptor, description in pairs(entity) do
-        writeEntityColumnToDatabase(rustLib, ffi, dbPath, label, descriptor, description)
+        local column = createEntityColumn(label, descriptor, description)
+        if column.descriptor == GetProtectedDescriptor("parents") then
+            writeParentRelationshipsToDatabase(dbPath, column.label, column.description)
+        else
+            writeEntityColumnToDatabase(dbPath, column)
+        end
     end
 end
 
 local function writeHistoryItemToDatabase(dbPath, item)
-    local rustLib, ffi = getLib()
-    if not rustLib or not ffi then return nil end
+    loreCore, ffi = getLib()
+    if not loreCore or not ffi then return nil end
 
-    local label = GetProtectedStringField(item, "label")
-    local content = GetProtectedStringField(item, "content")
-    local isConcernsOthers = GetProtectedNullableField(item, "isConcernsOthers")
-    local isSecret = GetProtectedNullableField(item, "isSecret")
-    local year = GetProtectedNullableField(item, "year")
-    local day = GetProtectedNullableField(item, "day")
+    local item = {}
+    item.label = GetProtectedStringField(item, "label")
+    item.content = GetProtectedStringField(item, "content")
+    item.isConcernsOthers = GetProtectedNullableField(item, "isConcernsOthers")
+    item.isSecret = GetProtectedNullableField(item, "isSecret")
+    item.year = GetProtectedNullableField(item, "year")
+    item.day = GetProtectedNullableField(item, "day")
     local originator = GetProtectedNullableField(item, "originator")
-    originator = optionalEntityToString(originator)
+    item.originator = optionalEntityToString(originator)
     local yearFormat = GetProtectedNullableField(item, "yearFormat")
-    yearFormat = optionalEntityToString(yearFormat)
+    item.yearFormat = optionalEntityToString(yearFormat)
 
-    local result = rustLib.write_history_item(dbPath, label, content, isConcernsOthers, isSecret, year, day, originator,
-        yearFormat)
+    local result = loreCore.write_history_item(dbPath, item)
     local errorMessage = ffi.string(result)
     if errorMessage ~= "" then
         LogError(errorMessage)

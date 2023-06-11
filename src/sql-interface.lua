@@ -161,24 +161,35 @@ local function writeEntityToDatabase(dbPath, entity)
     end
 end
 
-local function writeHistoryItemToDatabase(dbPath, itemEntity)
+local function getCHistoryItemsList()
+    ffi = getFFIModule()
+    if not ffi then return nil end
+
+    local historyItems = ffi.new("CHistoryItem[" .. #AllHistoryItems .. "]")
+    for i = 0, (#AllHistoryItems - 1) do
+        local item = AllHistoryItems[i + 1]
+        historyItems[i].label = GetProtectedStringField(item, "label")
+        historyItems[i].content = GetProtectedStringField(item, "content")
+        historyItems[i].is_concerns_others = GetProtectedNullableField(item, "isConcernsOthers")
+        historyItems[i].is_secret = GetProtectedNullableField(item, "isSecret")
+        historyItems[i].year = GetProtectedNullableField(item, "year")
+        historyItems[i].day = GetProtectedNullableField(item, "day")
+        local originator = GetProtectedNullableField(item, "originator")
+        historyItems[i].originator = optionalEntityToString(originator)
+        local yearFormat = GetProtectedNullableField(item, "yearFormat")
+        historyItems[i].year_format = optionalEntityToString(yearFormat)
+    end
+    return historyItems, #AllHistoryItems
+end
+
+local function writeHistoryItemsToDatabase(dbPath)
     ffi = getFFIModule()
     loreCore = getLib()
     if not loreCore or not ffi then return nil end
 
-    local item = ffi.new("CHistoryItem[1]")
-    item[0].label = GetProtectedStringField(itemEntity, "label")
-    item[0].content = GetProtectedStringField(itemEntity, "content")
-    item[0].is_concerns_others = GetProtectedNullableField(itemEntity, "isConcernsOthers")
-    item[0].is_secret = GetProtectedNullableField(itemEntity, "isSecret")
-    item[0].year = GetProtectedNullableField(itemEntity, "year")
-    item[0].day = GetProtectedNullableField(itemEntity, "day")
-    local originator = GetProtectedNullableField(itemEntity, "originator")
-    item[0].originator = optionalEntityToString(originator)
-    local yearFormat = GetProtectedNullableField(itemEntity, "yearFormat")
-    item[0].year_format = optionalEntityToString(yearFormat)
+    local items, len = getCHistoryItemsList()
+    local result = loreCore.write_history_items(dbPath, items, len)
 
-    local result = loreCore.write_history_items(dbPath, item, 1)
     local errorMessage = ffi.string(result)
     if errorMessage ~= "" then
         LogError(errorMessage)
@@ -190,7 +201,5 @@ TexApi.writeLoreToDatabase = function(dbPath)
     for key, entity in pairs(AllEntities) do
         writeEntityToDatabase(dbPath, entity)
     end
-    for key, item in pairs(AllHistoryItems) do
-        writeHistoryItemToDatabase(dbPath, item)
-    end
+    writeHistoryItemsToDatabase(dbPath)
 end

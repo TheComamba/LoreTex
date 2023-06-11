@@ -150,14 +150,13 @@ local function writeEntityToDatabase(dbPath, entity)
     local label = GetProtectedStringField(entity, "label")
     for descriptor, description in pairs(entity) do
         local column = createEntityColumn(label, descriptor, description)
-        if not column then
-            LogError("Could not create column for descriptor " .. descriptor .. ".")
-        else
+        if column then
             if column.descriptor == GetProtectedDescriptor("parents") then
                 writeParentRelationshipsToDatabase(dbPath, column.label, column.description)
             else
                 writeEntityColumnToDatabase(dbPath, column)
             end
+        else
         end
     end
 end
@@ -170,14 +169,14 @@ local function writeHistoryItemToDatabase(dbPath, itemEntity)
     local item = ffi.new("CHistoryItem")
     item.label = GetProtectedStringField(itemEntity, "label")
     item.content = GetProtectedStringField(itemEntity, "content")
-    item.isConcernsOthers = GetProtectedNullableField(itemEntity, "isConcernsOthers")
-    item.isSecret = GetProtectedNullableField(itemEntity, "isSecret")
+    item.is_concerns_others = GetProtectedNullableField(itemEntity, "isConcernsOthers")
+    item.is_secret = GetProtectedNullableField(itemEntity, "isSecret")
     item.year = GetProtectedNullableField(itemEntity, "year")
     item.day = GetProtectedNullableField(itemEntity, "day")
     local originator = GetProtectedNullableField(itemEntity, "originator")
     item.originator = optionalEntityToString(originator)
     local yearFormat = GetProtectedNullableField(itemEntity, "yearFormat")
-    item.yearFormat = optionalEntityToString(yearFormat)
+    item.year_format = optionalEntityToString(yearFormat)
 
     local result = loreCore.write_history_item(dbPath, item)
     local errorMessage = ffi.string(result)

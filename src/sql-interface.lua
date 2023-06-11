@@ -69,36 +69,10 @@ local function shouldDescriptorBeWrittenToDatabase(descriptor)
         return false
     elseif descriptor == GetProtectedDescriptor("children") then
         return false
+    elseif descriptor == GetProtectedDescriptor("parents") then
+        return false
     else
         return true
-    end
-end
-
-local function writeRelationshipToDatabase(dbPath, relationship)
-    ffi = getFFIModule()
-    loreCore = getLib()
-    if not loreCore or not ffi then return nil end
-
-    local result = loreCore.write_relationships(dbPath, relationship, 1)
-    local errorMessage = ffi.string(result)
-    if errorMessage ~= "" then
-        LogError(errorMessage)
-    end
-end
-
-local function writeParentRelationshipsToDatabase(dbPath, childlabel, parentsAndRoles)
-    ffi = getFFIModule()
-    if not ffi then return nil end
-
-    for key, parentAndRole in pairs(parentsAndRoles) do
-        local parent = parentAndRole[1]
-        local role = parentAndRole[2]
-        local parentLabel = GetProtectedStringField(parent, "label")
-        local relationship = ffi.new("CRelationship[1]")
-        relationship[0].parent = parentLabel
-        relationship[0].child = childlabel
-        relationship[0].role = role
-        writeRelationshipToDatabase(dbPath, relationship)
     end
 end
 
@@ -106,58 +80,64 @@ local function createEntityColumn(label, descriptor, description)
     ffi = getFFIModule()
     if not ffi then return nil end
 
-    local column = ffi.new("CEntityColumn[1]");
+    local column = {};
 
-    column[0].label = label
+    column.label = label
 
     if not shouldDescriptorBeWrittenToDatabase(descriptor) then
         return nil
-    elseif descriptor == GetProtectedDescriptor("parents") then
-        return nil
-    else
-        column[0].descriptor = descriptor
     end
+    column.descriptor = descriptor
 
     if IsEntity(description) then
-        column[0].description = optionalEntityToString(description)
+        column.description = optionalEntityToString(description)
     elseif type(description) == "table" then
         LogError([[Value to key \verb|]] .. descriptor .. [[| is a table.]])
         return nil
     else
-        column[0].description = tostring(description)
+        column.description = tostring(description)
     end
 
     return column
 end
 
-local function writeEntityColumnToDatabase(dbPath, column)
+local function getEntityColumns()
+    local entityColumns = {}
+    for _, entity in pairs(AllEntities) do
+        local label = GetProtectedStringField(entity, "label")
+        for descriptor, description in pairs(entity) do
+            local column = createEntityColumn(label, descriptor, description)
+            if column then
+                table.insert(entityColumns, column)
+            end
+        end
+    end
+    return entityColumns
+end
+
+local function getCEntityColumns()
+    ffi = getFFIModule()
+    if not ffi then return nil end
+
+    local entityColumns = getEntityColumns()
+    local cEntityColumns = ffi.new("CEntityColumn[" .. #entityColumns .. "]")
+    for i = 0, (#entityColumns - 1) do
+        cEntityColumns[i] = entityColumns[i + 1]
+    end
+    return cEntityColumns, #entityColumns
+end
+
+local function writeEntitiesToDatabase(dbPath)
     ffi = getFFIModule()
     loreCore = getLib()
     if not loreCore or not ffi then return nil end
 
-    if IsEmpty(column) then
-        return
-    end
+    local cEntityColumns, count = getCEntityColumns()
+    local result = loreCore.write_entity_columns(dbPath, cEntityColumns, count)
 
-    local result = loreCore.write_entity_columns(dbPath, column, 1)
     local errorMessage = ffi.string(result)
     if errorMessage ~= "" then
         LogError(errorMessage)
-    end
-end
-
-local function writeEntityToDatabase(dbPath, entity)
-    local label = GetProtectedStringField(entity, "label")
-    for descriptor, description in pairs(entity) do
-        local column = createEntityColumn(label, descriptor, description)
-        if column then
-            if column[0].descriptor == GetProtectedDescriptor("parents") then
-                writeParentRelationshipsToDatabase(dbPath, column[0].label, column[0].description)
-            else
-                writeEntityColumnToDatabase(dbPath, column)
-            end
-        else
-        end
     end
 end
 
@@ -187,8 +167,53 @@ local function writeHistoryItemsToDatabase(dbPath)
     loreCore = getLib()
     if not loreCore or not ffi then return nil end
 
-    local items, len = getCHistoryItemsList()
-    local result = loreCore.write_history_items(dbPath, items, len)
+    local items, count = getCHistoryItemsList()
+    local result = loreCore.write_history_items(dbPath, items, count)
+
+    local errorMessage = ffi.string(result)
+    if errorMessage ~= "" then
+        LogError(errorMessage)
+    end
+end
+
+local function getRelationships()
+    local relationships = {}
+    for _, entity in pairs(AllEntities) do
+        local parentsAndRoles = GetProtectedTableReferenceField(entity, "parents")
+        local childlabel = GetProtectedStringField(entity, "label")
+        for _, parentAndRole in pairs(parentsAndRoles) do
+            local parent = parentAndRole[1]
+            local role = parentAndRole[2]
+            local parentLabel = GetProtectedStringField(parent, "label")
+            local relationship = {}
+            relationship.parent = parentLabel
+            relationship.child = childlabel
+            relationship.role = role
+            table.insert(relationships, relationship)
+        end
+    end
+    return relationships
+end
+
+local function getCRelationships()
+    ffi = getFFIModule()
+    if not ffi then return nil end
+
+    local relationships = getRelationships()
+    local cRelationships = ffi.new("CEntityRelationship[" .. #relationships .. "]")
+    for i = 0, (#relationships - 1) do
+        cRelationships[i] = relationships[i + 1]
+    end
+    return cRelationships, #relationships
+end
+
+local function writeRelationshiptsToDatabase(dbPath)
+    ffi = getFFIModule()
+    loreCore = getLib()
+    if not loreCore or not ffi then return nil end
+
+    local cRelationships, count = getCRelationships()
+    local result = loreCore.write_relationships(dbPath, cRelationships, count)
 
     local errorMessage = ffi.string(result)
     if errorMessage ~= "" then
@@ -198,8 +223,7 @@ end
 
 TexApi.writeLoreToDatabase = function(dbPath)
     getLib() --Load the library if it hasn't been loaded yet.
-    for key, entity in pairs(AllEntities) do
-        writeEntityToDatabase(dbPath, entity)
-    end
+    writeEntitiesToDatabase(dbPath)
     writeHistoryItemsToDatabase(dbPath)
+    writeRelationshiptsToDatabase(dbPath)
 end

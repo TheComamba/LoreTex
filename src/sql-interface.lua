@@ -79,7 +79,7 @@ local function writeRelationshipToDatabase(dbPath, relationship)
     loreCore = getLib()
     if not loreCore or not ffi then return nil end
 
-    local result = loreCore.write_relationship(dbPath, relationship)
+    local result = loreCore.write_relationships(dbPath, relationship, 1)
     local errorMessage = ffi.string(result)
     if errorMessage ~= "" then
         LogError(errorMessage)
@@ -139,7 +139,7 @@ local function writeEntityColumnToDatabase(dbPath, column)
         return
     end
 
-    local result = loreCore.write_entity_column(dbPath, column)
+    local result = loreCore.write_entity_columns(dbPath, column, 1)
     local errorMessage = ffi.string(result)
     if errorMessage ~= "" then
         LogError(errorMessage)
@@ -178,7 +178,7 @@ local function writeHistoryItemToDatabase(dbPath, itemEntity)
     local yearFormat = GetProtectedNullableField(itemEntity, "yearFormat")
     item[0].year_format = optionalEntityToString(yearFormat)
 
-    local result = loreCore.write_history_item(dbPath, item)
+    local result = loreCore.write_history_items(dbPath, item, 1)
     local errorMessage = ffi.string(result)
     if errorMessage ~= "" then
         LogError(errorMessage)

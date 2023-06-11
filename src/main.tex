@@ -15,7 +15,6 @@
         dofile([[#1]] .. "/dictionary.lua")
         dofile([[#1]] .. "/errors.lua")
         dofile([[#1]] .. "/scoped-variables.lua")
-        dofile([[#1]] .. "/sql-interface.lua")
         dofile([[#1]] .. "/translation.lua")
         dofile([[#1]] .. "/units.lua")
 
@@ -41,6 +40,9 @@
         dofile([[#1]] .. "/entities/types.lua")
         dofile([[#1]] .. "/entities/visibility.lua")
 
+        dofile([[#1]] .. "/ffi/lorecore.lua")
+        dofile([[#1]] .. "/ffi/writing-database.lua")
+
         ResetState()
         RelativePath = [[#1]]
     }
@@ -50,7 +52,6 @@
     \input{#1/dictionary.tex}
     \input{#1/errors.tex}
     \input{#1/scoped-variables.tex}
-    \input{#1/sql-interface.tex}
     \input{#1/state.tex}
     \input{#1/translation.tex}
     \input{#1/units.tex}
@@ -61,4 +62,6 @@
     \input{#1/entities/refs.tex}
     \input{#1/entities/types.tex}
     \input{#1/entities/visibility.tex}
+
+    \input{#1/ffi/writing-database.tex}
 }

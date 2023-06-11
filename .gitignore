@@ -6,4 +6,5 @@
 *.synctex.gz
 
 dependencies
+dependencies.zip
 example.db

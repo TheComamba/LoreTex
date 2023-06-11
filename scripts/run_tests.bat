@@ -1,4 +1,6 @@
-echo off
+@echo off
+rem go to git root directory
+for /f "delims=" %%i in ('git rev-parse --show-toplevel') do cd %%i
 
 cd tests
 echo ""

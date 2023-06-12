@@ -1,11 +1,13 @@
-TexApi.setCurrentYear(0)
+local function setup()
+    TexApi.setCurrentYear(0)
 
-TexApi.newEntity { type = "stories", label = "teststory", name = "Teststory" }
-TexApi.makeEntityPrimary("teststory")
-TexApi.addHistory { year = -10, event = [[Concerns \nameref{secret-item}.]] }
+    TexApi.newEntity { type = "stories", label = "teststory", name = "Teststory" }
+    TexApi.makeEntityPrimary("teststory")
+    TexApi.addHistory { year = -10, event = [[Concerns \nameref{secret-item}.]] }
 
-TexApi.newEntity { type = "other", label = "secret-item", name = "Secret Item" }
-TexApi.setSecret()
+    TexApi.newEntity { type = "other", label = "secret-item", name = "Secret Item" }
+    TexApi.setSecret()
+end
 
 local function generateHistoryParagraph()
     local out = {}
@@ -53,25 +55,25 @@ local function generateExpected(isItemReferenced, isShowSecrets)
 end
 
 local expected = {}
-local received = {}
 
+setup()
 TexApi.showSecrets(false)
 expected = generateExpected(false, false)
-received = TexApi.automatedChapters()
-Assert("entity-secrecey-two-do-not-show-secrets", expected, received)
+AssertAutomatedChapters("entity-secrecey-two-do-not-show-secrets", expected)
 
+setup()
 TexApi.showSecrets(true)
 expected = generateExpected(false, true)
-received = TexApi.automatedChapters()
-Assert("entity-secrecey-two-show-secrets", expected, received)
+AssertAutomatedChapters("entity-secrecey-two-show-secrets", expected)
 
+setup()
 TexApi.makeEntityPrimary("secret-item")
 TexApi.showSecrets(false)
 expected = generateExpected(true, false)
-received = TexApi.automatedChapters()
-Assert("entity-secrecey-two-do-not-show-secrets", expected, received)
+AssertAutomatedChapters("entity-secrecey-two-do-not-show-secrets", expected)
 
+setup()
+TexApi.makeEntityPrimary("secret-item")
 TexApi.showSecrets(true)
 expected = generateExpected(true, true)
-received = TexApi.automatedChapters()
-Assert("entity-secrecey-two-show-secrets", expected, received)
+AssertAutomatedChapters("entity-secrecey-two-show-secrets", expected)

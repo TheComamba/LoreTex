@@ -1,5 +1,4 @@
 local function setupTest(typename, includesShortname, includesSubname)
-    ResetState()
     if includesShortname then
         TexApi.newEntity { type = typename, label = typename .. "-1", name = typename .. " 1", shortname = "Shorty" }
     else
@@ -90,7 +89,7 @@ for key, typename in pairs({ "places", "other" }) do
         for key, includesSubname in pairs({ false, true }) do
             setupTest(typename, includesShortname, includesSubname)
             local expected = generateExpected(typename, includesShortname, includesSubname)
-            local out = TexApi.automatedChapters()
+
             local testName = "Nested " .. typename
             if includesShortname then
                 testName = testName .. " with Shortname"
@@ -98,7 +97,7 @@ for key, typename in pairs({ "places", "other" }) do
             if includesSubname then
                 testName = testName .. " with Subname"
             end
-            Assert(testName, expected, out)
+            AssertAutomatedChapters(testName, expected)
         end
     end
 end

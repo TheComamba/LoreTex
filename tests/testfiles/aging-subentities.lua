@@ -61,5 +61,5 @@ Append(expected, [[90+ ]] .. Tr("years"))
 Append(expected, [[\paragraph{Subspecies}]])
 Append(expected, [[\subparagraph{Subsubspecies}]])
 Append(expected, [[\label{subsubspecies}]])
-local out = TexApi.automatedChapters()
-Assert("Entity with subentities and age", expected, out)
+
+AssertAutomatedChapters("Entity with subentities and age", expected)

@@ -8,8 +8,6 @@ TexApi.setLocation("test-region")
 
 TexApi.makeAllEntitiesPrimary()
 
-local out = TexApi.automatedChapters()
-
 local expected = {
     [[\chapter{]] .. CapFirst(Tr("places")) .. [[}]],
     [[\section{]] .. CapFirst(Tr("places")) .. [[}]],
@@ -41,4 +39,4 @@ local expected = {
     [[\label{test-city}]]
 }
 
-Assert("region-and-city", expected, out)
+AssertAutomatedChapters("region-and-city", expected)

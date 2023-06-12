@@ -31,6 +31,4 @@ Append(expected, [[\subparagraph{Tusken}]])
 Append(expected, [[\label{tusken}]])
 Append(expected, [[\hspace{1cm}]])
 
-
-local out = TexApi.automatedChapters()
-Assert("species-at-location", expected, out)
+AssertAutomatedChapters("species-at-location", expected)

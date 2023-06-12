@@ -15,8 +15,6 @@ TexApi.setDescriptor { descriptor = "Subspecies", description = [[\label{subspec
 
 TexApi.makeEntityPrimary("some-npc")
 
-local out = TexApi.automatedChapters()
-
 local expected = {
     [[\chapter{]] .. CapFirst(Tr("characters")) .. [[}]],
     [[\section{]] .. CapFirst(Tr("npcs")) .. [[}]],
@@ -51,9 +49,7 @@ local expected = {
     [[\hspace{1cm}]]
 }
 
-Assert("Sublabel", expected, out)
-
-ResetState()
+AssertAutomatedChapters("Sublabel", expected)
 
 TexApi.newEntity { type = "npcs", label = "also-primary", name = "Also Primary" }
 TexApi.setDescriptor { descriptor = "Sublabel 1", description = [[\label{sublabel-1}]] }
@@ -65,7 +61,8 @@ TexApi.makeEntityPrimary("also-primary")
 TexApi.newEntity { type = "npcs", label = "not-primary", name = "Not Primary" }
 TexApi.setDescriptor { descriptor = "Sublabel 3", description = [[\label{sublabel-3}]] }
 TexApi.setDescriptor { descriptor = "Some ignored Paragraph",
-    description = [[\subparagraph{Some ignored paragraph}\label{ignored-label}\subparagraph{Sublabel 4}\label{sublabel-4}]] }
+    description =
+    [[\subparagraph{Some ignored paragraph}\label{ignored-label}\subparagraph{Sublabel 4}\label{sublabel-4}]] }
 TexApi.mention("sublabel-3")
 TexApi.mention("sublabel-4")
 
@@ -95,11 +92,7 @@ local expected = {
     [[\hspace{1cm}]],
 }
 
-local out = TexApi.automatedChapters()
-
-Assert("Only sublabel mentioned", expected, out)
-
-ResetState()
+AssertAutomatedChapters("Only sublabel mentioned", expected)
 
 TexApi.newEntity { type = "npcs", label = "some-npc", name = "Some NPC" }
 TexApi.setDescriptor { descriptor = "Paragraph with just label", description = [[\label{sublabel}]] }
@@ -148,11 +141,7 @@ Append(expected, paraWithoutLabel)
 Append(expected, [[\paragraph{Unusual paragraph}]])
 Append(expected, unusualPara)
 
-local out = TexApi.automatedChapters()
-
-Assert("Subparagraphs with and without labels", expected, out)
-
-ResetState()
+AssertAutomatedChapters("Subparagraphs with and without labels", expected)
 
 TexApi.newEntity { type = "places", label = "place-1", name = "Place 1" }
 TexApi.setDescriptor { descriptor = "Appears Twice", description = [[\subparagraph{One}\label{one}]] }
@@ -182,6 +171,4 @@ Append(expected, [[\paragraph{Appears Twice}]])
 Append(expected, [[\subparagraph{Two}]])
 Append(expected, [[\label{two}]])
 
-local out = TexApi.automatedChapters()
-
-Assert("Unlabeled paragraph with labeled subpara appears twice", expected, out)
+AssertAutomatedChapters("Unlabeled paragraph with labeled subpara appears twice", expected)

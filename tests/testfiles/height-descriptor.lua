@@ -55,17 +55,12 @@ local function generateExpected(depth, height)
     return out
 end
 
-local expexted = {}
-local received = {}
-
 for depth = 1, 3 do
     for key, height in pairs({ 0.5, 5, 50, 500, 5000 }) do
-        ResetState()
         newMountain(depth)
         TexApi.setHeight(height)
         TexApi.makeAllEntitiesPrimary()
-        expexted = generateExpected(depth, height)
-        received = TexApi.automatedChapters()
-        Assert("setHeight depth " .. depth, expexted, received)
+        local expexted = generateExpected(depth, height)
+        AssertAutomatedChapters("setHeight depth " .. depth, expexted)
     end
 end

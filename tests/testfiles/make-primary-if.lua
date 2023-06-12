@@ -13,6 +13,4 @@ Append(expected, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
 Append(expected, [[\subsubsection{Test}]])
 Append(expected, [[\label{test}]])
 
-local out = TexApi.automatedChapters()
-
-Assert("make-primary-if", expected, out)
+AssertAutomatedChapters("make-primary-if", expected)

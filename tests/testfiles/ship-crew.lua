@@ -77,5 +77,4 @@ Append(expected, [[\begin{itemize}]])
 Append(expected, [[\item \nameref{aurora}]])
 Append(expected, [[\end{itemize}]])
 
-local out = TexApi.automatedChapters()
-Assert("Example Ship Crew", expected, out)
+AssertAutomatedChapters("Example Ship Crew", expected)

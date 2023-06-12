@@ -34,11 +34,7 @@ Append(expected, [[\begin{itemize}]])
 Append(expected, [[\item 0 (]] .. Tr("this-year") .. [[):\\Mentions \nameref{deferred-entity-2-alias}.]])
 Append(expected, [[\end{itemize}]])
 
-local out = TexApi.automatedChapters()
-
-Assert("Deferred Entities", expected, out)
-
-ResetState()
+AssertAutomatedChapters("Deferred Entities", expected)
 
 TexApi.newEntity { type = "npcs", label = "some-npc", name = "Some NPC" }
 TexApi.setLocation("some-place")
@@ -69,9 +65,7 @@ Append(expected, [[\subparagraph{Orga Sublabel}]])
 Append(expected, [[\label{orga-sublabel}]])
 Append(expected, [[\hspace{1cm}]])
 
-local out = TexApi.automatedChapters()
-
-Assert("Deferred Location and Association", expected, out)
+AssertAutomatedChapters("Deferred Location and Association", expected)
 
 local function defineCalendar()
     TexApi.newEntity { type = "calendars", label = "test-1", name = "Test 1" }
@@ -80,6 +74,8 @@ local function defineCalendar()
     TexApi.setYearAbbreviation("QT")
     TexApi.setYearOffset(200)
 end
+
+local out = {}
 
 ResetState()
 TexApi.addDayFmt("test-1")

@@ -199,6 +199,12 @@ function Assert(caller, expected, received)
     end
 end
 
+function AssertAutomatedChapters(caller, expected)
+    local out = TexApi.automatedChapters()
+    Assert(caller, expected, out)
+    ResetState()
+end
+
 local function prepareFunctionsWrappers()
     for key, fun in pairs(TexApi) do
         apiFunctionUsage[key] = 0

@@ -1,16 +1,18 @@
 local types = { "other", "places" }
 
-for key1, typename1 in pairs(types) do
-    local name1 = typename1
-    TexApi.newEntity { type = typename1, label = name1, name = name1 }
-    for key2, typename2 in pairs(types) do
-        local name2 = typename1 .. "-" .. typename2
-        TexApi.newEntity { type = typename2, label = name2, name = name2 }
-        TexApi.addParent { parentLabel = name1 }
-        for key3, typename3 in pairs(types) do
-            local name3 = typename1 .. "-" .. typename2 .. "-" .. typename3
-            TexApi.newEntity { type = typename3, label = name3, name = name3 }
-            TexApi.addParent { parentLabel = name2 }
+local function setup()
+    for key1, typename1 in pairs(types) do
+        local name1 = typename1
+        TexApi.newEntity { type = typename1, label = name1, name = name1 }
+        for key2, typename2 in pairs(types) do
+            local name2 = typename1 .. "-" .. typename2
+            TexApi.newEntity { type = typename2, label = name2, name = name2 }
+            TexApi.addParent { parentLabel = name1 }
+            for key3, typename3 in pairs(types) do
+                local name3 = typename1 .. "-" .. typename2 .. "-" .. typename3
+                TexApi.newEntity { type = typename3, label = name3, name = name3 }
+                TexApi.addParent { parentLabel = name2 }
+            end
         end
     end
 end
@@ -195,34 +197,31 @@ local expected = {}
 local out = {}
 
 for key, typename in pairs(types) do
-    ResetRefs()
-
+    setup()
     TexApi.makeAllEntitiesOfTypePrimary(typename)
 
     expected = generateExpected { primaryType = typename }
-    out = TexApi.automatedChapters()
-
-    Assert("Type " .. typename .. " is primary", expected, out)
+    AssertAutomatedChapters("Type " .. typename .. " is primary", expected)
 end
 
 for depth = 1, 3 do
     for key1, typename in pairs(types) do
         for key2, label in pairs(generateLabels(typename, depth)) do
-            ResetRefs()
+            setup()
             TexApi.makeEntityAndChildrenPrimary(label)
+
             expected = generateExpected { primaryParent = label }
-            out = TexApi.automatedChapters()
             local testname = "Entity '" .. label .. "' is primary"
-            Assert(testname, expected, out)
+            AssertAutomatedChapters(testname, expected)
 
             for key2, primaryTypename in pairs(types) do
-                ResetRefs()
+                setup()
                 TexApi.makeEntityAndChildrenPrimary(label)
                 TexApi.makeTypePrimaryWhenMentioned(primaryTypename)
+
                 expected = generateExpected { primaryParent = label, primaryTypeWhenMentioned = primaryTypename }
-                out = TexApi.automatedChapters()
                 local testname2 = testname .. ", type " .. primaryTypename .. " is primary when mentioned"
-                Assert(testname2, expected, out)
+                AssertAutomatedChapters(testname2, expected)
             end
         end
     end

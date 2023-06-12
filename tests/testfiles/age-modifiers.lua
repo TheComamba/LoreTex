@@ -107,12 +107,8 @@ local function generateExpected(depth, modification)
     return out
 end
 
-local expected = {}
-local received = {}
-
 for depth = 1, 3 do
-    for key, modification in pairs({ "none", "not-aging", "normal", "factor", "exponent", "both", "mixing" }) do
-        ResetState()
+    for _, modification in pairs({ "none", "not-aging", "normal", "factor", "exponent", "both", "mixing" }) do
         TexApi.setCurrentYear(100)
 
         newEntity("species-1-", depth)
@@ -142,8 +138,8 @@ for depth = 1, 3 do
         TexApi.born { year = 0, event = "Born." }
         TexApi.makeEntityPrimary("char")
 
-        expected = generateExpected(depth, modification)
-        received = TexApi.automatedChapters()
-        Assert("Age modifications " .. modification .. ", entity depth " .. depth, expected, received)
+        local name = "Age modifications " .. modification .. ", entity depth " .. depth
+        local expected = generateExpected(depth, modification)
+        AssertAutomatedChapters(name, expected)
     end
 end

@@ -33,6 +33,4 @@ Append(expected, [[\end{itemize}]])
 Append(expected, [[\subsubsection[Ramona]{Ramona (]] .. CapFirst(Tr("secret")) .. [[)}]])
 Append(expected, [[\label{ramona}]])
 
-
-local out = TexApi.automatedChapters()
-Assert("Marked Entities", expected, out)
+AssertAutomatedChapters("Marked Entities", expected)

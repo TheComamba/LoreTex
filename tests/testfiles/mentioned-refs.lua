@@ -40,6 +40,4 @@ Append(expected, [[\subparagraph{Some Organisation}]])
 Append(expected, [[\label{some-organisation}]])
 Append(expected, [[\hspace{1cm}]])
 
-local out = TexApi.automatedChapters()
-
-Assert("mentioned-refs", expected, out)
+AssertAutomatedChapters("mentioned-refs", expected)

@@ -41,6 +41,7 @@
         dofile([[#1]] .. "/entities/visibility.lua")
 
         dofile([[#1]] .. "/ffi/lorecore.lua")
+        dofile([[#1]] .. "/ffi/reading-database.lua")
         dofile([[#1]] .. "/ffi/writing-database.lua")
 
         ResetState()
@@ -63,5 +64,6 @@
     \input{#1/entities/types.tex}
     \input{#1/entities/visibility.tex}
 
+    \input{#1/ffi/reading-database.tex}
     \input{#1/ffi/writing-database.tex}
 }

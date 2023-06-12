@@ -1,0 +1,21 @@
+% !TeX document-id = {258f45cd-6a57-4c4b-95e0-21f4ef37ea21}
+% !TeX TXS-program:compile = txs:///lualatex/{%.tex} -shell-escape "%.tex"
+\documentclass{book}
+
+\input{../../src/main.tex}
+\loadLuacode{../../src/}
+%\throwOnError
+
+\setCurrentYear{311}
+\setCurrentDay{114}
+\setDaysPerYear{365}
+
+\begin{document}
+
+\readLoreFromDatabase{example.db}
+
+\makeAllEntitiesPrimary
+\automatedChapters
+\printLoreTexErrors
+
+\end{document}

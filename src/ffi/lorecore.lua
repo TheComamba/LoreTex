@@ -1,7 +1,7 @@
 local ffi
 local loreCore
 
-function getFFIModule()
+function GetFFIModule()
     if ffi then return ffi end
 
     ffi = require("ffi")
@@ -35,10 +35,10 @@ local function getCHeader()
     return content
 end
 
-function getLib()
+function GetLib()
     if loreCore then return loreCore end
 
-    ffi = getFFIModule()
+    ffi = GetFFIModule()
     if not ffi then return nil end
 
     local header = getCHeader()

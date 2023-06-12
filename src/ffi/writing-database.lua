@@ -20,7 +20,7 @@ local function shouldDescriptorBeWrittenToDatabase(descriptor)
 end
 
 local function createEntityColumn(label, descriptor, description)
-    local ffi = getFFIModule()
+    local ffi = GetFFIModule()
     if not ffi then return nil end
 
     local column = {};
@@ -59,7 +59,7 @@ local function getEntityColumns()
 end
 
 local function getCEntityColumns()
-    local ffi = getFFIModule()
+    local ffi = GetFFIModule()
     if not ffi then return nil end
 
     local entityColumns = getEntityColumns()
@@ -71,8 +71,8 @@ local function getCEntityColumns()
 end
 
 local function writeEntitiesToDatabase(dbPath)
-    local ffi = getFFIModule()
-    local loreCore = getLib()
+    local ffi = GetFFIModule()
+    local loreCore = GetLib()
     if not loreCore or not ffi then return nil end
 
     local cEntityColumns, count = getCEntityColumns()
@@ -85,7 +85,7 @@ local function writeEntitiesToDatabase(dbPath)
 end
 
 local function getCHistoryItemsList()
-    local ffi = getFFIModule()
+    local ffi = GetFFIModule()
     if not ffi then return nil end
 
     local historyItems = ffi.new("CHistoryItem[" .. #AllHistoryItems .. "]")
@@ -106,8 +106,8 @@ local function getCHistoryItemsList()
 end
 
 local function writeHistoryItemsToDatabase(dbPath)
-    local ffi = getFFIModule()
-    local loreCore = getLib()
+    local ffi = GetFFIModule()
+    local loreCore = GetLib()
     if not loreCore or not ffi then return nil end
 
     local items, count = getCHistoryItemsList()
@@ -139,7 +139,7 @@ local function getRelationships()
 end
 
 local function getCRelationships()
-    local ffi = getFFIModule()
+    local ffi = GetFFIModule()
     if not ffi then return nil end
 
     local relationships = getRelationships()
@@ -151,8 +151,8 @@ local function getCRelationships()
 end
 
 local function writeRelationshiptsToDatabase(dbPath)
-    local ffi = getFFIModule()
-    local loreCore = getLib()
+    local ffi = GetFFIModule()
+    local loreCore = GetLib()
     if not loreCore or not ffi then return nil end
 
     local cRelationships, count = getCRelationships()
@@ -165,7 +165,7 @@ local function writeRelationshiptsToDatabase(dbPath)
 end
 
 TexApi.writeLoreToDatabase = function(dbPath)
-    getLib() --Load the library if it hasn't been loaded yet.
+    GetLib() --Load the library if it hasn't been loaded yet.
     writeEntitiesToDatabase(dbPath)
     writeHistoryItemsToDatabase(dbPath)
     writeRelationshiptsToDatabase(dbPath)

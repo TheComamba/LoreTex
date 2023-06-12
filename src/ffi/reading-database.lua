@@ -1,6 +1,6 @@
 local function getNumberOfEntityColumns(dbPath)
-    local ffi = getFFIModule()
-    local loreCore = getLib()
+    local ffi = GetFFIModule()
+    local loreCore = GetLib()
     if not ffi or not loreCore then return nil end
 
     local numEntityColumns = ffi.new("intptr_t[1]")
@@ -15,8 +15,8 @@ local function getNumberOfEntityColumns(dbPath)
 end
 
 local function readEntityColumns(dbPath)
-    local ffi = getFFIModule()
-    local loreCore = getLib()
+    local ffi = GetFFIModule()
+    local loreCore = GetLib()
     if not ffi or not loreCore then return {} end
 
     local numEntityColumns = getNumberOfEntityColumns(dbPath)
@@ -54,6 +54,6 @@ local function readEntities(dbPath)
 end
 
 TexApi.readLoreFromDatabase = function(dbPath)
-    getLib() --Load the library if it hasn't been loaded yet.
+    GetLib() --Load the library if it hasn't been loaded yet.
     readEntities(dbPath)
 end

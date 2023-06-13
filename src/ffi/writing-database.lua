@@ -7,6 +7,26 @@ local function optionalEntityToString(inp)
     end
 end
 
+local descriptionToString
+
+local function listToString(list)
+    local out = {}
+    for i = 1, #list do
+        Append(out, descriptionToString(list[i]))
+    end
+    return [[{]] .. table.concat(out, ", ") .. [[}]]
+end
+
+descriptionToString = function(description)
+    if IsEntity(description) then
+        return optionalEntityToString(description)
+    elseif type(description) == "table" then
+        return listToString(description)
+    else
+        return tostring(description)
+    end
+end
+
 local function shouldDescriptorBeWrittenToDatabase(descriptor)
     if descriptor == GetProtectedDescriptor("historyItems") then
         return false
@@ -23,23 +43,14 @@ local function createEntityColumn(label, descriptor, description)
     local ffi = GetFFIModule()
     if not ffi then return nil end
 
-    local column = {};
-
-    column.label = label
-
     if not shouldDescriptorBeWrittenToDatabase(descriptor) then
         return nil
     end
-    column.descriptor = descriptor
 
-    if IsEntity(description) then
-        column.description = optionalEntityToString(description)
-    elseif type(description) == "table" then
-        LogError([[Value to key \verb|]] .. descriptor .. [[| is a table.]])
-        return nil
-    else
-        column.description = tostring(description)
-    end
+    local column = {};
+    column.label = label
+    column.descriptor = descriptor
+    column.description = descriptionToString(description)
 
     return column
 end
@@ -150,7 +161,7 @@ local function getCRelationships()
     return cRelationships, #relationships
 end
 
-local function writeRelationshiptsToDatabase(dbPath)
+local function writeRelationshipsToDatabase(dbPath)
     local ffi = GetFFIModule()
     local loreCore = GetLib()
     if not loreCore or not ffi then return nil end
@@ -168,5 +179,5 @@ TexApi.writeLoreToDatabase = function(dbPath)
     GetLib() --Load the library if it hasn't been loaded yet.
     writeEntitiesToDatabase(dbPath)
     writeHistoryItemsToDatabase(dbPath)
-    writeRelationshiptsToDatabase(dbPath)
+    writeRelationshipsToDatabase(dbPath)
 end

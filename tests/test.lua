@@ -202,7 +202,12 @@ end
 function AssertAutomatedChapters(caller, expected)
     local out = TexApi.automatedChapters()
     Assert(caller, expected, out)
+    TexApi.writeLoreToDatabase("tmp.db")
     ResetState()
+    -- TexApi.readLoreFromDatabase("tmp.db")
+    -- local out = TexApi.automatedChapters()
+    -- Assert(caller..", read from Database", expected, out)
+    -- ResetState()
 end
 
 local function prepareFunctionsWrappers()

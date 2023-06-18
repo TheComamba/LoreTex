@@ -11,12 +11,15 @@ local function setDescriptorAsKeyValPair(arg)
 end
 
 function SetDescriptor(arg)
-    if not IsArgOk("SetDescriptor", arg, { "entity", "descriptor", "description" }, { "subdescriptor" }) then
+    if not IsArgOk("SetDescriptor", arg, { "entity", "descriptor", "description" }, { "subdescriptor",
+            "suppressDerivedDescriptors" }) then
         return
     end
 
     Replace([[\reference]], [[\nameref]], arg.description)
-    AddMentions(arg.entity, arg.description)
+    if not arg.suppressDerivedDescriptors then
+        AddMentions(arg.entity, arg.description)
+    end
     if not IsEmpty(ScanForCmd(arg.description, "label")) then
         arg.description = ContentToEntity { name = arg.descriptor, content = arg.description }
         MakePartOf { subEntity = arg.description, mainEntity = arg.entity }

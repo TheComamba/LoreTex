@@ -49,7 +49,16 @@ local function readEntities(dbPath)
     local entityColumns = readEntityColumns(dbPath)
     for _, entityColumn in pairs(entityColumns) do
         local entity = GetMutableEntityFromAll(entityColumn.label)
-        SetDescriptor { entity = entity, descriptor = entityColumn.descriptor, description = entityColumn.description }
+        if IsProtectedDescriptor(entityColumn.descriptor) then
+            SetProtectedField(entity, entityColumn.descriptor, entityColumn.descriptor)
+        else
+            local args = {};
+            args.entity = entity
+            args.descriptor = entityColumn.descriptor
+            args.description = entityColumn.description
+            args.suppressDerivedDescriptors = true
+            SetDescriptor(args)
+        end
     end
 end
 

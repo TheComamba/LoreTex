@@ -46,6 +46,9 @@ StateResetters[#StateResetters + 1] = function()
 end
 
 function GetProtectedDescriptor(key)
+    if IsProtectedDescriptor(key) then
+        return key
+    end
     local descriptor = protectedDescriptors[key]
     if descriptor == nil then
         LogError("Key \"" .. key .. "\" does not name a protected descriptor.")
@@ -117,6 +120,9 @@ function AddToProtectedField(entity, key, value)
     local descriptor = GetProtectedDescriptor(key)
     if entity[descriptor] == nil then
         entity[descriptor] = {}
+    elseif type(entity[descriptor]) ~= "table" then
+        LogError("Expected table, got " .. type(entity[descriptor]) .. " for key \"" .. key .. "\"!")
+        return
     end
     entity[descriptor][#entity[descriptor] + 1] = value
 end

@@ -38,8 +38,6 @@ local function readEntityColumns(dbPath)
         entityColumn.label = ffi.string(cEntityColumn.label)
         entityColumn.descriptor = ffi.string(cEntityColumn.descriptor)
         entityColumn.description = ffi.string(cEntityColumn.description)
-        tex.print(i)
-        tex.print(DebugPrint(entityColumn) .. [[ endline\\]])
         table.insert(entityColumns, entityColumn)
     end
     return entityColumns
@@ -50,7 +48,7 @@ local function readEntities(dbPath)
     for _, entityColumn in pairs(entityColumns) do
         local entity = GetMutableEntityFromAll(entityColumn.label)
         if IsProtectedDescriptor(entityColumn.descriptor) then
-            SetProtectedField(entity, entityColumn.descriptor, entityColumn.descriptor)
+            SetProtectedField(entity, entityColumn.descriptor, entityColumn.description)
         else
             local args = {};
             args.entity = entity

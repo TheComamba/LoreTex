@@ -199,7 +199,10 @@ function Assert(caller, expected, received)
     end
 end
 
-function AssertAutomatedChapters(caller, expected)
+function AssertAutomatedChapters(caller, expected, setup)
+    if setup then
+        setup()
+    end
     local out = TexApi.automatedChapters()
     Assert(caller, expected, out)
 
@@ -209,7 +212,10 @@ function AssertAutomatedChapters(caller, expected)
     TexApi.readLoreFromDatabase(dbName)
     os.remove(dbName)
 
-    local out = TexApi.automatedChapters()
+    if setup then
+        setup()
+    end
+    out = TexApi.automatedChapters()
     Assert(caller .. ", read from Database", expected, out)
     ResetState()
 end

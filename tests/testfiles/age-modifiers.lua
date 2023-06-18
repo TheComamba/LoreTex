@@ -107,10 +107,13 @@ local function generateExpected(depth, modification)
     return out
 end
 
+local function setup()
+    TexApi.setCurrentYear(100)
+    TexApi.makeEntityPrimary("char")
+end
+
 for depth = 1, 3 do
     for _, modification in pairs({ "none", "not-aging", "normal", "factor", "exponent", "both", "mixing" }) do
-        TexApi.setCurrentYear(100)
-
         newEntity("species-1-", depth)
         if modification == "not-aging" then
             TexApi.setAgeFactor(0)
@@ -136,10 +139,9 @@ for depth = 1, 3 do
             TexApi.setSpecies("species-1-" .. depth)
         end
         TexApi.born { year = 0, event = "Born." }
-        TexApi.makeEntityPrimary("char")
 
         local name = "Age modifications " .. modification .. ", entity depth " .. depth
         local expected = generateExpected(depth, modification)
-        AssertAutomatedChapters(name, expected)
+        AssertAutomatedChapters(name, expected, setup)
     end
 end

@@ -15,6 +15,7 @@ local function printEntities(sectionname, entitiesList)
         end
         Append(out, TexCmd("label", GetProtectedStringField(entity, "label")))
         Append(out, DescriptorsString(entity))
+        Append(out, TexCmd("newpage"))
     end
     return out
 end

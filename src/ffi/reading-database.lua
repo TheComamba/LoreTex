@@ -60,6 +60,52 @@ local function readEntities(dbPath)
     end
 end
 
+local function getNumberOfHistoryItems(dbPath)
+    local ffi = GetFFIModule()
+    local loreCore = GetLib()
+    if not ffi or not loreCore then return {} end
+
+    local numHistoryItems = ffi.new("intptr_t[1]")
+    local result = loreCore.get_number_of_history_items(dbPath, numHistoryItems)
+    local errorMessage = ffi.string(result)
+    if errorMessage ~= "" then
+        LogError(errorMessage)
+        return {}
+    end
+end
+
+local function readHistoryItems(dbPath)
+    local ffi = GetFFIModule()
+    local loreCore = GetLib()
+    if not ffi or not loreCore then return {} end
+
+    local numHistoryItems = getNumberOfHistoryItems(dbPath)
+    if not numHistoryItems then return {} end
+
+    local cHistoryItems = ffi.new("CHistoryItem[?]", ffi.number(numHistoryItems[0]))
+
+    local result = loreCore.read_history_items(dbPath, cHistoryItems)
+    local errorMessage = ffi.string(result)
+    if errorMessage ~= "" then
+        LogError(errorMessage)
+        return {}
+    end
+
+    for i = 0, (ffi.number(numHistoryItems[0]) - 1) do
+        local cHistoryItem = cHistoryItems[i]
+        local historyItem = {}
+        historyItem.label = ffi.string(cHistoryItem.label)
+        historyItem.content = ffi.string(cHistoryItem.content)
+        historyItem.is_concerns_others = ffi.boolean(cHistoryItem.is_concerns_others)
+        historyItem.is_secret = ffi.boolean(cHistoryItem.is_secret)
+        historyItem.year = ffi.number(cHistoryItem.year)
+        historyItem.day = ffi.number(cHistoryItem.day)
+        historyItem.originator = ffi.string(cHistoryItem.originator)
+        historyItem.year_format = ffi.string(cHistoryItem.year_format)
+        table.insert(AllHistoryItems, historyItem)
+    end
+end
+
 TexApi.readLoreFromDatabase = function(dbPath)
     GetLib() --Load the library if it hasn't been loaded yet.
     readEntities(dbPath)

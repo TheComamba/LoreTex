@@ -69,16 +69,21 @@ local function getEntityColumns()
     return entityColumns
 end
 
-local function getCEntityColumns()
+local function toCColumns(columns, cTypename)
+    if not type(columns) == "table" then
+        return nil
+    end
+    if not type(cTypename) == "string" then
+        return nil
+    end
     local ffi = GetFFIModule()
     if not ffi then return nil end
 
-    local entityColumns = getEntityColumns()
-    local cEntityColumns = ffi.new("CEntityColumn[" .. #entityColumns .. "]")
-    for i = 0, (#entityColumns - 1) do
-        cEntityColumns[i] = entityColumns[i + 1]
+    local cColumns = ffi.new(cTypename .. "[" .. #columns .. "]")
+    for i = 0, (#columns - 1) do
+        cColumns[i] = columns[i + 1]
     end
-    return cEntityColumns, #entityColumns
+    return cColumns, #columns
 end
 
 local function writeEntitiesToDatabase(dbPath)
@@ -86,7 +91,7 @@ local function writeEntitiesToDatabase(dbPath)
     local loreCore = GetLib()
     if not loreCore or not ffi then return nil end
 
-    local cEntityColumns, count = getCEntityColumns()
+    local cEntityColumns, count = toCColumns(getEntityColumns(), "CEntityColumn")
     local result = loreCore.write_entity_columns(dbPath, cEntityColumns, count)
 
     local errorMessage = ffi.string(result)
@@ -95,13 +100,9 @@ local function writeEntitiesToDatabase(dbPath)
     end
 end
 
-local function getCHistoryItemsList()
-    local ffi = GetFFIModule()
-    if not ffi then return nil end
-
-    local historyItems = ffi.new("CHistoryItem[" .. #AllHistoryItems .. "]")
-    for i = 0, (#AllHistoryItems - 1) do
-        local item = AllHistoryItems[i + 1]
+local function getHistoryItems()
+    local historyItems = {}
+    for i, item in pairs(historyItems) do
         historyItems[i].label = GetProtectedStringField(item, "label")
         historyItems[i].content = GetProtectedStringField(item, "content")
         historyItems[i].is_concerns_others = GetProtectedNullableField(item, "isConcernsOthers")
@@ -113,7 +114,7 @@ local function getCHistoryItemsList()
         local yearFormat = GetProtectedNullableField(item, "yearFormat")
         historyItems[i].year_format = optionalEntityToString(yearFormat)
     end
-    return historyItems, #AllHistoryItems
+    return historyItems
 end
 
 local function writeHistoryItemsToDatabase(dbPath)
@@ -121,7 +122,7 @@ local function writeHistoryItemsToDatabase(dbPath)
     local loreCore = GetLib()
     if not loreCore or not ffi then return nil end
 
-    local items, count = getCHistoryItemsList()
+    local items, count = toCColumns(getHistoryItems(), "CHistoryItem")
     local result = loreCore.write_history_items(dbPath, items, count)
 
     local errorMessage = ffi.string(result)
@@ -149,24 +150,12 @@ local function getRelationships()
     return relationships
 end
 
-local function getCRelationships()
-    local ffi = GetFFIModule()
-    if not ffi then return nil end
-
-    local relationships = getRelationships()
-    local cRelationships = ffi.new("CEntityRelationship[" .. #relationships .. "]")
-    for i = 0, (#relationships - 1) do
-        cRelationships[i] = relationships[i + 1]
-    end
-    return cRelationships, #relationships
-end
-
 local function writeRelationshipsToDatabase(dbPath)
     local ffi = GetFFIModule()
     local loreCore = GetLib()
     if not loreCore or not ffi then return nil end
 
-    local cRelationships, count = getCRelationships()
+    local cRelationships, count = toCColumns(getRelationships(), "CEntityRelationship")
     local result = loreCore.write_relationships(dbPath, cRelationships, count)
 
     local errorMessage = ffi.string(result)

@@ -69,8 +69,8 @@ local function getEntityColumns()
     return entityColumns
 end
 
-local function toCColumns(columns, cTypename)
-    if not type(columns) == "table" then
+local function toCColumns(luaColumns, cTypename)
+    if not type(luaColumns) == "table" then
         return nil
     end
     if not type(cTypename) == "string" then
@@ -79,11 +79,11 @@ local function toCColumns(columns, cTypename)
     local ffi = GetFFIModule()
     if not ffi then return nil end
 
-    local cColumns = ffi.new(cTypename .. "[" .. #columns .. "]")
-    for i = 0, (#columns - 1) do
-        cColumns[i] = columns[i + 1]
+    local cColumns = ffi.new(cTypename .. "[" .. #luaColumns .. "]")
+    for i = 0, (#luaColumns - 1) do
+        cColumns[i] = luaColumns[i + 1]
     end
-    return cColumns, #columns
+    return cColumns, #luaColumns
 end
 
 local function writeEntitiesToDatabase(dbPath)
@@ -100,19 +100,48 @@ local function writeEntitiesToDatabase(dbPath)
     end
 end
 
+local function formatHistoryItemForC(historyItem)
+    local item = {}
+    local newItem = {}
+
+    newItem.label = GetProtectedStringField(item, "label")
+
+    newItem.content = GetProtectedStringField(item, "content")
+
+    local is_concerns_others = GetProtectedNullableField(item, "isConcernsOthers")
+    if not is_concerns_others then is_concerns_others = false end
+    newItem.is_concerns_others = is_concerns_others
+
+    local is_secret = GetProtectedNullableField(item, "isSecret")
+    if not is_secret then is_secret = false end
+    newItem.is_secret = is_secret
+
+    local year = GetProtectedNullableField(item, "year")
+    if not year then
+        LogError("History item " .. newItem.label .. " has no year.")
+        return {}
+    end
+    newItem.year = year
+
+    local day = GetProtectedNullableField(item, "day")
+    if not day then day = 0 end
+    newItem.day = day
+
+    local originator = GetProtectedNullableField(item, "originator")
+    newItem.originator = optionalEntityToString(originator)
+
+    local yearFormat = GetProtectedNullableField(item, "yearFormat")
+    newItem.year_format = optionalEntityToString(yearFormat)
+    return item
+end
+
 local function getHistoryItems()
     local historyItems = {}
-    for i, item in pairs(historyItems) do
-        historyItems[i].label = GetProtectedStringField(item, "label")
-        historyItems[i].content = GetProtectedStringField(item, "content")
-        historyItems[i].is_concerns_others = GetProtectedNullableField(item, "isConcernsOthers")
-        historyItems[i].is_secret = GetProtectedNullableField(item, "isSecret")
-        historyItems[i].year = GetProtectedNullableField(item, "year")
-        historyItems[i].day = GetProtectedNullableField(item, "day")
-        local originator = GetProtectedNullableField(item, "originator")
-        historyItems[i].originator = optionalEntityToString(originator)
-        local yearFormat = GetProtectedNullableField(item, "yearFormat")
-        historyItems[i].year_format = optionalEntityToString(yearFormat)
+    for _, item in pairs(historyItems) do
+        local newItem = formatHistoryItemForC(item)
+        if #newItem ~= 0 then
+            table.insert(historyItems, newItem)
+        end
     end
     return historyItems
 end
@@ -139,6 +168,7 @@ local function getRelationships()
         for _, parentAndRole in pairs(parentsAndRoles) do
             local parent = parentAndRole[1]
             local role = parentAndRole[2]
+            if not role then role = "" end
             local parentLabel = GetProtectedStringField(parent, "label")
             local relationship = {}
             relationship.parent = parentLabel

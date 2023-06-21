@@ -3,3 +3,5 @@
 \newcommand{\declarePC}[1]{\directlua{TexApi.declarePC("#1")}}
 \newcommand{\addDescriptor}[3][]{\directlua{TexApi.setDescriptor{ descriptor = [[\detokenize{#2}]], description = [[\detokenize{#3}]], subdescriptor = [[\detokenize{#1}]] }}}
 \newcommand{\automatedChapters}{\directlua{tex.print(TexApi.automatedChapters())}}
+\newcommand{\newpageAfterEntity}{\directlua{NewpageAfterEntity = true}}
+

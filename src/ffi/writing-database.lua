@@ -100,8 +100,7 @@ local function writeEntitiesToDatabase(dbPath)
     end
 end
 
-local function formatHistoryItemForC(historyItem)
-    local item = {}
+local function formatHistoryItemForC(item)
     local newItem = {}
 
     newItem.label = GetProtectedStringField(item, "label")

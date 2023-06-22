@@ -106,7 +106,50 @@ local function readHistoryItems(dbPath)
     end
 end
 
+local function getNumberOfRelationships(dbPath)
+    local ffi = GetFFIModule()
+    local loreCore = GetLib()
+    if not ffi or not loreCore then return {} end
+
+    local numRelationships = ffi.new("intptr_t[1]")
+    local result = loreCore.get_number_of_relationships(dbPath, numRelationships)
+    local errorMessage = ffi.string(result)
+    if errorMessage ~= "" then
+        LogError(errorMessage)
+        return {}
+    end
+end
+
+local function readRelationships(dbPath)
+    local ffi = GetFFIModule()
+    local loreCore = GetLib()
+    if not ffi or not loreCore then return {} end
+
+    local numRelationships = getNumberOfRelationships(dbPath)
+    if not numRelationships then return {} end
+
+    local cRelationships = ffi.new("CRelationship[?]", ffi.number(numRelationships[0]))
+
+    local result = loreCore.read_relationships(dbPath, cRelationships)
+    local errorMessage = ffi.string(result)
+    if errorMessage ~= "" then
+        LogError(errorMessage)
+        return {}
+    end
+
+    for i = 0, (ffi.number(numRelationships[0]) - 1) do
+        local cRelationship = cRelationships[i]
+        local relationship = {}
+        relationship.parent = ffi.string(cRelationship.parent)
+        relationship.child = ffi.string(cRelationship.child)
+        relationship.role = ffi.string(cRelationship.role)
+        -- TODO: Add relationship to Child
+    end
+end
+
 TexApi.readLoreFromDatabase = function(dbPath)
     GetLib() --Load the library if it hasn't been loaded yet.
     readEntities(dbPath)
+    readHistoryItems(dbPath)
+    readRelationships(dbPath)
 end

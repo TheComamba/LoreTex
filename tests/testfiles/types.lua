@@ -12,8 +12,6 @@ local function setup()
 
     TexApi.newEntity { type = "hair-products", label = "cream", name = "Cream" }
     TexApi.newEntity { type = "laces", label = "red-laces", name = "Red laces" }
-
-    TexApi.makeAllEntitiesPrimary()
 end
 
 local function generateOther(language)
@@ -79,9 +77,9 @@ local expected = {}
 setup()
 TexApi.selectLanguage("english")
 expected = generateExpected("english")
-AssertAutomatedChapters("New type (english)", expected)
+AssertAutomatedChapters("New type (english)", expected, TexApi.makeAllEntitiesPrimary)
 
 setup()
 TexApi.selectLanguage("german")
 expected = generateExpected("german")
-AssertAutomatedChapters("New type (german)", expected)
+AssertAutomatedChapters("New type (german)", expected, TexApi.makeAllEntitiesPrimary)

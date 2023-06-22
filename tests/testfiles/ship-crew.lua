@@ -18,8 +18,6 @@ TexApi.addParent { parentLabel = "aurora", relationship = "Cook" }
 TexApi.newEntity { type = "npcs", label = "cuen", name = "Cuen" }
 TexApi.addParent { parentLabel = "aurora" }
 
-TexApi.makeAllEntitiesPrimary()
-
 local function generateCrewMember(label, roles)
     local out = {}
     Append(out, [[\subsubsection{]] .. CapFirst(label) .. [[}]])
@@ -77,4 +75,4 @@ Append(expected, [[\begin{itemize}]])
 Append(expected, [[\item \nameref{aurora}]])
 Append(expected, [[\end{itemize}]])
 
-AssertAutomatedChapters("Example Ship Crew", expected)
+AssertAutomatedChapters("Example Ship Crew", expected, TexApi.makeAllEntitiesPrimary)

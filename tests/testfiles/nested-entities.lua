@@ -17,8 +17,6 @@ local function setupTest(typename, includesShortname, includesSubname)
     else
         TexApi.setLocation(typename .. "-2")
     end
-
-    TexApi.makeAllEntitiesPrimary()
 end
 
 local function generateExpected(typename, includesShortname, includesSubname)
@@ -97,7 +95,7 @@ for key, typename in pairs({ "places", "other" }) do
             if includesSubname then
                 testName = testName .. " with Subname"
             end
-            AssertAutomatedChapters(testName, expected)
+            AssertAutomatedChapters(testName, expected, TexApi.makeAllEntitiesPrimary)
         end
     end
 end

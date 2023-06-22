@@ -1,10 +1,9 @@
-local function setup()
+local function entitySetup()
     TexApi.setCurrentYear(0)
 
     TexApi.newEntity { type = "stories", label = "teststory", name = "Teststory" }
-    TexApi.makeEntityPrimary("teststory")
     TexApi.addHistory { year = -10, event = [[Concerns \nameref{secret-item}.]] }
-
+    
     TexApi.newEntity { type = "other", label = "secret-item", name = "Secret Item" }
     TexApi.setSecret()
 end
@@ -56,24 +55,31 @@ end
 
 local expected = {}
 
-setup()
+local function refSetup1()
+    TexApi.makeEntityPrimary("teststory")
+end
+
+local function refSetup2()
+    refSetup1()
+    TexApi.makeEntityPrimary("secret-item")
+end
+
+entitySetup()
 TexApi.showSecrets(false)
 expected = generateExpected(false, false)
-AssertAutomatedChapters("entity-secrecey-two-do-not-show-secrets", expected)
+AssertAutomatedChapters("entity-secrecy-two-do-not-show-secrets", expected, refSetup1)
 
-setup()
+entitySetup()
 TexApi.showSecrets(true)
 expected = generateExpected(false, true)
-AssertAutomatedChapters("entity-secrecey-two-show-secrets", expected)
+AssertAutomatedChapters("entity-secrecy-two-show-secrets", expected, refSetup1)
 
-setup()
-TexApi.makeEntityPrimary("secret-item")
+entitySetup()
 TexApi.showSecrets(false)
 expected = generateExpected(true, false)
-AssertAutomatedChapters("entity-secrecey-two-do-not-show-secrets", expected)
+AssertAutomatedChapters("entity-secrecy-two-do-not-show-secrets-but-item-referenced", expected, refSetup2)
 
-setup()
-TexApi.makeEntityPrimary("secret-item")
+entitySetup()
 TexApi.showSecrets(true)
 expected = generateExpected(true, true)
-AssertAutomatedChapters("entity-secrecey-two-show-secrets", expected)
+AssertAutomatedChapters("entity-secrecy-two-show-secrets, item referenced", expected, refSetup2)

@@ -59,8 +59,7 @@ for depth = 1, 3 do
     for key, height in pairs({ 0.5, 5, 50, 500, 5000 }) do
         newMountain(depth)
         TexApi.setHeight(height)
-        TexApi.makeAllEntitiesPrimary()
         local expexted = generateExpected(depth, height)
-        AssertAutomatedChapters("setHeight depth " .. depth, expexted)
+        AssertAutomatedChapters("setHeight depth " .. depth, expexted, TexApi.makeAllEntitiesPrimary)
     end
 end

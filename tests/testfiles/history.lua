@@ -1,4 +1,4 @@
-local function setup()
+local function entitySetup()
     TexApi.setCurrentYear(0)
     TexApi.setDaysPerYear(365)
 
@@ -24,11 +24,13 @@ local function setup()
     TexApi.addHistory { year = 1, event = [[Event next year.]] }
     TexApi.addHistory { year = 1, day = 15, event = [[Event next year, with day.]] }
 
-    TexApi.makeEntityPrimary("test-1")
-
     TexApi.newEntity { type = "places", label = "test-2", name = "Test 2" }
     TexApi.addHistory { year = -5,
         event = [[Event that concerns \reference{test-1}, but not \reference{test-2}.\notconcerns{test-2}]] }
+end
+
+local function refSetup()
+    TexApi.makeEntityPrimary("test-1")
 end
 
 local function generateExpected(isCurrentDaySet, isShowFuture)
@@ -119,24 +121,24 @@ local function generateExpected(isCurrentDaySet, isShowFuture)
     return out
 end
 
-setup()
+entitySetup()
 TexApi.showFuture(false)
 local expected = generateExpected(false, false)
-AssertAutomatedChapters("history-events-no-future-day-not-set", expected)
+AssertAutomatedChapters("history-events-no-future-day-not-set", expected, refSetup)
 
-setup()
+entitySetup()
 TexApi.showFuture(true)
 expected = generateExpected(false, true)
-AssertAutomatedChapters("history-events-with-future-day-not-set", expected)
+AssertAutomatedChapters("history-events-with-future-day-not-set", expected, refSetup)
 
-setup()
+entitySetup()
 TexApi.setCurrentDay(10)
 TexApi.showFuture(false)
 local expected = generateExpected(true, false)
-AssertAutomatedChapters("history-events-no-future-day-set", expected)
+AssertAutomatedChapters("history-events-no-future-day-set", expected, refSetup)
 
-setup()
+entitySetup()
 TexApi.setCurrentDay(10)
 TexApi.showFuture(true)
 expected = generateExpected(true, true)
-AssertAutomatedChapters("history-events-with-future-day-set", expected)
+AssertAutomatedChapters("history-events-with-future-day-set", expected, refSetup)

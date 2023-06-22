@@ -1,4 +1,4 @@
-local function setup()
+local function entitySetup()
     TexApi.setCurrentYear(0)
 
     TexApi.addType { metatype = "other", type = "organisations" }
@@ -9,12 +9,11 @@ local function setup()
     TexApi.addParent { parentLabel = "secret-orga" }
     TexApi.addParent { parentLabel = "revealed-orga" }
     TexApi.addParent { parentLabel = "unborn-orga" }
-    TexApi.makeEntityPrimary("normal")
     TexApi.addHistory { year = -10, event = [[Normal event]] }
     TexApi.addHistory { year = -9, event = [[Concerns \reference{secret}]] }
     TexApi.addHistory { year = -8, event = [[Concerns \reference{revealed}]] }
     TexApi.addSecretHistory { year = -5, event = [[Secret event]] }
-
+    
     TexApi.newEntity { type = "npcs", label = "secret", name = "Secret" }
     TexApi.setSecret()
     TexApi.addParent { parentLabel = "normal-orga" }
@@ -22,48 +21,52 @@ local function setup()
     TexApi.addParent { parentLabel = "revealed-orga" }
     TexApi.addParent { parentLabel = "unborn-orga" }
     TexApi.addHistory { year = -7, event = [[Concerns \reference{normal}]] }
-
+    
     TexApi.newEntity { type = "npcs", label = "revealed", name = "Revealed" }
     TexApi.setSecret()
     TexApi.addParent { parentLabel = "normal-orga" }
     TexApi.addParent { parentLabel = "secret-orga" }
     TexApi.addParent { parentLabel = "revealed-orga" }
     TexApi.addParent { parentLabel = "unborn-orga" }
-    TexApi.reveal("revealed")
     TexApi.addHistory { year = -6, event = [[Concerns \reference{normal}]] }
-
+    
     TexApi.newEntity { type = "npcs", label = "unborn", name = "Unborn" }
     TexApi.addParent { parentLabel = "normal-orga" }
     TexApi.addParent { parentLabel = "secret-orga" }
     TexApi.addParent { parentLabel = "revealed-orga" }
     TexApi.addParent { parentLabel = "unborn-orga" }
-    TexApi.makeEntityPrimary("unborn")
     TexApi.addHistory { year = 10, event = [[Created.\birthof{unborn}]] }
-
+    
     TexApi.newEntity { type = "npcs", label = "at-secret-location", name = "At secret Location" }
     TexApi.setLocation("eldorado")
     TexApi.addParent { parentLabel = "normal-orga" }
     TexApi.addParent { parentLabel = "secret-orga" }
     TexApi.addParent { parentLabel = "revealed-orga" }
     TexApi.addParent { parentLabel = "unborn-orga" }
-    TexApi.makeEntityPrimary("at-secret-location")
-
+    
     TexApi.newEntity { type = "places", label = "eldorado", name = "Eldorado" }
     TexApi.setSecret()
-
+    
     TexApi.newEntity { type = "organisations", label = "normal-orga", name = "Normal Organisation" }
-    TexApi.makeEntityPrimary("normal-orga")
-
+    
     TexApi.newEntity { type = "organisations", label = "secret-orga", name = "Secret Organisation" }
     TexApi.setSecret()
-
+    
     TexApi.newEntity { type = "organisations", label = "revealed-orga", name = "Revealed Organisation" }
     TexApi.setSecret()
-    TexApi.reveal("revealed-orga")
-
+    
     TexApi.newEntity { type = "organisations", label = "unborn-orga", name = "Unborn Organisation" }
-    TexApi.makeEntityPrimary("unborn-orga")
     TexApi.born { year = 10, event = [[Founded.\birthof{unborn-orga}]] }
+end
+
+local function refSetup()
+    TexApi.makeEntityPrimary("normal")
+    TexApi.makeEntityPrimary("unborn")
+    TexApi.makeEntityPrimary("at-secret-location")
+    TexApi.makeEntityPrimary("normal-orga")
+    TexApi.makeEntityPrimary("unborn-orga")
+    TexApi.reveal("revealed")
+    TexApi.reveal("revealed-orga")
 end
 
 local function npcsParagraph(isShowSecrets, isShowFuture)
@@ -246,26 +249,26 @@ end
 local out = {}
 local expected = {}
 
-setup()
+entitySetup()
 TexApi.showSecrets(false)
 TexApi.showFuture(false)
 expected = generateExpected(false, false)
-AssertAutomatedChapters("entity-visibility-no-secrets-no-future", expected)
+AssertAutomatedChapters("entity-visibility-no-secrets-no-future", expected, refSetup)
 
-setup()
+entitySetup()
 TexApi.showSecrets(true)
 TexApi.showFuture(false)
 expected = generateExpected(true, false)
-AssertAutomatedChapters("entity-visibility-with-secrets-no-future", expected)
+AssertAutomatedChapters("entity-visibility-with-secrets-no-future", expected, refSetup)
 
-setup()
+entitySetup()
 TexApi.showSecrets(false)
 TexApi.showFuture(true)
 expected = generateExpected(false, true)
-AssertAutomatedChapters("entity-visibility-no-secrets-with-future", expected)
+AssertAutomatedChapters("entity-visibility-no-secrets-with-future", expected, refSetup)
 
-setup()
+entitySetup()
 TexApi.showSecrets(true)
 TexApi.showFuture(true)
 expected = generateExpected(true, true)
-AssertAutomatedChapters("entity-visibility-with-secrets-with-future", expected)
+AssertAutomatedChapters("entity-visibility-with-secrets-with-future", expected, refSetup)

@@ -10,8 +10,6 @@ for key, isAgingDefined in pairs({ false, true }) do
     TexApi.setSpecies("test-species")
     TexApi.born { year = -20, event = "Birth." }
 
-    TexApi.makeAllEntitiesPrimary()
-
     local expected = {}
     Append(expected, [[\chapter{]] .. CapFirst(Tr("characters")) .. [[}]])
     Append(expected, [[\section{]] .. CapFirst(Tr("npcs")) .. [[}]])
@@ -65,5 +63,5 @@ for key, isAgingDefined in pairs({ false, true }) do
         Append(name, "not ")
     end
     Append(name, "defined")
-    AssertAutomatedChapters(table.concat(name), expected)
+    AssertAutomatedChapters(table.concat(name), expected, TexApi.makeAllEntitiesPrimary)
 end

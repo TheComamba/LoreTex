@@ -13,7 +13,9 @@ TexApi.setDescriptor { descriptor = "More Subplaces", description = [[\subparagr
 TexApi.newEntity { type = "species", label = "species", name = "Species" }
 TexApi.setDescriptor { descriptor = "Subspecies", description = [[\label{subspecies}]] }
 
-TexApi.makeEntityPrimary("some-npc")
+local function refSetup1()
+    TexApi.makeEntityPrimary("some-npc")
+end
 
 local expected = {
     [[\chapter{]] .. CapFirst(Tr("characters")) .. [[}]],
@@ -49,22 +51,25 @@ local expected = {
     [[\hspace{1cm}]]
 }
 
-AssertAutomatedChapters("Sublabel", expected)
+AssertAutomatedChapters("Sublabel", expected, refSetup1)
 
 TexApi.newEntity { type = "npcs", label = "also-primary", name = "Also Primary" }
 TexApi.setDescriptor { descriptor = "Sublabel 1", description = [[\label{sublabel-1}]] }
 TexApi.setDescriptor { descriptor = "Some Paragraph", description = [[\subparagraph{Sublabel 2}\label{sublabel-2}]] }
-TexApi.mention("sublabel-1")
-TexApi.mention("sublabel-2")
-TexApi.makeEntityPrimary("also-primary")
 
 TexApi.newEntity { type = "npcs", label = "not-primary", name = "Not Primary" }
 TexApi.setDescriptor { descriptor = "Sublabel 3", description = [[\label{sublabel-3}]] }
 TexApi.setDescriptor { descriptor = "Some ignored Paragraph",
     description =
     [[\subparagraph{Some ignored paragraph}\label{ignored-label}\subparagraph{Sublabel 4}\label{sublabel-4}]] }
-TexApi.mention("sublabel-3")
-TexApi.mention("sublabel-4")
+
+local function refSetup2()
+    TexApi.mention("sublabel-1")
+    TexApi.mention("sublabel-2")
+    TexApi.makeEntityPrimary("also-primary")
+    TexApi.mention("sublabel-3")
+    TexApi.mention("sublabel-4")
+end
 
 local expected = {
     [[\chapter{]] .. CapFirst(Tr("characters")) .. [[}]],
@@ -92,7 +97,7 @@ local expected = {
     [[\hspace{1cm}]],
 }
 
-AssertAutomatedChapters("Only sublabel mentioned", expected)
+AssertAutomatedChapters("Only sublabel mentioned", expected, refSetup2)
 
 TexApi.newEntity { type = "npcs", label = "some-npc", name = "Some NPC" }
 TexApi.setDescriptor { descriptor = "Paragraph with just label", description = [[\label{sublabel}]] }
@@ -115,7 +120,10 @@ Append(unusualPara, [[\label{subpara-with-label}]])
 Append(unusualPara, [[\subparagraph{GG Again no label}]])
 Append(unusualPara, [[But some miscelaneous content]])
 TexApi.setDescriptor { descriptor = "Unusual paragraph", description = table.concat(unusualPara, " ") }
-TexApi.makeEntityPrimary("some-npc")
+
+local function refSetup3()
+    TexApi.makeEntityPrimary("some-npc")
+end
 
 local expected = {}
 Append(expected, [[\chapter{]] .. CapFirst(Tr("characters")) .. [[}]])
@@ -141,13 +149,12 @@ Append(expected, paraWithoutLabel)
 Append(expected, [[\paragraph{Unusual paragraph}]])
 Append(expected, unusualPara)
 
-AssertAutomatedChapters("Subparagraphs with and without labels", expected)
+AssertAutomatedChapters("Subparagraphs with and without labels", expected, refSetup3)
 
 TexApi.newEntity { type = "places", label = "place-1", name = "Place 1" }
 TexApi.setDescriptor { descriptor = "Appears Twice", description = [[\subparagraph{One}\label{one}]] }
 TexApi.newEntity { type = "places", label = "place-2", name = "Place 2" }
 TexApi.setDescriptor { descriptor = "Appears Twice", description = [[\subparagraph{Two}\label{two}]] }
-TexApi.makeAllEntitiesPrimary()
 
 local expected = {}
 Append(expected, [[\chapter{]] .. CapFirst(Tr("places")) .. [[}]])
@@ -171,4 +178,5 @@ Append(expected, [[\paragraph{Appears Twice}]])
 Append(expected, [[\subparagraph{Two}]])
 Append(expected, [[\label{two}]])
 
-AssertAutomatedChapters("Unlabeled paragraph with labeled subpara appears twice", expected)
+AssertAutomatedChapters("Unlabeled paragraph with labeled subpara appears twice", expected, TexApi
+.makeAllEntitiesPrimary)

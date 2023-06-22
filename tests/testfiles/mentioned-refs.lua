@@ -1,16 +1,15 @@
 TexApi.newEntity { type = "npcs", label = "primary-npc", name = "Primary NPC" }
-TexApi.makeEntityPrimary("primary-npc")
 TexApi.setDescriptor { descriptor = "Description", description = [[Different than \nameref{other-npc}.]] }
 TexApi.addParent { parentLabel = "some-organisation" }
-
 TexApi.newEntity { type = "npcs", label = "mentioned-npc", name = "Mentioned NPC" }
-TexApi.mention("mentioned-npc")
-
 TexApi.newEntity { type = "npcs", label = "other-npc", name = "Other NPC" }
-
 TexApi.newEntity { type = "npcs", label = "not-mentioned-npc", name = "Not mentioned NPC" }
-
 TexApi.newEntity { type = "other", label = "some-organisation", name = "Some Organisation" }
+
+local function refSetup()
+    TexApi.makeEntityPrimary("primary-npc")
+    TexApi.mention("mentioned-npc")
+end
 
 local expected = {}
 Append(expected, [[\chapter{]] .. CapFirst(Tr("characters")) .. [[}]])
@@ -40,4 +39,4 @@ Append(expected, [[\subparagraph{Some Organisation}]])
 Append(expected, [[\label{some-organisation}]])
 Append(expected, [[\hspace{1cm}]])
 
-AssertAutomatedChapters("mentioned-refs", expected)
+AssertAutomatedChapters("mentioned-refs", expected, refSetup)

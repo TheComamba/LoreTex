@@ -1,6 +1,6 @@
 local types = { "other", "places" }
 
-local function setup()
+local function entitySetup()
     for key1, typename1 in pairs(types) do
         local name1 = typename1
         TexApi.newEntity { type = typename1, label = name1, name = name1 }
@@ -197,31 +197,37 @@ local expected = {}
 local out = {}
 
 for key, typename in pairs(types) do
-    setup()
-    TexApi.makeAllEntitiesOfTypePrimary(typename)
+    entitySetup()
+    local function refSetup()
+        TexApi.makeAllEntitiesOfTypePrimary(typename)
+    end
 
     expected = generateExpected { primaryType = typename }
-    AssertAutomatedChapters("Type " .. typename .. " is primary", expected)
+    AssertAutomatedChapters("Type " .. typename .. " is primary", expected, refSetup)
 end
 
 for depth = 1, 3 do
     for key1, typename in pairs(types) do
         for key2, label in pairs(generateLabels(typename, depth)) do
-            setup()
-            TexApi.makeEntityAndChildrenPrimary(label)
+            entitySetup()
+            local function refSetupLabel()
+                TexApi.makeEntityAndChildrenPrimary(label)
+            end
 
             expected = generateExpected { primaryParent = label }
             local testname = "Entity '" .. label .. "' is primary"
-            AssertAutomatedChapters(testname, expected)
+            AssertAutomatedChapters(testname, expected, refSetupLabel)
 
             for key2, primaryTypename in pairs(types) do
-                setup()
-                TexApi.makeEntityAndChildrenPrimary(label)
-                TexApi.makeTypePrimaryWhenMentioned(primaryTypename)
+                entitySetup()
+                local function refSetupLabelAndType()
+                    TexApi.makeEntityAndChildrenPrimary(label)
+                    TexApi.makeTypePrimaryWhenMentioned(primaryTypename)
+                end
 
                 expected = generateExpected { primaryParent = label, primaryTypeWhenMentioned = primaryTypename }
                 local testname2 = testname .. ", type " .. primaryTypename .. " is primary when mentioned"
-                AssertAutomatedChapters(testname2, expected)
+                AssertAutomatedChapters(testname2, expected, refSetupLabelAndType)
             end
         end
     end

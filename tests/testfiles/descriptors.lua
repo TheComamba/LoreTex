@@ -110,8 +110,6 @@ for key, isSubdescription in pairs({ false, true }) do
             description = [[\label{2} \subparagraph{ZZZSubsubentity} \label{3}]] }
         setDescriptors(GetMutableEntityFromAll(tostring(i)), isSubdescription)
 
-        TexApi.makeAllEntitiesPrimary()
-
         local expected = {}
         Append(expected, [[\chapter{]] .. CapFirst(Tr("places")) .. [[}]])
         Append(expected, [[\section{]] .. CapFirst(Tr("places")) .. [[}]])
@@ -143,6 +141,6 @@ for key, isSubdescription in pairs({ false, true }) do
         if isSubdescription then
             testname = "Sub-" .. testname
         end
-        AssertAutomatedChapters(testname, expected)
+        AssertAutomatedChapters(testname, expected, TexApi.makeAllEntitiesPrimary)
     end
 end

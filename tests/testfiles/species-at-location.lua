@@ -6,7 +6,9 @@ TexApi.setLocation("tattooine")
 TexApi.newEntity { type = "species", label = "jawa", name = "Jawa" }
 TexApi.setLocation("tattooine")
 
-TexApi.makeEntityPrimary("tattooine")
+local function refSetup()
+    TexApi.makeEntityPrimary("tattooine")
+end
 
 local expected = {}
 Append(expected, [[\chapter{]] .. CapFirst(Tr("places")) .. [[}]])
@@ -31,4 +33,4 @@ Append(expected, [[\subparagraph{Tusken}]])
 Append(expected, [[\label{tusken}]])
 Append(expected, [[\hspace{1cm}]])
 
-AssertAutomatedChapters("species-at-location", expected)
+AssertAutomatedChapters("species-at-location", expected, refSetup)

@@ -53,7 +53,7 @@ local function readEntities(dbPath)
             local args = {};
             args.entity = entity
             args.descriptor = entityColumn.descriptor
-            args.description = entityColumn.description
+            args.description = StringToDescription(entityColumn.description)
             args.suppressDerivedDescriptors = true
             SetDescriptor(args)
         end

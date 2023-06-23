@@ -1,7 +1,7 @@
 local function optionalEntityToString(inp)
     if IsEntity(inp) then
         local label = GetProtectedStringField(inp, "label")
-        return [[ENTITY{]] .. label .. [[}]]
+        return TexCmd(EntityRefCommand, label)
     else
         return ""
     end

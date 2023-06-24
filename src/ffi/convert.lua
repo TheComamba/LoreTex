@@ -147,3 +147,27 @@ function HistoryItemsFromColumns(historyItemColumns)
         table.insert(AllHistoryItems, item)
     end
 end
+
+function GetRelationshipColumns()
+    local relationships = {}
+    for _, entity in pairs(AllEntities) do
+        local parentsAndRoles = GetProtectedTableReferenceField(entity, "parents")
+        local childlabel = GetProtectedStringField(entity, "label")
+        for _, parentAndRole in pairs(parentsAndRoles) do
+            local parent = parentAndRole[1]
+            local role = parentAndRole[2]
+            if not role then role = "" end
+            local parentLabel = GetProtectedStringField(parent, "label")
+            local relationship = {}
+            relationship.parent = parentLabel
+            relationship.child = childlabel
+            relationship.role = role
+            table.insert(relationships, relationship)
+        end
+    end
+    return relationships
+end
+
+function RelationshipsFromColumns(relationshipColumns)
+
+end

@@ -43,11 +43,6 @@ local function readEntityColumns(dbPath)
     return entityColumns
 end
 
-local function readEntities(dbPath)
-    local entityColumns = readEntityColumns(dbPath)
-    EntitiesFromColumns(entityColumns)
-end
-
 local function getNumberOfHistoryItems(dbPath)
     local ffi = GetFFIModule()
     local loreCore = GetLib()
@@ -96,11 +91,6 @@ local function readHistoryItemColumns(dbPath)
     return histoyItemColumns
 end
 
-local function readHistoryItems(dbPath)
-    local historyItemColumns = readHistoryItemColumns(dbPath)
-    HistoryItemsFromColumns(historyItemColumns)
-end
-
 local function getNumberOfRelationships(dbPath)
     local ffi = GetFFIModule()
     local loreCore = GetLib()
@@ -115,7 +105,7 @@ local function getNumberOfRelationships(dbPath)
     end
 end
 
-local function readRelationships(dbPath)
+local function readRelationshipColumns(dbPath)
     local ffi = GetFFIModule()
     local loreCore = GetLib()
     if not ffi or not loreCore then return {} end
@@ -132,19 +122,23 @@ local function readRelationships(dbPath)
         return {}
     end
 
+    local relationshipColumns = {}
     for i = 0, (ffi.number(numRelationships[0]) - 1) do
         local cRelationship = cRelationships[i]
         local relationship = {}
         relationship.parent = ffi.string(cRelationship.parent)
         relationship.child = ffi.string(cRelationship.child)
         relationship.role = ffi.string(cRelationship.role)
-        -- TODO: Add relationship to Child
+        table.insert(relationshipColumns, relationship)
     end
+    return relationshipColumns
 end
 
 TexApi.readLoreFromDatabase = function(dbPath)
-    GetLib() --Load the library if it hasn't been loaded yet.
-    readEntities(dbPath)
-    readHistoryItems(dbPath)
-    readRelationships(dbPath)
+    local entityColumns = readEntityColumns(dbPath)
+    EntitiesFromColumns(entityColumns)
+    local historyItemColumns = readHistoryItemColumns(dbPath)
+    HistoryItemsFromColumns(historyItemColumns)
+    local relationshipColumns = readRelationshipColumns(dbPath)
+    RelationshipsFromColumns(relationshipColumns)
 end

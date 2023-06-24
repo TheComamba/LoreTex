@@ -33,72 +33,8 @@ local numSucceeded = 0
 local numFailed = 0
 local isContainedTranslation = false
 local apiFunctionUsage = {}
-local testFunctions = {}
 
-testFunctions.areEntitiesWithSameLabel = function(obj1, obj2)
-    if obj1 == nil or obj2 == nil then
-        return false
-    elseif not IsEntity(obj1) or not IsEntity(obj2) then
-        return false
-    else
-        return GetProtectedStringField(obj1, "label") == GetProtectedStringField(obj2, "label")
-    end
-end
-
-testFunctions.areTablesEqual = function(obj1, obj2, elementNum, currentObj1, currentObj2)
-    if #obj1 ~= #obj2 then
-        elementNum[1] = -1
-        currentObj1[1] = #obj1
-        currentObj2[1] = #obj2
-        return false
-    end
-    for key, value in pairs(obj1) do
-        if not testFunctions.areEntitiesWithSameLabel(value, obj2[key]) and
-            not testFunctions.areEqual(value, obj2[key], elementNum, currentObj1, currentObj2) then
-            if IsProtectedDescriptor(key) then
-                elementNum[1] = [[$]] .. key .. [[$]]
-            else
-                elementNum[1] = key
-            end
-            currentObj1[1] = obj1[key]
-            currentObj2[1] = obj2[key]
-            return false
-        end
-    end
-    return true
-end
-
-testFunctions.areEqual = function(obj1, obj2, elementNum, currentObj1, currentObj2)
-    if obj1 == nil or obj2 == nil then
-        if obj1 == nil and obj2 == nil then
-            return true
-        else
-            return false
-        end
-    elseif type(obj1) ~= type(obj2) then
-        return false
-    elseif type(obj1) == "table" then
-        return testFunctions.areTablesEqual(obj1, obj2, elementNum, currentObj1, currentObj2)
-    else
-        obj1 = Replace(" ", "", obj1)
-        obj2 = Replace(" ", "", obj2)
-        obj1 = Replace("\n", "", obj1)
-        obj2 = Replace("\n", "", obj2)
-        obj1 = Replace([[_]], [[\_]], obj1)
-        obj2 = Replace([[_]], [[\_]], obj2)
-        return obj1 == obj2
-    end
-end
-
-testFunctions.printAllChars = function(str)
-    local out = {}
-    for i = 1, #str do
-        Append(out, str:sub(i, i))
-    end
-    return out
-end
-
-testFunctions.splitStringInLinebreaks = function(str, maxWidth)
+local function splitStringInLinebreaks(str, maxWidth)
     if not str then return { "nil" } end
     local out = {}
     while string.len(str) > 0 do
@@ -108,7 +44,7 @@ testFunctions.splitStringInLinebreaks = function(str, maxWidth)
     return out
 end
 
-testFunctions.printMinipage = function(caption, rows, i0, chunksize)
+local function printMinipage(caption, rows, i0, chunksize)
     local out = {}
     Append(out, [[\begin{minipage}[t]{.5\textwidth}]])
     if i0 == 1 then
@@ -118,7 +54,7 @@ testFunctions.printMinipage = function(caption, rows, i0, chunksize)
     local iMax = math.min(i0 + chunksize - 1, #rows)
     for i = i0, iMax do
         local rowcounter = tostring(i) .. " - "
-        local splitRow = testFunctions.splitStringInLinebreaks(rows[i], 40)
+        local splitRow = splitStringInLinebreaks(rows[i], 40)
         for key, line in pairs(splitRow) do
             if key == 1 then
                 line = rowcounter .. line
@@ -135,31 +71,17 @@ testFunctions.printMinipage = function(caption, rows, i0, chunksize)
     return out
 end
 
-testFunctions.printStringComparison = function(expected, received)
+local function printStringComparison(expected, received)
     local out = {}
     local chunksize = 40
     local startIndex = 1
     while startIndex <= math.max(#expected, #received) do
-        Append(out, testFunctions.printMinipage("Expected", expected, startIndex, chunksize))
-        Append(out, testFunctions.printMinipage("Received", received, startIndex, chunksize))
+        Append(out, printMinipage("Expected", expected, startIndex, chunksize))
+        Append(out, printMinipage("Received", received, startIndex, chunksize))
         Append(out, [[\newpage]])
         startIndex = startIndex + chunksize
     end
     return out
-end
-
-testFunctions.isListOfStrings = function(list)
-    if type(list) ~= "table" then
-        return false
-    elseif #list == 0 then
-        return false
-    end
-    for key, val in pairs(list) do
-        if type(key) ~= "number" or type(val) ~= "string" then
-            return false
-        end
-    end
-    return true
 end
 
 local function ToFlattenedString(input)
@@ -236,7 +158,7 @@ local function checkOutputValues(caller, expected, received)
         if expectedString[i] == nil or receivedString[i] == nil or not areStringEqual(expectedString[i], receivedString[i]) then
             local out = {}
             Append(out, "Mismatch at position " .. i .. [[:\\]])
-            Append(out, testFunctions.printStringComparison(expectedString, receivedString))
+            Append(out, printStringComparison(expectedString, receivedString))
 
             onAssertionFail(caller, out)
             return
@@ -245,11 +167,6 @@ local function checkOutputValues(caller, expected, received)
 end
 
 function Assert(caller, expected, received)
-    --TODO: Get rid of this
-    -- local failedIndex = { 0 }
-    -- local failedItem1 = { "" }
-    -- local failedItem2 = { "" }
-
     if IsDictionaryRandomised then
         caller = caller .. ", with randomised dictionary"
     end
@@ -257,39 +174,6 @@ function Assert(caller, expected, received)
     checkForErrors(caller)
     checkOutputTypes(caller, expected, received)
     checkOutputValues(caller, expected, received)
-    -- if  then
-    --     return
-    -- else
-    --     compareOutputs(caller, expected, received)
-
-
-    --     if testFunctions.areEqual(expected, received, failedIndex, failedItem1, failedItem2) then
-    --         numSucceeded = numSucceeded + 1
-    --     else
-    --         local out = {}
-    --         numFailed = numFailed + 1
-    --         Append(out, [[Assert failed in function "]] .. caller .. [["!\\]])
-    --         if type(expected) ~= type(received) then
-    --             Append(out, "Expected output of type ")
-    --             Append(out, type(expected) .. ",")
-    --             Append(out, "but received output of type ")
-    --             Append(out, type(received) .. [[.\\]])
-    --         else
-    --             if testFunctions.isListOfStrings(expected) and testFunctions.isListOfStrings(received) then
-    --                 Append(out, testFunctions.printStringComparison(expected, received))
-    --             else
-    --                 Append(out, testFunctions.printStringComparison(DebugPrintRaw(expected), DebugPrintRaw(received)))
-    --             end
-    --             if type(failedItem1[1]) == "string" and type(failedItem2[1]) == "string" then
-    --                 Append(out, "At Element " .. failedIndex[1] .. [[:\\]])
-    --                 local allCharsObj1 = testFunctions.printAllChars(failedItem1[1])
-    --                 local allCharsObj2 = testFunctions.printAllChars(failedItem2[1])
-    --                 Append(out, testFunctions.printStringComparison(allCharsObj1, allCharsObj2))
-    --             else
-    --             end
-    --         end
-    --     end
-    -- end
 end
 
 function AssertAutomatedChapters(caller, expected, setup)

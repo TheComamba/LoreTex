@@ -8,3 +8,11 @@ function StringToDescription(descriptionString)
         return descriptionString
     end
 end
+
+function EntitiesToColumns()
+    return {}
+end
+
+function ColumnsToEntities()
+    return {}
+end

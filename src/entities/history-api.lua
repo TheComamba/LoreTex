@@ -18,8 +18,10 @@ local function IsHistoryItemOk(caller, item)
 	return IsArgOk(caller, item, required, optional)
 end
 
-function NewHistoryItem()
-	local label = NewUniqueLabel("HISTORY-ITEM")
+function NewHistoryItem(label)
+	if not label then
+		label = NewUniqueLabel("HISTORY-ITEM")
+	end
 	local item = {}
 	SetProtectedField(item, "label", label)
 	SetProtectedField(item, "isSecret", false)
@@ -134,10 +136,10 @@ local function processEvent(item)
 end
 
 function AddHistory(arg)
-	if not IsArgOk("addHistory", arg, { "year", "event" }, { "day", "isConcernsOthers", "isSecret", "yearFmt" }) then
+	if not IsArgOk("addHistory", arg, { "year", "event" }, { "day", "isConcernsOthers", "isSecret", "label", "yearFmt" }) then
 		return
 	end
-	local item = NewHistoryItem()
+	local item = NewHistoryItem(arg.label)
 	SetProtectedField(item, "originator", CurrentEntity)
 	setDay(item, arg.day)
 	SetYear(item, arg.year)

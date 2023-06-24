@@ -99,38 +99,38 @@ function EntitiesFromColumns(entityColumns)
     end
 end
 
-local function formatHistoryItemForC(item)
-    local newItem = {}
+local function formatHistoryItemForC(luaItem)
+    local cItem = {}
 
-    newItem.label = GetProtectedStringField(item, "label")
+    cItem.label = GetProtectedStringField(luaItem, "label")
 
-    newItem.content = GetProtectedStringField(item, "content")
+    cItem.content = GetProtectedStringField(luaItem, "content")
 
-    local is_concerns_others = GetProtectedNullableField(item, "isConcernsOthers")
+    local is_concerns_others = GetProtectedNullableField(luaItem, "isConcernsOthers")
     if not is_concerns_others then is_concerns_others = false end
-    newItem.is_concerns_others = is_concerns_others
+    cItem.is_concerns_others = is_concerns_others
 
-    local is_secret = GetProtectedNullableField(item, "isSecret")
+    local is_secret = GetProtectedNullableField(luaItem, "isSecret")
     if not is_secret then is_secret = false end
-    newItem.is_secret = is_secret
+    cItem.is_secret = is_secret
 
-    local year = GetProtectedNullableField(item, "year")
+    local year = GetProtectedNullableField(luaItem, "year")
     if not year then
-        LogError("History item " .. newItem.label .. " has no year.")
+        LogError("History item " .. cItem.label .. " has no year.")
         return {}
     end
-    newItem.year = year
+    cItem.year = year
 
-    local day = GetProtectedNullableField(item, "day")
+    local day = GetProtectedNullableField(luaItem, "day")
     if not day then day = 0 end
-    newItem.day = day
+    cItem.day = day
 
-    local originator = GetProtectedNullableField(item, "originator")
-    newItem.originator = optionalEntityToString(originator)
+    local originator = GetProtectedNullableField(luaItem, "originator")
+    cItem.originator = optionalEntityToString(originator)
 
-    local yearFormat = GetProtectedNullableField(item, "yearFormat")
-    newItem.year_format = optionalEntityToString(yearFormat)
-    return newItem
+    local yearFormat = GetProtectedNullableField(luaItem, "yearFormat")
+    cItem.year_format = optionalEntityToString(yearFormat)
+    return cItem
 end
 
 function GetHistoryItemColumns()
@@ -142,8 +142,20 @@ function GetHistoryItemColumns()
     return historyItems
 end
 
+local function formatCHistoryItemForLua(cItem)
+    local luaItem = {}
+    luaItem.event = cItem.content
+    luaItem.isConcernsOthers = cItem.is_concerns_others
+    luaItem.isSecret = cItem.is_secret
+    luaItem.year = cItem.year
+    luaItem.day = cItem.day
+    luaItem.label = cItem.label
+    return luaItem
+end
+
 function HistoryItemsFromColumns(historyItemColumns)
     for _, item in pairs(historyItemColumns) do
+        item = formatCHistoryItemForLua(item)
         AddHistory(item)
     end
 end

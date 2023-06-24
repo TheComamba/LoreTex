@@ -73,25 +73,25 @@ function AddMentions(entity, content)
 end
 
 local function addConcerns(entity, content)
-	local originator = GetProtectedNullableField(entity, "originator")
-	if originator ~= nil then
-		AddToProtectedField(entity, "concerns", originator)
-	end
 	if GetProtectedNullableField(entity, "isConcernsOthers") then
-		local concernesLabels = {}
+		local concernsLabels = {}
+		local originator = GetProtectedNullableField(entity, "originator")
+		if originator ~= nil then
+			UniqueAppend(concernsLabels, GetProtectedStringField(originator, "label"))
+		end
 		for key, mentioned in pairs(GetProtectedTableReferenceField(entity, "mentions")) do
 			local label = GetProtectedStringField(mentioned, "label")
 			if label ~= "" then
-				UniqueAppend(concernesLabels, label)
+				UniqueAppend(concernsLabels, label)
 			end
 		end
 		if GetProtectedNullableField(entity, "year") ~= nil then
-			UniqueAppend(concernesLabels, ScanStringForCmd(content, "concerns"))
-			UniqueAppend(concernesLabels, GetProtectedTableReferenceField(entity, "birthof"))
-			UniqueAppend(concernesLabels, GetProtectedTableReferenceField(entity, "deathof"))
+			UniqueAppend(concernsLabels, ScanStringForCmd(content, "concerns"))
+			UniqueAppend(concernsLabels, GetProtectedTableReferenceField(entity, "birthof"))
+			UniqueAppend(concernsLabels, GetProtectedTableReferenceField(entity, "deathof"))
 		end
 		local notConcerns = ScanForCmd(content, "notconcerns")
-		for key, concernedLabel in pairs(concernesLabels) do
+		for key, concernedLabel in pairs(concernsLabels) do
 			if concernedLabel ~= "" and not IsIn(concernedLabel, notConcerns) then
 				local concernedEntity = GetMutableEntityFromAll(concernedLabel)
 				AddToProtectedField(entity, "concerns", concernedEntity)
@@ -120,7 +120,9 @@ local function processEvent(item)
 	AddMentions(item, content)
 	addConcerns(item, content)
 	for key, entity in pairs(GetProtectedTableReferenceField(item, "concerns")) do
-		AddToProtectedField(entity, "historyItems", item)
+		if not IsIn(item, GetProtectedTableReferenceField(entity, "historyItems")) then
+			AddToProtectedField(entity, "historyItems", item)
+		end
 	end
 
 	local year = GetProtectedNullableField(item, "year")

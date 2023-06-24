@@ -14,10 +14,12 @@ local allHistoryItemsBeforeRoundtrip = DeepCopy(AllHistoryItems)
 
 local entityColumns = GetEntityColumns()
 local historyItemColumns = GetHistoryItemColumns()
+local relationshipColumns = GetRelationshipColumns()
 ResetState()
 
 EntitiesFromColumns(entityColumns)
 HistoryItemsFromColumns(historyItemColumns)
+RelationshipsFromColumns(relationshipColumns)
 
 for _, entityBefore in ipairs(allEntitesBeforeRoundtrip) do
     local label = GetProtectedStringField(entityBefore, "label")

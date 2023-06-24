@@ -34,6 +34,16 @@ local isContainedTranslation = false
 local apiFunctionUsage = {}
 local testFunctions = {}
 
+testFunctions.areEntitiesWithSameLabel = function(obj1, obj2)
+    if obj1 == nil or obj2 == nil then
+        return false
+    elseif not IsEntity(obj1) or not IsEntity(obj2) then
+        return false
+    else
+        return GetProtectedStringField(obj1, "label") == GetProtectedStringField(obj2, "label")
+    end
+end
+
 testFunctions.areTablesEqual = function(obj1, obj2, elementNum, currentObj1, currentObj2)
     if #obj1 ~= #obj2 then
         elementNum[1] = -1
@@ -41,16 +51,12 @@ testFunctions.areTablesEqual = function(obj1, obj2, elementNum, currentObj1, cur
         currentObj2[1] = #obj2
         return false
     end
-    for i = 1, #obj1 do
-        if not testFunctions.areEqual(obj1[i], obj2[i], elementNum, currentObj1, currentObj2) then
-            elementNum[1] = i
-            currentObj1[1] = obj1[i]
-            currentObj2[1] = obj2[i]
-            return false
-        end
-    end
     for key, value in pairs(obj1) do
-        if not testFunctions.areEqual(value, obj2[key], elementNum, currentObj1, currentObj2) then
+        if not testFunctions.areEntitiesWithSameLabel(value, obj2[key]) or
+            not testFunctions.areEqual(value, obj2[key], elementNum, currentObj1, currentObj2) then
+            if IsProtectedDescriptor(key) then
+                key = [[$]] .. key .. [[$]]
+            end
             elementNum[1] = key
             currentObj1[1] = obj1[key]
             currentObj2[1] = obj2[key]

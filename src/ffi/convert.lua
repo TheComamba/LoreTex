@@ -135,11 +135,9 @@ end
 
 function GetHistoryItemColumns()
     local historyItems = {}
-    for _, item in pairs(historyItems) do
+    for _, item in pairs(AllHistoryItems) do
         local newItem = formatHistoryItemForC(item)
-        if #newItem ~= 0 then
-            table.insert(historyItems, newItem)
-        end
+        table.insert(historyItems, newItem)
     end
     return historyItems
 end

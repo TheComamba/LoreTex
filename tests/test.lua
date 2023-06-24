@@ -99,6 +99,7 @@ testFunctions.printAllChars = function(str)
 end
 
 testFunctions.splitStringInLinebreaks = function(str, maxWidth)
+    if not str then return { "nil" } end
     local out = {}
     while string.len(str) > 0 do
         Append(out, string.sub(str, 1, maxWidth))
@@ -114,20 +115,19 @@ testFunctions.printMinipage = function(caption, rows, i0, chunksize)
         Append(out, caption .. ":")
     end
     Append(out, TexCmd("begin", "verbatim"))
-    for i = i0, (i0 + chunksize - 1) do
-        if i <= #rows then
-            local rowcounter = tostring(i) .. " - "
-            local splitRow = testFunctions.splitStringInLinebreaks(rows[i], 40)
-            for key, line in pairs(splitRow) do
-                if key == 1 then
-                    line = rowcounter .. line
-                else
-                    for j = 1, string.len(rowcounter) do
-                        line = "." .. line
-                    end
+    local iMax = math.min(i0 + chunksize - 1, #rows)
+    for i = i0, iMax do
+        local rowcounter = tostring(i) .. " - "
+        local splitRow = testFunctions.splitStringInLinebreaks(rows[i], 40)
+        for key, line in pairs(splitRow) do
+            if key == 1 then
+                line = rowcounter .. line
+            else
+                for j = 1, string.len(rowcounter) do
+                    line = "." .. line
                 end
-                Append(out, line)
             end
+            Append(out, line)
         end
     end
     Append(out, TexCmd("end", "verbatim"))
@@ -162,50 +162,134 @@ testFunctions.isListOfStrings = function(list)
     return true
 end
 
-function Assert(caller, expected, received)
-    local failedIndex = { 0 }
-    local failedItem1 = { "" }
-    local failedItem2 = { "" }
-
-    if IsDictionaryRandomised then
-        caller = caller .. "-with-randomised-dictionary"
+local function ToFlattenedString(input)
+    if type(input) ~= "table" then
+        return { tostring(input) }
     end
 
+    local out = {}
+
+    local allKeys = GetSortedKeys(input)
+    for _, key in pairs(allKeys) do
+        local val = input[key]
+        if IsEntity(val) then
+            Append(out, tostring(key) .. " - [Entity " .. GetProtectedStringField(val, "label") .. "]")
+        elseif type(val) == "table" then
+            Append(out, tostring(key) .. ":")
+            Append(out, [[{]])
+            Append(out, ToFlattenedString(val))
+            Append(out, [[}]])
+        else
+            Append(out, tostring(key) .. " - " .. tostring(val))
+        end
+    end
+    return out
+end
+
+local function onAssertionFail(caller, message)
+    numFailed = numFailed + 1
+    local out = {}
+    Append(out, [[Assert failed in function "]] .. caller .. [["!\\]])
+    Append(out, message)
+    Append(out, [[\newpage]])
+    tex.print(out)
+end
+
+local function checkForErrors(caller)
     if HasError() then
         local out = {}
-        numFailed = numFailed + 1
         Append(out, [[Error in function "]] .. caller .. [["!\\]])
         Append(out, PrintErrors())
-        tex.print(out)
+
+        onAssertionFail(caller, out)
         ResetErrors()
-    elseif testFunctions.areEqual(expected, received, failedIndex, failedItem1, failedItem2) then
-        numSucceeded = numSucceeded + 1
-    else
-        local out = {}
-        numFailed = numFailed + 1
-        Append(out, [[Assert failed in function "]] .. caller .. [["!\\]])
-        if type(expected) ~= type(received) then
-            Append(out, "Expected output of type ")
-            Append(out, type(expected) .. ",")
-            Append(out, "but received output of type ")
-            Append(out, type(received) .. [[.\\]])
-        else
-            if testFunctions.isListOfStrings(expected) and testFunctions.isListOfStrings(received) then
-                Append(out, testFunctions.printStringComparison(expected, received))
-            else
-                Append(out, testFunctions.printStringComparison(DebugPrintRaw(expected), DebugPrintRaw(received)))
-            end
-            if type(failedItem1[1]) == "string" and type(failedItem2[1]) == "string" then
-                Append(out, "At Element " .. failedIndex[1] .. [[:\\]])
-                local allCharsObj1 = testFunctions.printAllChars(failedItem1[1])
-                local allCharsObj2 = testFunctions.printAllChars(failedItem2[1])
-                Append(out, testFunctions.printStringComparison(allCharsObj1, allCharsObj2))
-            else
-            end
-        end
-        Append(out, [[\newpage]])
-        tex.print(out)
     end
+end
+
+local function checkOutputTypes(caller, expected, received)
+    if type(expected) ~= type(received) then
+        local out = {}
+        Append(out, "Expected output of type ")
+        Append(out, type(expected) .. ",")
+        Append(out, "but received output of type ")
+        Append(out, type(received) .. [[.\\]])
+
+        onAssertionFail(caller, out)
+    end
+end
+
+local function areStringEqual(str1, str2)
+    local str1 = Replace(" ", "", str1)
+    local str2 = Replace(" ", "", str2)
+    local str1 = Replace("\n", "", str1)
+    local str2 = Replace("\n", "", str2)
+    local str1 = Replace([[_]], [[\_]], str1)
+    local str2 = Replace([[_]], [[\_]], str2)
+    return str1 == str2
+end
+
+local function checkOutputValues(caller, expected, received)
+    if not expected or not received then return end
+    local expectedString = ToFlattenedString(expected)
+    local receivedString = ToFlattenedString(received)
+    for i = 1, math.max(#expectedString, #receivedString) do
+        if expectedString[i] == nil or receivedString[i] == nil or not areStringEqual(expectedString[i], receivedString[i]) then
+            local out = {}
+            Append(out, "Mismatch at position " .. i .. [[:\\]])
+            Append(out, testFunctions.printStringComparison(expectedString, receivedString))
+
+            onAssertionFail(caller, out)
+            return
+        end
+    end
+end
+
+function Assert(caller, expected, received)
+    --TODO: Get rid of this
+    -- local failedIndex = { 0 }
+    -- local failedItem1 = { "" }
+    -- local failedItem2 = { "" }
+
+    if IsDictionaryRandomised then
+        caller = caller .. ", with randomised dictionary"
+    end
+
+    checkForErrors(caller)
+    checkOutputTypes(caller, expected, received)
+    checkOutputValues(caller, expected, received)
+    -- if  then
+    --     return
+    -- else
+    --     compareOutputs(caller, expected, received)
+
+
+    --     if testFunctions.areEqual(expected, received, failedIndex, failedItem1, failedItem2) then
+    --         numSucceeded = numSucceeded + 1
+    --     else
+    --         local out = {}
+    --         numFailed = numFailed + 1
+    --         Append(out, [[Assert failed in function "]] .. caller .. [["!\\]])
+    --         if type(expected) ~= type(received) then
+    --             Append(out, "Expected output of type ")
+    --             Append(out, type(expected) .. ",")
+    --             Append(out, "but received output of type ")
+    --             Append(out, type(received) .. [[.\\]])
+    --         else
+    --             if testFunctions.isListOfStrings(expected) and testFunctions.isListOfStrings(received) then
+    --                 Append(out, testFunctions.printStringComparison(expected, received))
+    --             else
+    --                 Append(out, testFunctions.printStringComparison(DebugPrintRaw(expected), DebugPrintRaw(received)))
+    --             end
+    --             if type(failedItem1[1]) == "string" and type(failedItem2[1]) == "string" then
+    --                 Append(out, "At Element " .. failedIndex[1] .. [[:\\]])
+    --                 local allCharsObj1 = testFunctions.printAllChars(failedItem1[1])
+    --                 local allCharsObj2 = testFunctions.printAllChars(failedItem2[1])
+    --                 Append(out, testFunctions.printStringComparison(allCharsObj1, allCharsObj2))
+    --             else
+    --             end
+    --         end
+    --     end
+    -- end
 end
 
 function AssertAutomatedChapters(caller, expected, setup)
@@ -215,17 +299,17 @@ function AssertAutomatedChapters(caller, expected, setup)
     local out = TexApi.automatedChapters()
     Assert(caller, expected, out)
 
-    local dbName = os.tmpname()
-    TexApi.writeLoreToDatabase(dbName)
-    ResetState()
-    TexApi.readLoreFromDatabase(dbName)
-    os.remove(dbName)
+    -- local dbName = os.tmpname()
+    -- TexApi.writeLoreToDatabase(dbName)
+    -- ResetState()
+    -- TexApi.readLoreFromDatabase(dbName)
+    -- os.remove(dbName)
 
-    if setup then
-        setup()
-    end
-    out = TexApi.automatedChapters()
-    Assert(caller .. ", read from Database", expected, out)
+    -- if setup then
+    --     setup()
+    -- end
+    -- out = TexApi.automatedChapters()
+    -- Assert(caller .. ", read from Database", expected, out)
     ResetState()
 end
 

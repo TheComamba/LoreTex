@@ -73,12 +73,13 @@ function AddMentions(entity, content)
 end
 
 local function addConcerns(entity, content)
+	local concernsLabels = {}
+	local originator = GetProtectedNullableField(entity, "originator")
+	if originator ~= nil then
+		UniqueAppend(concernsLabels, GetProtectedStringField(originator, "label"))
+	end
+
 	if GetProtectedNullableField(entity, "isConcernsOthers") then
-		local concernsLabels = {}
-		local originator = GetProtectedNullableField(entity, "originator")
-		if originator ~= nil then
-			UniqueAppend(concernsLabels, GetProtectedStringField(originator, "label"))
-		end
 		for key, mentioned in pairs(GetProtectedTableReferenceField(entity, "mentions")) do
 			local label = GetProtectedStringField(mentioned, "label")
 			if label ~= "" then
@@ -90,12 +91,13 @@ local function addConcerns(entity, content)
 			UniqueAppend(concernsLabels, GetProtectedTableReferenceField(entity, "birthof"))
 			UniqueAppend(concernsLabels, GetProtectedTableReferenceField(entity, "deathof"))
 		end
-		local notConcerns = ScanForCmd(content, "notconcerns")
-		for key, concernedLabel in pairs(concernsLabels) do
-			if concernedLabel ~= "" and not IsIn(concernedLabel, notConcerns) then
-				local concernedEntity = GetMutableEntityFromAll(concernedLabel)
-				AddToProtectedField(entity, "concerns", concernedEntity)
-			end
+	end
+
+	local notConcerns = ScanForCmd(content, "notconcerns")
+	for key, concernedLabel in pairs(concernsLabels) do
+		if concernedLabel ~= "" and not IsIn(concernedLabel, notConcerns) then
+			local concernedEntity = GetMutableEntityFromAll(concernedLabel)
+			AddToProtectedField(entity, "concerns", concernedEntity)
 		end
 	end
 end

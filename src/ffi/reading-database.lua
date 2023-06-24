@@ -62,7 +62,7 @@ local function getNumberOfHistoryItems(dbPath)
     end
 end
 
-local function readHistoryItems(dbPath)
+local function readHistoryItemColumns(dbPath)
     local ffi = GetFFIModule()
     local loreCore = GetLib()
     if not ffi or not loreCore then return {} end
@@ -79,6 +79,7 @@ local function readHistoryItems(dbPath)
         return {}
     end
 
+    local histoyItemColumns = {}
     for i = 0, (ffi.number(numHistoryItems[0]) - 1) do
         local cHistoryItem = cHistoryItems[i]
         local historyItem = {}
@@ -90,8 +91,14 @@ local function readHistoryItems(dbPath)
         historyItem.day = ffi.number(cHistoryItem.day)
         historyItem.originator = ffi.string(cHistoryItem.originator)
         historyItem.year_format = ffi.string(cHistoryItem.year_format)
-        table.insert(AllHistoryItems, historyItem)
+        table.insert(histoyItemColumns, historyItem)
     end
+    return histoyItemColumns
+end
+
+local function readHistoryItems(dbPath)
+    local historyItemColumns = readHistoryItemColumns(dbPath)
+    HistoryItemsFromColumns(historyItemColumns)
 end
 
 local function getNumberOfRelationships(dbPath)

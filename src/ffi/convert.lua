@@ -58,7 +58,7 @@ local function createEntityColumn(label, descriptor, description)
 end
 
 
-function StringToDescription(descriptionString)
+local function stringToDescription(descriptionString)
     local entityrefs = ScanStringForCmd(descriptionString, entityRefCommand)
     if #entityrefs == 1 then
         return GetMutableEntityFromAll(entityrefs[1])
@@ -90,9 +90,60 @@ function EntitiesFromColumns(entityColumns)
             local args = {};
             args.entity = entity
             args.descriptor = entityColumn.descriptor
-            args.description = StringToDescription(entityColumn.description)
+            args.description = stringToDescription(entityColumn.description)
             args.suppressDerivedDescriptors = true
             SetDescriptor(args)
         end
+    end
+end
+
+local function formatHistoryItemForC(item)
+    local newItem = {}
+
+    newItem.label = GetProtectedStringField(item, "label")
+
+    newItem.content = GetProtectedStringField(item, "content")
+
+    local is_concerns_others = GetProtectedNullableField(item, "isConcernsOthers")
+    if not is_concerns_others then is_concerns_others = false end
+    newItem.is_concerns_others = is_concerns_others
+
+    local is_secret = GetProtectedNullableField(item, "isSecret")
+    if not is_secret then is_secret = false end
+    newItem.is_secret = is_secret
+
+    local year = GetProtectedNullableField(item, "year")
+    if not year then
+        LogError("History item " .. newItem.label .. " has no year.")
+        return {}
+    end
+    newItem.year = year
+
+    local day = GetProtectedNullableField(item, "day")
+    if not day then day = 0 end
+    newItem.day = day
+
+    local originator = GetProtectedNullableField(item, "originator")
+    newItem.originator = optionalEntityToString(originator)
+
+    local yearFormat = GetProtectedNullableField(item, "yearFormat")
+    newItem.year_format = optionalEntityToString(yearFormat)
+    return item
+end
+
+function GetHistoryItemColumns()
+    local historyItems = {}
+    for _, item in pairs(historyItems) do
+        local newItem = formatHistoryItemForC(item)
+        if #newItem ~= 0 then
+            table.insert(historyItems, newItem)
+        end
+    end
+    return historyItems
+end
+
+function HistoryItemsFromColumns(historyItemColumns)
+    for _, item in pairs(historyItemColumns) do
+        table.insert(AllHistoryItems, item)
     end
 end

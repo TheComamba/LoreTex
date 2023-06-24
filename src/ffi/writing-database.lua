@@ -29,57 +29,12 @@ local function writeEntitiesToDatabase(dbPath)
     end
 end
 
-local function formatHistoryItemForC(item)
-    local newItem = {}
-
-    newItem.label = GetProtectedStringField(item, "label")
-
-    newItem.content = GetProtectedStringField(item, "content")
-
-    local is_concerns_others = GetProtectedNullableField(item, "isConcernsOthers")
-    if not is_concerns_others then is_concerns_others = false end
-    newItem.is_concerns_others = is_concerns_others
-
-    local is_secret = GetProtectedNullableField(item, "isSecret")
-    if not is_secret then is_secret = false end
-    newItem.is_secret = is_secret
-
-    local year = GetProtectedNullableField(item, "year")
-    if not year then
-        LogError("History item " .. newItem.label .. " has no year.")
-        return {}
-    end
-    newItem.year = year
-
-    local day = GetProtectedNullableField(item, "day")
-    if not day then day = 0 end
-    newItem.day = day
-
-    local originator = GetProtectedNullableField(item, "originator")
-    newItem.originator = optionalEntityToString(originator)
-
-    local yearFormat = GetProtectedNullableField(item, "yearFormat")
-    newItem.year_format = optionalEntityToString(yearFormat)
-    return item
-end
-
-local function getHistoryItems()
-    local historyItems = {}
-    for _, item in pairs(historyItems) do
-        local newItem = formatHistoryItemForC(item)
-        if #newItem ~= 0 then
-            table.insert(historyItems, newItem)
-        end
-    end
-    return historyItems
-end
-
 local function writeHistoryItemsToDatabase(dbPath)
     local ffi = GetFFIModule()
     local loreCore = GetLib()
     if not loreCore or not ffi then return nil end
 
-    local items, count = toCColumns(getHistoryItems(), "CHistoryItem")
+    local items, count = toCColumns(GetHistoryItemColumns(), "CHistoryItem")
     local result = loreCore.write_history_items(dbPath, items, count)
 
     local errorMessage = ffi.string(result)

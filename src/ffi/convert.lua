@@ -130,7 +130,7 @@ local function formatHistoryItemForC(item)
 
     local yearFormat = GetProtectedNullableField(item, "yearFormat")
     newItem.year_format = optionalEntityToString(yearFormat)
-    return item
+    return newItem
 end
 
 function GetHistoryItemColumns()
@@ -144,7 +144,7 @@ end
 
 function HistoryItemsFromColumns(historyItemColumns)
     for _, item in pairs(historyItemColumns) do
-        table.insert(AllHistoryItems, item)
+        AddHistory(item)
     end
 end
 

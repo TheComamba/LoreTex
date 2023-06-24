@@ -1,7 +1,7 @@
 AllHistoryItems = {}
 
 StateResetters[#StateResetters + 1] = function()
-    AllHistoryItems = {}
+	AllHistoryItems = {}
 end
 
 local function IsHistoryItemOk(caller, item)
@@ -133,7 +133,7 @@ local function processEvent(item)
 	end
 end
 
-local function addHistory(arg)
+function AddHistory(arg)
 	if not IsArgOk("addHistory", arg, { "year", "event" }, { "day", "isConcernsOthers", "isSecret", "yearFmt" }) then
 		return
 	end
@@ -155,21 +155,21 @@ local function addHistory(arg)
 end
 
 TexApi.addHistory = function(arg)
-	addHistory(arg)
+	AddHistory(arg)
 end
 
 TexApi.addSecretHistory = function(arg)
 	arg.isSecret = true
-	addHistory(arg)
+	AddHistory(arg)
 end
 
 TexApi.addHistoryOnlyHere = function(arg)
 	arg.isConcernsOthers = false
-	addHistory(arg)
+	AddHistory(arg)
 end
 
 TexApi.born = function(arg)
-	addHistory(arg)
+	AddHistory(arg)
 	if not IsEmpty(arg.yearFmt) then
 		arg.year = RemoveYearOffset(arg.year, arg.yearFmt)
 	end
@@ -177,7 +177,7 @@ TexApi.born = function(arg)
 end
 
 TexApi.died = function(arg)
-	addHistory(arg)
+	AddHistory(arg)
 	if not IsEmpty(arg.yearFmt) then
 		arg.year = RemoveYearOffset(arg.year, arg.yearFmt)
 	end

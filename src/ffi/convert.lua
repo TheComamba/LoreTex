@@ -150,12 +150,15 @@ end
 
 local function formatCHistoryItemForLua(cItem)
     local luaItem = {}
+    luaItem.label = cItem.label
     luaItem.event = cItem.content
     luaItem.isConcernsOthers = cItem.is_concerns_others
     luaItem.isSecret = cItem.is_secret
     luaItem.year = cItem.year
-    luaItem.day = cItem.day
-    luaItem.label = cItem.label
+    if cItem.day ~= 0 then
+        luaItem.day = cItem.day
+    end
+    luaItem.originator = stringToDescription(cItem.originator)
     return luaItem
 end
 

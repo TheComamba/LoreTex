@@ -140,11 +140,14 @@ local function processEvent(item)
 end
 
 function AddHistory(arg)
-	if not IsArgOk("addHistory", arg, { "year", "event" }, { "day", "isConcernsOthers", "isSecret", "label", "yearFmt" }) then
+	if not IsArgOk("addHistory", arg, { "year", "event" }, { "day", "isConcernsOthers", "isSecret", "label", "originator",
+			"yearFmt" }) then
 		return
 	end
 	local item = NewHistoryItem(arg.label)
-	SetProtectedField(item, "originator", CurrentEntity)
+	if arg.originator then
+		SetProtectedField(item, "originator", arg.originator)
+	end
 	setDay(item, arg.day)
 	SetYear(item, arg.year)
 	SetProtectedField(item, "content", arg.event)
@@ -161,21 +164,22 @@ function AddHistory(arg)
 end
 
 TexApi.addHistory = function(arg)
+	arg.originator = CurrentEntity
 	AddHistory(arg)
 end
 
 TexApi.addSecretHistory = function(arg)
 	arg.isSecret = true
-	AddHistory(arg)
+	TexApi.addHistory(arg)
 end
 
 TexApi.addHistoryOnlyHere = function(arg)
 	arg.isConcernsOthers = false
-	AddHistory(arg)
+	TexApi.addHistory(arg)
 end
 
 TexApi.born = function(arg)
-	AddHistory(arg)
+	TexApi.addHistory(arg)
 	if not IsEmpty(arg.yearFmt) then
 		arg.year = RemoveYearOffset(arg.year, arg.yearFmt)
 	end
@@ -183,7 +187,7 @@ TexApi.born = function(arg)
 end
 
 TexApi.died = function(arg)
-	AddHistory(arg)
+	TexApi.addHistory(arg)
 	if not IsEmpty(arg.yearFmt) then
 		arg.year = RemoveYearOffset(arg.year, arg.yearFmt)
 	end

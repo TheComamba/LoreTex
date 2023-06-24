@@ -89,14 +89,16 @@ end
 function EntitiesFromColumns(entityColumns)
     for _, entityColumn in pairs(entityColumns) do
         local entity = GetMutableEntityFromAll(entityColumn.label)
+        entityColumn.description = stringToDescription(entityColumn.description)
         if IsProtectedDescriptor(entityColumn.descriptor) then
-            local description = stringToDescription(entityColumn.description)
-            SetProtectedField(entity, entityColumn.descriptor, description)
+            SetProtectedField(entity, entityColumn.descriptor, entityColumn.description)
+        elseif IsEntity(entityColumn.description) then
+            entity[entityColumn.descriptor] = entityColumn.description
         else
             local args = {};
             args.entity = entity
             args.descriptor = entityColumn.descriptor
-            args.description = stringToDescription(entityColumn.description)
+            args.description = entityColumn.description
             args.suppressDerivedDescriptors = true
             SetDescriptor(args)
         end

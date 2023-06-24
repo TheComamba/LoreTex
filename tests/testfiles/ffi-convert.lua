@@ -9,6 +9,14 @@ TexApi.setLocation("locationLabel")
 TexApi.addParent { parentLabel = "parentLabel" }
 TexApi.born { year = 223, event = [[\nameref{testLabel} is born, child of \nameref{parentLabel}.]] }
 
+TexApi.newEntity { type = "npcs", label = "some-npc", name = "Some NPC" }
+TexApi.setDescriptor { descriptor = "Description", description = [[Mentions \nameref{testLabel}.]] }
+-- TexApi.addParent { parentLabel = "some-organisation" }
+-- TexApi.newEntity { type = "npcs", label = "mentioned-npc", name = "Mentioned NPC" }
+-- TexApi.newEntity { type = "npcs", label = "other-npc", name = "Other NPC" }
+-- TexApi.newEntity { type = "npcs", label = "not-mentioned-npc", name = "Not mentioned NPC" }
+-- TexApi.newEntity { type = "other", label = "some-organisation", name = "Some Organisation" }
+
 local allEntitesBeforeRoundtrip = DeepCopy(AllEntities)
 local allHistoryItemsBeforeRoundtrip = DeepCopy(AllHistoryItems)
 

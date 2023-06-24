@@ -27,7 +27,10 @@ function PlaceToName(location)
 end
 
 function LabelToName(label)
-    if label == "" then
+    if type(label) ~= "string" then
+        LogError("LabelToName called with non-string: " .. DebugPrint(label))
+        return ""
+    elseif label == "" then
         return ""
     end
 

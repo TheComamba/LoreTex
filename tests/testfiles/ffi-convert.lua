@@ -8,9 +8,9 @@ TexApi.setLocation("locationLabel")
 TexApi.addParent { parentLabel = "parentLabel" }
 
 local allEntitesBeforeRoundtrip = DeepCopy(AllEntities)
-local entityColumns = EntitiesToColumns()
+local entityColumns = GetEntityColumns()
 ResetState()
-ColumnsToEntities()
+EntitiesFromColumns(entityColumns)
 
 for _, entityBefore in ipairs(allEntitesBeforeRoundtrip) do
     local label = GetProtectedStringField(entityBefore, "label")

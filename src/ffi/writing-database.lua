@@ -1,74 +1,3 @@
-local function optionalEntityToString(inp)
-    if IsEntity(inp) then
-        local label = GetProtectedStringField(inp, "label")
-        return TexCmd(EntityRefCommand, label)
-    else
-        return ""
-    end
-end
-
-local descriptionToString
-
-local function listToString(list)
-    local out = {}
-    for i = 1, #list do
-        Append(out, descriptionToString(list[i]))
-    end
-    return [[{]] .. table.concat(out, ", ") .. [[}]]
-end
-
-descriptionToString = function(description)
-    if IsEntity(description) then
-        return optionalEntityToString(description)
-    elseif type(description) == "table" then
-        return listToString(description)
-    else
-        return tostring(description)
-    end
-end
-
-local function shouldDescriptorBeWrittenToDatabase(descriptor)
-    if descriptor == GetProtectedDescriptor("historyItems") then
-        return false
-    elseif descriptor == GetProtectedDescriptor("children") then
-        return false
-    elseif descriptor == GetProtectedDescriptor("parents") then
-        return false
-    else
-        return true
-    end
-end
-
-local function createEntityColumn(label, descriptor, description)
-    local ffi = GetFFIModule()
-    if not ffi then return nil end
-
-    if not shouldDescriptorBeWrittenToDatabase(descriptor) then
-        return nil
-    end
-
-    local column = {};
-    column.label = label
-    column.descriptor = descriptor
-    column.description = descriptionToString(description)
-
-    return column
-end
-
-local function getEntityColumns()
-    local entityColumns = {}
-    for _, entity in pairs(AllEntities) do
-        local label = GetProtectedStringField(entity, "label")
-        for descriptor, description in pairs(entity) do
-            local column = createEntityColumn(label, descriptor, description)
-            if column then
-                table.insert(entityColumns, column)
-            end
-        end
-    end
-    return entityColumns
-end
-
 local function toCColumns(luaColumns, cTypename)
     if not type(luaColumns) == "table" then
         return nil
@@ -91,7 +20,7 @@ local function writeEntitiesToDatabase(dbPath)
     local loreCore = GetLib()
     if not loreCore or not ffi then return nil end
 
-    local cEntityColumns, count = toCColumns(getEntityColumns(), "CEntityColumn")
+    local cEntityColumns, count = toCColumns(GetEntityColumns(), "CEntityColumn")
     local result = loreCore.write_entity_columns(dbPath, cEntityColumns, count)
 
     local errorMessage = ffi.string(result)

@@ -45,19 +45,7 @@ end
 
 local function readEntities(dbPath)
     local entityColumns = readEntityColumns(dbPath)
-    for _, entityColumn in pairs(entityColumns) do
-        local entity = GetMutableEntityFromAll(entityColumn.label)
-        if IsProtectedDescriptor(entityColumn.descriptor) then
-            SetProtectedField(entity, entityColumn.descriptor, entityColumn.description)
-        else
-            local args = {};
-            args.entity = entity
-            args.descriptor = entityColumn.descriptor
-            args.description = StringToDescription(entityColumn.description)
-            args.suppressDerivedDescriptors = true
-            SetDescriptor(args)
-        end
-    end
+    EntitiesFromColumns(entityColumns)
 end
 
 local function getNumberOfHistoryItems(dbPath)

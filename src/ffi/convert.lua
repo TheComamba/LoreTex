@@ -177,7 +177,7 @@ function GetRelationshipColumns()
         for _, parentAndRole in pairs(parentsAndRoles) do
             local parent = parentAndRole[1]
             local role = parentAndRole[2]
-            if role == "" then role = nil end
+            if role == nil then role = "" end
             local parentLabel = GetProtectedStringField(parent, "label")
             local relationship = {}
             relationship.parent = parentLabel
@@ -193,7 +193,10 @@ function RelationshipsFromColumns(relationshipColumns)
     for _, relationship in pairs(relationshipColumns) do
         local parentLabel = relationship.parent
         local child = GetMutableEntityFromAll(relationship.child)
-        local role = relationship.role
+        local role
+        if relationship.role ~= "" then
+            role = relationship.role
+        end
         AddParent { entity = child, parentLabel = parentLabel, relationship = role }
     end
 end

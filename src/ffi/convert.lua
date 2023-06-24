@@ -189,7 +189,6 @@ function RelationshipsFromColumns(relationshipColumns)
         local parentLabel = relationship.parent
         local child = GetMutableEntityFromAll(relationship.child)
         local role = relationship.role
-        if not role then role = "" end
         AddParent { entity = child, parentLabel = parentLabel, relationship = role }
     end
 end

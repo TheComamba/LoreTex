@@ -62,10 +62,13 @@ end
 
 local function stringToDescription(descriptionString)
     local entityrefs = ScanStringForCmd(descriptionString, entityRefCommand)
-    if #entityrefs == 1 then
+    if #entityrefs == 0 then
+        return descriptionString
+    elseif #entityrefs == 1 then
         return GetMutableEntityFromAll(entityrefs[1])
     else
-        return descriptionString
+        LogError("Multiple entity references in description string: " .. descriptionString)
+        return nil
     end
 end
 
@@ -87,7 +90,8 @@ function EntitiesFromColumns(entityColumns)
     for _, entityColumn in pairs(entityColumns) do
         local entity = GetMutableEntityFromAll(entityColumn.label)
         if IsProtectedDescriptor(entityColumn.descriptor) then
-            SetProtectedField(entity, entityColumn.descriptor, entityColumn.description)
+            local description = stringToDescription(entityColumn.description)
+            SetProtectedField(entity, entityColumn.descriptor, description)
         else
             local args = {};
             args.entity = entity

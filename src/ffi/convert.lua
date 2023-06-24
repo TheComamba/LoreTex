@@ -172,7 +172,7 @@ function GetRelationshipColumns()
         for _, parentAndRole in pairs(parentsAndRoles) do
             local parent = parentAndRole[1]
             local role = parentAndRole[2]
-            if not role then role = "" end
+            if role == "" then role = nil end
             local parentLabel = GetProtectedStringField(parent, "label")
             local relationship = {}
             relationship.parent = parentLabel

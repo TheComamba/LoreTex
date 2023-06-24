@@ -52,7 +52,7 @@ testFunctions.areTablesEqual = function(obj1, obj2, elementNum, currentObj1, cur
         return false
     end
     for key, value in pairs(obj1) do
-        if not testFunctions.areEntitiesWithSameLabel(value, obj2[key]) or
+        if not testFunctions.areEntitiesWithSameLabel(value, obj2[key]) and
             not testFunctions.areEqual(value, obj2[key], elementNum, currentObj1, currentObj2) then
             if IsProtectedDescriptor(key) then
                 elementNum[1] = [[$]] .. key .. [[$]]

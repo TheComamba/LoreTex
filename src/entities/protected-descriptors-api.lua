@@ -38,7 +38,7 @@ TexApi.setHeight = function(height)
     SetProtectedField(CurrentEntity, "height", height)
 end
 
-local function addParent(arg)
+function AddParent(arg)
     if not IsArgOk("addParent", arg, { "entity", "parentLabel" }, { "relationship" }) then
         return
     end
@@ -49,13 +49,13 @@ end
 
 TexApi.addParent = function(arg)
     arg.entity = CurrentEntity
-    addParent(arg)
+    AddParent(arg)
 end
 
 function SetLocation(entity, location)
     SetProtectedField(entity, "location", location)
     local locationLabel = GetProtectedStringField(location, "label")
-    addParent { entity = entity, parentLabel = locationLabel, relationship = GetProtectedDescriptor("location") }
+    AddParent { entity = entity, parentLabel = locationLabel, relationship = GetProtectedDescriptor("location") }
 end
 
 TexApi.setLocation = function(locationLabel)

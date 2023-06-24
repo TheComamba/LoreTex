@@ -36,6 +36,8 @@ local function shouldDescriptorBeWrittenToDatabase(descriptor)
         return false
     elseif descriptor == GetProtectedDescriptor("parents") then
         return false
+    elseif descriptor == GetProtectedDescriptor("label") then
+        return false
     else
         return true
     end
@@ -151,7 +153,7 @@ end
 function GetRelationshipColumns()
     local relationships = {}
     for _, entity in pairs(AllEntities) do
-        local parentsAndRoles = GetProtectedTableReferenceField(entity, "parents")
+        local parentsAndRoles = GetProtectedTableReferenceField(entity, "parents", false)
         local childlabel = GetProtectedStringField(entity, "label")
         for _, parentAndRole in pairs(parentsAndRoles) do
             local parent = parentAndRole[1]
@@ -169,5 +171,11 @@ function GetRelationshipColumns()
 end
 
 function RelationshipsFromColumns(relationshipColumns)
-
+    for _, relationship in pairs(relationshipColumns) do
+        local parentLabel = relationship.parent
+        local child = GetMutableEntityFromAll(relationship.child)
+        local role = relationship.role
+        if not role then role = "" end
+        AddParent { entity = child, parentLabel = parentLabel, relationship = role }
+    end
 end

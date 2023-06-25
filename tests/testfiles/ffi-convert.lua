@@ -10,7 +10,11 @@ TexApi.addParent { parentLabel = "parentLabel" }
 TexApi.born { year = 223, event = [[\nameref{testLabel} is born, child of \nameref{parentLabel}.]] }
 
 TexApi.newEntity { type = "npcs", label = "some-npc", name = "Some NPC" }
+local someList = { "First", "Second" }
+local someMap = { Alpha = [[$\alpha$]], Beta = [[$\beta$]] }
 TexApi.setDescriptor { descriptor = "Description", description = [[Mentions \nameref{testLabel}.]] }
+TexApi.setDescriptor { descriptor = "Some List", description = someList }
+TexApi.setDescriptor { descriptor = "Some Map", description = someMap }
 
 local allEntitesBeforeRoundtrip = DeepCopy(AllEntities)
 local allHistoryItemsBeforeRoundtrip = DeepCopy(AllHistoryItems)

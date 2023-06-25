@@ -13,8 +13,13 @@ end
 
 local function listToString(list)
     local out = {}
-    for i = 1, #list do
-        Append(out, descriptionToString(list[i]))
+    local keys = GetSortedKeys(list)
+    for _, key in pairs(keys) do
+        if type(key) == "number" then
+            table.insert(out, descriptionToString(list[key]))
+        else
+            table.insert(out, [["]] .. key .. [[" = ]] .. descriptionToString(list[key]))
+        end
     end
     return [[{]] .. table.concat(out, ", ") .. [[}]]
 end

@@ -129,14 +129,21 @@ local function checkOutputTypes(caller, expected, received)
     end
 end
 
+local function toPrintableString(inp)
+    local out = inp
+    if not out then
+        return "nil"
+    elseif type(out) ~= "string" then
+        out = tostring(out)
+    end
+    out = Replace(" ", "", out)
+    out = Replace("\n", "", out)
+    out = Replace([[_]], [[\_]], out)
+    return out
+end
+
 local function areStringEqual(str1, str2)
-    local str1 = Replace(" ", "", str1)
-    local str2 = Replace(" ", "", str2)
-    local str1 = Replace("\n", "", str1)
-    local str2 = Replace("\n", "", str2)
-    local str1 = Replace([[_]], [[\_]], str1)
-    local str2 = Replace([[_]], [[\_]], str2)
-    return str1 == str2
+    return toPrintableString(str1) == toPrintableString(str2)
 end
 
 local function checkOutputValues(caller, expected, received)
@@ -146,7 +153,13 @@ local function checkOutputValues(caller, expected, received)
     for i = 1, math.max(#expectedString, #receivedString) do
         if expectedString[i] == nil or receivedString[i] == nil or not areStringEqual(expectedString[i], receivedString[i]) then
             local out = {}
-            Append(out, "Mismatch at position " .. i .. [[:\\]])
+            Append(out, "Mismatch at position ")
+            Append(out, i)
+            Append(out, [[, "]])
+            Append(out, toPrintableString(expectedString[i]))
+            Append(out, [[" != "]])
+            Append(out, toPrintableString(receivedString[i]))
+            Append(out, [[".\\]])
             Append(out, printStringComparison(expectedString, receivedString))
 
             onAssertionFail(caller, out)

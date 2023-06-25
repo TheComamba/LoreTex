@@ -121,6 +121,14 @@ function EntitiesFromColumns(entityColumns)
     end
 end
 
+local function boolToNumber(bool)
+    if bool then
+        return 1
+    else
+        return 0
+    end
+end
+
 local function formatHistoryItemForC(luaItem)
     local cItem = {}
 
@@ -128,13 +136,11 @@ local function formatHistoryItemForC(luaItem)
 
     cItem.content = GetProtectedStringField(luaItem, "content")
 
-    local is_concerns_others = GetProtectedNullableField(luaItem, "isConcernsOthers")
-    if not is_concerns_others then is_concerns_others = false end
-    cItem.is_concerns_others = is_concerns_others
+    local isConcernsOthers = GetProtectedNullableField(luaItem, "isConcernsOthers")
+    cItem.is_concerns_others = boolToNumber(isConcernsOthers)
 
-    local is_secret = GetProtectedNullableField(luaItem, "isSecret")
-    if not is_secret then is_secret = false end
-    cItem.is_secret = is_secret
+    local isSecret = GetProtectedNullableField(luaItem, "isSecret")
+    cItem.is_secret = boolToNumber(isSecret)
 
     local year = GetProtectedNullableField(luaItem, "year")
     if not year then

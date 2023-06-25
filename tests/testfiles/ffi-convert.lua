@@ -40,6 +40,7 @@ RelationshipsFromColumns(relationshipColumns)
 for _, entityBefore in ipairs(allEntitesBeforeRoundtrip) do
     local label = GetProtectedStringField(entityBefore, "label")
     local entityAfter = GetEntity(label)
+    tex.print(DebugPrint(entityAfter))
     Assert("FFI Conversion, comparing entity " .. label, entityBefore, entityAfter)
 end
 

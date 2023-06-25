@@ -97,10 +97,22 @@ function DebugPrintRaw(entity)
     return out
 end
 
+function SplitStringInLinebreaks(str, maxWidth)
+    if not str then return { "nil" } end
+    local out = {}
+    while string.len(str) > 0 do
+        Append(out, string.sub(str, 1, maxWidth))
+        str = string.sub(str, maxWidth + 1)
+    end
+    return out
+end
+
 function DebugPrint(entity)
+    local content = DebugPrintRaw(entity)
+    local splitContent = SplitStringInLinebreaks(table.concat(content), 100)
     local out = {}
     Append(out, TexCmd("begin", "verbatim"))
-    Append(out, DebugPrintRaw(entity))
+    Append(out, splitContent)
     Append(out, TexCmd("end", "verbatim"))
     return table.concat(out)
 end

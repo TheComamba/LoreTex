@@ -33,16 +33,6 @@ local numFailed = 0
 local isContainedTranslation = false
 local apiFunctionUsage = {}
 
-local function splitStringInLinebreaks(str, maxWidth)
-    if not str then return { "nil" } end
-    local out = {}
-    while string.len(str) > 0 do
-        Append(out, string.sub(str, 1, maxWidth))
-        str = string.sub(str, maxWidth + 1)
-    end
-    return out
-end
-
 local function printMinipage(caption, rows, i0, chunksize)
     local out = {}
     Append(out, [[\begin{minipage}[t]{.5\textwidth}]])
@@ -52,7 +42,7 @@ local function printMinipage(caption, rows, i0, chunksize)
     Append(out, TexCmd("begin", "verbatim"))
     local iMax = math.min(i0 + chunksize - 1, #rows)
     for i = i0, iMax do
-        local splitRow = splitStringInLinebreaks(rows[i], 50)
+        local splitRow = SplitStringInLinebreaks(rows[i], 50)
         Append(out, splitRow)
     end
     Append(out, TexCmd("end", "verbatim"))

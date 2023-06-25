@@ -29,7 +29,6 @@ Append(allTestFiles, "ship-crew")
 Append(allTestFiles, "species-at-location")
 Append(allTestFiles, "sub-label")
 Append(allTestFiles, "types")
-local numSucceeded = 0
 local numFailed = 0
 local isContainedTranslation = false
 local apiFunctionUsage = {}
@@ -240,12 +239,8 @@ end
 local function printResults()
     local out = {}
     Append(out, TexCmd("section*", "Results"))
-    Append(out, TexCmd("LoreTex"))
-    Append(out, " ran ")
-    Append(out, numSucceeded + numFailed)
-    Append(out, " tests, ")
     Append(out, numFailed)
-    Append(out, " of which failed.")
+    Append(out, TexCmd(" LoreTex tests failed."))
     Append(out, [[\newline]])
     Append(out, "Usage of TexApi functions:")
     local apiFunctionUsageOutput = {}

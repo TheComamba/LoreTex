@@ -11,24 +11,12 @@ local function optionalEntityToString(inp)
     end
 end
 
-local function listToString(list)
-    local out = {}
-    local keys = GetSortedKeys(list)
-    for _, key in pairs(keys) do
-        if type(key) == "number" then
-            table.insert(out, descriptionToString(list[key]))
-        else
-            table.insert(out, [["]] .. key .. [[" = ]] .. descriptionToString(list[key]))
-        end
-    end
-    return [[{]] .. table.concat(out, ", ") .. [[}]]
-end
-
 descriptionToString = function(description)
     if IsEntity(description) then
         return optionalEntityToString(description)
     elseif type(description) == "table" then
-        return listToString(description)
+        require("lualibs.lua")
+        return utilities.json.tostring(description)
     else
         return tostring(description)
     end
@@ -66,16 +54,38 @@ local function createEntityColumn(label, descriptor, description)
     return column
 end
 
-
-local function stringToDescription(descriptionString)
+local function isEntityRef(descriptionString)
     local entityrefs = ScanStringForCmd(descriptionString, entityRefCommand)
     if #entityrefs == 0 then
-        return descriptionString
+        return false
     elseif #entityrefs == 1 then
-        return GetMutableEntityFromAll(entityrefs[1])
+        return true
     else
         LogError("Multiple entity references in description string: " .. descriptionString)
-        return nil
+        return false
+    end
+end
+
+local function isTableString(descriptionString)
+    local strippedString = string.gsub(descriptionString, "%s+", "")
+    if string.sub(strippedString, 1, 1) == "{" then
+        return true
+    elseif string.sub(strippedString, 1, 1) == "[" then
+        return true
+    else
+        return false
+    end
+end
+
+local function stringToDescription(descriptionString)
+    if isEntityRef(descriptionString) then
+        local entityrefs = ScanStringForCmd(descriptionString, entityRefCommand)
+        return GetMutableEntityFromAll(entityrefs[1])
+    elseif isTableString(descriptionString) then
+        require("lualibs.lua")
+        return utilities.json.tolua(descriptionString)
+    else
+        return descriptionString
     end
 end
 

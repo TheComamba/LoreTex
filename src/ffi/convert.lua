@@ -101,7 +101,6 @@ function EntitiesFromColumns(entityColumns)
             args.entity = entity
             args.descriptor = entityColumn.descriptor
             args.description = entityColumn.description
-            args.suppressDerivedDescriptors = true
             SetDescriptor(args)
         end
     end

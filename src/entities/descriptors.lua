@@ -17,9 +17,7 @@ function SetDescriptor(arg)
     end
 
     Replace([[\reference]], [[\nameref]], arg.description)
-    if not arg.suppressDerivedDescriptors then
-        AddMentions(arg.entity, arg.description)
-    end
+    AddMentions(arg.entity, arg.description)
     if not IsEmpty(ScanForCmd(arg.description, "label")) then
         arg.description = ContentToEntity { name = arg.descriptor, content = arg.description }
         MakePartOf { subEntity = arg.description, mainEntity = arg.entity }

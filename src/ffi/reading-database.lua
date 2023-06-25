@@ -53,8 +53,10 @@ local function getNumberOfHistoryItems(dbPath)
     local errorMessage = ffi.string(result)
     if errorMessage ~= "" then
         LogError(errorMessage)
-        return {}
+        return nil
     end
+
+    return numHistoryItems
 end
 
 local function readHistoryItemColumns(dbPath)
@@ -79,9 +81,9 @@ local function readHistoryItemColumns(dbPath)
         local cHistoryItem = cHistoryItems[i]
         local historyItem = {}
         historyItem.label = ffi.string(cHistoryItem.label)
-        historyItem.content = ffi.string(cHistoryItem.content)
-        historyItem.is_concerns_others = ffi.boolean(cHistoryItem.is_concerns_others)
-        historyItem.is_secret = ffi.boolean(cHistoryItem.is_secret)
+        historyItem.content = ffi.string(cHistoryItem.content)        
+        historyItem.is_concerns_others = ffi.number(cHistoryItem.is_concerns_others)
+        historyItem.is_secret = ffi.number(cHistoryItem.is_secret)
         historyItem.year = ffi.number(cHistoryItem.year)
         historyItem.day = ffi.number(cHistoryItem.day)
         historyItem.originator = ffi.string(cHistoryItem.originator)

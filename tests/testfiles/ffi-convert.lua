@@ -24,6 +24,9 @@ TexApi.newEntity { type = "species", label = "species-2", name = "species-2" }
 TexApi.setAgeFactor(1)
 TexApi.newEntity { type = "species", label = "species-3", name = "species-3" }
 TexApi.setAgeModifierMixing("species-1", "species-2")
+TexApi.newEntity { type = "species", label = "species-4", name = "species-4" }
+TexApi.setAgeFactor(0)
+TexApi.setAgeExponent(0)
 
 local allEntitesBeforeRoundtrip = DeepCopy(AllEntities)
 local allHistoryItemsBeforeRoundtrip = DeepCopy(AllHistoryItems)

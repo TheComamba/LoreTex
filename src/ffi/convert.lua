@@ -77,6 +77,15 @@ local function isTableString(descriptionString)
     end
 end
 
+local function isNumberString(descriptionString)
+    local num = tonumber(descriptionString)
+    if num then
+        return true
+    else
+        return false
+    end
+end
+
 local function stringToDescription(descriptionString)
     if isEntityRef(descriptionString) then
         local entityrefs = ScanStringForCmd(descriptionString, entityRefCommand)
@@ -84,6 +93,8 @@ local function stringToDescription(descriptionString)
     elseif isTableString(descriptionString) then
         require("lualibs.lua")
         return utilities.json.tolua(descriptionString)
+    elseif isNumberString(descriptionString) then
+        return tonumber(descriptionString)
     else
         return descriptionString
     end

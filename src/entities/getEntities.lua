@@ -11,7 +11,7 @@ end
 function GetEntitiesIf(condition, list)
     local out = {}
     if list == nil or type(list) ~= "table" then
-        LogError("Called with " .. DebugPrint(list))
+        LogError { "Called with ", DebugPrint(list) }
         return out
     end
     for key, entity in pairs(list) do

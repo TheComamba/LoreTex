@@ -30,7 +30,7 @@ function DescriptorsString(entity, level)
     if level == nil then
         level = 1
     elseif level > 10 then
-        LogError("Reached mildly unhealthy level of recursion for entity:" .. DebugPrint(entity))
+        LogError { "Reached mildly unhealthy level of recursion for entity:", DebugPrint(entity) }
         return {}
     end
     local descriptorsList = {}

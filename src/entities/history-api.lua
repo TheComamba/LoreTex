@@ -36,7 +36,7 @@ local function setDay(historyItem, day)
 	end
 	local dayNumber = tonumber(day)
 	if dayNumber == nil then
-		LogError("Could not convert to number:" .. DebugPrint(day))
+		LogError { "Could not convert to number:", DebugPrint(day) }
 	else
 		SetProtectedField(historyItem, "day", dayNumber)
 	end
@@ -45,7 +45,7 @@ end
 function SetYear(historyItem, year)
 	local yearNumber = tonumber(year)
 	if yearNumber == nil then
-		LogError("Could not convert to number:" .. DebugPrint(year))
+		LogError { "Could not convert to number:", DebugPrint(year) }
 	else
 		local yearFmt = GetProtectedNullableField(historyItem, "yearFormat")
 		if yearFmt ~= nil then
@@ -57,7 +57,7 @@ end
 
 local function setYearFmt(historyItem, label)
 	if IsEmpty(label) then
-		LogError("Called with empty year format for history item:" .. DebugPrint(historyItem))
+		LogError { "Called with empty year format for history item:", DebugPrint(historyItem) }
 		return
 	end
 	local fmt = GetMutableEntityFromAll(label)
@@ -135,7 +135,7 @@ local function processEvent(item)
 		SetProtectedField(item, "day", nil)
 	end
 	if #(GetProtectedTableReferenceField(item, "concerns")) == 0 then
-		LogError("This history item concerns nobody:" .. DebugPrint(item))
+		LogError { "This history item concerns nobody:", DebugPrint(item) }
 	end
 end
 

@@ -44,12 +44,12 @@ Comparer.compareAlphanumerical = function(a, b)
     elseif type(a) == "number" and type(b) == "number" then
         return a < b
     elseif type(a) == "number" and type(b) == "string" then
-        return true --numbers before strings
+        return true  --numbers before strings
     elseif type(a) == "string" and type(b) == "number" then
         return false --numbers before strings
     end
 
-    LogError("Tried comparing " .. DebugPrint(a) .. " with " .. DebugPrint(b))
+    LogError { "Tried comparing ", DebugPrint(a), " with ", DebugPrint(b) }
     return false
 end
 

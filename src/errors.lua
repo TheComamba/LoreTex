@@ -114,5 +114,5 @@ function DebugPrint(entity)
     Append(out, TexCmd("begin", "verbatim"))
     Append(out, splitContent)
     Append(out, TexCmd("end", "verbatim"))
-    return table.concat(out)
+    return out
 end

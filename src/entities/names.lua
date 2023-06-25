@@ -28,7 +28,7 @@ end
 
 function LabelToName(label)
     if type(label) ~= "string" then
-        LogError("LabelToName called with non-string: " .. DebugPrint(label))
+        LogError { "LabelToName called with non-string: ", DebugPrint(label) }
         return ""
     elseif label == "" then
         return ""
@@ -62,7 +62,7 @@ function GetName(entity)
     else
         local label = GetProtectedStringField(entity, "label")
         if label == "" then
-            LogError("Entity has neither label nor name:" .. DebugPrint(entity))
+            LogError{"Entity has neither label nor name:" , DebugPrint(entity)}
             return "NO NAME"
         else
             if not IsIn(label, UnfoundRefs) then

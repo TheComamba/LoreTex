@@ -1,6 +1,6 @@
 TexApi.setAgeExponent = function(exponent)
     if tonumber(exponent) == nil then
-        LogError("Age exponent must be a number. Function called with:" .. DebugPrint(exponent))
+        LogError { "Age exponent must be a number. Function called with:", DebugPrint(exponent) }
         return
     end
     if CurrentEntity == nil then
@@ -12,7 +12,7 @@ end
 
 TexApi.setAgeFactor = function(factor)
     if tonumber(factor) == nil then
-        LogError("Age factor must be a number. Function called with:" .. DebugPrint(factor))
+        LogError { "Age factor must be a number. Function called with:", DebugPrint(factor) }
         return
     end
     if CurrentEntity == nil then
@@ -24,7 +24,7 @@ end
 
 TexApi.setAgeModifierMixing = function(species1, species2)
     if species1 == nil or species2 == nil or type(species1) ~= "string" or type(species2) ~= "string" then
-        LogError("setAgeModifierMixing called with:" .. DebugPrint { species1, species2 })
+        LogError { "setAgeModifierMixing called with:", DebugPrint { species1, species2 } }
         return
     end
     if CurrentEntity == nil then

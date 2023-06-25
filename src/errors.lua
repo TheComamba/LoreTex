@@ -67,33 +67,27 @@ function PrintErrors()
     return out
 end
 
-function DebugPrintRaw(entity)
-    if entity == nil then
-        return { "nil" }
-    elseif type(entity) == "number" then
-        return { tostring(entity) }
-    elseif type(entity) == "string" then
-        return { " \"" .. entity .. "\" " }
-    elseif type(entity) ~= "table" then
-        return { tostring(entity) }
+function DebugPrintRaw(input)
+    if type(input) ~= "table" then
+        return { tostring(input) }
     end
+
     local out = {}
-    local keys = GetSortedKeys(entity)
-    Append(out, [[{	]])
-    for i, key in pairs(keys) do
-        if i > 1 then
-            Append(out, ",	")
-        end
-        Append(out, DebugPrintRaw(key))
-        Append(out, "=")
-        if IsEntity(entity[key]) then
-            local label = GetProtectedStringField(entity[key], "label")
-            Append(out, "[Entity \"" .. label .. "\"]")
+
+    local allKeys = GetSortedKeys(input)
+    for _, key in pairs(allKeys) do
+        local val = input[key]
+        if IsEntity(val) then
+            Append(out, tostring(key) .. " = [Entity " .. GetProtectedStringField(val, "label") .. "]")
+        elseif type(val) == "table" then
+            Append(out, tostring(key) .. ":")
+            Append(out, [[{]])
+            Append(out, DebugPrintRaw(val))
+            Append(out, [[}]])
         else
-            Append(out, DebugPrintRaw(entity[key]))
+            Append(out, tostring(key) .. " = " .. tostring(val))
         end
     end
-    Append(out, [[}	]])
     return out
 end
 
@@ -107,12 +101,15 @@ function SplitStringInLinebreaks(str, maxWidth)
     return out
 end
 
-function DebugPrint(entity)
-    local content = DebugPrintRaw(entity)
-    local splitContent = SplitStringInLinebreaks(table.concat(content), 100)
+function DebugPrint(input)
+    local content = DebugPrintRaw(input)
     local out = {}
     Append(out, TexCmd("begin", "verbatim"))
-    Append(out, splitContent)
+    for _, line in pairs(content) do
+        Append(out, SplitStringInLinebreaks(line, 100))
+    end
+    Append(out, content)
     Append(out, TexCmd("end", "verbatim"))
+    Append(out, TexCmd("vspace", "1cm"))
     return out
 end

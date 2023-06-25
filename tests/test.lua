@@ -63,30 +63,6 @@ local function printStringComparison(expected, received)
     return out
 end
 
-local function ToFlattenedString(input)
-    if type(input) ~= "table" then
-        return { tostring(input) }
-    end
-
-    local out = {}
-
-    local allKeys = GetSortedKeys(input)
-    for _, key in pairs(allKeys) do
-        local val = input[key]
-        if IsEntity(val) then
-            Append(out, tostring(key) .. " - [Entity " .. GetProtectedStringField(val, "label") .. "]")
-        elseif type(val) == "table" then
-            Append(out, tostring(key) .. ":")
-            Append(out, [[{]])
-            Append(out, ToFlattenedString(val))
-            Append(out, [[}]])
-        else
-            Append(out, tostring(key) .. " - " .. tostring(val))
-        end
-    end
-    return out
-end
-
 local function onAssertionFail(caller, message)
     numFailed = numFailed + 1
     local out = {}
@@ -138,8 +114,8 @@ end
 
 local function checkOutputValues(caller, expected, received)
     if not expected or not received then return end
-    local expectedString = ToFlattenedString(expected)
-    local receivedString = ToFlattenedString(received)
+    local expectedString = DebugPrintRaw(expected)
+    local receivedString = DebugPrintRaw(received)
     for i = 1, math.max(#expectedString, #receivedString) do
         if expectedString[i] == nil or receivedString[i] == nil or not areStringEqual(expectedString[i], receivedString[i]) then
             local out = {}

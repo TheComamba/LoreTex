@@ -1,6 +1,4 @@
 local function entitySetup()
-    TexApi.setCurrentYear(0)
-
     TexApi.addType { metatype = "other", type = "organisations" }
     TexApi.addTranslation { language = "english", key = "organisations", translation = "organisations" }
 
@@ -67,6 +65,8 @@ local function refSetup()
     TexApi.makeEntityPrimary("unborn-orga")
     TexApi.reveal("revealed")
     TexApi.reveal("revealed-orga")
+
+    TexApi.setCurrentYear(0)
 end
 
 local function npcsParagraph(isShowSecrets, isShowFuture)

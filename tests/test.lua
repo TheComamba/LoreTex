@@ -52,18 +52,8 @@ local function printMinipage(caption, rows, i0, chunksize)
     Append(out, TexCmd("begin", "verbatim"))
     local iMax = math.min(i0 + chunksize - 1, #rows)
     for i = i0, iMax do
-        local rowcounter = tostring(i) .. " - "
-        local splitRow = splitStringInLinebreaks(rows[i], 40)
-        for key, line in pairs(splitRow) do
-            if key == 1 then
-                line = rowcounter .. line
-            else
-                for j = 1, string.len(rowcounter) do
-                    line = "." .. line
-                end
-            end
-            Append(out, line)
-        end
+        local splitRow = splitStringInLinebreaks(rows[i], 50)
+        Append(out, splitRow)
     end
     Append(out, TexCmd("end", "verbatim"))
     Append(out, [[\end{minipage}]])

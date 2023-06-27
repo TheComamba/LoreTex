@@ -221,7 +221,7 @@ function DeepCopy(inp)
 end
 
 function IsArgOk(caller, arg, required, optional)
-	if IsEmpty(arg) then
+	if IsEmpty(arg) and #required > 0 then
 		LogError("\"" .. caller .. "\" called without arguments.")
 		return false
 	end

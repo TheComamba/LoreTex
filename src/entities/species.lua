@@ -161,7 +161,7 @@ function AddLifestageHistoryItems(entity)
 			Append(event, " ")
 			Append(event, Tr(lifestage))
 			Append(event, ".")
-			local item = NewHistoryItem()
+			local item = NewHistoryItem { addToAll = false }
 			SetYear(item, year)
 			SetProtectedField(item, "content", table.concat(event))
 			AddToProtectedField(item, "mentions", entity)

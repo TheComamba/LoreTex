@@ -1,4 +1,4 @@
-local generatedLabelFlag = [[GENERATED-LABEL-]]
+local generatedLabelFlag = [[_]]
 local labelCounter = 0
 
 StateResetters[#StateResetters + 1] = function()

@@ -1,4 +1,3 @@
-TexApi.setCurrentYear(0)
 TexApi.newEntity { label = "unimportant", type = "places", name = "Unimportant" }
 TexApi.addHistory { year = 0, event = [[Mentions \nameref{deferred-entity-1}.]] }
 TexApi.addHistory { year = 0, event = [[Mentions \nameref{deferred-entity-2-alias}.]] }
@@ -7,6 +6,7 @@ TexApi.newEntity { label = "deferred-entity-2", type = "places", name = "Deferre
 TexApi.setDescriptor { descriptor = "Alias", description = [[\label{deferred-entity-2-alias}]] }
 
 local function setup1()
+    TexApi.setCurrentYear(0)
     TexApi.makeEntityPrimary("deferred-entity-1")
     TexApi.makeEntityPrimary("deferred-entity-2")
 end

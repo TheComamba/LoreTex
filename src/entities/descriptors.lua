@@ -28,7 +28,7 @@ function SetDescriptor(arg)
         local currentDescription = arg.entity[arg.descriptor]
         if IsEmpty(currentDescription) or not IsEntity(currentDescription) then
             local entityLabel = GetProtectedStringField(arg.entity, "label")
-            local subLabel = NewUniqueLabel(entityLabel .. "-" .. arg.descriptor)
+            local subLabel = NewUniqueEntityLabel(entityLabel .. "-" .. arg.descriptor)
             local subEntity = GetMutableEntityFromAll(subLabel)
             SetProtectedField(subEntity, "name", arg.descriptor)
             arg.description = subEntity

@@ -18,24 +18,12 @@ local function IsHistoryItemOk(caller, item)
 	return IsArgOk(caller, item, required, optional)
 end
 
-function NewHistoryItem(arg)
-	if not IsArgOk("NewHistoryItem", arg, {}, { "label", "addToAll" }) then
-		return {}
-	end
-
-	if not arg.label then
-		arg.label = NewUniqueLabel("HISTORY-ITEM")
-	end
-	if arg.addToAll == nil then
-		arg.addToAll = true
-	end
-
+function NewHistoryItem(addToAll)
 	local item = {}
-	SetProtectedField(item, "label", arg.label)
 	SetProtectedField(item, "isSecret", false)
 	SetProtectedField(item, "isConcernsOthers", true)
 
-	if arg.addToAll then
+	if addToAll then
 		AllHistoryItems[#AllHistoryItems + 1] = item
 	end
 	return item
@@ -155,7 +143,7 @@ function AddHistory(arg)
 			"yearFmt" }) then
 		return
 	end
-	local item = NewHistoryItem { label = arg.label }
+	local item = NewHistoryItem(true)
 	if arg.originator then
 		SetProtectedField(item, "originator", arg.originator)
 	end
@@ -171,6 +159,7 @@ function AddHistory(arg)
 	if not IsEmpty(arg.yearFmt) then
 		setYearFmt(item, arg.yearFmt)
 	end
+	AssureUniqueHistoryLabel(item)
 	processEvent(item)
 end
 

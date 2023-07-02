@@ -10,7 +10,11 @@ StateResetters[#StateResetters + 1] = ResetErrors
 
 function LogError(errorMessage)
     if type(errorMessage) == "table" then
-        errorMessage = table.concat(errorMessage)
+        local flatTable = {}
+        for _, element in pairs(errorMessage) do
+            Append(flatTable, element)
+        end
+        errorMessage = table.concat(flatTable)
     end
     errorMessage = tostring(errorMessage)
     if errorMessage == nil or type(errorMessage) ~= "string" then

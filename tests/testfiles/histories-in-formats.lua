@@ -7,19 +7,20 @@ local function entitySetup()
     TexApi.addHistory { year = 0, event = "Event without offset." }
 end
 
-local function setup0()
-    TexApi.setCurrentYear(100)
+local function setupBase()
     TexApi.setCurrentDay(1)
     TexApi.setDaysPerYear(200)
     TexApi.makeEntityPrimary("test")
 end
 
-local function setup1()
-    setup0()
+local function setupNoOffset()
+    setupBase()
+    TexApi.setCurrentYear(100)
 end
 
-local function setup2()
-    setup0()
+local function setupWithOffset()
+    setupBase()
+    TexApi.setCurrentYear(110)
 end
 
 local function generateExpected(hasOffset)
@@ -39,15 +40,15 @@ local function generateExpected(hasOffset)
     if hasOffset then
         year = 10
     end
-    Append(out, [[\item ]] .. year .. [[ (]] .. Tr("x-years-ago", { 100 - year }) .. [[):\\Event without offset.]])
-    Append(out, [[\item ]] .. (year + 1) .. [[(]] .. Tr("x-years-ago", { 100 - year - 1 }) .. [[):\\Event with offset.]])
+    Append(out, [[\item ]] .. year .. [[ (]] .. Tr("x-years-ago", { 100 }) .. [[):\\Event without offset.]])
+    Append(out, [[\item ]] .. (year + 1) .. [[ (]] .. Tr("x-years-ago", { 99 }) .. [[):\\Event with offset.]])
     return out
 end
 
 entitySetup()
 local expected = generateExpected(false)
-AssertAutomatedChapters("history in format, standard output", expected, setup1)
+AssertAutomatedChapters("history in format, standard output", expected, setupNoOffset)
 
 entitySetup()
 local expected = generateExpected(true)
-AssertAutomatedChapters("history in format, offseted output", expected, setup2)
+AssertAutomatedChapters("history in format, offseted output", expected, setupWithOffset)

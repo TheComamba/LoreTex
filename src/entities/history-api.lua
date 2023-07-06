@@ -41,17 +41,17 @@ local function setDay(historyItem, day)
 	end
 end
 
-function SetYear(historyItem, year)
+function SetYear(historyItem, year, yearFmt)
 	local yearNumber = tonumber(year)
 	if yearNumber == nil then
 		LogError { "Could not convert to number:", DebugPrint(year) }
-	else
-		local yearFmt = GetProtectedNullableField(historyItem, "yearFormat")
-		if yearFmt ~= nil then
-			yearNumber = RemoveYearOffset(yearNumber, yearFmt)
-		end
-		SetProtectedField(historyItem, "year", yearNumber)
+		return
 	end
+
+	if yearFmt ~= nil then
+		yearNumber = RemoveYearOffset(yearNumber, yearFmt)
+	end
+	SetProtectedField(historyItem, "year", yearNumber)
 end
 
 local function setYearFmt(historyItem, label)
@@ -148,16 +148,13 @@ function AddHistory(arg)
 		SetProtectedField(item, "originator", arg.originator)
 	end
 	setDay(item, arg.day)
-	SetYear(item, arg.year)
+	SetYear(item, arg.year, arg.yearFmt)
 	SetProtectedField(item, "content", arg.event)
 	if not IsEmpty(arg.isConcernsOthers) then
 		SetProtectedField(item, "isConcernsOthers", arg.isConcernsOthers)
 	end
 	if not IsEmpty(arg.isSecret) then
 		SetProtectedField(item, "isSecret", arg.isSecret)
-	end
-	if not IsEmpty(arg.yearFmt) then
-		setYearFmt(item, arg.yearFmt)
 	end
 	AssureUniqueHistoryLabel(item)
 	processEvent(item)

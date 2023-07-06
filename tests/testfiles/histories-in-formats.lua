@@ -4,7 +4,10 @@ local function entitySetup()
 
     TexApi.newEntity { type = "other", label = "test", name = "Test Entity" }
     TexApi.addHistory { yearFmt = "test-calendar-with-offset", year = 11, event = "Event with offset." }
+    local itemEnteredInFormat = AllHistoryItems[#AllHistoryItems]
     TexApi.addHistory { year = 0, event = "Event without offset." }
+
+    Assert("Year of item entered in offsetted format", 1, GetProtectedNullableField(itemEnteredInFormat, "year"))
 end
 
 local function setupBase()

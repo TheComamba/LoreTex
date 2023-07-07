@@ -152,6 +152,11 @@ end
 
 TexApi.addHistory = function(arg)
 	arg.originator = CurrentEntity
+	if arg.yearFmt and arg.yearFmt ~= "" then
+		arg.yearFmt = GetMutableEntityFromAll(arg.yearFmt)
+	else
+		arg.yearFmt = nil
+	end
 	AddHistory(arg)
 end
 

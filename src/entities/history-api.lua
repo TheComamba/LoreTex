@@ -48,7 +48,7 @@ function SetYear(historyItem, year, yearFmt)
 	end
 
 	if yearFmt ~= nil then
-		yearNumber = RemoveYearOffset(yearNumber, yearFmt)
+		yearNumber = YearWithoutOffset(yearNumber, yearFmt)
 	end
 	SetProtectedField(historyItem, "year", yearNumber)
 end
@@ -168,7 +168,7 @@ end
 TexApi.born = function(arg)
 	TexApi.addHistory(arg)
 	if not IsEmpty(arg.yearFmt) then
-		arg.year = RemoveYearOffset(arg.year, arg.yearFmt)
+		arg.year = YearWithoutOffset(arg.year, arg.yearFmt)
 	end
 	SetProtectedField(CurrentEntity, "born", arg.year)
 end
@@ -176,7 +176,7 @@ end
 TexApi.died = function(arg)
 	TexApi.addHistory(arg)
 	if not IsEmpty(arg.yearFmt) then
-		arg.year = RemoveYearOffset(arg.year, arg.yearFmt)
+		arg.year = YearWithoutOffset(arg.year, arg.yearFmt)
 	end
 	SetProtectedField(CurrentEntity, "died", arg.year)
 end

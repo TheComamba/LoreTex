@@ -127,7 +127,7 @@ TexApi.addMonth = function(arg)
     addMonth(arg)
 end
 
-function RemoveYearOffset(year, fmt)
+function YearWithoutOffset(year, fmt)
     local offset = GetProtectedNullableField(fmt, "yearOffset")
     if offset == nil then
         return year
@@ -136,7 +136,7 @@ function RemoveYearOffset(year, fmt)
     end
 end
 
-function AddYearOffset(year, fmt)
+function YearWithOffset(year, fmt)
     local offset = GetProtectedNullableField(fmt, "yearOffset")
     if offset == nil then
         return year

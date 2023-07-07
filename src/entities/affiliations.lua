@@ -36,13 +36,13 @@ local function entityQualifiersString(child, parent, relationships)
     local birthyearstr = GetProtectedNullableField(child, "born")
     local birthyear = tonumber(birthyearstr)
     if birthyear ~= nil and birthyear <= GetCurrentYear() then
-        birthyear = AddYearOffset(birthyear, YearFmt)
+        birthyear = YearWithOffset(birthyear, YearFmt)
         Append(content, TexCmd("textborn") .. birthyear)
     end
     local deathyearstr = GetProtectedNullableField(child, "died")
     local deathyear = tonumber(deathyearstr)
     if deathyear ~= nil and deathyear <= GetCurrentYear() then
-        deathyear = AddYearOffset(deathyear, YearFmt)
+        deathyear = YearWithOffset(deathyear, YearFmt)
         Append(content, TexCmd("textdied") .. deathyear)
     end
     local childLocation = GetProtectedNullableField(child, "location")

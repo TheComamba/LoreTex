@@ -45,6 +45,7 @@ local function generateExpected(hasOffset)
     end
     Append(out, [[\item ]] .. year .. [[ (]] .. Tr("x-years-ago", { 100 }) .. [[):\\Event without offset.]])
     Append(out, [[\item ]] .. (year + 1) .. [[ (]] .. Tr("x-years-ago", { 99 }) .. [[):\\Event with offset.]])
+    Append(out, [[\end{itemize}]])
     return out
 end
 

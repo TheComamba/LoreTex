@@ -41,7 +41,6 @@ StateResetters[#StateResetters + 1] = function()
     addInheritableDescriptor("type")
     addInheritableDescriptor("year")
     addInheritableDescriptor("yearAbbreviation")
-    addInheritableDescriptor("yearFormat")
     addInheritableDescriptor("yearOffset")
 end
 

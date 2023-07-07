@@ -14,7 +14,6 @@ local function IsHistoryItemOk(caller, item)
 	local optional = {}
 	Append(optional, GetProtectedDescriptor("day"))
 	Append(optional, GetProtectedDescriptor("originator"))
-	Append(optional, GetProtectedDescriptor("yearFormat"))
 	return IsArgOk(caller, item, required, optional)
 end
 
@@ -52,15 +51,6 @@ function SetYear(historyItem, year, yearFmt)
 		yearNumber = RemoveYearOffset(yearNumber, yearFmt)
 	end
 	SetProtectedField(historyItem, "year", yearNumber)
-end
-
-local function setYearFmt(historyItem, label)
-	if IsEmpty(label) then
-		LogError { "Called with empty year format for history item:", DebugPrint(historyItem) }
-		return
-	end
-	local fmt = GetMutableEntityFromAll(label)
-	SetProtectedField(historyItem, "yearFormat", fmt)
 end
 
 function AddMentions(entity, content)

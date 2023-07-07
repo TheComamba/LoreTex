@@ -61,6 +61,11 @@ function IsProtectedDescriptor(descriptor)
 end
 
 local function getProtectedField(entity, key, inherit)
+    if type(entity) ~= "table" then
+        LogError("Expected table, got " .. type(entity) .. "!")
+        return nil
+    end
+
     if inherit == nil then
         inherit = true
     end
@@ -111,6 +116,11 @@ function GetProtectedTableCopyField(entity, key, inherit)
 end
 
 function SetProtectedField(entity, key, value)
+    if type(entity) ~= "table" then
+        LogError("Expected table, got " .. type(entity) .. "!")
+        return
+    end
+
     local descriptor = GetProtectedDescriptor(key)
     entity[descriptor] = value
 end

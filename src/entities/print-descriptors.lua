@@ -8,21 +8,28 @@ local function levelToCaptionstyle(level)
     end
 end
 
-local function appendDescriptorString(out, entity, descriptor, level)
-    local captionstyle = levelToCaptionstyle(level)
-    Append(out, TexCmd(captionstyle, CapFirst(descriptor)))
-    local desctiption = entity[descriptor]
-    if type(desctiption) == "string" and not IsEmpty(desctiption) then
-        Append(out, desctiption)
-    end
-    local stringContent = GetProtectedStringField(desctiption, "content")
+local function appendTableDescription(out, description, level)
+    local stringContent = GetProtectedStringField(description, "content")
     if stringContent ~= "" then
         Append(out, stringContent)
     end
-    if IsMap(desctiption) then
-        Append(out, DescriptorsString(desctiption, level + 1))
-    elseif IsList(desctiption) then
-        Append(out, ListAll(desctiption))
+    if IsMap(description) then
+        Append(out, DescriptorsString(description, level + 1))
+    elseif IsList(description) then
+        Append(out, ListAll(description))
+    end
+end
+
+local function appendDescriptorString(out, entity, descriptor, level)
+    local captionstyle = levelToCaptionstyle(level)
+    Append(out, TexCmd(captionstyle, CapFirst(descriptor)))
+    local description = entity[descriptor]
+    if type(description) == "string" then
+        if not IsEmpty(description) then
+            Append(out, description)
+        end
+    else
+        appendTableDescription(out, description, level)
     end
 end
 

@@ -14,7 +14,6 @@ local function IsHistoryItemOk(caller, item)
 	local optional = {}
 	Append(optional, GetProtectedDescriptor("day"))
 	Append(optional, GetProtectedDescriptor("originator"))
-	Append(optional, GetProtectedDescriptor("yearFormat"))
 	return IsArgOk(caller, item, required, optional)
 end
 
@@ -49,18 +48,9 @@ function SetYear(historyItem, year, yearFmt)
 	end
 
 	if yearFmt ~= nil then
-		yearNumber = RemoveYearOffset(yearNumber, yearFmt)
+		yearNumber = YearWithoutOffset(yearNumber, yearFmt)
 	end
 	SetProtectedField(historyItem, "year", yearNumber)
-end
-
-local function setYearFmt(historyItem, label)
-	if IsEmpty(label) then
-		LogError { "Called with empty year format for history item:", DebugPrint(historyItem) }
-		return
-	end
-	local fmt = GetMutableEntityFromAll(label)
-	SetProtectedField(historyItem, "yearFormat", fmt)
 end
 
 function AddMentions(entity, content)
@@ -162,6 +152,11 @@ end
 
 TexApi.addHistory = function(arg)
 	arg.originator = CurrentEntity
+	if arg.yearFmt and arg.yearFmt ~= "" then
+		arg.yearFmt = GetMutableEntityFromAll(arg.yearFmt)
+	else
+		arg.yearFmt = nil
+	end
 	AddHistory(arg)
 end
 
@@ -178,7 +173,7 @@ end
 TexApi.born = function(arg)
 	TexApi.addHistory(arg)
 	if not IsEmpty(arg.yearFmt) then
-		arg.year = RemoveYearOffset(arg.year, arg.yearFmt)
+		arg.year = YearWithoutOffset(arg.year, arg.yearFmt)
 	end
 	SetProtectedField(CurrentEntity, "born", arg.year)
 end
@@ -186,7 +181,7 @@ end
 TexApi.died = function(arg)
 	TexApi.addHistory(arg)
 	if not IsEmpty(arg.yearFmt) then
-		arg.year = RemoveYearOffset(arg.year, arg.yearFmt)
+		arg.year = YearWithoutOffset(arg.year, arg.yearFmt)
 	end
 	SetProtectedField(CurrentEntity, "died", arg.year)
 end

@@ -166,9 +166,6 @@ local function formatHistoryItemForC(luaItem)
 
     local originator = GetProtectedNullableField(luaItem, "originator")
     cItem.originator = optionalEntityToString(originator)
-
-    local yearFormat = GetProtectedNullableField(luaItem, "yearFormat")
-    cItem.year_format = optionalEntityToString(yearFormat)
     return cItem
 end
 

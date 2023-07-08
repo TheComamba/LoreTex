@@ -13,17 +13,17 @@ end
 local function setupBase()
     TexApi.setCurrentDay(1)
     TexApi.setDaysPerYear(200)
+    TexApi.setCurrentYear(100)
     TexApi.makeEntityPrimary("test")
 end
 
 local function setupNoOffset()
     setupBase()
-    TexApi.setCurrentYear(100)
 end
 
 local function setupWithOffset()
     setupBase()
-    TexApi.setCurrentYear(110)
+    TexApi.addYearFmt("test-calendar-with-offset")
 end
 
 local function generateExpected(hasOffset)

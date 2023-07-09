@@ -1,6 +1,3 @@
-TexApi.addType { metatype = "other", type = "ships" }
-TexApi.addTranslation { language = "english", key = "ships", translation = "ships" }
-
 TexApi.newEntity { type = "places", label = "ocean", name = "Ocean" }
 
 TexApi.newEntity { type = "ships", label = "aurora", name = "Aurora" }
@@ -75,4 +72,12 @@ Append(expected, [[\begin{itemize}]])
 Append(expected, [[\item \nameref{aurora}]])
 Append(expected, [[\end{itemize}]])
 
-AssertAutomatedChapters("Example Ship Crew", expected, TexApi.makeAllEntitiesPrimary)
+local function setup()
+    TexApi.makeAllEntitiesPrimary()
+    TexApi.addType { metatype = "other", type = "ships" }
+    TexApi.addType { metatype = "characters", type = "npcs" }
+    TexApi.addType { metatype = "places", type = "places" }
+    TexApi.addTranslation { language = "english", key = "ships", translation = "ships" }
+end
+
+AssertAutomatedChapters("Example Ship Crew", expected, setup)

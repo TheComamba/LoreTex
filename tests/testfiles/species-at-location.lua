@@ -8,6 +8,7 @@ TexApi.setLocation("tattooine")
 
 local function refSetup()
     TexApi.makeEntityPrimary("tattooine")
+    TexApi.addType { metatype = "places", type = "places" }
 end
 
 local expected = {}

@@ -15,6 +15,7 @@ TexApi.setDescriptor { descriptor = "Subspecies", description = [[\label{subspec
 
 local function refSetup1()
     TexApi.makeEntityPrimary("some-npc")
+    TexApi.addType { metatype = "characters", type = "npcs" }
 end
 
 local expected = {
@@ -69,6 +70,7 @@ local function refSetup2()
     TexApi.makeEntityPrimary("also-primary")
     TexApi.mention("sublabel-3")
     TexApi.mention("sublabel-4")
+    TexApi.addType { metatype = "characters", type = "npcs" }
 end
 
 local expected = {
@@ -123,6 +125,7 @@ TexApi.setDescriptor { descriptor = "Unusual paragraph", description = table.con
 
 local function refSetup3()
     TexApi.makeEntityPrimary("some-npc")
+    TexApi.addType { metatype = "characters", type = "npcs" }
 end
 
 local expected = {}
@@ -178,5 +181,9 @@ Append(expected, [[\paragraph{Appears Twice}]])
 Append(expected, [[\subparagraph{Two}]])
 Append(expected, [[\label{two}]])
 
-AssertAutomatedChapters("Unlabeled paragraph with labeled subpara appears twice", expected, TexApi
-.makeAllEntitiesPrimary)
+local function refSetup4()
+    TexApi.makeAllEntitiesPrimary()
+    TexApi.addType { metatype = "places", type = "places" }
+end
+
+AssertAutomatedChapters("Unlabeled paragraph with labeled subpara appears twice", expected, refSetup4)

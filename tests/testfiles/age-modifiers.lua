@@ -110,6 +110,7 @@ end
 local function setup()
     TexApi.setCurrentYear(100)
     TexApi.makeEntityPrimary("char")
+    TexApi.addType { metatype = "other", type = "other" }
 end
 
 for depth = 1, 3 do

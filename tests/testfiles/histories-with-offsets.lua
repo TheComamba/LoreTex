@@ -15,6 +15,7 @@ local function setupBase()
     TexApi.setDaysPerYear(200)
     TexApi.setCurrentYear(100)
     TexApi.makeEntityPrimary("test")
+    TexApi.addType { metatype = "other", type = "other" }
 end
 
 local function setupNoOffset()
@@ -51,8 +52,8 @@ end
 
 entitySetup()
 local expected = generateExpected(false)
-AssertAutomatedChapters("history in format, standard output", expected, setupNoOffset)
+AssertAutomatedChapters("history with offset, standard output", expected, setupNoOffset)
 
 entitySetup()
 local expected = generateExpected(true)
-AssertAutomatedChapters("history in format, offseted output", expected, setupWithOffset)
+AssertAutomatedChapters("history with offset, offseted output", expected, setupWithOffset)

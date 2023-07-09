@@ -25,6 +25,9 @@ local function refSetup()
     TexApi.makeEntityPrimary("place-1")
     TexApi.makeEntityPrimary("place-2")
     TexApi.makeEntityPrimary("orga-2")
+
+    TexApi.addType { metatype = "other", type = "other" }
+    TexApi.addType { metatype = "places", type = "places" }
 end
 
 local function generateOrga1(areLocationsSet)

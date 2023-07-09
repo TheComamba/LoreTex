@@ -11,7 +11,7 @@ local function getNumberOfEntityColumns(dbPath)
         return nil
     end
 
-    return numEntityColumns
+    return ffi.number(numEntityColumns[0])
 end
 
 local function readEntityColumns(dbPath)
@@ -22,7 +22,7 @@ local function readEntityColumns(dbPath)
     local numEntityColumns = getNumberOfEntityColumns(dbPath)
     if not numEntityColumns then return {} end
 
-    local cEntityColumns = ffi.new("CEntityColumn[?]", ffi.number(numEntityColumns[0]))
+    local cEntityColumns = ffi.new("CEntityColumn[?]", numEntityColumns)
 
     local result = loreCore.read_entity_columns(dbPath, cEntityColumns)
     local errorMessage = ffi.string(result)
@@ -32,7 +32,7 @@ local function readEntityColumns(dbPath)
     end
 
     local entityColumns = {}
-    for i = 0, (ffi.number(numEntityColumns[0]) - 1) do
+    for i = 0, (numEntityColumns - 1) do
         local cEntityColumn = cEntityColumns[i]
         local entityColumn = {}
         entityColumn.label = ffi.string(cEntityColumn.label)
@@ -46,7 +46,7 @@ end
 local function getNumberOfHistoryItems(dbPath)
     local ffi = GetFFIModule()
     local loreCore = GetLib()
-    if not ffi or not loreCore then return {} end
+    if not ffi or not loreCore then return nil end
 
     local numHistoryItems = ffi.new("intptr_t[1]")
     local result = loreCore.get_number_of_history_items(dbPath, numHistoryItems)
@@ -56,7 +56,7 @@ local function getNumberOfHistoryItems(dbPath)
         return nil
     end
 
-    return numHistoryItems
+    return ffi.number(numHistoryItems[0])
 end
 
 local function readHistoryItemColumns(dbPath)
@@ -67,7 +67,7 @@ local function readHistoryItemColumns(dbPath)
     local numHistoryItems = getNumberOfHistoryItems(dbPath)
     if not numHistoryItems then return {} end
 
-    local cHistoryItems = ffi.new("CHistoryItem[?]", ffi.number(numHistoryItems[0]))
+    local cHistoryItems = ffi.new("CHistoryItem[?]", numHistoryItems)
 
     local result = loreCore.read_history_items(dbPath, cHistoryItems)
     local errorMessage = ffi.string(result)
@@ -77,11 +77,11 @@ local function readHistoryItemColumns(dbPath)
     end
 
     local histoyItemColumns = {}
-    for i = 0, (ffi.number(numHistoryItems[0]) - 1) do
+    for i = 0, (numHistoryItems - 1) do
         local cHistoryItem = cHistoryItems[i]
         local historyItem = {}
         historyItem.label = ffi.string(cHistoryItem.label)
-        historyItem.content = ffi.string(cHistoryItem.content)        
+        historyItem.content = ffi.string(cHistoryItem.content)
         historyItem.is_concerns_others = ffi.number(cHistoryItem.is_concerns_others)
         historyItem.is_secret = ffi.number(cHistoryItem.is_secret)
         historyItem.year = ffi.number(cHistoryItem.year)
@@ -95,15 +95,16 @@ end
 local function getNumberOfRelationships(dbPath)
     local ffi = GetFFIModule()
     local loreCore = GetLib()
-    if not ffi or not loreCore then return {} end
+    if not ffi or not loreCore then return nil end
 
     local numRelationships = ffi.new("intptr_t[1]")
     local result = loreCore.get_number_of_relationships(dbPath, numRelationships)
     local errorMessage = ffi.string(result)
     if errorMessage ~= "" then
         LogError(errorMessage)
-        return {}
+        return nil
     end
+    return ffi.number(numRelationships[0])
 end
 
 local function readRelationshipColumns(dbPath)
@@ -114,7 +115,7 @@ local function readRelationshipColumns(dbPath)
     local numRelationships = getNumberOfRelationships(dbPath)
     if not numRelationships then return {} end
 
-    local cRelationships = ffi.new("CRelationship[?]", ffi.number(numRelationships[0]))
+    local cRelationships = ffi.new("CEntityRelationship[?]", numRelationships)
 
     local result = loreCore.read_relationships(dbPath, cRelationships)
     local errorMessage = ffi.string(result)
@@ -124,7 +125,7 @@ local function readRelationshipColumns(dbPath)
     end
 
     local relationshipColumns = {}
-    for i = 0, (ffi.number(numRelationships[0]) - 1) do
+    for i = 0, (numRelationships - 1) do
         local cRelationship = cRelationships[i]
         local relationship = {}
         relationship.parent = ffi.string(cRelationship.parent)

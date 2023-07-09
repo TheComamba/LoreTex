@@ -21,7 +21,7 @@ end
 
 TexApi.setCurrentYear = function(year)
     if year == nil or type(year) ~= "number" then
-        LogError("Called with " .. DebugPrint(year))
+        LogError { "Called with ", DebugPrint(year) }
         return
     end
     currentYear = year
@@ -30,7 +30,7 @@ end
 
 TexApi.setCurrentDay = function(day)
     if day == nil or type(day) ~= "number" then
-        LogError("Called with " .. DebugPrint(day))
+        LogError { "Called with ", DebugPrint(day) }
         return
     end
     currentDay = day
@@ -39,7 +39,7 @@ end
 
 TexApi.setDaysPerYear = function(days)
     if days == nil or type(days) ~= "number" then
-        LogError("Called with " .. DebugPrint(days))
+        LogError { "Called with ", DebugPrint(days) }
         return
     end
     daysPerYear = days
@@ -89,7 +89,7 @@ TexApi.addYearFmt = addYearFmt
 
 local function setYearAbbreviation(entity, abbr)
     if entity == nil then
-        LogError("Called without entity for abbreviation:" .. DebugPrint(abbr))
+        LogError { "Called without entity for abbreviation:", DebugPrint(abbr) }
         return
     end
     SetProtectedField(entity, "yearAbbreviation", abbr)
@@ -105,7 +105,7 @@ local function setYearOffset(entity, offset)
         return
     end
     if offset == nil or type(offset) ~= "number" then
-        LogError("Called with invalid offset for entity:" .. DebugPrint(entity))
+        LogError { "Called with invalid offset for entity:", DebugPrint(entity) }
         return
     end
     SetProtectedField(entity, "yearOffset", offset)
@@ -127,7 +127,7 @@ TexApi.addMonth = function(arg)
     addMonth(arg)
 end
 
-function RemoveYearOffset(year, fmt)
+function YearWithoutOffset(year, fmt)
     local offset = GetProtectedNullableField(fmt, "yearOffset")
     if offset == nil then
         return year
@@ -136,7 +136,7 @@ function RemoveYearOffset(year, fmt)
     end
 end
 
-function AddYearOffset(year, fmt)
+function YearWithOffset(year, fmt)
     local offset = GetProtectedNullableField(fmt, "yearOffset")
     if offset == nil then
         return year
@@ -216,7 +216,7 @@ function IsHasHappened(entity, keyword, onNil)
     else
         year = tonumber(year)
         if year == nil then
-            LogError("Entry with key \"" .. keyword .. "\" of is not a number:" .. DebugPrint(entity))
+            LogError { "Entry with key \"", keyword, "\" of is not a number:", DebugPrint(entity) }
             return onNil
         end
         return year <= GetCurrentYear()

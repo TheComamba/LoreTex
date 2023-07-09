@@ -1,11 +1,12 @@
-TexApi.newEntity { type = "npcs", label = "karl", name = "Karl" }
-TexApi.setSpecies("human")
-TexApi.setDescriptor { descriptor = "Friend", description = [[\nameref{peter}]] }
-TexApi.newEntity { type = "npcs", label = "peter", name = "Peter" }
-TexApi.setSpecies("human")
-TexApi.newEntity { type = "species", label = "human", name = "Human" }
-TexApi.setAgeFactor(0)
-TexApi.mention("karl")
+local function setup()
+    TexApi.newEntity { type = "npcs", label = "karl", name = "Karl" }
+    TexApi.setSpecies("human")
+    TexApi.setDescriptor { descriptor = "Friend", description = [[\nameref{peter}]] }
+    TexApi.newEntity { type = "npcs", label = "peter", name = "Peter" }
+    TexApi.setSpecies("human")
+    TexApi.newEntity { type = "species", label = "human", name = "Human" }
+    TexApi.setAgeFactor(0)
+end
 
 local function generateExpected(primaryType, isKarlReferenced)
     local out = {}
@@ -73,41 +74,59 @@ local function generateExpected(primaryType, isKarlReferenced)
     return out
 end
 
-local out = {}
 local expected = {}
 
-PrimaryRefWhenMentionedTypes = {}
-out = TexApi.automatedChapters()
+local function refSetup1()
+    TexApi.mention("karl")
+end
+
+setup()
 expected = generateExpected(nil, false)
-Assert("one-only-mentioned-npc", expected, out)
+AssertAutomatedChapters("one-only-mentioned-npc", expected, refSetup1)
 
-PrimaryRefWhenMentionedTypes = {}
-TexApi.makeTypePrimaryWhenMentioned("species")
-out = TexApi.automatedChapters()
+local function refSetup2()
+    TexApi.mention("karl")
+    TexApi.makeTypePrimaryWhenMentioned("species")
+end
+
+setup()
 expected = generateExpected("species")
-Assert("species-are-primary-types-npc-is-only-mentioned", expected, out)
+AssertAutomatedChapters("species-are-primary-types-npc-is-only-mentioned", expected, refSetup2)
 
-PrimaryRefWhenMentionedTypes = {}
-TexApi.makeTypePrimaryWhenMentioned("npcs")
-out = TexApi.automatedChapters()
+local function refSetup3()
+    TexApi.mention("karl")
+    TexApi.makeTypePrimaryWhenMentioned("npcs")
+end
+
+setup()
 expected = generateExpected("npcs", false)
-Assert("npcs-are-primary-types-one-is-only-mentioned", expected, out)
+AssertAutomatedChapters("npcs-are-primary-types-one-is-only-mentioned", expected, refSetup3)
 
-TexApi.makeEntityPrimary("karl")
+local function refSetup4()
+    TexApi.mention("karl")
+    TexApi.makeEntityPrimary("karl")
+end
 
-PrimaryRefWhenMentionedTypes = {}
-out = TexApi.automatedChapters()
+setup()
 expected = generateExpected(nil, true)
-Assert("two-npcs-one-primary", expected, out)
+AssertAutomatedChapters("two-npcs-one-primary", expected, refSetup4)
 
-PrimaryRefWhenMentionedTypes = {}
-TexApi.makeTypePrimaryWhenMentioned("species")
-out = TexApi.automatedChapters()
+local function refSetup5()
+    TexApi.mention("karl")
+    TexApi.makeEntityPrimary("karl")
+    TexApi.makeTypePrimaryWhenMentioned("species")
+end
+
+setup()
 expected = generateExpected("species", true)
-Assert("species-are-primary-types-one-npc-explicitly-referenced", expected, out)
+AssertAutomatedChapters("species-are-primary-types-one-npc-explicitly-referenced", expected, refSetup5)
 
-PrimaryRefWhenMentionedTypes = {}
-TexApi.makeTypePrimaryWhenMentioned("npcs")
-out = TexApi.automatedChapters()
+local function refSetup6()
+    TexApi.mention("karl")
+    TexApi.makeEntityPrimary("karl")
+    TexApi.makeTypePrimaryWhenMentioned("npcs")
+end
+
+setup()
 expected = generateExpected("npcs", true)
-Assert("npcs-are-primary-types-one-explicitly-referenced", expected, out)
+AssertAutomatedChapters("npcs-are-primary-types-one-explicitly-referenced", expected, refSetup6)

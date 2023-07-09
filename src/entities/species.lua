@@ -28,13 +28,13 @@ end
 
 local function getMixedAgeFactorAndExponent(speciesMixing)
 	if type(speciesMixing) ~= "table" or #speciesMixing ~= 2 then
-		LogError("getMixedAgeFactorAndExponent called with " .. DebugPrint(speciesMixing))
+		LogError { "getMixedAgeFactorAndExponent called with ", DebugPrint(speciesMixing) }
 		return 1, 1
 	end
 	local species1 = GetEntity(speciesMixing[1])
 	local species2 = GetEntity(speciesMixing[2])
 	if IsEmpty(species1) or IsEmpty(species2) then
-		LogError("One of " .. DebugPrint(speciesMixing) .. " not found!")
+		LogError { "At least one not found: ", DebugPrint(speciesMixing) }
 		return 1, 1
 	end
 	local f1, e1 = GetAgeFactorAndExponent(species1)
@@ -161,11 +161,12 @@ function AddLifestageHistoryItems(entity)
 			Append(event, " ")
 			Append(event, Tr(lifestage))
 			Append(event, ".")
-			local item = NewHistoryItem()
+			local item = NewHistoryItem(false)
 			SetYear(item, year)
 			SetProtectedField(item, "content", table.concat(event))
 			AddToProtectedField(item, "mentions", entity)
 			AddToProtectedField(entity, "historyItems", item)
+			AssureUniqueHistoryLabel(item)
 		end
 	end
 end

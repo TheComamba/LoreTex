@@ -4,12 +4,15 @@ TexApi.newEntity { type = "npcs", label = "flora", shortname = "", name = "Flora
 TexApi.born { year = -10, event = [[\nameref{flora} is born.\birthof{flora}]] }
 TexApi.died { year = -5, event = [[\nameref{flora} dies.\deathof{flora}]] }
 
-TexApi.makeEntityPrimary("flora")
 
 TexApi.newEntity { type = "npcs", label = "ramona", name = "Ramona" }
 TexApi.setSecret()
 TexApi.reveal("ramona")
-TexApi.makeEntityPrimary("ramona")
+
+local function refSetup()
+    TexApi.makeEntityPrimary("flora")
+    TexApi.makeEntityPrimary("ramona")
+end
 
 local expected = {}
 Append(expected, [[\chapter{]] .. CapFirst(Tr("characters")) .. [[}]])
@@ -33,6 +36,4 @@ Append(expected, [[\end{itemize}]])
 Append(expected, [[\subsubsection[Ramona]{Ramona (]] .. CapFirst(Tr("secret")) .. [[)}]])
 Append(expected, [[\label{ramona}]])
 
-
-local out = TexApi.automatedChapters()
-Assert("Marked Entities", expected, out)
+AssertAutomatedChapters("Marked Entities", expected, refSetup)

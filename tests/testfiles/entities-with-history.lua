@@ -1,11 +1,10 @@
-TexApi.setCurrentYear(0)
+local function entitySetup()
+    TexApi.newEntity { type = "places", label = "test-1", name = "Test 1" }
 
-TexApi.newEntity { type = "places", label = "test-1", name = "Test 1" }
-
-TexApi.newEntity { type = "places", label = "test-2", name = "Test 2" }
-TexApi.addHistory { year = -10, event = [[Event that concerns \reference{test-1} and \itref{test-2}.]] }
-TexApi.addHistory { year = 10, event = [[Event in the future.]] }
-TexApi.makeEntityPrimary("test-1")
+    TexApi.newEntity { type = "places", label = "test-2", name = "Test 2" }
+    TexApi.addHistory { year = -10, event = [[Event that concerns \reference{test-1} and \itref{test-2}.]] }
+    TexApi.addHistory { year = 10, event = [[Event in the future.]] }
+end
 
 local function generateExpected(isSecondAdded)
     local out = {}
@@ -45,16 +44,20 @@ local function generateExpected(isSecondAdded)
     return out
 end
 
-local out = TexApi.automatedChapters()
+local function refSetup1()
+    TexApi.setCurrentYear(0)
+    TexApi.makeEntityPrimary("test-1")
+end
 
+local function refSetup2()
+    refSetup1()
+    TexApi.makeEntityPrimary("test-2")
+end
+
+entitySetup()
 local expected = generateExpected(false)
+AssertAutomatedChapters("one-entity-with-history", expected, refSetup1)
 
-Assert("one-entity-with-history", expected, out)
-
-TexApi.makeEntityPrimary("test-2")
-
-out = TexApi.automatedChapters()
-
+entitySetup()
 expected = generateExpected(true)
-
-Assert("two-entities-with-history", expected, out)
+AssertAutomatedChapters("two-entities-with-history", expected, refSetup2)

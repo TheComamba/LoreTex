@@ -101,19 +101,14 @@ local function addDescriptorsToExpected(expected, isSubdescription, level)
             Append(expected, [[\end{itemize}]])
         end
     end
-
 end
 
 for key, isSubdescription in pairs({ false, true }) do
     for i = 1, 3 do
-        ResetState()
-
         TexApi.newEntity { type = "places", label = "1", name = "Test" }
         TexApi.setDescriptor { descriptor = "ZZZSubentity",
             description = [[\label{2} \subparagraph{ZZZSubsubentity} \label{3}]] }
         setDescriptors(GetMutableEntityFromAll(tostring(i)), isSubdescription)
-
-        TexApi.makeAllEntitiesPrimary()
 
         local expected = {}
         Append(expected, [[\chapter{]] .. CapFirst(Tr("places")) .. [[}]])
@@ -142,12 +137,10 @@ for key, isSubdescription in pairs({ false, true }) do
             addDescriptorsToExpected(expected, isSubdescription, i)
         end
 
-        local out = TexApi.automatedChapters()
-
         local testname = "Descriptors " .. i
         if isSubdescription then
             testname = "Sub-" .. testname
         end
-        Assert(testname, expected, out)
+        AssertAutomatedChapters(testname, expected, TexApi.makeAllEntitiesPrimary)
     end
 end

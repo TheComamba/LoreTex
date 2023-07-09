@@ -2,6 +2,7 @@
 
 \input{../../src/main.tex}
 \loadLuacode{../../src/}
+\throwOnError
 
 \begin{document}
 
@@ -32,15 +33,15 @@ Associations are a similar concept, but they do not influence how an entity is s
 
 The addParent command can be given a role in the association as an optional argument. Otherwise they will simply be called member. An entity can have an arbitrary number of associations.
 
-\newEntity{organisations}{galactic-empire}{}{Galactic Empire}
+\newEntity{other}{galactic-empire}{}{Galactic Empire}
 
-\newEntity{ships}{star-destroyer}{}{Star Destroyer}
+\newEntity{other}{star-destroyer}{}{Star Destroyer}
 \addParent{galactic-empire}
 
-\newEntity{ships}{death-star}{}{Death Star}
+\newEntity{other}{death-star}{}{Death Star}
 \addParent[Flawless Flagship]{galactic-empire}
 
-\newEntity{ships}{death-star-2}{}{Death Star 2}
+\newEntity{other}{death-star-2}{}{Death Star 2}
 \addParent[Unfinished Flagship]{galactic-empire}
 \addParent[Successor]{death-star}
 

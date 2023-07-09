@@ -29,7 +29,7 @@ local function getYear(entity, key)
     end
     local year = tonumber(value)
     if year == nil then
-        LogError("Could not convert " .. DebugPrint(value) .. " to year in entity: " .. DebugPrint(entity))
+        LogError { "Could not convert ", DebugPrint(value), " to year in entity: ", DebugPrint(entity) }
         return nil
     else
         return year
@@ -38,7 +38,7 @@ end
 
 function GetAgeInYears(entity, year)
     if year == nil or type(year) ~= "number" then
-        LogError("Called with " .. DebugPrint(year))
+        LogError { "Called with ", DebugPrint(year) }
         return nil
     end
     local born = getYear(entity, "born")

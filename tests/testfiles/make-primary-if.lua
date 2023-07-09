@@ -1,6 +1,8 @@
 TexApi.newEntity { type = "npcs", label = "test", name = "Test" }
 
-TexApi.makeAllEntitiesOfTypePrimary("characters")
+local function refSetup()
+    TexApi.makeAllEntitiesOfTypePrimary("characters")
+end
 
 local expected = {}
 Append(expected, [[\chapter{]] .. CapFirst(Tr("characters")) .. [[}]])
@@ -13,6 +15,4 @@ Append(expected, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
 Append(expected, [[\subsubsection{Test}]])
 Append(expected, [[\label{test}]])
 
-local out = TexApi.automatedChapters()
-
-Assert("make-primary-if", expected, out)
+AssertAutomatedChapters("make-primary-if", expected, refSetup)

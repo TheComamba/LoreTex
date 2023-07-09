@@ -1,3 +1,5 @@
+NewpageAfterEntity = false
+
 local function printEntities(sectionname, entitiesList)
     if IsEmpty(entitiesList) then
         return {}
@@ -15,6 +17,9 @@ local function printEntities(sectionname, entitiesList)
         end
         Append(out, TexCmd("label", GetProtectedStringField(entity, "label")))
         Append(out, DescriptorsString(entity))
+        if NewpageAfterEntity then
+            Append(out, TexCmd("newpage"))
+        end
     end
     return out
 end

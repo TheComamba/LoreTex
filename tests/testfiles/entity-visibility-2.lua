@@ -1,11 +1,12 @@
-TexApi.setCurrentYear(0)
+local function entitySetup()
+    TexApi.setCurrentYear(0)
 
-TexApi.newEntity { type = "stories", label = "teststory", name = "Teststory" }
-TexApi.makeEntityPrimary("teststory")
-TexApi.addHistory { year = -10, event = [[Concerns \nameref{secret-item}.]] }
-
-TexApi.newEntity { type = "other", label = "secret-item", name = "Secret Item" }
-TexApi.setSecret()
+    TexApi.newEntity { type = "stories", label = "teststory", name = "Teststory" }
+    TexApi.addHistory { year = -10, event = [[Concerns \nameref{secret-item}.]] }
+    
+    TexApi.newEntity { type = "other", label = "secret-item", name = "Secret Item" }
+    TexApi.setSecret()
+end
 
 local function generateHistoryParagraph()
     local out = {}
@@ -53,25 +54,32 @@ local function generateExpected(isItemReferenced, isShowSecrets)
 end
 
 local expected = {}
-local received = {}
 
+local function refSetup1()
+    TexApi.makeEntityPrimary("teststory")
+end
+
+local function refSetup2()
+    refSetup1()
+    TexApi.makeEntityPrimary("secret-item")
+end
+
+entitySetup()
 TexApi.showSecrets(false)
 expected = generateExpected(false, false)
-received = TexApi.automatedChapters()
-Assert("entity-secrecey-two-do-not-show-secrets", expected, received)
+AssertAutomatedChapters("entity-secrecy-two-do-not-show-secrets", expected, refSetup1)
 
+entitySetup()
 TexApi.showSecrets(true)
 expected = generateExpected(false, true)
-received = TexApi.automatedChapters()
-Assert("entity-secrecey-two-show-secrets", expected, received)
+AssertAutomatedChapters("entity-secrecy-two-show-secrets", expected, refSetup1)
 
-TexApi.makeEntityPrimary("secret-item")
+entitySetup()
 TexApi.showSecrets(false)
 expected = generateExpected(true, false)
-received = TexApi.automatedChapters()
-Assert("entity-secrecey-two-do-not-show-secrets", expected, received)
+AssertAutomatedChapters("entity-secrecy-two-do-not-show-secrets-but-item-referenced", expected, refSetup2)
 
+entitySetup()
 TexApi.showSecrets(true)
 expected = generateExpected(true, true)
-received = TexApi.automatedChapters()
-Assert("entity-secrecey-two-show-secrets", expected, received)
+AssertAutomatedChapters("entity-secrecy-two-show-secrets, item referenced", expected, refSetup2)

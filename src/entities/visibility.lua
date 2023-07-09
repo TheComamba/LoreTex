@@ -38,7 +38,8 @@ function IsEntitySecret(entity)
         return false
     end
     if type(isSecret) ~= "boolean" then
-        LogError("isSecret property of " .. DebugPrint(entity) .. " should be boolean, but is " .. type(isSecret) .. ".")
+        LogError("isSecret property of entity \"" ..
+        GetProtectedStringField(entity, "label") .. "\" should be boolean, but is " .. type(isSecret) .. ".")
         return false
     end
     return isSecret

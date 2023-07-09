@@ -6,9 +6,11 @@ TexApi.setDescriptor { descriptor = "subchar", description = [[\subparagraph{sub
 TexApi.newEntity { label = "species", type = "species", name = "species" }
 TexApi.setDescriptor { descriptor = "subspecies", description = [[\subparagraph{subsubspecies}\label{subsubspecies}]] }
 TexApi.setAgeFactor(1)
-TexApi.makeAllEntitiesPrimary()
 
-TexApi.setCurrentYear(0)
+local function setup()
+    TexApi.makeAllEntitiesPrimary()
+    TexApi.setCurrentYear(0)
+end
 
 local expected = {}
 Append(expected, [[\chapter{]] .. CapFirst(Tr("characters")) .. [[}]])
@@ -61,5 +63,5 @@ Append(expected, [[90+ ]] .. Tr("years"))
 Append(expected, [[\paragraph{Subspecies}]])
 Append(expected, [[\subparagraph{Subsubspecies}]])
 Append(expected, [[\label{subsubspecies}]])
-local out = TexApi.automatedChapters()
-Assert("Entity with subentities and age", expected, out)
+
+AssertAutomatedChapters("Entity with subentities and age", expected, setup)

@@ -1,5 +1,4 @@
 for key, isAgingDefined in pairs({ false, true }) do
-    ResetState()
     TexApi.setCurrentYear(0)
 
     TexApi.newEntity { type = "species", label = "test-species", name = "Test Species" }
@@ -10,10 +9,6 @@ for key, isAgingDefined in pairs({ false, true }) do
     TexApi.newEntity { type = "npcs", label = "test-npc", name = "Test NPC" }
     TexApi.setSpecies("test-species")
     TexApi.born { year = -20, event = "Birth." }
-
-    TexApi.makeAllEntitiesPrimary()
-
-    local out = TexApi.automatedChapters()
 
     local expected = {}
     Append(expected, [[\chapter{]] .. CapFirst(Tr("characters")) .. [[}]])
@@ -68,5 +63,5 @@ for key, isAgingDefined in pairs({ false, true }) do
         Append(name, "not ")
     end
     Append(name, "defined")
-    Assert(table.concat(name), expected, out)
+    AssertAutomatedChapters(table.concat(name), expected, TexApi.makeAllEntitiesPrimary)
 end

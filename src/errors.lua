@@ -10,7 +10,11 @@ StateResetters[#StateResetters + 1] = ResetErrors
 
 function LogError(errorMessage)
     if type(errorMessage) == "table" then
-        errorMessage = table.concat(errorMessage)
+        local flatTable = {}
+        for _, element in pairs(errorMessage) do
+            Append(flatTable, element)
+        end
+        errorMessage = table.concat(flatTable)
     end
     errorMessage = tostring(errorMessage)
     if errorMessage == nil or type(errorMessage) ~= "string" then
@@ -19,7 +23,6 @@ function LogError(errorMessage)
     end
     local caller = debug.getinfo(2).name
     if caller ~= nil and type(caller) == "string" then
-        caller = string.gsub(caller, [[_]], [[\_]])
         errorMessage = "In function \"" .. caller .. "\": " .. errorMessage
     end
     if IsErrorsChronologicallySorted then
@@ -28,7 +31,7 @@ function LogError(errorMessage)
     if IsThrowOnError then
         error(errorMessage)
     else
-        errorMessages[#errorMessages + 1] = errorMessage
+        errorMessages[#errorMessages + 1] = string.gsub(errorMessage, [[_]], [[\_]])
     end
 end
 
@@ -68,40 +71,49 @@ function PrintErrors()
     return out
 end
 
-function DebugPrintRaw(entity)
-    if entity == nil then
-        return { "nil" }
-    elseif type(entity) == "number" then
-        return { tostring(entity) }
-    elseif type(entity) == "string" then
-        return { " \"" .. entity .. "\" " }
-    elseif type(entity) ~= "table" then
-        return { tostring(entity) }
+function DebugPrintRaw(input)
+    if type(input) ~= "table" then
+        return { tostring(input) }
     end
+
     local out = {}
-    local keys = GetSortedKeys(entity)
-    Append(out, [[{	]])
-    for i, key in pairs(keys) do
-        if i > 1 then
-            Append(out, ",	")
-        end
-        Append(out, DebugPrintRaw(key))
-        Append(out, "=")
-        if IsEntity(entity[key]) then
-            local label = GetProtectedStringField(entity[key], "label")
-            Append(out, "[Entity \"" .. label .. "\"]")
+
+    local allKeys = GetSortedKeys(input)
+    for _, key in pairs(allKeys) do
+        local val = input[key]
+        if IsEntity(val) then
+            Append(out, tostring(key) .. " = [Entity " .. GetProtectedStringField(val, "label") .. "]")
+        elseif type(val) == "table" then
+            Append(out, tostring(key) .. ":")
+            Append(out, [[{]])
+            Append(out, DebugPrintRaw(val))
+            Append(out, [[}]])
         else
-            Append(out, DebugPrintRaw(entity[key]))
+            Append(out, tostring(key) .. " = " .. tostring(val))
         end
     end
-    Append(out, [[}	]])
     return out
 end
 
-function DebugPrint(entity)
+function SplitStringInLinebreaks(str, maxWidth)
+    if not str then return { "nil" } end
+    local out = {}
+    while string.len(str) > 0 do
+        Append(out, string.sub(str, 1, maxWidth))
+        str = string.sub(str, maxWidth + 1)
+    end
+    return out
+end
+
+function DebugPrint(input)
+    local content = DebugPrintRaw(input)
     local out = {}
     Append(out, TexCmd("begin", "verbatim"))
-    Append(out, DebugPrintRaw(entity))
+    for _, line in pairs(content) do
+        Append(out, SplitStringInLinebreaks(line, 100))
+    end
+    Append(out, content)
     Append(out, TexCmd("end", "verbatim"))
-    return table.concat(out)
+    Append(out, TexCmd("vspace", "1cm"))
+    return out
 end

@@ -2,11 +2,6 @@ AllTypes = {}
 
 StateResetters[#StateResetters + 1] = function()
     AllTypes = {}
-    AllTypes["characters"] = { "npcs", "pcs" }
-    AllTypes["chronologies"] = { "calendars", "events", "stories" }
-    AllTypes["other"] = { "other" }
-    AllTypes["peoples"] = { "languages", "species" }
-    AllTypes["places"] = { "places" }
 end
 
 function IsType(type, entity)

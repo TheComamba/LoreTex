@@ -151,7 +151,7 @@ function AssertAutomatedChapters(caller, expected, setup)
     local out = TexApi.automatedChapters()
     Assert(caller, expected, out)
 
-    local dbName = os.tmpname()
+    local dbName = os.tmpname() .. Replace(" ", "_", caller) .. ".db"
     TexApi.writeLoreToDatabase(dbName)
     ResetState()
     TexApi.readLoreFromDatabase(dbName)

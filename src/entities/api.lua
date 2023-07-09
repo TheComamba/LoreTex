@@ -11,7 +11,8 @@ local function newEntity(arg)
     end
     if not IsTypeKnown(arg.type) then
         LogError("Trying to create entity with unkown type \"" .. arg.type .. "\"")
-        return
+        arg.type = arg.type:upper()
+        TexApi.addType { metatype = "UNKNOWN", type = arg.type }
     end
     CurrentEntity = GetMutableEntityFromAll(arg.label)
     SetProtectedField(CurrentEntity, "type", arg.type)

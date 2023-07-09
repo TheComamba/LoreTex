@@ -55,10 +55,6 @@ local function addType(arg)
     if AllTypes[arg.metatype] == nil then
         AllTypes[arg.metatype] = {}
     end
-    if IsIn(arg.type, AllTypes[arg.metatype]) then
-        LogError("Subtype \"" .. arg.type .. "\" of metatype \"" .. arg.metatype .. "\" already exists.")
-        return
-    end
     Append(AllTypes[arg.metatype], arg.type)
 end
 

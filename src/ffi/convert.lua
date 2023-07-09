@@ -86,6 +86,16 @@ local function isNumberString(descriptionString)
     end
 end
 
+local function stringToBoolean(descriptionString)
+    if descriptionString:lower() == "true" then
+        return true
+    elseif descriptionString:lower() == "false" then
+        return false
+    else
+        return nil
+    end
+end
+
 local function stringToDescription(descriptionString)
     if isEntityRef(descriptionString) then
         local entityrefs = ScanStringForCmd(descriptionString, entityRefCommand)
@@ -95,6 +105,8 @@ local function stringToDescription(descriptionString)
         return utilities.json.tolua(descriptionString)
     elseif isNumberString(descriptionString) then
         return tonumber(descriptionString)
+    elseif stringToBoolean(descriptionString) ~= nil then
+        return stringToBoolean(descriptionString)
     else
         return descriptionString
     end

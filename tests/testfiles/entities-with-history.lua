@@ -1,6 +1,4 @@
 local function entitySetup()
-    TexApi.setCurrentYear(0)
-
     TexApi.newEntity { type = "places", label = "test-1", name = "Test 1" }
 
     TexApi.newEntity { type = "places", label = "test-2", name = "Test 2" }
@@ -47,6 +45,7 @@ local function generateExpected(isSecondAdded)
 end
 
 local function refSetup1()
+    TexApi.setCurrentYear(0)
     TexApi.makeEntityPrimary("test-1")
 end
 

@@ -87,7 +87,6 @@ local function readHistoryItemColumns(dbPath)
         historyItem.year = ffi.number(cHistoryItem.year)
         historyItem.day = ffi.number(cHistoryItem.day)
         historyItem.originator = ffi.string(cHistoryItem.originator)
-        historyItem.year_format = ffi.string(cHistoryItem.year_format)
         table.insert(histoyItemColumns, historyItem)
     end
     return histoyItemColumns

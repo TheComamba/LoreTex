@@ -1,7 +1,9 @@
 local function levelToCaptionstyle(level)
     if level == 1 then
-        return "paragraph"
+        return "subsubsection"
     elseif level == 2 then
+        return "paragraph"
+    elseif level == 3 then
         return "subparagraph"
     else
         return [[item \textbf]]

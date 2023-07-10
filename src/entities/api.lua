@@ -11,6 +11,7 @@ local function newEntity(arg)
     end
     CurrentEntity = GetMutableEntityFromAll(arg.label)
     SetProtectedField(CurrentEntity, "type", arg.type)
+    AddType(arg.type)
     SetProtectedField(CurrentEntity, "shortname", arg.shortname)
     SetProtectedField(CurrentEntity, "name", arg.name)
     local defaultLocation = GetScopedVariable("DefaultLocation")
@@ -36,8 +37,9 @@ TexApi.newCharacter = newCharacter
 local function automatedChapters()
     local processOut = ProcessedEntities()
     local output = {}
-    for key, metatype in pairs(SortedMetatypes()) do
-        Append(output, PrintEntityChapter(processOut, metatype))
+    Sort(AllTypes)
+    for _, type in pairs(AllTypes) do
+        Append(output, PrintEntityChapter(processOut, type))
     end
     Append(output, PrintOnlyMentionedChapter(processOut.mentioned))
     if HasError() then

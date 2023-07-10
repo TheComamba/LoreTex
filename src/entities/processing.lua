@@ -36,12 +36,8 @@ local function addEntityToDict(arg, newEntity)
         arg.entites = {}
     end
     local typename = GetProtectedStringField(newEntity, "type")
-    local metatype = GetMetatype(typename)
-    if arg.entities[metatype] == nil then
-        arg.entities[metatype] = {}
-    end
-    if arg.entities[metatype][typename] == nil then
-        arg.entities[metatype][typename] = {}
+    if arg.entities[typename] == nil then
+        arg.entities[typename] = {}
     end
     local locationName = ""
     if IsLocationUnrevealed(newEntity) then
@@ -52,10 +48,10 @@ local function addEntityToDict(arg, newEntity)
             locationName = PlaceToName(location)
         end
     end
-    if arg.entities[metatype][typename][locationName] == nil then
-        arg.entities[metatype][typename][locationName] = {}
+    if arg.entities[typename][locationName] == nil then
+        arg.entities[typename][locationName] = {}
     end
-    arg.entities[metatype][typename][locationName][#arg.entities[metatype][typename][locationName] + 1] = newEntity
+    arg.entities[typename][locationName][#arg.entities[typename][locationName] + 1] = newEntity
 end
 
 local function registerProcessedEntity(arg, newEntity)

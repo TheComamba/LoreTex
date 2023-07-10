@@ -6,14 +6,14 @@ local function printEntities(sectionname, entitiesList)
     end
 
     local out = {}
-    Append(out, TexCmd("subsection", CapFirst(sectionname)))
+    Append(out, TexCmd("section", CapFirst(sectionname)))
     Sort(entitiesList, "compareByName")
     for key, entity in pairs(entitiesList) do
         local shortname = GetProtectedStringField(entity, "shortname")
         if shortname == "" then
-            Append(out, TexCmd("subsubsection", GetProtectedStringField(entity, "name")))
+            Append(out, TexCmd("subsection", GetProtectedStringField(entity, "name")))
         else
-            Append(out, TexCmd("subsubsection", GetProtectedStringField(entity, "name"), shortname))
+            Append(out, TexCmd("subsection", GetProtectedStringField(entity, "name"), shortname))
         end
         Append(out, TexCmd("label", GetProtectedStringField(entity, "label")))
         Append(out, DescriptorsString(entity))
@@ -68,7 +68,7 @@ local function PrintAllEntities(name, entities)
     end
     if #allLabels > 0 then
         Sort(allLabels, "compareByName")
-        Append(out, TexCmd("subsection*", CapFirst(Tr("all")) .. " " .. CapFirst(name)))
+        Append(out, TexCmd("section*", CapFirst(Tr("all")) .. " " .. CapFirst(name)))
         Append(out, ListAll(allLabels, NamerefString))
     end
     return out
@@ -97,22 +97,15 @@ local function printEntityChapterSortedByLocation(entities)
     return out
 end
 
-function PrintEntityChapter(processedOut, metatype)
-    if IsEmpty(processedOut.entities[metatype]) then
+function PrintEntityChapter(processedOut, type)
+    local entitiesOfType = processedOut.entities[type]
+    if IsEmpty(entitiesOfType) then
         return {}
     end
 
     local out = {}
-    Append(out, TexCmd("chapter", CapFirst(metatype)))
-    local types = AllTypes[metatype]
-    Sort(types)
-    for i, type in pairs(types) do
-        local entitiesOfType = processedOut.entities[metatype][type]
-        if not IsEmpty(entitiesOfType) then
-            Append(out, TexCmd("section", CapFirst(type)))
-            Append(out, PrintAllEntities(type, entitiesOfType))
-            Append(out, printEntityChapterSortedByLocation(entitiesOfType))
-        end
-    end
+    Append(out, TexCmd("chapter", CapFirst(type)))
+    Append(out, PrintAllEntities(type, entitiesOfType))
+    Append(out, printEntityChapterSortedByLocation(entitiesOfType))
     return out
 end

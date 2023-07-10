@@ -12,7 +12,7 @@ Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(T
 Append(expected, [[\begin{itemize}]])
 Append(expected, [[\item \nameref{test}]])
 Append(expected, [[\end{itemize}]])
-Append(expected, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
+Append(expected, [[\subsection{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
 Append(expected, [[\subsubsection{Test}]])
 Append(expected, [[\label{test}]])
 

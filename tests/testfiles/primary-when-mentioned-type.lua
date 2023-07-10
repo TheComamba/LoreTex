@@ -20,11 +20,11 @@ local function generateExpected(primaryType, isKarlReferenced)
             Append(out, [[\item \nameref{peter}]])
         end
         Append(out, [[\end{itemize}]])
-        Append(out, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
+        Append(out, [[\subsection{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
         Append(out, [[\subsubsection{Karl}]])
         Append(out, [[\label{karl}]])
         Append(out, [[\paragraph{]] .. CapFirst(Tr("appearance")) .. [[}]])
-        Append(out, [[\subparagraph{]] .. CapFirst(Tr("species-and-age")) .. [[:}]])
+        Append(out, [[\subparagraph{]] .. CapFirst(Tr("species_and_age")) .. [[:}]])
         Append(out, [[\nameref {human}.]])
         Append(out, [[\paragraph{Friend}]])
         Append(out, [[\nameref{peter}]])
@@ -32,7 +32,7 @@ local function generateExpected(primaryType, isKarlReferenced)
             Append(out, [[\subsubsection{Peter}]])
             Append(out, [[\label{peter}]])
             Append(out, [[\paragraph{]] .. CapFirst(Tr("appearance")) .. [[}]])
-            Append(out, [[\subparagraph{]] .. CapFirst(Tr("species-and-age")) .. [[:}]])
+            Append(out, [[\subparagraph{]] .. CapFirst(Tr("species_and_age")) .. [[:}]])
             Append(out, [[\nameref {human}.]])
         end
     end
@@ -44,12 +44,12 @@ local function generateExpected(primaryType, isKarlReferenced)
         Append(out, [[\begin{itemize}]])
         Append(out, [[\item \nameref{human}]])
         Append(out, [[\end{itemize}]])
-        Append(out, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
+        Append(out, [[\subsection{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
         Append(out, [[\subsubsection{Human}]])
         Append(out, [[\label{human}]])
     end
 
-    Append(out, [[\chapter{]] .. CapFirst(Tr("only-mentioned")) .. [[}]])
+    Append(out, [[\chapter{]] .. CapFirst(Tr("only_mentioned")) .. [[}]])
 
     if primaryType ~= "species" then
         if isKarlReferenced or primaryType == "npcs" then

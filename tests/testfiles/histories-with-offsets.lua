@@ -35,7 +35,7 @@ local function generateExpected(hasOffset)
     Append(out, [[\begin{itemize}]])
     Append(out, [[\item \nameref{test}]])
     Append(out, [[\end{itemize}]])
-    Append(out, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
+    Append(out, [[\subsection{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
     Append(out, [[\subsubsection{Test Entity}]])
     Append(out, [[\label{test}]])
     Append(out, [[\paragraph{]] .. CapFirst(Tr("history")) .. [[}]])
@@ -44,8 +44,8 @@ local function generateExpected(hasOffset)
     if hasOffset then
         year = 10
     end
-    Append(out, [[\item ]] .. year .. [[ (]] .. Tr("x-years-ago", { 100 }) .. [[):\\Event without offset.]])
-    Append(out, [[\item ]] .. (year + 1) .. [[ (]] .. Tr("x-years-ago", { 99 }) .. [[):\\Event with offset.]])
+    Append(out, [[\item ]] .. year .. [[ (]] .. Tr("x_years_ago", { 100 }) .. [[):\\Event without offset.]])
+    Append(out, [[\item ]] .. (year + 1) .. [[ (]] .. Tr("x_years_ago", { 99 }) .. [[):\\Event with offset.]])
     Append(out, [[\end{itemize}]])
     return out
 end

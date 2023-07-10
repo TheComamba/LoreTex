@@ -42,38 +42,38 @@ local function generateExpected(isCurrentDaySet, isShowFuture)
     Append(out, [[\begin{itemize}]])
     Append(out, [[\item \nameref{test-1}]])
     Append(out, [[\end{itemize}]])
-    Append(out, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
+    Append(out, [[\subsection{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
     Append(out, [[\subsubsection{Test 1}]])
     Append(out, [[\label{test-1}]])
     Append(out, [[\paragraph{]] .. CapFirst(Tr("history")) .. [[}]])
     Append(out, [[\begin{itemize}]])
 
-    Append(out, [[\item -987654321 (]] .. Tr("x-years-ago", { 987654321 }) .. [[):\\Long time ago.]])
-    Append(out, [[\item -20 (]] .. Tr("x-years-ago", { 20 }) .. [[):\\Some event.]])
+    Append(out, [[\item -987654321 (]] .. Tr("x_years_ago", { 987654321 }) .. [[):\\Long time ago.]])
+    Append(out, [[\item -20 (]] .. Tr("x_years_ago", { 20 }) .. [[):\\Some event.]])
     Append(out, [[\item Event same year as another.]])
     Append(out,
         [[\item -10 (]] ..
-        Tr("x-years-ago", { 10 }) ..
+        Tr("x_years_ago", { 10 }) ..
         [[):\\Event that concerns \nameref{test-1}, but not \nameref{test-2}.]])
     Append(out,
         [[\item -5 (]] ..
-        Tr("x-years-ago", { 5 }) ..
+        Tr("x_years_ago", { 5 }) ..
         [[):\\Event that concerns \nameref{test-1}, but not \nameref{test-2}.\notconcerns{test-2}]])
 
 
-    Append(out, [[\item -2, ]] .. Tr("day") .. [[ 5 (]] .. Tr("x-years-ago", { 2 }) .. [[):\\Event with day.]])
+    Append(out, [[\item -2, ]] .. Tr("day") .. [[ 5 (]] .. Tr("x_years_ago", { 2 }) .. [[):\\Event with day.]])
     Append(out, [[\item Event on same day.]])
 
-    Append(out, [[\item -1 (]] .. Tr("last-year") .. [[):\\ Event last year.]])
-    Append(out, [[\item -1, ]] .. Tr("day") .. [[ 1 (]] .. Tr("last-year") .. [[):\\Event last year, with day.]])
+    Append(out, [[\item -1 (]] .. Tr("last_year") .. [[):\\ Event last year.]])
+    Append(out, [[\item -1, ]] .. Tr("day") .. [[ 1 (]] .. Tr("last_year") .. [[):\\Event last year, with day.]])
 
     if isCurrentDaySet then
         Append(out,
             [[\item -1, ]] ..
-            Tr("day") .. [[ 100 (]] .. Tr("x-days-ago", { 275 }) .. [[):\\Event less than a year ago.]])
-        Append(out, [[\item 0 (]] .. Tr("this-year") .. [[):\\Event this year.]])
+            Tr("day") .. [[ 100 (]] .. Tr("x_days_ago", { 275 }) .. [[):\\Event less than a year ago.]])
+        Append(out, [[\item 0 (]] .. Tr("this_year") .. [[):\\Event this year.]])
         Append(out,
-            [[\item 0, ]] .. Tr("day") .. [[ 5 (]] .. Tr("x-days-ago", { 5 }) .. [[):\\Event this year, with day.]])
+            [[\item 0, ]] .. Tr("day") .. [[ 5 (]] .. Tr("x_days_ago", { 5 }) .. [[):\\Event this year, with day.]])
         Append(out, [[\item 0, ]] .. Tr("day") .. [[ 9 (]] .. Tr("yesterday") .. [[):\\Event yesterday.]])
         Append(out, [[\item 0, ]] .. Tr("day") .. [[ 10 (]] .. Tr("today") .. [[):\\Event today.]])
 
@@ -81,41 +81,41 @@ local function generateExpected(isCurrentDaySet, isShowFuture)
             Append(out, [[\item 0, ]] .. Tr("day") .. [[ 11 (]] .. Tr("tomorrow") .. [[):\\Event tomorrow.]])
             Append(out,
                 [[\item 0, ]] ..
-                Tr("day") .. [[ 15 (]] .. Tr("in-x-days", { 5 }) .. [[):\\Event this year, with day in future.]])
+                Tr("day") .. [[ 15 (]] .. Tr("in_x_days", { 5 }) .. [[):\\Event this year, with day in future.]])
         end
     else
         Append(out,
-            [[\item -1, ]] .. Tr("day") .. [[ 100 (]] .. Tr("last-year") .. [[):\\Event less than a year ago.]])
-        Append(out, [[\item 0 (]] .. Tr("this-year") .. [[):\\Event this year.]])
+            [[\item -1, ]] .. Tr("day") .. [[ 100 (]] .. Tr("last_year") .. [[):\\Event less than a year ago.]])
+        Append(out, [[\item 0 (]] .. Tr("this_year") .. [[):\\Event this year.]])
         Append(out,
-            [[\item 0, ]] .. Tr("day") .. [[ 5 (]] .. Tr("this-year") .. [[):\\Event this year, with day.]])
-        Append(out, [[\item 0, ]] .. Tr("day") .. [[ 9 (]] .. Tr("this-year") .. [[):\\Event yesterday.]])
-        Append(out, [[\item 0, ]] .. Tr("day") .. [[ 10 (]] .. Tr("this-year") .. [[):\\Event today.]])
-        Append(out, [[\item 0, ]] .. Tr("day") .. [[ 11 (]] .. Tr("this-year") .. [[):\\Event tomorrow.]])
+            [[\item 0, ]] .. Tr("day") .. [[ 5 (]] .. Tr("this_year") .. [[):\\Event this year, with day.]])
+        Append(out, [[\item 0, ]] .. Tr("day") .. [[ 9 (]] .. Tr("this_year") .. [[):\\Event yesterday.]])
+        Append(out, [[\item 0, ]] .. Tr("day") .. [[ 10 (]] .. Tr("this_year") .. [[):\\Event today.]])
+        Append(out, [[\item 0, ]] .. Tr("day") .. [[ 11 (]] .. Tr("this_year") .. [[):\\Event tomorrow.]])
         Append(out,
             [[\item 0, ]] ..
-            Tr("day") .. [[ 15 (]] .. Tr("this-year") .. [[):\\Event this year, with day in future.]])
+            Tr("day") .. [[ 15 (]] .. Tr("this_year") .. [[):\\Event this year, with day in future.]])
     end
 
 
     if isShowFuture then
-        Append(out, [[\item 1 (]] .. Tr("next-year") .. [[):\\Event next year.]])
+        Append(out, [[\item 1 (]] .. Tr("next_year") .. [[):\\Event next year.]])
         if isCurrentDaySet then
             Append(out,
                 [[\item 1, ]] ..
-                Tr("day") .. [[ 5 (]] .. Tr("in-x-days", { 360 }) .. [[):\\Event in less than a year.]])
+                Tr("day") .. [[ 5 (]] .. Tr("in_x_days", { 360 }) .. [[):\\Event in less than a year.]])
         else
             Append(out,
                 [[\item 1, ]] ..
-                Tr("day") .. [[ 5 (]] .. Tr("next-year") .. [[):\\Event in less than a year.]])
+                Tr("day") .. [[ 5 (]] .. Tr("next_year") .. [[):\\Event in less than a year.]])
         end
         Append(out,
             [[\item 1, ]] ..
-            Tr("day") .. [[ 15 (]] .. Tr("next-year") .. [[):\\Event next year, with day.]])
-        Append(out, [[\item 5 (]] .. Tr("in-x-years", { 5 }) .. [[):\\Event in the future.]])
+            Tr("day") .. [[ 15 (]] .. Tr("next_year") .. [[):\\Event next year, with day.]])
+        Append(out, [[\item 5 (]] .. Tr("in_x_years", { 5 }) .. [[):\\Event in the future.]])
     end
     Append(out, [[\end{itemize}]])
-    Append(out, [[\chapter{]] .. CapFirst(Tr("only-mentioned")) .. [[}]])
+    Append(out, [[\chapter{]] .. CapFirst(Tr("only_mentioned")) .. [[}]])
     Append(out, [[\subparagraph{Test 2}]])
     Append(out, [[\label{test-2}]])
     Append(out, [[\hspace{1cm}]])

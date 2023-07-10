@@ -12,7 +12,7 @@ local function generateHistoryParagraph()
     Append(out, [[\begin{itemize}]])
     Append(out,
         [[\item -10 (]] ..
-        Tr("x-years-ago", { 10 }) .. [[):\\ (]] .. CapFirst(Tr("secret")) .. [[) Concerns \nameref{secret-item}.]])
+        Tr("x_years_ago", { 10 }) .. [[):\\ (]] .. CapFirst(Tr("secret")) .. [[) Concerns \nameref{secret-item}.]])
     Append(out, [[\end{itemize}]])
     return out
 end
@@ -25,7 +25,7 @@ local function generateExpected(isItemReferenced, isShowSecrets)
     Append(out, [[\begin{itemize}]])
     Append(out, [[\item \nameref{teststory}]])
     Append(out, [[\end{itemize}]])
-    Append(out, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
+    Append(out, [[\subsection{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
     Append(out, [[\subsubsection{Teststory}]])
     Append(out, [[\label{teststory}]])
     if isShowSecrets then
@@ -37,12 +37,12 @@ local function generateExpected(isItemReferenced, isShowSecrets)
             Append(out, [[\begin{itemize}]])
             Append(out, [[\item \nameref{secret-item}]])
             Append(out, [[\end{itemize}]])
-            Append(out, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
+            Append(out, [[\subsection{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
             Append(out, [[\subsubsection[Secret Item]{Secret Item (]] .. CapFirst(Tr("secret")) .. [[)}]])
             Append(out, [[\label{secret-item}]])
             Append(out, generateHistoryParagraph())
         else
-            Append(out, [[\chapter{]] .. CapFirst(Tr("only-mentioned")) .. [[}]])
+            Append(out, [[\chapter{]] .. CapFirst(Tr("only_mentioned")) .. [[}]])
             Append(out, [[\subparagraph{Secret Item}]])
             Append(out, [[\label{secret-item}]])
             Append(out, [[\hspace{1cm}]])

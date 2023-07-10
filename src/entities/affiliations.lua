@@ -48,7 +48,7 @@ local function entityQualifiersString(child, parent, relationships)
     local childLocation = GetProtectedNullableField(child, "location")
     local parentLocation = GetProtectedNullableField(parent, "location")
     if IsLocationUnrevealed(child) then
-        Append(content, Tr("at-secret-location"))
+        Append(content, Tr("at_secret_location"))
     elseif childLocation ~= nil then
         local childLocationLabel = GetProtectedStringField(childLocation, "label")
         local parentLocationLabel = ""
@@ -57,7 +57,7 @@ local function entityQualifiersString(child, parent, relationships)
         end
         if childLocationLabel ~= parentLocationLabel and
             not IsIn(childLocationLabel, GetAllLabels(parent)) then
-            Append(content, Tr("in") .. " " .. TexCmd("nameref", childLocationLabel))
+            Append(content, Tr("located_in") .. " " .. TexCmd("nameref", childLocationLabel))
             AddToProtectedField(parent, "mentions", childLocation)
         end
     end

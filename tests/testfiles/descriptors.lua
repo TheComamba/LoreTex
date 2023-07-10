@@ -124,7 +124,7 @@ for key, isSubdescription in pairs({ false, true }) do
         Append(expected, [[\item \nameref{2}]])
         Append(expected, [[\item \nameref{3}]])
         Append(expected, [[\end{itemize}]])
-        Append(expected, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
+        Append(expected, [[\subsection{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
 
         Append(expected, [[\subsubsection{Test}]])
         Append(expected, [[\label{1}]])

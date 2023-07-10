@@ -34,7 +34,7 @@ local function generateExpected(typename, includesShortname, includesSubname)
     end
     Append(out, [[\end{itemize}]])
 
-    Append(out, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
+    Append(out, [[\subsection{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
     if includesShortname then
         Append(out, [[\subsubsection[Shorty]{]] .. typename .. [[ 1}]])
     else
@@ -47,9 +47,9 @@ local function generateExpected(typename, includesShortname, includesSubname)
     Append(out, [[\end{itemize}]])
 
     if includesShortname then
-        Append(out, [[\subsection{]] .. CapFirst(Tr("in")) .. [[ Shorty}]])
+        Append(out, [[\subsection{]] .. CapFirst(Tr("located_in")) .. [[ Shorty}]])
     else
-        Append(out, [[\subsection{]] .. CapFirst(Tr("in")) .. [[ ]] .. typename .. [[ 1}]])
+        Append(out, [[\subsection{]] .. CapFirst(Tr("located_in")) .. [[ ]] .. typename .. [[ 1}]])
     end
     Append(out, [[\subsubsection{]] .. typename .. [[ 2}]])
     Append(out, [[\label{]] .. typename .. [[-2}]])
@@ -66,15 +66,15 @@ local function generateExpected(typename, includesShortname, includesSubname)
 
     if includesShortname then
         if includesSubname then
-            Append(out, [[\subsection{]] .. CapFirst(Tr("in")) .. [[ Shorty - Subname}]])
+            Append(out, [[\subsection{]] .. CapFirst(Tr("located_in")) .. [[ Shorty - Subname}]])
         else
-            Append(out, [[\subsection{]] .. CapFirst(Tr("in")) .. [[ Shorty - ]] .. typename .. [[ 2}]])
+            Append(out, [[\subsection{]] .. CapFirst(Tr("located_in")) .. [[ Shorty - ]] .. typename .. [[ 2}]])
         end
     else
         if includesSubname then
-            Append(out, [[\subsection{]] .. CapFirst(Tr("in")) .. [[ ]] .. typename .. [[ 1 - Subname}]])
+            Append(out, [[\subsection{]] .. CapFirst(Tr("located_in")) .. [[ ]] .. typename .. [[ 1 - Subname}]])
         else
-            Append(out, [[\subsection{]] .. CapFirst(Tr("in")) .. [[ ]] .. typename .. [[ 1 - ]] .. typename .. [[ 2}]])
+            Append(out, [[\subsection{]] .. CapFirst(Tr("located_in")) .. [[ ]] .. typename .. [[ 1 - ]] .. typename .. [[ 2}]])
         end
     end
     Append(out, [[\subsubsection{]] .. typename .. [[ 3}]])

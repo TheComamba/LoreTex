@@ -129,7 +129,7 @@ local function generateChapter(typename, primaryLabels)
         Append(out, [[\item \nameref{]] .. label .. [[}]])
     end
     Append(out, [[\end{itemize}]])
-    Append(out, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
+    Append(out, [[\subsection{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
     for key, label in pairs(labelsOfType) do
         Append(out, generateEntityFromLabel(label))
     end
@@ -139,7 +139,7 @@ end
 local function generateMentionedChapter(mentionedLabels)
     local out = {}
     if #mentionedLabels > 0 then
-        Append(out, [[\chapter{]] .. CapFirst(Tr("only-mentioned")) .. [[}]])
+        Append(out, [[\chapter{]] .. CapFirst(Tr("only_mentioned")) .. [[}]])
         for key, label in pairs(mentionedLabels) do
             Append(out, [[\subparagraph{]] .. label .. [[}]])
             Append(out, [[\label{]] .. label .. [[}]])

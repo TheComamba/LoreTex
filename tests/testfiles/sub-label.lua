@@ -25,11 +25,11 @@ local expected = {
     [[\begin{itemize}]],
     [[\item \nameref{some-npc}]],
     [[\end{itemize}]],
-    [[\subsection{]] .. CapFirst(Tr("in")) .. [[ Subplace 1}]],
+    [[\subsection{]] .. CapFirst(Tr("located_in")) .. [[ Subplace 1}]],
     [[\subsubsection{Some NPC}]],
     [[\label{some-npc}]],
     [[\paragraph{]] .. CapFirst(Tr("appearance")) .. [[}]],
-    [[\subparagraph{]] .. CapFirst(Tr("species-and-age")) .. [[:}]],
+    [[\subparagraph{]] .. CapFirst(Tr("species_and_age")) .. [[:}]],
     [[\nameref {subspecies}.]],
     [[\paragraph{Info 1}]],
     [[Refers to \nameref{subplace-2}.]],
@@ -37,7 +37,7 @@ local expected = {
     [[Refers to \nameref{subplace-3}.]],
     [[\paragraph{Info 3}]],
     [[Refers to \nameref{subplace-4}.]],
-    [[\chapter{]] .. CapFirst(Tr("only-mentioned")) .. [[}]],
+    [[\chapter{]] .. CapFirst(Tr("only_mentioned")) .. [[}]],
     [[\subparagraph{Subplace 2}]],
     [[\label{subplace-2}]],
     [[\hspace{1cm}]],
@@ -82,7 +82,7 @@ local expected = {
     [[\item \nameref{sublabel-1}]],
     [[\item \nameref{sublabel-2}]],
     [[\end{itemize}]],
-    [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]],
+    [[\subsection{]] .. CapFirst(Tr("in_whole_world")) .. [[}]],
     [[\subsubsection{Also Primary}]],
     [[\label{also-primary}]],
     [[\paragraph{Some Paragraph}]],
@@ -90,7 +90,7 @@ local expected = {
     [[\label{sublabel-2}]],
     [[\paragraph{Sublabel 1}]],
     [[\label{sublabel-1}]],
-    [[\chapter{]] .. CapFirst(Tr("only-mentioned")) .. [[}]],
+    [[\chapter{]] .. CapFirst(Tr("only_mentioned")) .. [[}]],
     [[\subparagraph{Sublabel 3}]],
     [[\label{sublabel-3}]],
     [[\hspace{1cm}]],
@@ -140,7 +140,7 @@ Append(expected, [[\item \nameref{para-labeled-subs}]])
 Append(expected, [[\item \nameref{sublabel}]])
 Append(expected, [[\item \nameref{some-npc}]])
 Append(expected, [[\end{itemize}]])
-Append(expected, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
+Append(expected, [[\subsection{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
 Append(expected, [[\subsubsection{Some NPC}]])
 Append(expected, [[\label{some-npc}]])
 Append(expected, [[\paragraph{Labeled subparagraphs}]])
@@ -169,7 +169,7 @@ Append(expected, [[\item \nameref{place-1}]])
 Append(expected, [[\item \nameref{place-2}]])
 Append(expected, [[\item \nameref{two}]])
 Append(expected, [[\end{itemize}]])
-Append(expected, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
+Append(expected, [[\subsection{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
 Append(expected, [[\subsubsection{Place 1}]])
 Append(expected, [[\label{place-1}]])
 Append(expected, [[\paragraph{Appears Twice}]])

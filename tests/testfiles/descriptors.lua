@@ -103,6 +103,11 @@ local function addDescriptorsToExpected(expected, isSubdescription, level)
     end
 end
 
+local function setup()
+    TexApi.makeAllEntitiesPrimary()
+    TexApi.addType { metatype = "places", type = "places" }
+end
+
 for key, isSubdescription in pairs({ false, true }) do
     for i = 1, 3 do
         TexApi.newEntity { type = "places", label = "1", name = "Test" }
@@ -141,6 +146,6 @@ for key, isSubdescription in pairs({ false, true }) do
         if isSubdescription then
             testname = "Sub-" .. testname
         end
-        AssertAutomatedChapters(testname, expected, TexApi.makeAllEntitiesPrimary)
+        AssertAutomatedChapters(testname, expected, setup)
     end
 end

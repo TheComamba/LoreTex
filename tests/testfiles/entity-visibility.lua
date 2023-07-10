@@ -67,6 +67,7 @@ local function refSetup()
     TexApi.reveal("revealed-orga")
 
     TexApi.setCurrentYear(0)
+    TexApi.addType { metatype = "characters", type = "npcs" }
 end
 
 local function npcsParagraph(isShowSecrets, isShowFuture)

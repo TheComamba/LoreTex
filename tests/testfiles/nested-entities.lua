@@ -82,6 +82,12 @@ local function generateExpected(typename, includesShortname, includesSubname)
     return out
 end
 
+local function setup()
+    TexApi.makeAllEntitiesPrimary()
+    TexApi.addType { metatype = "places", type = "places" }
+    TexApi.addType { metatype = "other", type = "other" }
+end
+
 for key, typename in pairs({ "places", "other" }) do
     for key, includesShortname in pairs({ false, true }) do
         for key, includesSubname in pairs({ false, true }) do
@@ -95,7 +101,7 @@ for key, typename in pairs({ "places", "other" }) do
             if includesSubname then
                 testName = testName .. " with Subname"
             end
-            AssertAutomatedChapters(testName, expected, TexApi.makeAllEntitiesPrimary)
+            AssertAutomatedChapters(testName, expected, setup)
         end
     end
 end

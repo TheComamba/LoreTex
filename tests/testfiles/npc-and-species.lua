@@ -58,10 +58,16 @@ for key, isAgingDefined in pairs({ false, true }) do
         Append(expected, [[90+ ]] .. Tr("years"))
     end
 
+    local function setup()
+        TexApi.makeAllEntitiesPrimary()
+        TexApi.addType { metatype = "characters", type = "npcs" }
+        TexApi.addType { metatype = "peoples", type = "species" }
+    end
+
     local name = { "Npc with species, aging " }
     if not isAgingDefined then
         Append(name, "not ")
     end
     Append(name, "defined")
-    AssertAutomatedChapters(table.concat(name), expected, TexApi.makeAllEntitiesPrimary)
+    AssertAutomatedChapters(table.concat(name), expected, setup)
 end

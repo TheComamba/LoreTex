@@ -1,9 +1,7 @@
 local function entitySetup()
-    TexApi.setCurrentYear(0)
-
     TexApi.newEntity { type = "stories", label = "teststory", name = "Teststory" }
     TexApi.addHistory { year = -10, event = [[Concerns \nameref{secret-item}.]] }
-    
+
     TexApi.newEntity { type = "other", label = "secret-item", name = "Secret Item" }
     TexApi.setSecret()
 end
@@ -57,6 +55,9 @@ local expected = {}
 
 local function refSetup1()
     TexApi.makeEntityPrimary("teststory")
+    TexApi.addType { metatype = "chronologies", type = "stories" }
+    TexApi.addType { metatype = "other", type = "other" }
+    TexApi.setCurrentYear(0)
 end
 
 local function refSetup2()

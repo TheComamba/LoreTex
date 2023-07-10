@@ -6,6 +6,11 @@ TexApi.setLocation("test-continent")
 TexApi.newEntity { type = "places", label = "test-city", name = "Test City" }
 TexApi.setLocation("test-region")
 
+local function setup()
+    TexApi.makeAllEntitiesPrimary()
+    TexApi.addType { metatype = "places", type = "places" }
+end
+
 local expected = {
     [[\chapter{]] .. CapFirst(Tr("places")) .. [[}]],
     [[\section{]] .. CapFirst(Tr("places")) .. [[}]],
@@ -37,4 +42,4 @@ local expected = {
     [[\label{test-city}]]
 }
 
-AssertAutomatedChapters("region-and-city", expected, TexApi.makeAllEntitiesPrimary)
+AssertAutomatedChapters("region-and-city", expected, setup)

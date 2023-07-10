@@ -1,6 +1,7 @@
 TexApi.newEntity { type = "npcs", label = "test", name = "Test" }
 
 local function refSetup()
+    TexApi.addType { metatype = "characters", type = "npcs" }
     TexApi.makeAllEntitiesOfTypePrimary("characters")
 end
 

@@ -241,6 +241,14 @@ end
 local function monthAndDay(day, namesAndFirstDays)
     local firstDay = 1
     local month = "NoMonthFound"
+    if not namesAndFirstDays then
+        LogError("No months defined!")
+        return month, day
+    elseif not namesAndFirstDays[1] then
+        LogError("No months defined!")
+        return month, day
+    end
+
     if day < namesAndFirstDays[1][2] then
         month = namesAndFirstDays[#namesAndFirstDays][1]
         firstDay = namesAndFirstDays[#namesAndFirstDays][2]

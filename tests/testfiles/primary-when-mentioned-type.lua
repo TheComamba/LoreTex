@@ -76,8 +76,14 @@ end
 
 local expected = {}
 
+local function typeSetup()
+    TexApi.addType { metatype = "characters", type = "npcs" }
+    TexApi.addType { metatype = "peoples", type = "species" }
+end
+
 local function refSetup1()
     TexApi.mention("karl")
+    typeSetup()
 end
 
 setup()
@@ -87,6 +93,7 @@ AssertAutomatedChapters("one-only-mentioned-npc", expected, refSetup1)
 local function refSetup2()
     TexApi.mention("karl")
     TexApi.makeTypePrimaryWhenMentioned("species")
+    typeSetup()
 end
 
 setup()
@@ -96,6 +103,7 @@ AssertAutomatedChapters("species-are-primary-types-npc-is-only-mentioned", expec
 local function refSetup3()
     TexApi.mention("karl")
     TexApi.makeTypePrimaryWhenMentioned("npcs")
+    typeSetup()
 end
 
 setup()
@@ -105,6 +113,7 @@ AssertAutomatedChapters("npcs-are-primary-types-one-is-only-mentioned", expected
 local function refSetup4()
     TexApi.mention("karl")
     TexApi.makeEntityPrimary("karl")
+    typeSetup()
 end
 
 setup()
@@ -115,6 +124,7 @@ local function refSetup5()
     TexApi.mention("karl")
     TexApi.makeEntityPrimary("karl")
     TexApi.makeTypePrimaryWhenMentioned("species")
+    typeSetup()
 end
 
 setup()
@@ -125,6 +135,7 @@ local function refSetup6()
     TexApi.mention("karl")
     TexApi.makeEntityPrimary("karl")
     TexApi.makeTypePrimaryWhenMentioned("npcs")
+    typeSetup()
 end
 
 setup()

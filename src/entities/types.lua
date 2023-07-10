@@ -2,11 +2,6 @@ AllTypes = {}
 
 StateResetters[#StateResetters + 1] = function()
     AllTypes = {}
-    AllTypes["characters"] = { "npcs", "pcs" }
-    AllTypes["chronologies"] = { "calendars", "events", "stories" }
-    AllTypes["other"] = { "other" }
-    AllTypes["peoples"] = { "languages", "species" }
-    AllTypes["places"] = { "places" }
 end
 
 function IsType(type, entity)
@@ -59,10 +54,6 @@ local function addType(arg)
     end
     if AllTypes[arg.metatype] == nil then
         AllTypes[arg.metatype] = {}
-    end
-    if IsIn(arg.type, AllTypes[arg.metatype]) then
-        LogError("Subtype \"" .. arg.type .. "\" of metatype \"" .. arg.metatype .. "\" already exists.")
-        return
     end
     Append(AllTypes[arg.metatype], arg.type)
 end

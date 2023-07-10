@@ -10,6 +10,8 @@ TexApi.setAgeFactor(1)
 local function setup()
     TexApi.makeAllEntitiesPrimary()
     TexApi.setCurrentYear(0)
+    TexApi.addType { metatype = "characters", type = "npcs" }
+    TexApi.addType { metatype = "peoples", type = "species" }
 end
 
 local expected = {}

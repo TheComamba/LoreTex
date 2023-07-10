@@ -44,7 +44,7 @@ function SortedMetatypes()
     for key, types in pairs(AllTypes) do
         Append(metatypes, key)
     end
-    Sort(metatypes, "compareTranslation")
+    Sort(metatypes)
     return metatypes
 end
 

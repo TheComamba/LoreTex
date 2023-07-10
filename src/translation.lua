@@ -4,9 +4,7 @@ IsDictionaryRandomised = false
 local currentDictionary = {}
 
 local function selectLanguage(language)
-    if #currentDictionary == 0 then
-        dofile(RelativePath .. "/../translation/" .. language .. ".lua")
-    end
+    dofile(RelativePath .. "/../translation/" .. language .. ".lua")
     currentDictionary = Dictionaries[language:lower()]
     IsDictionaryRandomised = false
 end

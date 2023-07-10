@@ -70,7 +70,7 @@ end
 
 local function addSingleChildDescriptorToParent(child, parent, relationships)
     local childType = GetProtectedStringField(child, "type")
-    local descriptor = Tr("affiliated") .. " " .. childType
+    local descriptor = Tr("affiliated") .. " " .. CapFirst(childType)
     if parent[descriptor] == nil then
         parent[descriptor] = {}
     end

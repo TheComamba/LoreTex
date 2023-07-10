@@ -74,7 +74,7 @@ local function generateEntityFromLabel(label)
     Append(out, [[\label{]] .. label .. [[}]])
     if #(generateChildren(label)) > 0 then
         for key, typename in pairs(types) do
-            Append(out, [[\paragraph{]] .. CapFirst(Tr("affiliated")) .. [[ ]] .. typename .. [[}]])
+            Append(out, [[\paragraph{]] .. CapFirst(Tr("affiliated")) .. [[ ]] .. CapFirst(typename) .. [[}]])
             Append(out, [[\begin{itemize}]])
             Append(out, [[\item \nameref{]] .. label .. [[-]] .. typename .. [[}]])
             Append(out, [[\end{itemize}]])

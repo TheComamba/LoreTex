@@ -28,6 +28,8 @@ local function generateCrewMember(label, roles)
     return out
 end
 
+TexApi.addTranslation { language = "english", key = "ships", translation = "ships" }
+
 local expected = {}
 Append(expected, [[\chapter{]] .. CapFirst(Tr("characters")) .. [[}]])
 Append(expected, [[\section{]] .. CapFirst(Tr("npcs")) .. [[}]])
@@ -77,7 +79,6 @@ local function setup()
     TexApi.addType { metatype = "other", type = "ships" }
     TexApi.addType { metatype = "characters", type = "npcs" }
     TexApi.addType { metatype = "places", type = "places" }
-    TexApi.addTranslation { language = "english", key = "ships", translation = "ships" }
 end
 
 AssertAutomatedChapters("Example Ship Crew", expected, setup)

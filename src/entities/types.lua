@@ -1,7 +1,7 @@
-AllTypes = {}
+local allTypes = {}
 
 StateResetters[#StateResetters + 1] = function()
-    AllTypes = {}
+    allTypes = {}
 end
 
 function IsType(type, entity)
@@ -10,11 +10,16 @@ function IsType(type, entity)
 end
 
 function IsTypeKnown(queriedType)
-    return IsIn(queriedType, AllTypes)
+    return IsIn(queriedType, allTypes)
 end
 
 function AddType(type)
-    UniqueAppend(AllTypes, type)
+    UniqueAppend(allTypes, type)
+end
+
+function GetSortedTypes()
+    Sort(allTypes, "compareAlphanumerical")
+    return allTypes
 end
 
 --TODO delete this api function

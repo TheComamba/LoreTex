@@ -37,8 +37,7 @@ TexApi.newCharacter = newCharacter
 local function automatedChapters()
     local processOut = ProcessedEntities()
     local output = {}
-    Sort(AllTypes)
-    for _, type in pairs(AllTypes) do
+    for _, type in pairs(GetSortedTypes()) do
         Append(output, PrintEntityChapter(processOut, type))
     end
     Append(output, PrintOnlyMentionedChapter(processOut.mentioned))

@@ -28,8 +28,6 @@ local function generateCrewMember(label, roles)
     return out
 end
 
-TexApi.addTranslation { language = "english", key = "ships", translation = "ships" }
-
 local expected = {}
 Append(expected, [[\chapter{Characters}]])
 Append(expected, [[\section{NPCs}]])

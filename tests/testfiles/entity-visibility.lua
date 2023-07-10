@@ -1,6 +1,5 @@
 local function entitySetup()
     TexApi.addType { metatype = "other", type = "organisations" }
-    TexApi.addTranslation { language = "english", key = "organisations", translation = "organisations" }
 
     TexApi.newEntity { type = "NPCs", label = "normal", name = "Normal" }
     TexApi.addParent { parentLabel = "normal-orga" }
@@ -11,7 +10,7 @@ local function entitySetup()
     TexApi.addHistory { year = -9, event = [[Concerns \reference{secret}]] }
     TexApi.addHistory { year = -8, event = [[Concerns \reference{revealed}]] }
     TexApi.addSecretHistory { year = -5, event = [[Secret event]] }
-    
+
     TexApi.newEntity { type = "NPCs", label = "secret", name = "Secret" }
     TexApi.setSecret()
     TexApi.addParent { parentLabel = "normal-orga" }
@@ -19,7 +18,7 @@ local function entitySetup()
     TexApi.addParent { parentLabel = "revealed-orga" }
     TexApi.addParent { parentLabel = "unborn-orga" }
     TexApi.addHistory { year = -7, event = [[Concerns \reference{normal}]] }
-    
+
     TexApi.newEntity { type = "NPCs", label = "revealed", name = "Revealed" }
     TexApi.setSecret()
     TexApi.addParent { parentLabel = "normal-orga" }
@@ -27,32 +26,32 @@ local function entitySetup()
     TexApi.addParent { parentLabel = "revealed-orga" }
     TexApi.addParent { parentLabel = "unborn-orga" }
     TexApi.addHistory { year = -6, event = [[Concerns \reference{normal}]] }
-    
+
     TexApi.newEntity { type = "NPCs", label = "unborn", name = "Unborn" }
     TexApi.addParent { parentLabel = "normal-orga" }
     TexApi.addParent { parentLabel = "secret-orga" }
     TexApi.addParent { parentLabel = "revealed-orga" }
     TexApi.addParent { parentLabel = "unborn-orga" }
     TexApi.addHistory { year = 10, event = [[Created.\birthof{unborn}]] }
-    
+
     TexApi.newEntity { type = "NPCs", label = "at_secret_location", name = "At secret Location" }
     TexApi.setLocation("eldorado")
     TexApi.addParent { parentLabel = "normal-orga" }
     TexApi.addParent { parentLabel = "secret-orga" }
     TexApi.addParent { parentLabel = "revealed-orga" }
     TexApi.addParent { parentLabel = "unborn-orga" }
-    
+
     TexApi.newEntity { type = "places", label = "eldorado", name = "Eldorado" }
     TexApi.setSecret()
-    
+
     TexApi.newEntity { type = "organisations", label = "normal-orga", name = "Normal Organisation" }
-    
+
     TexApi.newEntity { type = "organisations", label = "secret-orga", name = "Secret Organisation" }
     TexApi.setSecret()
-    
+
     TexApi.newEntity { type = "organisations", label = "revealed-orga", name = "Revealed Organisation" }
     TexApi.setSecret()
-    
+
     TexApi.newEntity { type = "organisations", label = "unborn-orga", name = "Unborn Organisation" }
     TexApi.born { year = 10, event = [[Founded.\birthof{unborn-orga}]] }
 end
@@ -193,8 +192,8 @@ end
 local function otherChapter(isShowSecrets, isShowFuture)
     local out = {}
     Append(out, [[\chapter{Other}]])
-    Append(out, [[\section{]] .. CapFirst(Tr("organisations")) .. [[}]])
-    Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("organisations")) .. [[}]])
+    Append(out, [[\section{Organisations}]])
+    Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ Organisations}]])
     Append(out, [[\begin{itemize}]])
     Append(out, [[\item \nameref{normal-orga}]])
     Append(out, [[\item \nameref{revealed-orga}]])

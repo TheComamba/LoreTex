@@ -2,10 +2,6 @@ local function setup()
     TexApi.addType { metatype = "other", type = "hair products" }
     TexApi.addType { metatype = "nonsense", type = "laces" }
 
-    TexApi.addTranslation { language = "english", key = "hair products", translation = "hair products" }
-    TexApi.addTranslation { language = "english", key = "nonsense", translation = "nonsense" }
-    TexApi.addTranslation { language = "english", key = "laces", translation = "laces" }
-
     TexApi.newEntity { type = "hair products", label = "cream", name = "Cream" }
     TexApi.newEntity { type = "laces", label = "red-laces", name = "Red laces" }
 end

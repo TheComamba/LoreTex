@@ -11,18 +11,6 @@ end
 
 TexApi.selectLanguage = selectLanguage
 
-local function addTranslation(arg)
-    if not IsArgOk("addTranslation", arg, { "language", "key", "translation" }, {}) then
-        return
-    end
-    if Dictionaries[arg.language] == nil then
-        Dictionaries[arg.language] = {}
-    end
-    Dictionaries[arg.language][arg.key] = arg.translation
-end
-
-TexApi.addTranslation = addTranslation
-
 function Tr(keyword, additionalArguments)
     local translation = currentDictionary[keyword]
     if translation == nil then

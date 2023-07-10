@@ -103,14 +103,14 @@ function PrintEntityChapter(processedOut, metatype)
     end
 
     local out = {}
-    Append(out, TexCmd("chapter", CapFirst(Tr(metatype))))
+    Append(out, TexCmd("chapter", CapFirst(metatype)))
     local types = AllTypes[metatype]
     Sort(types, "compareTranslation")
     for i, type in pairs(types) do
         local entitiesOfType = processedOut.entities[metatype][type]
         if not IsEmpty(entitiesOfType) then
-            Append(out, TexCmd("section", CapFirst(Tr(type))))
-            Append(out, PrintAllEntities(Tr(type), entitiesOfType))
+            Append(out, TexCmd("section", CapFirst(type)))
+            Append(out, PrintAllEntities(type, entitiesOfType))
             Append(out, printEntityChapterSortedByLocation(entitiesOfType))
         end
     end

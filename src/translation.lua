@@ -52,8 +52,8 @@ end
 
 function RandomiseDictionary()
     --Before you ask: This is purely for testing.
-    for key, val in pairs(currentDictionary) do
-        currentDictionary[key] = currentDictionary[key]:lower() .. "-" .. randomWord(5)
+    for key, _ in pairs(currentDictionary) do
+        currentDictionary[key] = currentDictionary[key]:lower() .. "_" .. randomWord(5)
     end
     IsDictionaryRandomised = true
 end

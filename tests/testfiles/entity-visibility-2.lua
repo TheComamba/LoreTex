@@ -12,37 +12,37 @@ local function generateHistoryParagraph()
     Append(out, [[\begin{itemize}]])
     Append(out,
         [[\item -10 (]] ..
-        Tr("x-years-ago", { 10 }) .. [[):\\ (]] .. CapFirst(Tr("secret")) .. [[) Concerns \nameref{secret-item}.]])
+        Tr("x_years_ago", { 10 }) .. [[):\\ (]] .. CapFirst(Tr("secret")) .. [[) Concerns \nameref{secret-item}.]])
     Append(out, [[\end{itemize}]])
     return out
 end
 
 local function generateExpected(isItemReferenced, isShowSecrets)
     local out = {}
-    Append(out, [[\chapter{]] .. CapFirst(Tr("chronologies")) .. [[}]])
-    Append(out, [[\section{]] .. CapFirst(Tr("stories")) .. [[}]])
-    Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("stories")) .. [[}]])
+    Append(out, [[\chapter{Chronologies}]])
+    Append(out, [[\section{Stories}]])
+    Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ Stories}]])
     Append(out, [[\begin{itemize}]])
     Append(out, [[\item \nameref{teststory}]])
     Append(out, [[\end{itemize}]])
-    Append(out, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
+    Append(out, [[\subsection{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
     Append(out, [[\subsubsection{Teststory}]])
     Append(out, [[\label{teststory}]])
     if isShowSecrets then
         Append(out, generateHistoryParagraph())
         if isItemReferenced then
-            Append(out, [[\chapter{]] .. CapFirst(Tr("other")) .. [[}]])
-            Append(out, [[\section{]] .. CapFirst(Tr("other")) .. [[}]])
-            Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("other")) .. [[}]])
+            Append(out, [[\chapter{Other}]])
+            Append(out, [[\section{Other}]])
+            Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ Other}]])
             Append(out, [[\begin{itemize}]])
             Append(out, [[\item \nameref{secret-item}]])
             Append(out, [[\end{itemize}]])
-            Append(out, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
+            Append(out, [[\subsection{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
             Append(out, [[\subsubsection[Secret Item]{Secret Item (]] .. CapFirst(Tr("secret")) .. [[)}]])
             Append(out, [[\label{secret-item}]])
             Append(out, generateHistoryParagraph())
         else
-            Append(out, [[\chapter{]] .. CapFirst(Tr("only-mentioned")) .. [[}]])
+            Append(out, [[\chapter{]] .. CapFirst(Tr("only_mentioned")) .. [[}]])
             Append(out, [[\subparagraph{Secret Item}]])
             Append(out, [[\label{secret-item}]])
             Append(out, [[\hspace{1cm}]])

@@ -45,7 +45,7 @@ function PrintOnlyMentionedChapter(mentionedEntities)
     Sort(mentionedEntities, "compareByName")
     for key, mentionedEntity in pairs(mentionedEntities) do
         if key == 1 then
-            Append(out, TexCmd("chapter", CapFirst(Tr("only-mentioned"))))
+            Append(out, TexCmd("chapter", CapFirst(Tr("only_mentioned"))))
         end
         local name = GetShortname(mentionedEntity)
         local label = GetProtectedStringField(mentionedEntity, "label")
@@ -81,16 +81,16 @@ local function printEntityChapterSortedByLocation(entities)
         if not IsProtectedDescriptor(locationName) then
             local sectionname = ""
             if IsEmpty(locationName) then
-                sectionname = Tr("in-whole-world")
+                sectionname = Tr("in_whole_world")
             else
-                sectionname = CapFirst(Tr("in")) .. " " .. locationName
+                sectionname = CapFirst(Tr("located_in")) .. " " .. locationName
             end
             local entitiesHere = entities[locationName]
             Append(out, printEntities(sectionname, entitiesHere))
         end
     end
 
-    local sectionname = Tr("at-secret-locations")
+    local sectionname = Tr("at_secret_locations")
     local entitiesAtSecretLocations = GetProtectedTableReferenceField(entities, "isSecret")
     Append(out, printEntities(sectionname, entitiesAtSecretLocations))
 
@@ -103,14 +103,14 @@ function PrintEntityChapter(processedOut, metatype)
     end
 
     local out = {}
-    Append(out, TexCmd("chapter", CapFirst(Tr(metatype))))
+    Append(out, TexCmd("chapter", CapFirst(metatype)))
     local types = AllTypes[metatype]
-    Sort(types, "compareTranslation")
+    Sort(types)
     for i, type in pairs(types) do
         local entitiesOfType = processedOut.entities[metatype][type]
         if not IsEmpty(entitiesOfType) then
-            Append(out, TexCmd("section", CapFirst(Tr(type))))
-            Append(out, PrintAllEntities(Tr(type), entitiesOfType))
+            Append(out, TexCmd("section", CapFirst(type)))
+            Append(out, PrintAllEntities(type, entitiesOfType))
             Append(out, printEntityChapterSortedByLocation(entitiesOfType))
         end
     end

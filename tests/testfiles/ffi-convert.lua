@@ -10,7 +10,7 @@ TexApi.addParent { parentLabel = "parentLabel" }
 TexApi.born { year = 223, event = [[\nameref{testLabel} is born, child of \nameref{parentLabel}.]] }
 TexApi.setSpecies("species-1")
 
-TexApi.newEntity { type = "npcs", label = "some-npc", name = "Some NPC" }
+TexApi.newEntity { type = "NPCs", label = "some-npc", name = "Some NPC" }
 local someList = { "First", "Second" }
 local someMap = { Alpha = [[$\alpha$]], Beta = [[$\beta$]] }
 TexApi.setDescriptor { descriptor = "Description", description = [[Mentions \nameref{testLabel}.]] }

@@ -6,40 +6,40 @@ for key, isAgingDefined in pairs({ false, true }) do
         TexApi.setAgeFactor(1)
     end
 
-    TexApi.newEntity { type = "npcs", label = "test-npc", name = "Test NPC" }
+    TexApi.newEntity { type = "NPCs", label = "test-npc", name = "Test NPC" }
     TexApi.setSpecies("test-species")
     TexApi.born { year = -20, event = "Birth." }
 
     local expected = {}
-    Append(expected, [[\chapter{]] .. CapFirst(Tr("characters")) .. [[}]])
-    Append(expected, [[\section{]] .. CapFirst(Tr("npcs")) .. [[}]])
-    Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("npcs")) .. [[}]])
+    Append(expected, [[\chapter{Characters}]])
+    Append(expected, [[\section{NPCs}]])
+    Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ NPCs}]])
     Append(expected, [[\begin{itemize}]])
     Append(expected, [[\item \nameref{test-npc}]])
     Append(expected, [[\end{itemize}]])
-    Append(expected, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
+    Append(expected, [[\subsection{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
     Append(expected, [[\subsubsection{Test NPC}]])
     Append(expected, [[\label{test-npc}]])
     Append(expected, [[\paragraph{]] .. CapFirst(Tr("appearance")) .. [[}]])
-    Append(expected, [[\subparagraph{]] .. CapFirst(Tr("species-and-age")) .. [[:}]])
-    Append(expected, [[\nameref {test-species}, 20 ]] .. Tr("years-old") .. [[.]])
+    Append(expected, [[\subparagraph{]] .. CapFirst(Tr("species_and_age")) .. [[:}]])
+    Append(expected, [[\nameref {test-species}, 20 ]] .. Tr("years_old") .. [[.]])
     Append(expected, [[\paragraph{]] .. CapFirst(Tr("history")) .. [[}]])
     Append(expected, [[\begin{itemize}]])
-    Append(expected, [[\item -20 (]] .. Tr("x-years-ago", { 20 }) .. [[):\\Birth.]])
+    Append(expected, [[\item -20 (]] .. Tr("x_years_ago", { 20 }) .. [[):\\Birth.]])
     if isAgingDefined then
         Append(expected, [[\item -8 (]] ..
-            Tr("x-years-ago", { 8 }) .. [[):\\ \nameref{test-npc} ]] .. Tr("is") .. [[ ]] .. Tr("juvenile") .. [[.]])
+            Tr("x_years_ago", { 8 }) .. [[):\\ \nameref{test-npc} ]] .. Tr("is") .. [[ ]] .. Tr("juvenile") .. [[.]])
         Append(expected,
-            [[\item 0 (]] .. Tr("this-year") .. [[):\\ \nameref{test-npc} ]] .. Tr("is") .. [[ ]] .. Tr("young") .. [[.]])
+            [[\item 0 (]] .. Tr("this_year") .. [[):\\ \nameref{test-npc} ]] .. Tr("is") .. [[ ]] .. Tr("young") .. [[.]])
     end
     Append(expected, [[\end{itemize}]])
-    Append(expected, [[\chapter{]] .. CapFirst(Tr("peoples")) .. [[}]])
-    Append(expected, [[\section{]] .. CapFirst(Tr("species")) .. [[}]])
-    Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("species")) .. [[}]])
+    Append(expected, [[\chapter{Peoples}]])
+    Append(expected, [[\section{Species}]])
+    Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ Species}]])
     Append(expected, [[\begin{itemize}]])
     Append(expected, [[\item \nameref{test-species}]])
     Append(expected, [[\end{itemize}]])
-    Append(expected, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
+    Append(expected, [[\subsection{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
     Append(expected, [[\subsubsection{Test Species}]])
     Append(expected, [[\label{test-species}]])
     if isAgingDefined then
@@ -60,7 +60,7 @@ for key, isAgingDefined in pairs({ false, true }) do
 
     local function setup()
         TexApi.makeAllEntitiesPrimary()
-        TexApi.addType { metatype = "characters", type = "npcs" }
+        TexApi.addType { metatype = "characters", type = "NPCs" }
         TexApi.addType { metatype = "peoples", type = "species" }
     end
 

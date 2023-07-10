@@ -8,23 +8,23 @@ end
 
 local function generateExpected(isSecondAdded)
     local out = {}
-    Append(out, [[\chapter{]] .. CapFirst(Tr("places")) .. [[}]])
-    Append(out, [[\section{]] .. CapFirst(Tr("places")) .. [[}]])
-    Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("places")) .. [[}]])
+    Append(out, [[\chapter{Places}]])
+    Append(out, [[\section{Places}]])
+    Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ Places}]])
     Append(out, [[\begin{itemize}]])
     Append(out, [[\item \nameref{test-1}]])
     if isSecondAdded then
         Append(out, [[\item \nameref{test-2}]])
     end
     Append(out, [[\end{itemize}]])
-    Append(out, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
+    Append(out, [[\subsection{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
     Append(out, [[\subsubsection{Test 1}]])
     Append(out, [[\label{test-1}]])
     Append(out, [[\paragraph{]] .. CapFirst(Tr("history")) .. [[}]])
     Append(out, [[\begin{itemize}]])
     Append(out,
         [[\item -10 (]] ..
-        Tr("x-years-ago", { 10 }) .. [[):\\ Event that concerns \nameref{test-1} and \itref{test-2}.]])
+        Tr("x_years_ago", { 10 }) .. [[):\\ Event that concerns \nameref{test-1} and \itref{test-2}.]])
     Append(out, [[\end{itemize}]])
     if isSecondAdded then
         Append(out, [[\subsubsection{Test 2}]])
@@ -33,10 +33,10 @@ local function generateExpected(isSecondAdded)
         Append(out, [[\begin{itemize}]])
         Append(out,
             [[\item -10 (]] ..
-            Tr("x-years-ago", { 10 }) .. [[):\\ Event that concerns \nameref{test-1} and \itref{test-2}.]])
+            Tr("x_years_ago", { 10 }) .. [[):\\ Event that concerns \nameref{test-1} and \itref{test-2}.]])
         Append(out, [[\end{itemize}]])
     else
-        Append(out, [[\chapter{]] .. CapFirst(Tr("only-mentioned")) .. [[}]])
+        Append(out, [[\chapter{]] .. CapFirst(Tr("only_mentioned")) .. [[}]])
         Append(out, [[\subparagraph{Test 2}]])
         Append(out, [[\label{test-2}]])
         Append(out, [[\hspace{1cm}]])

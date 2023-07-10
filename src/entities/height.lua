@@ -19,7 +19,7 @@ function AddHeightDescriptor(entity)
     Append(out, "m (")
     Append(out, toHorizonString)
     Append(out, "km ")
-    Append(out, Tr("visual-range-to-horizon"))
+    Append(out, Tr("visual_range_to_horizon"))
     Append(out, ").")
     local description = table.concat(out)
     SetDescriptor { entity = entity, descriptor = Tr("height"), description = description }

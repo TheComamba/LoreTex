@@ -34,11 +34,11 @@ local function generateOrga1(areLocationsSet)
     local out = {}
     Append(out, [[\subsubsection{Orga}]])
     Append(out, [[\label{orga}]])
-    Append(out, [[\paragraph{]] .. CapFirst(Tr("affiliated")) .. [[ ]] .. Tr("places") .. [[}]])
+    Append(out, [[\paragraph{]] .. CapFirst(Tr("affiliated")) .. [[ Places}]])
     Append(out, [[\begin{itemize}]])
     Append(out, [[\item \nameref{place-1}]])
     if areLocationsSet then
-        Append(out, [[\item \nameref{place-2} (Hometown, ]] .. Tr("in") .. [[ \nameref{place-4})]])
+        Append(out, [[\item \nameref{place-2} (Hometown, ]] .. Tr("located_in") .. [[ \nameref{place-4})]])
     else
         Append(out, [[\item \nameref{place-2} (Hometown)]])
     end
@@ -59,19 +59,19 @@ end
 
 local function generateExpected(areLocationsSet)
     local out = {}
-    Append(out, [[\chapter{]] .. CapFirst(Tr("other")) .. [[}]])
-    Append(out, [[\section{]] .. CapFirst(Tr("other")) .. [[}]])
-    Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("other")) .. [[}]])
+    Append(out, [[\chapter{Other}]])
+    Append(out, [[\section{Other}]])
+    Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ Other}]])
     Append(out, [[\begin{itemize}]])
     Append(out, [[\item \nameref{orga}]])
     Append(out, [[\item \nameref{orga-2}]])
     Append(out, [[\end{itemize}]])
     if areLocationsSet then
-        Append(out, [[\subsection{]] .. CapFirst(Tr("in")) .. [[ Place 1}]])
+        Append(out, [[\subsection{]] .. CapFirst(Tr("located_in")) .. [[ Place 1}]])
         Append(out, generateOrga2())
-        Append(out, [[\subsection{]] .. CapFirst(Tr("in")) .. [[ Place 3}]])
+        Append(out, [[\subsection{]] .. CapFirst(Tr("located_in")) .. [[ Place 3}]])
     else
-        Append(out, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
+        Append(out, [[\subsection{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
     end
 
     Append(out, generateOrga1(areLocationsSet))
@@ -79,17 +79,17 @@ local function generateExpected(areLocationsSet)
         Append(out, generateOrga2())
     end
 
-    Append(out, [[\chapter{]] .. CapFirst(Tr("places")) .. [[}]])
-    Append(out, [[\section{]] .. CapFirst(Tr("places")) .. [[}]])
-    Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. " " .. CapFirst(Tr("places")) .. [[}]])
+    Append(out, [[\chapter{Places}]])
+    Append(out, [[\section{Places}]])
+    Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ Places}]])
     Append(out, [[\begin{itemize}]])
     Append(out, [[\item \nameref{place-1}]])
     Append(out, [[\item \nameref{place-2}]])
     Append(out, [[\end{itemize}]])
-    Append(out, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
+    Append(out, [[\subsection{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
     Append(out, [[\subsubsection{Place 1}]])
     Append(out, [[\label{place-1}]])
-    Append(out, [[\paragraph{]] .. CapFirst(Tr("affiliated")) .. " " .. Tr("other") .. [[}]])
+    Append(out, [[\paragraph{]] .. CapFirst(Tr("affiliated")) .. [[ Other}]])
     Append(out, [[\begin{itemize}]])
     Append(out, [[\item \nameref{orga-2} (Rulers)]])
     Append(out, [[\end{itemize}]])
@@ -98,7 +98,7 @@ local function generateExpected(areLocationsSet)
     Append(out, [[\item ]] .. CapFirst(Tr("member")) .. [[ ]] .. Tr("of") .. [[ \nameref{orga}.]])
     Append(out, [[\end{itemize}]])
     if areLocationsSet then
-        Append(out, [[\subsection{]] .. CapFirst(Tr("in")) .. [[ Place 4}]])
+        Append(out, [[\subsection{]] .. CapFirst(Tr("located_in")) .. [[ Place 4}]])
     end
     Append(out, [[\subsubsection{Place 2}]])
     Append(out, [[\label{place-2}]])
@@ -107,7 +107,7 @@ local function generateExpected(areLocationsSet)
     Append(out, [[\item Hometown ]] .. Tr("of") .. [[ \nameref{orga}.]])
     Append(out, [[\end{itemize}]])
     if areLocationsSet then
-        Append(out, [[\chapter{]] .. CapFirst(Tr("only-mentioned")) .. [[}]])
+        Append(out, [[\chapter{]] .. CapFirst(Tr("only_mentioned")) .. [[}]])
         Append(out, [[\subparagraph{Place 4}]])
         Append(out, [[\label{place-4}]])
         Append(out, [[\hspace{1cm}]])

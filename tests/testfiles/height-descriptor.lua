@@ -24,22 +24,22 @@ local function generateHeightString(height)
         Append(out, "250")
     end
     Append(out, "km ")
-    Append(out, Tr("visual-range-to-horizon"))
+    Append(out, Tr("visual_range_to_horizon"))
     Append(out, ").")
     return table.concat(out)
 end
 
 local function generateExpected(depth, height)
     local out = {}
-    Append(out, [[\chapter{]] .. CapFirst(Tr("other")) .. [[}]])
-    Append(out, [[\section{]] .. CapFirst(Tr("other")) .. [[}]])
-    Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("other")) .. [[}]])
+    Append(out, [[\chapter{Other}]])
+    Append(out, [[\section{Other}]])
+    Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ Other}]])
     Append(out, [[\begin{itemize}]])
     for i = 1, depth do
         Append(out, [[\item \nameref{mountain-]] .. i .. [[}]])
     end
     Append(out, [[\end{itemize}]])
-    Append(out, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
+    Append(out, [[\subsection{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
     Append(out, [[\subsubsection{mountain-1}]])
     Append(out, [[\label{mountain-1}]])
     Append(out, [[\paragraph{]] .. CapFirst(Tr("height")) .. [[}]])

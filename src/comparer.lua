@@ -95,10 +95,6 @@ Comparer.compareHistoryItems = function(a, b)
     end
 end
 
-Comparer.compareTranslation = function(a, b)
-    return Comparer.compareString(Tr(a), Tr(b))
-end
-
 function Sort(t, comp)
     table.sort(t, Comparer[comp])
 end

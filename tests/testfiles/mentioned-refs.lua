@@ -1,25 +1,25 @@
-TexApi.newEntity { type = "npcs", label = "primary-npc", name = "Primary NPC" }
+TexApi.newEntity { type = "NPCs", label = "primary-npc", name = "Primary NPC" }
 TexApi.setDescriptor { descriptor = "Description", description = [[Different than \nameref{other-npc}.]] }
 TexApi.addParent { parentLabel = "some-organisation" }
-TexApi.newEntity { type = "npcs", label = "mentioned-npc", name = "Mentioned NPC" }
-TexApi.newEntity { type = "npcs", label = "other-npc", name = "Other NPC" }
-TexApi.newEntity { type = "npcs", label = "not-mentioned-npc", name = "Not mentioned NPC" }
+TexApi.newEntity { type = "NPCs", label = "mentioned-npc", name = "Mentioned NPC" }
+TexApi.newEntity { type = "NPCs", label = "other-npc", name = "Other NPC" }
+TexApi.newEntity { type = "NPCs", label = "not-mentioned-npc", name = "Not mentioned NPC" }
 TexApi.newEntity { type = "other", label = "some-organisation", name = "Some Organisation" }
 
 local function refSetup()
     TexApi.makeEntityPrimary("primary-npc")
     TexApi.mention("mentioned-npc")
-    TexApi.addType { metatype = "characters", type = "npcs" }
+    TexApi.addType { metatype = "characters", type = "NPCs" }
 end
 
 local expected = {}
-Append(expected, [[\chapter{]] .. CapFirst(Tr("characters")) .. [[}]])
-Append(expected, [[\section{]] .. CapFirst(Tr("npcs")) .. [[}]])
-Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("npcs")) .. [[}]])
+Append(expected, [[\chapter{Characters}]])
+Append(expected, [[\section{NPCs}]])
+Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ NPCs}]])
 Append(expected, [[\begin{itemize}]])
 Append(expected, [[\item \nameref{primary-npc}]])
 Append(expected, [[\end{itemize}]])
-Append(expected, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
+Append(expected, [[\subsection{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
 Append(expected, [[\subsubsection{Primary NPC}]])
 Append(expected, [[\label{primary-npc}]])
 Append(expected, [[\paragraph{]] .. CapFirst(Tr("affiliations")) .. [[}]])
@@ -29,7 +29,7 @@ Append(expected, [[\end{itemize}]])
 Append(expected, [[\paragraph{Description}]])
 Append(expected, [[Different than \nameref{other-npc}.]])
 
-Append(expected, [[\chapter{]] .. CapFirst(Tr("only-mentioned")) .. [[}]])
+Append(expected, [[\chapter{]] .. CapFirst(Tr("only_mentioned")) .. [[}]])
 Append(expected, [[\subparagraph{Mentioned NPC}]])
 Append(expected, [[\label{mentioned-npc}]])
 Append(expected, [[\hspace{1cm}]])

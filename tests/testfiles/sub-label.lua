@@ -1,4 +1,4 @@
-TexApi.newEntity { type = "npcs", label = "some-npc", name = "Some NPC" }
+TexApi.newEntity { type = "NPCs", label = "some-npc", name = "Some NPC" }
 TexApi.setSpecies("subspecies")
 TexApi.setLocation("subplace-1")
 TexApi.setDescriptor { descriptor = "Info 1", description = [[Refers to \nameref{subplace-2}.]] }
@@ -15,21 +15,21 @@ TexApi.setDescriptor { descriptor = "Subspecies", description = [[\label{subspec
 
 local function refSetup1()
     TexApi.makeEntityPrimary("some-npc")
-    TexApi.addType { metatype = "characters", type = "npcs" }
+    TexApi.addType { metatype = "characters", type = "NPCs" }
 end
 
 local expected = {
-    [[\chapter{]] .. CapFirst(Tr("characters")) .. [[}]],
-    [[\section{]] .. CapFirst(Tr("npcs")) .. [[}]],
-    [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("npcs")) .. [[}]],
+    [[\chapter{Characters}]],
+    [[\section{NPCs}]],
+    [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ NPCs}]],
     [[\begin{itemize}]],
     [[\item \nameref{some-npc}]],
     [[\end{itemize}]],
-    [[\subsection{]] .. CapFirst(Tr("in")) .. [[ Subplace 1}]],
+    [[\subsection{]] .. CapFirst(Tr("located_in")) .. [[ Subplace 1}]],
     [[\subsubsection{Some NPC}]],
     [[\label{some-npc}]],
     [[\paragraph{]] .. CapFirst(Tr("appearance")) .. [[}]],
-    [[\subparagraph{]] .. CapFirst(Tr("species-and-age")) .. [[:}]],
+    [[\subparagraph{]] .. CapFirst(Tr("species_and_age")) .. [[:}]],
     [[\nameref {subspecies}.]],
     [[\paragraph{Info 1}]],
     [[Refers to \nameref{subplace-2}.]],
@@ -37,7 +37,7 @@ local expected = {
     [[Refers to \nameref{subplace-3}.]],
     [[\paragraph{Info 3}]],
     [[Refers to \nameref{subplace-4}.]],
-    [[\chapter{]] .. CapFirst(Tr("only-mentioned")) .. [[}]],
+    [[\chapter{]] .. CapFirst(Tr("only_mentioned")) .. [[}]],
     [[\subparagraph{Subplace 2}]],
     [[\label{subplace-2}]],
     [[\hspace{1cm}]],
@@ -54,11 +54,11 @@ local expected = {
 
 AssertAutomatedChapters("Sublabel", expected, refSetup1)
 
-TexApi.newEntity { type = "npcs", label = "also-primary", name = "Also Primary" }
+TexApi.newEntity { type = "NPCs", label = "also-primary", name = "Also Primary" }
 TexApi.setDescriptor { descriptor = "Sublabel 1", description = [[\label{sublabel-1}]] }
 TexApi.setDescriptor { descriptor = "Some Paragraph", description = [[\subparagraph{Sublabel 2}\label{sublabel-2}]] }
 
-TexApi.newEntity { type = "npcs", label = "not-primary", name = "Not Primary" }
+TexApi.newEntity { type = "NPCs", label = "not-primary", name = "Not Primary" }
 TexApi.setDescriptor { descriptor = "Sublabel 3", description = [[\label{sublabel-3}]] }
 TexApi.setDescriptor { descriptor = "Some ignored Paragraph",
     description =
@@ -70,19 +70,19 @@ local function refSetup2()
     TexApi.makeEntityPrimary("also-primary")
     TexApi.mention("sublabel-3")
     TexApi.mention("sublabel-4")
-    TexApi.addType { metatype = "characters", type = "npcs" }
+    TexApi.addType { metatype = "characters", type = "NPCs" }
 end
 
 local expected = {
-    [[\chapter{]] .. CapFirst(Tr("characters")) .. [[}]],
-    [[\section{]] .. CapFirst(Tr("npcs")) .. [[}]],
-    [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("npcs")) .. [[}]],
+    [[\chapter{Characters}]],
+    [[\section{NPCs}]],
+    [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ NPCs}]],
     [[\begin{itemize}]],
     [[\item \nameref{also-primary}]],
     [[\item \nameref{sublabel-1}]],
     [[\item \nameref{sublabel-2}]],
     [[\end{itemize}]],
-    [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]],
+    [[\subsection{]] .. CapFirst(Tr("in_whole_world")) .. [[}]],
     [[\subsubsection{Also Primary}]],
     [[\label{also-primary}]],
     [[\paragraph{Some Paragraph}]],
@@ -90,7 +90,7 @@ local expected = {
     [[\label{sublabel-2}]],
     [[\paragraph{Sublabel 1}]],
     [[\label{sublabel-1}]],
-    [[\chapter{]] .. CapFirst(Tr("only-mentioned")) .. [[}]],
+    [[\chapter{]] .. CapFirst(Tr("only_mentioned")) .. [[}]],
     [[\subparagraph{Sublabel 3}]],
     [[\label{sublabel-3}]],
     [[\hspace{1cm}]],
@@ -101,7 +101,7 @@ local expected = {
 
 AssertAutomatedChapters("Only sublabel mentioned", expected, refSetup2)
 
-TexApi.newEntity { type = "npcs", label = "some-npc", name = "Some NPC" }
+TexApi.newEntity { type = "NPCs", label = "some-npc", name = "Some NPC" }
 TexApi.setDescriptor { descriptor = "Paragraph with just label", description = [[\label{sublabel}]] }
 local paraWithoutLabel = {}
 Append(paraWithoutLabel, [[\subparagraph{AA Subpara 1}]])
@@ -125,13 +125,13 @@ TexApi.setDescriptor { descriptor = "Unusual paragraph", description = table.con
 
 local function refSetup3()
     TexApi.makeEntityPrimary("some-npc")
-    TexApi.addType { metatype = "characters", type = "npcs" }
+    TexApi.addType { metatype = "characters", type = "NPCs" }
 end
 
 local expected = {}
-Append(expected, [[\chapter{]] .. CapFirst(Tr("characters")) .. [[}]])
-Append(expected, [[\section{]] .. CapFirst(Tr("npcs")) .. [[}]])
-Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("npcs")) .. [[}]])
+Append(expected, [[\chapter{Characters}]])
+Append(expected, [[\section{NPCs}]])
+Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ NPCs}]])
 Append(expected, [[\begin{itemize}]])
 Append(expected, [[\item \nameref{subpara-1}]])
 Append(expected, [[\item \nameref{subpara-2}]])
@@ -140,7 +140,7 @@ Append(expected, [[\item \nameref{para-labeled-subs}]])
 Append(expected, [[\item \nameref{sublabel}]])
 Append(expected, [[\item \nameref{some-npc}]])
 Append(expected, [[\end{itemize}]])
-Append(expected, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
+Append(expected, [[\subsection{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
 Append(expected, [[\subsubsection{Some NPC}]])
 Append(expected, [[\label{some-npc}]])
 Append(expected, [[\paragraph{Labeled subparagraphs}]])
@@ -160,16 +160,16 @@ TexApi.newEntity { type = "places", label = "place-2", name = "Place 2" }
 TexApi.setDescriptor { descriptor = "Appears Twice", description = [[\subparagraph{Two}\label{two}]] }
 
 local expected = {}
-Append(expected, [[\chapter{]] .. CapFirst(Tr("places")) .. [[}]])
-Append(expected, [[\section{]] .. CapFirst(Tr("places")) .. [[}]])
-Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("places")) .. [[}]])
+Append(expected, [[\chapter{Places}]])
+Append(expected, [[\section{Places}]])
+Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ Places}]])
 Append(expected, [[\begin{itemize}]])
 Append(expected, [[\item \nameref{one}]])
 Append(expected, [[\item \nameref{place-1}]])
 Append(expected, [[\item \nameref{place-2}]])
 Append(expected, [[\item \nameref{two}]])
 Append(expected, [[\end{itemize}]])
-Append(expected, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
+Append(expected, [[\subsection{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
 Append(expected, [[\subsubsection{Place 1}]])
 Append(expected, [[\label{place-1}]])
 Append(expected, [[\paragraph{Appears Twice}]])

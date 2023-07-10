@@ -65,7 +65,7 @@ local function correspondingHumanAgeString(species, age)
 		local specificAge = yearsToAge(age, factor, exponent)
 		local specificAgeString = RoundedNumString(specificAge, 0)
 		Append(out, " (")
-		Append(out, Tr("corresponding-human-age"))
+		Append(out, Tr("corresponding_human_age"))
 		Append(out, " ")
 		Append(out, specificAgeString)
 		Append(out, " ")
@@ -83,7 +83,7 @@ local function specificAgeString(entity, age)
 	if isAgingSpecies(species) then
 		return correspondingHumanAgeString(species, age)
 	else
-		return " (" .. Tr("does-not-age") .. ")"
+		return " (" .. Tr("does_not_age") .. ")"
 	end
 end
 
@@ -103,7 +103,7 @@ local function ageString(entity, year)
 	end
 	Append(out, tostring(age))
 	Append(out, " ")
-	Append(out, Tr("years-old"))
+	Append(out, Tr("years_old"))
 	Append(out, specificAgeString(entity, age))
 	return table.concat(out)
 end

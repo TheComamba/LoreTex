@@ -9,7 +9,7 @@ function AddSpeciesAndAgeString(entity)
     if speciesAndAgeStr ~= "" then
         SetDescriptor { entity = entity,
             descriptor = Tr("appearance"),
-            subdescriptor = CapFirst(Tr("species-and-age")) .. ":",
+            subdescriptor = CapFirst(Tr("species_and_age")) .. ":",
             description = speciesAndAgeStr }
     end
 end

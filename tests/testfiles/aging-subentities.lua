@@ -1,4 +1,4 @@
-TexApi.newEntity { label = "char", type = "npcs", name = "char" }
+TexApi.newEntity { label = "char", type = "NPCs", name = "char" }
 TexApi.born { year = -15, event = "Born." }
 TexApi.setSpecies("species")
 TexApi.setDescriptor { descriptor = "subchar", description = [[\subparagraph{subsubchar}\label{subsubchar}]] }
@@ -10,43 +10,43 @@ TexApi.setAgeFactor(1)
 local function setup()
     TexApi.makeAllEntitiesPrimary()
     TexApi.setCurrentYear(0)
-    TexApi.addType { metatype = "characters", type = "npcs" }
+    TexApi.addType { metatype = "characters", type = "NPCs" }
     TexApi.addType { metatype = "peoples", type = "species" }
 end
 
 local expected = {}
-Append(expected, [[\chapter{]] .. CapFirst(Tr("characters")) .. [[}]])
-Append(expected, [[\section{]] .. CapFirst(Tr("npcs")) .. [[}]])
-Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. CapFirst(Tr("npcs")) .. [[}]])
+Append(expected, [[\chapter{Characters}]])
+Append(expected, [[\section{NPCs}]])
+Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ NPCs}]])
 Append(expected, [[\begin{itemize}]])
 Append(expected, [[\item \nameref{char}]])
 Append(expected, [[\item \nameref{subsubchar}]])
 Append(expected, [[\end{itemize}]])
-Append(expected, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
+Append(expected, [[\subsection{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
 Append(expected, [[\subsubsection{char}]])
 Append(expected, [[\label{char}]])
 Append(expected, [[\paragraph{]] .. CapFirst(Tr("appearance")) .. [[}]])
-Append(expected, [[\subparagraph{]] .. CapFirst(Tr("species-and-age")) .. [[:}]])
-Append(expected, [[\nameref{species}, 15 ]] .. Tr("years-old") .. [[.]])
+Append(expected, [[\subparagraph{]] .. CapFirst(Tr("species_and_age")) .. [[:}]])
+Append(expected, [[\nameref{species}, 15 ]] .. Tr("years_old") .. [[.]])
 Append(expected, [[\paragraph{]] .. CapFirst(Tr("history")) .. [[}]])
 Append(expected, [[\begin{itemize}]])
-Append(expected, [[\item -15 (]] .. Tr("x-years-ago", { 15 }) .. [[):\\Born.]])
+Append(expected, [[\item -15 (]] .. Tr("x_years_ago", { 15 }) .. [[):\\Born.]])
 Append(expected,
-    [[\item -3 (]] .. Tr("x-years-ago", { 3 }) .. [[):\\ \nameref{char} ]] .. Tr("is") .. [[ ]] .. Tr("juvenile") ..
+    [[\item -3 (]] .. Tr("x_years_ago", { 3 }) .. [[):\\ \nameref{char} ]] .. Tr("is") .. [[ ]] .. Tr("juvenile") ..
     [[.]])
 Append(expected, [[\end{itemize}]])
 Append(expected, [[\paragraph{Subchar}]])
 Append(expected, [[\subparagraph{Subsubchar}]])
 Append(expected, [[\label{subsubchar}]])
 
-Append(expected, [[\chapter{]] .. CapFirst(Tr("peoples")) .. [[}]])
-Append(expected, [[\section{]] .. CapFirst(Tr("species")) .. [[}]])
-Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. CapFirst(Tr("species")) .. [[}]])
+Append(expected, [[\chapter{Peoples}]])
+Append(expected, [[\section{Species}]])
+Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ Species}]])
 Append(expected, [[\begin{itemize}]])
 Append(expected, [[\item \nameref{species}]])
 Append(expected, [[\item \nameref{subsubspecies}]])
 Append(expected, [[\end{itemize}]])
-Append(expected, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
+Append(expected, [[\subsection{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
 Append(expected, [[\subsubsection{species}]])
 Append(expected, [[\label{species}]])
 Append(expected, [[\paragraph{]] .. CapFirst(Tr("lifestages")) .. [[}]])

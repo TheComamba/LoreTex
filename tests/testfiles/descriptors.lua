@@ -116,15 +116,15 @@ for key, isSubdescription in pairs({ false, true }) do
         setDescriptors(GetMutableEntityFromAll(tostring(i)), isSubdescription)
 
         local expected = {}
-        Append(expected, [[\chapter{]] .. CapFirst(Tr("places")) .. [[}]])
-        Append(expected, [[\section{]] .. CapFirst(Tr("places")) .. [[}]])
-        Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("places")) .. [[}]])
+        Append(expected, [[\chapter{Places}]])
+        Append(expected, [[\section{Places}]])
+        Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ Places}]])
         Append(expected, [[\begin{itemize}]])
         Append(expected, [[\item \nameref{1}]])
         Append(expected, [[\item \nameref{2}]])
         Append(expected, [[\item \nameref{3}]])
         Append(expected, [[\end{itemize}]])
-        Append(expected, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
+        Append(expected, [[\subsection{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
 
         Append(expected, [[\subsubsection{Test}]])
         Append(expected, [[\label{1}]])

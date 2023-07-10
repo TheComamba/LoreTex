@@ -31,9 +31,9 @@ local function generateExpected(isItemReferenced, isShowSecrets)
     if isShowSecrets then
         Append(out, generateHistoryParagraph())
         if isItemReferenced then
-            Append(out, [[\chapter{]] .. CapFirst(Tr("other")) .. [[}]])
-            Append(out, [[\section{]] .. CapFirst(Tr("other")) .. [[}]])
-            Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("other")) .. [[}]])
+            Append(out, [[\chapter{Other}]])
+            Append(out, [[\section{Other}]])
+            Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ Other}]])
             Append(out, [[\begin{itemize}]])
             Append(out, [[\item \nameref{secret-item}]])
             Append(out, [[\end{itemize}]])

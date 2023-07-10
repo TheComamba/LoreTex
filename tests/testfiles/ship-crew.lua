@@ -5,14 +5,14 @@ TexApi.setLocation("ocean")
 
 SetScopedVariable("DefaultLocation", GetMutableEntityFromAll("aurora"))
 
-TexApi.newEntity { type = "npcs", label = "haldora", name = "Haldora" }
+TexApi.newEntity { type = "NPCs", label = "haldora", name = "Haldora" }
 TexApi.addParent { parentLabel = "aurora", relationship = "Captain" }
 
-TexApi.newEntity { type = "npcs", label = "balagog", name = "Balagog" }
+TexApi.newEntity { type = "NPCs", label = "balagog", name = "Balagog" }
 TexApi.addParent { parentLabel = "aurora", relationship = "First Mate" }
 TexApi.addParent { parentLabel = "aurora", relationship = "Cook" }
 
-TexApi.newEntity { type = "npcs", label = "cuen", name = "Cuen" }
+TexApi.newEntity { type = "NPCs", label = "cuen", name = "Cuen" }
 TexApi.addParent { parentLabel = "aurora" }
 
 local function generateCrewMember(label, roles)
@@ -31,9 +31,9 @@ end
 TexApi.addTranslation { language = "english", key = "ships", translation = "ships" }
 
 local expected = {}
-Append(expected, [[\chapter{]] .. CapFirst(Tr("characters")) .. [[}]])
-Append(expected, [[\section{]] .. CapFirst(Tr("npcs")) .. [[}]])
-Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("npcs")) .. [[}]])
+Append(expected, [[\chapter{Characters}]])
+Append(expected, [[\section{NPCs}]])
+Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ NPCs}]])
 Append(expected, [[\begin{itemize}]])
 Append(expected, [[\item \nameref{balagog}]])
 Append(expected, [[\item \nameref{cuen}]])
@@ -44,7 +44,7 @@ Append(expected, generateCrewMember("balagog", { "Cook", "First Mate" }))
 Append(expected, generateCrewMember("cuen", { CapFirst(Tr("member")) }))
 Append(expected, generateCrewMember("haldora", { "Captain" }))
 
-Append(expected, [[\chapter{]] .. CapFirst(Tr("other")) .. [[}]])
+Append(expected, [[\chapter{Other}]])
 Append(expected, [[\section{]] .. CapFirst(Tr("ships")) .. [[}]])
 Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("ships")) .. [[}]])
 Append(expected, [[\begin{itemize}]])
@@ -53,16 +53,16 @@ Append(expected, [[\end{itemize}]])
 Append(expected, [[\subsection{]] .. CapFirst(Tr("located_in")) .. [[ Ocean}]])
 Append(expected, [[\subsubsection{Aurora}]])
 Append(expected, [[\label{aurora}]])
-Append(expected, [[\paragraph{]] .. CapFirst(Tr("affiliated")) .. [[ ]] .. Tr("npcs") .. [[}]])
+Append(expected, [[\paragraph{]] .. CapFirst(Tr("affiliated")) .. [[ ]] .. Tr("NPCs") .. [[}]])
 Append(expected, [[\begin{itemize}]])
 Append(expected, [[\item \nameref{balagog} (Cook, First Mate)]])
 Append(expected, [[\item \nameref{cuen}]])
 Append(expected, [[\item \nameref{haldora} (Captain)]])
 Append(expected, [[\end{itemize}]])
 
-Append(expected, [[\chapter{]] .. CapFirst(Tr("places")) .. [[}]])
-Append(expected, [[\section{]] .. CapFirst(Tr("places")) .. [[}]])
-Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("places")) .. [[}]])
+Append(expected, [[\chapter{Places}]])
+Append(expected, [[\section{Places}]])
+Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ Places}]])
 Append(expected, [[\begin{itemize}]])
 Append(expected, [[\item \nameref{ocean}]])
 Append(expected, [[\end{itemize}]])
@@ -77,7 +77,7 @@ Append(expected, [[\end{itemize}]])
 local function setup()
     TexApi.makeAllEntitiesPrimary()
     TexApi.addType { metatype = "other", type = "ships" }
-    TexApi.addType { metatype = "characters", type = "npcs" }
+    TexApi.addType { metatype = "characters", type = "NPCs" }
     TexApi.addType { metatype = "places", type = "places" }
 end
 

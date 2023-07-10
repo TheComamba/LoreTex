@@ -59,9 +59,9 @@ end
 
 local function generateExpected(areLocationsSet)
     local out = {}
-    Append(out, [[\chapter{]] .. CapFirst(Tr("other")) .. [[}]])
-    Append(out, [[\section{]] .. CapFirst(Tr("other")) .. [[}]])
-    Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("other")) .. [[}]])
+    Append(out, [[\chapter{Other}]])
+    Append(out, [[\section{Other}]])
+    Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ Other}]])
     Append(out, [[\begin{itemize}]])
     Append(out, [[\item \nameref{orga}]])
     Append(out, [[\item \nameref{orga-2}]])
@@ -79,8 +79,8 @@ local function generateExpected(areLocationsSet)
         Append(out, generateOrga2())
     end
 
-    Append(out, [[\chapter{]] .. CapFirst(Tr("places")) .. [[}]])
-    Append(out, [[\section{]] .. CapFirst(Tr("places")) .. [[}]])
+    Append(out, [[\chapter{Places}]])
+    Append(out, [[\section{Places}]])
     Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. " " .. CapFirst(Tr("places")) .. [[}]])
     Append(out, [[\begin{itemize}]])
     Append(out, [[\item \nameref{place-1}]])

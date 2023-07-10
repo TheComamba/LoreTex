@@ -1,8 +1,8 @@
 local function setup()
-    TexApi.newEntity { type = "npcs", label = "karl", name = "Karl" }
+    TexApi.newEntity { type = "NPCs", label = "karl", name = "Karl" }
     TexApi.setSpecies("human")
     TexApi.setDescriptor { descriptor = "Friend", description = [[\nameref{peter}]] }
-    TexApi.newEntity { type = "npcs", label = "peter", name = "Peter" }
+    TexApi.newEntity { type = "NPCs", label = "peter", name = "Peter" }
     TexApi.setSpecies("human")
     TexApi.newEntity { type = "species", label = "human", name = "Human" }
     TexApi.setAgeFactor(0)
@@ -10,13 +10,13 @@ end
 
 local function generateExpected(primaryType, isKarlReferenced)
     local out = {}
-    if primaryType == "npcs" or isKarlReferenced then
-        Append(out, [[\chapter{]] .. CapFirst(Tr("characters")) .. [[}]])
-        Append(out, [[\section{]] .. CapFirst(Tr("npcs")) .. [[}]])
-        Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("npcs")) .. [[}]])
+    if primaryType == "NPCs" or isKarlReferenced then
+        Append(out, [[\chapter{Characters}]])
+        Append(out, [[\section{NPCs}]])
+        Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ NPCs}]])
         Append(out, [[\begin{itemize}]])
         Append(out, [[\item \nameref{karl}]])
-        if primaryType == "npcs" then
+        if primaryType == "NPCs" then
             Append(out, [[\item \nameref{peter}]])
         end
         Append(out, [[\end{itemize}]])
@@ -28,7 +28,7 @@ local function generateExpected(primaryType, isKarlReferenced)
         Append(out, [[\nameref {human}.]])
         Append(out, [[\paragraph{Friend}]])
         Append(out, [[\nameref{peter}]])
-        if primaryType == "npcs" then
+        if primaryType == "NPCs" then
             Append(out, [[\subsubsection{Peter}]])
             Append(out, [[\label{peter}]])
             Append(out, [[\paragraph{]] .. CapFirst(Tr("appearance")) .. [[}]])
@@ -38,9 +38,9 @@ local function generateExpected(primaryType, isKarlReferenced)
     end
 
     if primaryType == "species" and isKarlReferenced then
-        Append(out, [[\chapter{]] .. CapFirst(Tr("peoples")) .. [[}]])
-        Append(out, [[\section{]] .. CapFirst(Tr("species")) .. [[}]])
-        Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("species")) .. [[}]])
+        Append(out, [[\chapter{Peoples}]])
+        Append(out, [[\section{Species}]])
+        Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ Species}]])
         Append(out, [[\begin{itemize}]])
         Append(out, [[\item \nameref{human}]])
         Append(out, [[\end{itemize}]])
@@ -52,14 +52,14 @@ local function generateExpected(primaryType, isKarlReferenced)
     Append(out, [[\chapter{]] .. CapFirst(Tr("only_mentioned")) .. [[}]])
 
     if primaryType ~= "species" then
-        if isKarlReferenced or primaryType == "npcs" then
+        if isKarlReferenced or primaryType == "NPCs" then
             Append(out, [[\subparagraph{Human}]])
             Append(out, [[\label{human}]])
             Append(out, [[\hspace{1cm}]])
         end
     end
 
-    if primaryType ~= "npcs" then
+    if primaryType ~= "NPCs" then
         if isKarlReferenced then
             Append(out, [[\subparagraph{Peter}]])
             Append(out, [[\label{peter}]])
@@ -77,7 +77,7 @@ end
 local expected = {}
 
 local function typeSetup()
-    TexApi.addType { metatype = "characters", type = "npcs" }
+    TexApi.addType { metatype = "characters", type = "NPCs" }
     TexApi.addType { metatype = "peoples", type = "species" }
 end
 
@@ -102,13 +102,13 @@ AssertAutomatedChapters("species-are-primary-types-npc-is-only-mentioned", expec
 
 local function refSetup3()
     TexApi.mention("karl")
-    TexApi.makeTypePrimaryWhenMentioned("npcs")
+    TexApi.makeTypePrimaryWhenMentioned("NPCs")
     typeSetup()
 end
 
 setup()
-expected = generateExpected("npcs", false)
-AssertAutomatedChapters("npcs-are-primary-types-one-is-only-mentioned", expected, refSetup3)
+expected = generateExpected("NPCs", false)
+AssertAutomatedChapters("NPCs-are-primary-types-one-is-only-mentioned", expected, refSetup3)
 
 local function refSetup4()
     TexApi.mention("karl")
@@ -118,7 +118,7 @@ end
 
 setup()
 expected = generateExpected(nil, true)
-AssertAutomatedChapters("two-npcs-one-primary", expected, refSetup4)
+AssertAutomatedChapters("two-NPCs-one-primary", expected, refSetup4)
 
 local function refSetup5()
     TexApi.mention("karl")
@@ -134,10 +134,10 @@ AssertAutomatedChapters("species-are-primary-types-one-npc-explicitly-referenced
 local function refSetup6()
     TexApi.mention("karl")
     TexApi.makeEntityPrimary("karl")
-    TexApi.makeTypePrimaryWhenMentioned("npcs")
+    TexApi.makeTypePrimaryWhenMentioned("NPCs")
     typeSetup()
 end
 
 setup()
-expected = generateExpected("npcs", true)
-AssertAutomatedChapters("npcs-are-primary-types-one-explicitly-referenced", expected, refSetup6)
+expected = generateExpected("NPCs", true)
+AssertAutomatedChapters("NPCs-are-primary-types-one-explicitly-referenced", expected, refSetup6)

@@ -23,7 +23,7 @@ local function generateOther(language)
     end
 
     local out = {}
-    Append(out, [[\chapter{]] .. CapFirst(Tr("other")) .. [[}]])
+    Append(out, [[\chapter{Other}]])
     Append(out, [[\section{]] .. CapFirst(haiproducts) .. [[}]])
     Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(haiproducts) .. [[}]])
     Append(out, [[\begin{itemize}]])

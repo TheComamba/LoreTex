@@ -23,10 +23,10 @@ TexApi.newEntity = newEntity
 
 local function newCharacter(arg)
     if IsIn(arg.label, PCs) then
-        arg.type = "pcs"
+        arg.type = "PCs"
         newEntity(arg)
     else
-        arg.type = "npcs"
+        arg.type = "NPCs"
         newEntity(arg)
     end
 end

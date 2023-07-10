@@ -12,9 +12,9 @@ local function refSetup()
 end
 
 local expected = {}
-Append(expected, [[\chapter{]] .. CapFirst(Tr("places")) .. [[}]])
-Append(expected, [[\section{]] .. CapFirst(Tr("places")) .. [[}]])
-Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("places")) .. [[}]])
+Append(expected, [[\chapter{Places}]])
+Append(expected, [[\section{Places}]])
+Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ Places}]])
 Append(expected, [[\begin{itemize}]])
 Append(expected, [[\item \nameref{tattooine}]])
 Append(expected, [[\end{itemize}]])

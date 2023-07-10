@@ -8,9 +8,9 @@ end
 
 local function generateExpected(isSecondAdded)
     local out = {}
-    Append(out, [[\chapter{]] .. CapFirst(Tr("places")) .. [[}]])
-    Append(out, [[\section{]] .. CapFirst(Tr("places")) .. [[}]])
-    Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("places")) .. [[}]])
+    Append(out, [[\chapter{Places}]])
+    Append(out, [[\section{Places}]])
+    Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ Places}]])
     Append(out, [[\begin{itemize}]])
     Append(out, [[\item \nameref{test-1}]])
     if isSecondAdded then

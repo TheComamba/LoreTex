@@ -6,14 +6,14 @@ for key, isAgingDefined in pairs({ false, true }) do
         TexApi.setAgeFactor(1)
     end
 
-    TexApi.newEntity { type = "npcs", label = "test-npc", name = "Test NPC" }
+    TexApi.newEntity { type = "NPCs", label = "test-npc", name = "Test NPC" }
     TexApi.setSpecies("test-species")
     TexApi.born { year = -20, event = "Birth." }
 
     local expected = {}
-    Append(expected, [[\chapter{]] .. CapFirst(Tr("characters")) .. [[}]])
-    Append(expected, [[\section{]] .. CapFirst(Tr("npcs")) .. [[}]])
-    Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("npcs")) .. [[}]])
+    Append(expected, [[\chapter{Characters}]])
+    Append(expected, [[\section{NPCs}]])
+    Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ NPCs}]])
     Append(expected, [[\begin{itemize}]])
     Append(expected, [[\item \nameref{test-npc}]])
     Append(expected, [[\end{itemize}]])
@@ -33,9 +33,9 @@ for key, isAgingDefined in pairs({ false, true }) do
             [[\item 0 (]] .. Tr("this_year") .. [[):\\ \nameref{test-npc} ]] .. Tr("is") .. [[ ]] .. Tr("young") .. [[.]])
     end
     Append(expected, [[\end{itemize}]])
-    Append(expected, [[\chapter{]] .. CapFirst(Tr("peoples")) .. [[}]])
-    Append(expected, [[\section{]] .. CapFirst(Tr("species")) .. [[}]])
-    Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("species")) .. [[}]])
+    Append(expected, [[\chapter{Peoples}]])
+    Append(expected, [[\section{Species}]])
+    Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ Species}]])
     Append(expected, [[\begin{itemize}]])
     Append(expected, [[\item \nameref{test-species}]])
     Append(expected, [[\end{itemize}]])
@@ -60,7 +60,7 @@ for key, isAgingDefined in pairs({ false, true }) do
 
     local function setup()
         TexApi.makeAllEntitiesPrimary()
-        TexApi.addType { metatype = "characters", type = "npcs" }
+        TexApi.addType { metatype = "characters", type = "NPCs" }
         TexApi.addType { metatype = "peoples", type = "species" }
     end
 

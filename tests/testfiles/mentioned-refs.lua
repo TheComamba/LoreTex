@@ -1,21 +1,21 @@
-TexApi.newEntity { type = "npcs", label = "primary-npc", name = "Primary NPC" }
+TexApi.newEntity { type = "NPCs", label = "primary-npc", name = "Primary NPC" }
 TexApi.setDescriptor { descriptor = "Description", description = [[Different than \nameref{other-npc}.]] }
 TexApi.addParent { parentLabel = "some-organisation" }
-TexApi.newEntity { type = "npcs", label = "mentioned-npc", name = "Mentioned NPC" }
-TexApi.newEntity { type = "npcs", label = "other-npc", name = "Other NPC" }
-TexApi.newEntity { type = "npcs", label = "not-mentioned-npc", name = "Not mentioned NPC" }
+TexApi.newEntity { type = "NPCs", label = "mentioned-npc", name = "Mentioned NPC" }
+TexApi.newEntity { type = "NPCs", label = "other-npc", name = "Other NPC" }
+TexApi.newEntity { type = "NPCs", label = "not-mentioned-npc", name = "Not mentioned NPC" }
 TexApi.newEntity { type = "other", label = "some-organisation", name = "Some Organisation" }
 
 local function refSetup()
     TexApi.makeEntityPrimary("primary-npc")
     TexApi.mention("mentioned-npc")
-    TexApi.addType { metatype = "characters", type = "npcs" }
+    TexApi.addType { metatype = "characters", type = "NPCs" }
 end
 
 local expected = {}
-Append(expected, [[\chapter{]] .. CapFirst(Tr("characters")) .. [[}]])
-Append(expected, [[\section{]] .. CapFirst(Tr("npcs")) .. [[}]])
-Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("npcs")) .. [[}]])
+Append(expected, [[\chapter{Characters}]])
+Append(expected, [[\section{NPCs}]])
+Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ NPCs}]])
 Append(expected, [[\begin{itemize}]])
 Append(expected, [[\item \nameref{primary-npc}]])
 Append(expected, [[\end{itemize}]])

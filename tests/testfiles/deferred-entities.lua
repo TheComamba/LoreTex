@@ -12,9 +12,9 @@ local function setup1()
     TexApi.addType { metatype = "places", type = "places" }
 end
 local expected = {}
-Append(expected, [[\chapter{]] .. CapFirst(Tr("places")) .. [[}]])
-Append(expected, [[\section{]] .. CapFirst(Tr("places")) .. [[}]])
-Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("places")) .. [[}]])
+Append(expected, [[\chapter{Places}]])
+Append(expected, [[\section{Places}]])
+Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ Places}]])
 Append(expected, [[\begin{itemize}]])
 Append(expected, [[\item \nameref{deferred-entity-2-alias}]])
 Append(expected, [[\item \nameref{deferred-entity-1}]])
@@ -40,7 +40,7 @@ Append(expected, [[\end{itemize}]])
 
 AssertAutomatedChapters("Deferred Entities", expected, setup1)
 
-TexApi.newEntity { type = "npcs", label = "some-npc", name = "Some NPC" }
+TexApi.newEntity { type = "NPCs", label = "some-npc", name = "Some NPC" }
 TexApi.setLocation("some-place")
 TexApi.addParent { parentLabel = "orga-sublabel", relationship = "Code-Cleaner" }
 TexApi.newEntity { type = "places", label = "some-place", name = "Some Place" }
@@ -49,13 +49,13 @@ TexApi.setDescriptor { descriptor = "Orga Sublabel", description = [[\label{orga
 
 local function setup2()
     TexApi.makeEntityPrimary("some-npc")
-    TexApi.addType { metatype = "characters", type = "npcs" }
+    TexApi.addType { metatype = "characters", type = "NPCs" }
 end
 
 expected = {}
-Append(expected, [[\chapter{]] .. CapFirst(Tr("characters")) .. [[}]])
-Append(expected, [[\section{]] .. CapFirst(Tr("npcs")) .. [[}]])
-Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("npcs")) .. [[}]])
+Append(expected, [[\chapter{Characters}]])
+Append(expected, [[\section{NPCs}]])
+Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ NPCs}]])
 Append(expected, [[\begin{itemize}]])
 Append(expected, [[\item \nameref{some-npc}]])
 Append(expected, [[\end{itemize}]])

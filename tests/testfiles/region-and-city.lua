@@ -12,9 +12,9 @@ local function setup()
 end
 
 local expected = {
-    [[\chapter{]] .. CapFirst(Tr("places")) .. [[}]],
-    [[\section{]] .. CapFirst(Tr("places")) .. [[}]],
-    [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("places")) .. [[}]],
+    [[\chapter{Places}]],
+    [[\section{Places}]],
+    [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ Places}]],
     [[\begin{itemize}]],
     [[\item \nameref{test-city}]],
     [[\item \nameref{test-continent}]],

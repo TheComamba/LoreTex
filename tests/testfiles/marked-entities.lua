@@ -1,24 +1,24 @@
 TexApi.setCurrentYear(0)
 
-TexApi.newEntity { type = "npcs", label = "flora", shortname = "", name = "Flora" }
+TexApi.newEntity { type = "NPCs", label = "flora", shortname = "", name = "Flora" }
 TexApi.born { year = -10, event = [[\nameref{flora} is born.\birthof{flora}]] }
 TexApi.died { year = -5, event = [[\nameref{flora} dies.\deathof{flora}]] }
 
 
-TexApi.newEntity { type = "npcs", label = "ramona", name = "Ramona" }
+TexApi.newEntity { type = "NPCs", label = "ramona", name = "Ramona" }
 TexApi.setSecret()
 TexApi.reveal("ramona")
 
 local function refSetup()
     TexApi.makeEntityPrimary("flora")
     TexApi.makeEntityPrimary("ramona")
-    TexApi.addType { metatype = "characters", type = "npcs" }
+    TexApi.addType { metatype = "characters", type = "NPCs" }
 end
 
 local expected = {}
-Append(expected, [[\chapter{]] .. CapFirst(Tr("characters")) .. [[}]])
-Append(expected, [[\section{]] .. CapFirst(Tr("npcs")) .. [[}]])
-Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("npcs")) .. [[}]])
+Append(expected, [[\chapter{Characters}]])
+Append(expected, [[\section{NPCs}]])
+Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ NPCs}]])
 Append(expected, [[\begin{itemize}]])
 Append(expected, [[\item \nameref{flora}]])
 Append(expected, [[\item \nameref{ramona}]])

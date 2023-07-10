@@ -31,9 +31,9 @@ end
 
 local function generateExpected(depth, height)
     local out = {}
-    Append(out, [[\chapter{]] .. CapFirst(Tr("other")) .. [[}]])
-    Append(out, [[\section{]] .. CapFirst(Tr("other")) .. [[}]])
-    Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("other")) .. [[}]])
+    Append(out, [[\chapter{Other}]])
+    Append(out, [[\section{Other}]])
+    Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ Other}]])
     Append(out, [[\begin{itemize}]])
     for i = 1, depth do
         Append(out, [[\item \nameref{mountain-]] .. i .. [[}]])

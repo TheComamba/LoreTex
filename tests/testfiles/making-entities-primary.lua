@@ -74,7 +74,7 @@ local function generateEntityFromLabel(label)
     Append(out, [[\label{]] .. label .. [[}]])
     if #(generateChildren(label)) > 0 then
         for key, typename in pairs(types) do
-            Append(out, [[\paragraph{]] .. CapFirst(Tr("affiliated")) .. [[ ]] .. Tr(typename) .. [[}]])
+            Append(out, [[\paragraph{]] .. CapFirst(Tr("affiliated")) .. [[ ]] .. typename .. [[}]])
             Append(out, [[\begin{itemize}]])
             Append(out, [[\item \nameref{]] .. label .. [[-]] .. typename .. [[}]])
             Append(out, [[\end{itemize}]])
@@ -121,9 +121,9 @@ local function generateChapter(typename, primaryLabels)
         return {}
     end
     local out = {}
-    Append(out, [[\chapter{]] .. CapFirst(Tr(typename)) .. [[}]])
-    Append(out, [[\section{]] .. CapFirst(Tr(typename)) .. [[}]])
-    Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr(typename)) .. [[}]])
+    Append(out, [[\chapter{]] .. CapFirst(typename) .. [[}]])
+    Append(out, [[\section{]] .. CapFirst(typename) .. [[}]])
+    Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(typename) .. [[}]])
     Append(out, [[\begin{itemize}]])
     for key, label in pairs(labelsOfType) do
         Append(out, [[\item \nameref{]] .. label .. [[}]])

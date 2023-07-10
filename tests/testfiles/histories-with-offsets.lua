@@ -29,9 +29,9 @@ end
 
 local function generateExpected(hasOffset)
     local out = {}
-    Append(out, [[\chapter{]] .. CapFirst(Tr("other")) .. [[}]])
-    Append(out, [[\section{]] .. CapFirst(Tr("other")) .. [[}]])
-    Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("other")) .. [[}]])
+    Append(out, [[\chapter{Other}]])
+    Append(out, [[\section{Other}]])
+    Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ Other}]])
     Append(out, [[\begin{itemize}]])
     Append(out, [[\item \nameref{test}]])
     Append(out, [[\end{itemize}]])

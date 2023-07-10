@@ -2,7 +2,7 @@ local function entitySetup()
     TexApi.addType { metatype = "other", type = "organisations" }
     TexApi.addTranslation { language = "english", key = "organisations", translation = "organisations" }
 
-    TexApi.newEntity { type = "npcs", label = "normal", name = "Normal" }
+    TexApi.newEntity { type = "NPCs", label = "normal", name = "Normal" }
     TexApi.addParent { parentLabel = "normal-orga" }
     TexApi.addParent { parentLabel = "secret-orga" }
     TexApi.addParent { parentLabel = "revealed-orga" }
@@ -12,7 +12,7 @@ local function entitySetup()
     TexApi.addHistory { year = -8, event = [[Concerns \reference{revealed}]] }
     TexApi.addSecretHistory { year = -5, event = [[Secret event]] }
     
-    TexApi.newEntity { type = "npcs", label = "secret", name = "Secret" }
+    TexApi.newEntity { type = "NPCs", label = "secret", name = "Secret" }
     TexApi.setSecret()
     TexApi.addParent { parentLabel = "normal-orga" }
     TexApi.addParent { parentLabel = "secret-orga" }
@@ -20,7 +20,7 @@ local function entitySetup()
     TexApi.addParent { parentLabel = "unborn-orga" }
     TexApi.addHistory { year = -7, event = [[Concerns \reference{normal}]] }
     
-    TexApi.newEntity { type = "npcs", label = "revealed", name = "Revealed" }
+    TexApi.newEntity { type = "NPCs", label = "revealed", name = "Revealed" }
     TexApi.setSecret()
     TexApi.addParent { parentLabel = "normal-orga" }
     TexApi.addParent { parentLabel = "secret-orga" }
@@ -28,14 +28,14 @@ local function entitySetup()
     TexApi.addParent { parentLabel = "unborn-orga" }
     TexApi.addHistory { year = -6, event = [[Concerns \reference{normal}]] }
     
-    TexApi.newEntity { type = "npcs", label = "unborn", name = "Unborn" }
+    TexApi.newEntity { type = "NPCs", label = "unborn", name = "Unborn" }
     TexApi.addParent { parentLabel = "normal-orga" }
     TexApi.addParent { parentLabel = "secret-orga" }
     TexApi.addParent { parentLabel = "revealed-orga" }
     TexApi.addParent { parentLabel = "unborn-orga" }
     TexApi.addHistory { year = 10, event = [[Created.\birthof{unborn}]] }
     
-    TexApi.newEntity { type = "npcs", label = "at_secret_location", name = "At secret Location" }
+    TexApi.newEntity { type = "NPCs", label = "at_secret_location", name = "At secret Location" }
     TexApi.setLocation("eldorado")
     TexApi.addParent { parentLabel = "normal-orga" }
     TexApi.addParent { parentLabel = "secret-orga" }
@@ -67,12 +67,12 @@ local function refSetup()
     TexApi.reveal("revealed-orga")
 
     TexApi.setCurrentYear(0)
-    TexApi.addType { metatype = "characters", type = "npcs" }
+    TexApi.addType { metatype = "characters", type = "NPCs" }
 end
 
-local function npcsParagraph(isShowSecrets, isShowFuture)
+local function NPCsParagraph(isShowSecrets, isShowFuture)
     local out = {}
-    Append(out, [[\paragraph{]] .. CapFirst(Tr("affiliated")) .. [[ ]] .. Tr("npcs") .. [[}]])
+    Append(out, [[\paragraph{]] .. CapFirst(Tr("affiliated")) .. [[ ]] .. Tr("NPCs") .. [[}]])
     Append(out, [[\begin{itemize}]])
     if isShowSecrets then
         Append(out, [[\item \nameref{at_secret_location} (]] .. Tr("located_in") .. [[ \nameref{eldorado})]])
@@ -114,9 +114,9 @@ end
 
 local function charactersChapter(isShowSecrets, isShowFuture)
     local out = {}
-    Append(out, [[\chapter{]] .. CapFirst(Tr("characters")) .. [[}]])
-    Append(out, [[\section{]] .. CapFirst(Tr("npcs")) .. [[}]])
-    Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("npcs")) .. [[}]])
+    Append(out, [[\chapter{Characters}]])
+    Append(out, [[\section{NPCs}]])
+    Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ NPCs}]])
     Append(out, [[\begin{itemize}]])
     Append(out, [[\item \nameref{at_secret_location}]])
     Append(out, [[\item \nameref{normal}]])
@@ -192,7 +192,7 @@ end
 
 local function otherChapter(isShowSecrets, isShowFuture)
     local out = {}
-    Append(out, [[\chapter{]] .. CapFirst(Tr("other")) .. [[}]])
+    Append(out, [[\chapter{Other}]])
     Append(out, [[\section{]] .. CapFirst(Tr("organisations")) .. [[}]])
     Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("organisations")) .. [[}]])
     Append(out, [[\begin{itemize}]])
@@ -206,14 +206,14 @@ local function otherChapter(isShowSecrets, isShowFuture)
     Append(out, [[\subsection{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
     Append(out, [[\subsubsection{Normal Organisation}]])
     Append(out, [[\label{normal-orga}]])
-    Append(out, npcsParagraph(isShowSecrets, isShowFuture))
+    Append(out, NPCsParagraph(isShowSecrets, isShowFuture))
     Append(out, [[\subsubsection[Revealed Organisation]{Revealed Organisation (]] .. CapFirst(Tr("secret")) .. [[)}]])
     Append(out, [[\label{revealed-orga}]])
-    Append(out, npcsParagraph(isShowSecrets, isShowFuture))
+    Append(out, NPCsParagraph(isShowSecrets, isShowFuture))
     if isShowFuture then
         Append(out, [[\subsubsection{Unborn Organisation}]])
         Append(out, [[\label{unborn-orga}]])
-        Append(out, npcsParagraph(isShowSecrets, isShowFuture))
+        Append(out, NPCsParagraph(isShowSecrets, isShowFuture))
         Append(out, [[\paragraph{]] .. CapFirst(Tr("history")) .. [[}]])
         Append(out, [[\begin{itemize}]])
         Append(out, [[\item 10 (]] .. Tr("in_x_years", { 10 }) .. [[):\\ Founded.\birthof{unborn-orga}]])

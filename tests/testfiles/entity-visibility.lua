@@ -72,7 +72,7 @@ end
 
 local function NPCsParagraph(isShowSecrets, isShowFuture)
     local out = {}
-    Append(out, [[\paragraph{]] .. CapFirst(Tr("affiliated")) .. [[ ]] .. Tr("NPCs") .. [[}]])
+    Append(out, [[\paragraph{]] .. CapFirst(Tr("affiliated")) .. [[ NPCs}]])
     Append(out, [[\begin{itemize}]])
     if isShowSecrets then
         Append(out, [[\item \nameref{at_secret_location} (]] .. Tr("located_in") .. [[ \nameref{eldorado})]])

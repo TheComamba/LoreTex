@@ -19,9 +19,9 @@ end
 
 local function generateExpected(isItemReferenced, isShowSecrets)
     local out = {}
-    Append(out, [[\chapter{]] .. CapFirst(Tr("chronologies")) .. [[}]])
-    Append(out, [[\section{]] .. CapFirst(Tr("stories")) .. [[}]])
-    Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("stories")) .. [[}]])
+    Append(out, [[\chapter{Chronologies}]])
+    Append(out, [[\section{Stories}]])
+    Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ Stories}]])
     Append(out, [[\begin{itemize}]])
     Append(out, [[\item \nameref{teststory}]])
     Append(out, [[\end{itemize}]])

@@ -1,16 +1,12 @@
 local function setup()
-    TexApi.addType { metatype = "other", type = "hair-products" }
+    TexApi.addType { metatype = "other", type = "hair products" }
     TexApi.addType { metatype = "nonsense", type = "laces" }
 
-    TexApi.addTranslation { language = "english", key = "hair-products", translation = "hair products" }
+    TexApi.addTranslation { language = "english", key = "hair products", translation = "hair products" }
     TexApi.addTranslation { language = "english", key = "nonsense", translation = "nonsense" }
     TexApi.addTranslation { language = "english", key = "laces", translation = "laces" }
 
-    TexApi.addTranslation { language = "german", key = "hair-products", translation = "Haarprodukte" }
-    TexApi.addTranslation { language = "german", key = "nonsense", translation = "Unfug" }
-    TexApi.addTranslation { language = "german", key = "laces", translation = [[Schnürsenkel]] }
-
-    TexApi.newEntity { type = "hair-products", label = "cream", name = "Cream" }
+    TexApi.newEntity { type = "hair products", label = "cream", name = "Cream" }
     TexApi.newEntity { type = "laces", label = "red-laces", name = "Red laces" }
 end
 
@@ -75,11 +71,5 @@ end
 
 local expected = {}
 setup()
-TexApi.selectLanguage("english")
 expected = generateExpected("english")
-AssertAutomatedChapters("New type (english)", expected, TexApi.makeAllEntitiesPrimary)
-
-setup()
-TexApi.selectLanguage("german")
-expected = generateExpected("german")
-AssertAutomatedChapters("New type (german)", expected, TexApi.makeAllEntitiesPrimary)
+AssertAutomatedChapters("New type", expected, TexApi.makeAllEntitiesPrimary)

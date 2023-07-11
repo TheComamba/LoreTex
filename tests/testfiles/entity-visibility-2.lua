@@ -8,7 +8,7 @@ end
 
 local function generateHistoryParagraph()
     local out = {}
-    Append(out, [[\paragraph{]] .. CapFirst(Tr("history")) .. [[}]])
+    Append(out, [[\subsubsection{]] .. CapFirst(Tr("history")) .. [[}]])
     Append(out, [[\begin{itemize}]])
     Append(out,
         [[\item -10 (]] ..
@@ -19,34 +19,34 @@ end
 
 local function generateExpected(isItemReferenced, isShowSecrets)
     local out = {}
-    Append(out, [[\chapter{Chronologies}]])
-    Append(out, [[\section{Stories}]])
-    Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ Stories}]])
+    if isShowSecrets and isItemReferenced then
+        Append(out, [[\chapter{Other}]])
+        Append(out, [[\section*{]] .. CapFirst(Tr("all")) .. [[ Other}]])
+        Append(out, [[\begin{itemize}]])
+        Append(out, [[\item \nameref{secret-item}]])
+        Append(out, [[\end{itemize}]])
+        Append(out, [[\section{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
+        Append(out, [[\subsection[Secret Item]{Secret Item (]] .. CapFirst(Tr("secret")) .. [[)}]])
+        Append(out, [[\label{secret-item}]])
+        Append(out, generateHistoryParagraph())
+    end
+    Append(out, [[\chapter{Stories}]])
+    Append(out, [[\section*{]] .. CapFirst(Tr("all")) .. [[ Stories}]])
     Append(out, [[\begin{itemize}]])
     Append(out, [[\item \nameref{teststory}]])
     Append(out, [[\end{itemize}]])
-    Append(out, [[\subsection{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
-    Append(out, [[\subsubsection{Teststory}]])
+    Append(out, [[\section{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
+    Append(out, [[\subsection{Teststory}]])
     Append(out, [[\label{teststory}]])
     if isShowSecrets then
         Append(out, generateHistoryParagraph())
-        if isItemReferenced then
-            Append(out, [[\chapter{Other}]])
-            Append(out, [[\section{Other}]])
-            Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ Other}]])
-            Append(out, [[\begin{itemize}]])
-            Append(out, [[\item \nameref{secret-item}]])
-            Append(out, [[\end{itemize}]])
-            Append(out, [[\subsection{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
-            Append(out, [[\subsubsection[Secret Item]{Secret Item (]] .. CapFirst(Tr("secret")) .. [[)}]])
-            Append(out, [[\label{secret-item}]])
-            Append(out, generateHistoryParagraph())
-        else
-            Append(out, [[\chapter{]] .. CapFirst(Tr("only_mentioned")) .. [[}]])
-            Append(out, [[\subparagraph{Secret Item}]])
-            Append(out, [[\label{secret-item}]])
-            Append(out, [[\hspace{1cm}]])
-        end
+    end
+
+    if isShowSecrets and not isItemReferenced then
+        Append(out, [[\chapter{]] .. CapFirst(Tr("only_mentioned")) .. [[}]])
+        Append(out, [[\subparagraph{Secret Item}]])
+        Append(out, [[\label{secret-item}]])
+        Append(out, [[\hspace{1cm}]])
     end
     return out
 end
@@ -55,8 +55,6 @@ local expected = {}
 
 local function refSetup1()
     TexApi.makeEntityPrimary("teststory")
-    TexApi.addType { metatype = "chronologies", type = "stories" }
-    TexApi.addType { metatype = "other", type = "other" }
     TexApi.setCurrentYear(0)
 end
 

@@ -9,24 +9,22 @@ TexApi.newEntity { type = "other", label = "some-organisation", name = "Some Org
 local function refSetup()
     TexApi.makeEntityPrimary("primary-npc")
     TexApi.mention("mentioned-npc")
-    TexApi.addType { metatype = "characters", type = "NPCs" }
 end
 
 local expected = {}
-Append(expected, [[\chapter{Characters}]])
-Append(expected, [[\section{NPCs}]])
-Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ NPCs}]])
+Append(expected, [[\chapter{NPCs}]])
+Append(expected, [[\section*{]] .. CapFirst(Tr("all")) .. [[ NPCs}]])
 Append(expected, [[\begin{itemize}]])
 Append(expected, [[\item \nameref{primary-npc}]])
 Append(expected, [[\end{itemize}]])
-Append(expected, [[\subsection{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
-Append(expected, [[\subsubsection{Primary NPC}]])
+Append(expected, [[\section{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
+Append(expected, [[\subsection{Primary NPC}]])
 Append(expected, [[\label{primary-npc}]])
-Append(expected, [[\paragraph{]] .. CapFirst(Tr("affiliations")) .. [[}]])
+Append(expected, [[\subsubsection{]] .. CapFirst(Tr("affiliations")) .. [[}]])
 Append(expected, [[\begin{itemize}]])
 Append(expected, [[\item ]] .. CapFirst(Tr("member")) .. [[ ]] .. Tr("of") .. [[ \nameref{some-organisation}.]])
 Append(expected, [[\end{itemize}]])
-Append(expected, [[\paragraph{Description}]])
+Append(expected, [[\subsubsection{Description}]])
 Append(expected, [[Different than \nameref{other-npc}.]])
 
 Append(expected, [[\chapter{]] .. CapFirst(Tr("only_mentioned")) .. [[}]])

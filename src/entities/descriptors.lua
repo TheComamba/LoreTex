@@ -21,7 +21,7 @@ function SetDescriptor(arg)
     if not IsEmpty(ScanForCmd(arg.description, "label")) then
         arg.description = ContentToEntity { name = arg.descriptor, content = arg.description }
         MakePartOf { subEntity = arg.description, mainEntity = arg.entity }
-    elseif not IsEmpty(ScanForCmd(arg.description, "subparagraph")) then
+    elseif IsMapString(arg.description) then
         arg.description = ContentToMap(arg.description)
     elseif not IsEmpty(arg.subdescriptor) then
         local content = arg.description

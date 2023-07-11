@@ -9,27 +9,26 @@ end
 local function generateExpected(isSecondAdded)
     local out = {}
     Append(out, [[\chapter{Places}]])
-    Append(out, [[\section{Places}]])
-    Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ Places}]])
+    Append(out, [[\section*{]] .. CapFirst(Tr("all")) .. [[ Places}]])
     Append(out, [[\begin{itemize}]])
     Append(out, [[\item \nameref{test-1}]])
     if isSecondAdded then
         Append(out, [[\item \nameref{test-2}]])
     end
     Append(out, [[\end{itemize}]])
-    Append(out, [[\subsection{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
-    Append(out, [[\subsubsection{Test 1}]])
+    Append(out, [[\section{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
+    Append(out, [[\subsection{Test 1}]])
     Append(out, [[\label{test-1}]])
-    Append(out, [[\paragraph{]] .. CapFirst(Tr("history")) .. [[}]])
+    Append(out, [[\subsubsection{]] .. CapFirst(Tr("history")) .. [[}]])
     Append(out, [[\begin{itemize}]])
     Append(out,
         [[\item -10 (]] ..
         Tr("x_years_ago", { 10 }) .. [[):\\ Event that concerns \nameref{test-1} and \itref{test-2}.]])
     Append(out, [[\end{itemize}]])
     if isSecondAdded then
-        Append(out, [[\subsubsection{Test 2}]])
+        Append(out, [[\subsection{Test 2}]])
         Append(out, [[\label{test-2}]])
-        Append(out, [[\paragraph{]] .. CapFirst(Tr("history")) .. [[}]])
+        Append(out, [[\subsubsection{]] .. CapFirst(Tr("history")) .. [[}]])
         Append(out, [[\begin{itemize}]])
         Append(out,
             [[\item -10 (]] ..
@@ -47,7 +46,6 @@ end
 local function refSetup1()
     TexApi.setCurrentYear(0)
     TexApi.makeEntityPrimary("test-1")
-    TexApi.addType { metatype = "places", type = "places" }
 end
 
 local function refSetup2()

@@ -22,9 +22,8 @@ end
 local function generateExpected(typename, includesShortname, includesSubname)
     local out = {}
     Append(out, [[\chapter{]] .. CapFirst(typename) .. [[}]])
-    Append(out, [[\section{]] .. CapFirst(typename) .. [[}]])
 
-    Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(typename) .. [[}]])
+    Append(out, [[\section*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(typename) .. [[}]])
     Append(out, [[\begin{itemize}]])
     Append(out, [[\item \nameref{]] .. typename .. [[-1}]])
     Append(out, [[\item \nameref{]] .. typename .. [[-2}]])
@@ -34,31 +33,31 @@ local function generateExpected(typename, includesShortname, includesSubname)
     end
     Append(out, [[\end{itemize}]])
 
-    Append(out, [[\subsection{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
+    Append(out, [[\section{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
     if includesShortname then
-        Append(out, [[\subsubsection[Shorty]{]] .. typename .. [[ 1}]])
+        Append(out, [[\subsection[Shorty]{]] .. CapFirst(typename) .. [[ 1}]])
     else
-        Append(out, [[\subsubsection{]] .. typename .. [[ 1}]])
+        Append(out, [[\subsection{]] .. CapFirst(typename) .. [[ 1}]])
     end
     Append(out, [[\label{]] .. typename .. [[-1}]])
-    Append(out, [[\paragraph{]] .. CapFirst(Tr("affiliated")) .. [[ ]] .. CapFirst(typename) .. [[}]])
+    Append(out, [[\subsubsection{]] .. CapFirst(Tr("affiliated")) .. [[ ]] .. CapFirst(typename) .. [[}]])
     Append(out, [[\begin{itemize}]])
     Append(out, [[\item \nameref{]] .. typename .. [[-2}]])
     Append(out, [[\end{itemize}]])
 
     if includesShortname then
-        Append(out, [[\subsection{]] .. CapFirst(Tr("located_in")) .. [[ Shorty}]])
+        Append(out, [[\section{]] .. CapFirst(Tr("located_in")) .. [[ Shorty}]])
     else
-        Append(out, [[\subsection{]] .. CapFirst(Tr("located_in")) .. [[ ]] .. typename .. [[ 1}]])
+        Append(out, [[\section{]] .. CapFirst(Tr("located_in")) .. [[ ]] .. typename .. [[ 1}]])
     end
-    Append(out, [[\subsubsection{]] .. typename .. [[ 2}]])
+    Append(out, [[\subsection{]] .. CapFirst(typename) .. [[ 2}]])
     Append(out, [[\label{]] .. typename .. [[-2}]])
     if includesSubname then
-        Append(out, [[\paragraph{Subname}]])
+        Append(out, [[\subsubsection{Subname}]])
         Append(out, [[\label{sublabel}]])
-        Append(out, [[\subparagraph{]] .. CapFirst(Tr("affiliated")) .. [[ ]] .. CapFirst(typename) .. [[}]])
-    else
         Append(out, [[\paragraph{]] .. CapFirst(Tr("affiliated")) .. [[ ]] .. CapFirst(typename) .. [[}]])
+    else
+        Append(out, [[\subsubsection{]] .. CapFirst(Tr("affiliated")) .. [[ ]] .. CapFirst(typename) .. [[}]])
     end
     Append(out, [[\begin{itemize}]])
     Append(out, [[\item \nameref{]] .. typename .. [[-3}]])
@@ -66,27 +65,25 @@ local function generateExpected(typename, includesShortname, includesSubname)
 
     if includesShortname then
         if includesSubname then
-            Append(out, [[\subsection{]] .. CapFirst(Tr("located_in")) .. [[ Shorty - Subname}]])
+            Append(out, [[\section{]] .. CapFirst(Tr("located_in")) .. [[ Shorty - Subname}]])
         else
-            Append(out, [[\subsection{]] .. CapFirst(Tr("located_in")) .. [[ Shorty - ]] .. typename .. [[ 2}]])
+            Append(out, [[\section{]] .. CapFirst(Tr("located_in")) .. [[ Shorty - ]] .. typename .. [[ 2}]])
         end
     else
         if includesSubname then
-            Append(out, [[\subsection{]] .. CapFirst(Tr("located_in")) .. [[ ]] .. typename .. [[ 1 - Subname}]])
+            Append(out, [[\section{]] .. CapFirst(Tr("located_in")) .. [[ ]] .. typename .. [[ 1 - Subname}]])
         else
             Append(out,
-                [[\subsection{]] .. CapFirst(Tr("located_in")) .. [[ ]] .. typename .. [[ 1 - ]] .. typename .. [[ 2}]])
+                [[\section{]] .. CapFirst(Tr("located_in")) .. [[ ]] .. typename .. [[ 1 - ]] .. typename .. [[ 2}]])
         end
     end
-    Append(out, [[\subsubsection{]] .. typename .. [[ 3}]])
+    Append(out, [[\subsection{]] .. CapFirst(typename) .. [[ 3}]])
     Append(out, [[\label{]] .. typename .. [[-3}]])
     return out
 end
 
 local function setup()
     TexApi.makeAllEntitiesPrimary()
-    TexApi.addType { metatype = "places", type = "places" }
-    TexApi.addType { metatype = "other", type = "other" }
 end
 
 for key, typename in pairs({ "places", "other" }) do

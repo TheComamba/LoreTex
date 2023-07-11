@@ -4,7 +4,11 @@ local function newEntity(name, depth)
         TexApi.setDescriptor { descriptor = name .. 2, description = [[\label{]] .. name .. 2 .. [[}]] }
     elseif depth == 3 then
         TexApi.setDescriptor { descriptor = name .. 2,
-            description = [[\subparagraph{]] .. name .. 3 .. [[}\label{]] .. name .. 3 .. [[}]] }
+            description = [[\paragraph{]] .. name .. 3 .. [[}\label{]] .. name .. 3 .. [[}]] }
+    elseif depth == 4 then
+        TexApi.setDescriptor { descriptor = name .. 3,
+            description = [[\paragraph{]] .. name .. 3 .. [[}\label{]] .. name .. 3 .. [[}
+            \subparagraph{]] .. name .. 4 .. [[}\label{]] .. name .. 4 .. [[}]] }
     end
 end
 
@@ -76,18 +80,17 @@ end
 local function generateExpected(depth, modification)
     local out = {}
     Append(out, [[\chapter{Other}]])
-    Append(out, [[\section{Other}]])
-    Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ Other}]])
+    Append(out, [[\section*{]] .. CapFirst(Tr("all")) .. [[ Other}]])
     Append(out, [[\begin{itemize}]])
     Append(out, [[\item \nameref{char}]])
     Append(out, [[\end{itemize}]])
-    Append(out, [[\subsection{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
-    Append(out, [[\subsubsection{char}]])
+    Append(out, [[\section{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
+    Append(out, [[\subsection{Char}]])
     Append(out, [[\label{char}]])
-    Append(out, [[\paragraph{]] .. CapFirst(Tr("appearance")) .. [[}]])
-    Append(out, [[\subparagraph{]] .. CapFirst(Tr("species_and_age")) .. [[:}]])
+    Append(out, [[\subsubsection{]] .. CapFirst(Tr("appearance")) .. [[}]])
+    Append(out, [[\paragraph{]] .. CapFirst(Tr("species_and_age")) .. [[:}]])
     Append(out, generateAppearance(depth, modification))
-    Append(out, [[\paragraph{]] .. CapFirst(Tr("history")) .. [[}]])
+    Append(out, [[\subsubsection{]] .. CapFirst(Tr("history")) .. [[}]])
     Append(out, [[\begin{itemize}]])
     Append(out, [[\item 0 (]] .. Tr("x_years_ago", { 100 }) .. [[): \\Born.]])
     for key, age in pairs(generateAgeAtLifestages(modification)) do
@@ -110,10 +113,9 @@ end
 local function setup()
     TexApi.setCurrentYear(100)
     TexApi.makeEntityPrimary("char")
-    TexApi.addType { metatype = "other", type = "other" }
 end
 
-for depth = 1, 3 do
+for depth = 1, 4 do
     for _, modification in pairs({ "none", "not-aging", "normal", "factor", "exponent", "both", "mixing" }) do
         newEntity("species-1-", depth)
         if modification == "not-aging" then

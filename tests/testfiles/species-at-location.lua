@@ -8,20 +8,18 @@ TexApi.setLocation("tattooine")
 
 local function refSetup()
     TexApi.makeEntityPrimary("tattooine")
-    TexApi.addType { metatype = "places", type = "places" }
 end
 
 local expected = {}
 Append(expected, [[\chapter{Places}]])
-Append(expected, [[\section{Places}]])
-Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ Places}]])
+Append(expected, [[\section*{]] .. CapFirst(Tr("all")) .. [[ Places}]])
 Append(expected, [[\begin{itemize}]])
 Append(expected, [[\item \nameref{tattooine}]])
 Append(expected, [[\end{itemize}]])
-Append(expected, [[\subsection{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
-Append(expected, [[\subsubsection{Tattooine}]])
+Append(expected, [[\section{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
+Append(expected, [[\subsection{Tattooine}]])
 Append(expected, [[\label{tattooine}]])
-Append(expected, [[\paragraph{]] .. CapFirst(Tr("affiliated")) .. [[ Species}]])
+Append(expected, [[\subsubsection{]] .. CapFirst(Tr("affiliated")) .. [[ Species}]])
 Append(expected, [[\begin{itemize}]])
 Append(expected, [[\item \nameref{jawa}]])
 Append(expected, [[\item \nameref{tusken}]])

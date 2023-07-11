@@ -55,7 +55,7 @@ end
 local function extractLabel(arg)
     local labels = ScanStringForCmd(arg.content, "label")
     for i = 2, #labels do
-        LogError("Label \"" .. labels[i] .. "\" will be ignored.")
+        LogError("Additional label \"" .. labels[i] .. "\" will be ignored.")
     end
     if #labels > 0 then
         return labels[1]
@@ -83,11 +83,11 @@ function ContentToEntity(arg)
     return newEntity
 end
 
-local function splitContentAtSubparagraph(content)
+local function splitContentAt(content, level)
     local contentSplit = {}
     local lastpos = 0
     while lastpos >= 0 do
-        local nextpos = string.find(content, [[\subparagraph]], lastpos + 1)
+        local nextpos = string.find(content, [[\]] .. level, lastpos + 1)
         local part = ""
         if nextpos == nil then
             part = string.sub(content, lastpos)
@@ -101,9 +101,9 @@ local function splitContentAtSubparagraph(content)
     return contentSplit
 end
 
-local function addMapEntry(map, content, name)
-    local posSubpara = string.find(content, "subparagraph")
-    local earliestActualContent = posSubpara + string.len("subparagraph") + string.len(name)
+local function addMapEntry(map, content, name, level)
+    local posSubpara = string.find(content, level)
+    local earliestActualContent = posSubpara + string.len(level) + string.len(name)
     local beginActualContent = string.find(content, [[}]], earliestActualContent) + 1
     local actualContent = string.sub(content, beginActualContent)
     if string.find(actualContent, "label") ~= nil then
@@ -114,27 +114,39 @@ local function addMapEntry(map, content, name)
     end
 end
 
-local function listToMap(list)
+local function listToMap(list, level)
     local map = {}
     if not IsEmpty(list[1]) then
         map[GetProtectedDescriptor("content")] = list[1]
     end
     for i = 2, #list do
         local content = list[i]
-        local name = ScanForCmd(content, "subparagraph")[1]
+        local name = ScanForCmd(content, level)[1]
         if IsEmpty(name) then
-            LogError("Description contains empty subparagraph!")
+            LogError("Description contains empty " .. level)
             return map
         elseif map[name] ~= nil then
-            LogError("Subparagraph \"" .. name .. "\" is defined more than once!")
+            LogError(level .. " \"" .. name .. "\" is defined more than once!")
             return map
         end
-        addMapEntry(map, content, name)
+        addMapEntry(map, content, name, level)
     end
     return map
 end
 
 function ContentToMap(content)
-    local contentSplit = splitContentAtSubparagraph(content)
-    return listToMap(contentSplit)
+    local level = "paragraph"
+    if string.find(content, [[\paragraph]]) == nil then
+        level = "subparagraph"
+    end
+    local contentSplit = splitContentAt(content, level)
+    return listToMap(contentSplit, level)
+end
+
+function IsMapString(content)
+    if type(content) ~= "string" then
+        return false
+    else
+        return string.find(content, [[\paragraph]]) ~= nil or string.find(content, [[\subparagraph]]) ~= nil
+    end
 end

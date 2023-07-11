@@ -15,7 +15,6 @@ local function setupBase()
     TexApi.setDaysPerYear(200)
     TexApi.setCurrentYear(100)
     TexApi.makeEntityPrimary("test")
-    TexApi.addType { metatype = "other", type = "other" }
 end
 
 local function setupNoOffset()
@@ -30,15 +29,14 @@ end
 local function generateExpected(hasOffset)
     local out = {}
     Append(out, [[\chapter{Other}]])
-    Append(out, [[\section{Other}]])
-    Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ Other}]])
+    Append(out, [[\section*{]] .. CapFirst(Tr("all")) .. [[ Other}]])
     Append(out, [[\begin{itemize}]])
     Append(out, [[\item \nameref{test}]])
     Append(out, [[\end{itemize}]])
-    Append(out, [[\subsection{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
-    Append(out, [[\subsubsection{Test Entity}]])
+    Append(out, [[\section{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
+    Append(out, [[\subsection{Test Entity}]])
     Append(out, [[\label{test}]])
-    Append(out, [[\paragraph{]] .. CapFirst(Tr("history")) .. [[}]])
+    Append(out, [[\subsubsection{]] .. CapFirst(Tr("history")) .. [[}]])
     Append(out, [[\begin{itemize}]])
     local year = 0
     if hasOffset then

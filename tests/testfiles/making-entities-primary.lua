@@ -70,11 +70,11 @@ end
 
 local function generateEntityFromLabel(label)
     local out = {}
-    Append(out, [[\subsubsection{]] .. label .. [[}]])
+    Append(out, [[\subsection{]] .. CapFirst(label) .. [[}]])
     Append(out, [[\label{]] .. label .. [[}]])
     if #(generateChildren(label)) > 0 then
         for key, typename in pairs(types) do
-            Append(out, [[\paragraph{]] .. CapFirst(Tr("affiliated")) .. [[ ]] .. CapFirst(typename) .. [[}]])
+            Append(out, [[\subsubsection{]] .. CapFirst(Tr("affiliated")) .. [[ ]] .. CapFirst(typename) .. [[}]])
             Append(out, [[\begin{itemize}]])
             Append(out, [[\item \nameref{]] .. label .. [[-]] .. typename .. [[}]])
             Append(out, [[\end{itemize}]])
@@ -82,7 +82,7 @@ local function generateEntityFromLabel(label)
     end
     local parent = generateParent(label)
     if parent ~= nil then
-        Append(out, [[\paragraph{]] .. CapFirst(Tr("affiliations")) .. [[}]])
+        Append(out, [[\subsubsection{]] .. CapFirst(Tr("affiliations")) .. [[}]])
         Append(out, [[\begin{itemize}]])
         Append(out, [[\item ]] .. CapFirst(Tr("member")) .. [[ ]] .. Tr("of") .. [[ \nameref{]] .. parent .. [[}.]])
         Append(out, [[\end{itemize}]])
@@ -122,14 +122,13 @@ local function generateChapter(typename, primaryLabels)
     end
     local out = {}
     Append(out, [[\chapter{]] .. CapFirst(typename) .. [[}]])
-    Append(out, [[\section{]] .. CapFirst(typename) .. [[}]])
-    Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(typename) .. [[}]])
+    Append(out, [[\section*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(typename) .. [[}]])
     Append(out, [[\begin{itemize}]])
     for key, label in pairs(labelsOfType) do
         Append(out, [[\item \nameref{]] .. label .. [[}]])
     end
     Append(out, [[\end{itemize}]])
-    Append(out, [[\subsection{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
+    Append(out, [[\section{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
     for key, label in pairs(labelsOfType) do
         Append(out, generateEntityFromLabel(label))
     end
@@ -195,16 +194,10 @@ end
 
 local expected = {}
 
-local function typeSetup()
-    TexApi.addType { metatype = "other", type = "other" }
-    TexApi.addType { metatype = "places", type = "places" }
-end
-
 for key, typename in pairs(types) do
     entitySetup()
     local function refSetup()
         TexApi.makeAllEntitiesOfTypePrimary(typename)
-        typeSetup()
     end
 
     expected = generateExpected { primaryType = typename }
@@ -217,7 +210,6 @@ for depth = 1, 3 do
             entitySetup()
             local function refSetupLabel()
                 TexApi.makeEntityAndChildrenPrimary(label)
-                typeSetup()
             end
 
             expected = generateExpected { primaryParent = label }
@@ -229,7 +221,6 @@ for depth = 1, 3 do
                 local function refSetupLabelAndType()
                     TexApi.makeEntityAndChildrenPrimary(label)
                     TexApi.makeTypePrimaryWhenMentioned(primaryTypename)
-                    typeSetup()
                 end
 
                 expected = generateExpected { primaryParent = label, primaryTypeWhenMentioned = primaryTypename }

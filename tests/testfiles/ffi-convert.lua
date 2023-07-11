@@ -4,7 +4,7 @@ TexApi.newEntity { type = "other", label = "parentLabel", name = "parentName" }
 TexApi.newEntity { type = "other", label = "testLabel", name = "testName" }
 TexApi.setDescriptor { descriptor = "descriptor", description = "description" }
 TexApi.setDescriptor { descriptor = "subdescriptor", description =
-[[\subparagraph{subdescription}\label{subdescription}]] }
+[[\paragraph{subdescription}\label{subdescription}]] }
 TexApi.setLocation("locationLabel")
 TexApi.addParent { parentLabel = "parentLabel" }
 TexApi.born { year = 223, event = [[\nameref{testLabel} is born, child of \nameref{parentLabel}.]] }

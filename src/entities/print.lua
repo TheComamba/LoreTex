@@ -9,11 +9,12 @@ local function printEntities(sectionname, entitiesList)
     Append(out, TexCmd("section", CapFirst(sectionname)))
     Sort(entitiesList, "compareByName")
     for key, entity in pairs(entitiesList) do
-        local shortname = GetProtectedStringField(entity, "shortname")
+        local name = CapFirst(GetProtectedStringField(entity, "name"))
+        local shortname = CapFirst(GetProtectedStringField(entity, "shortname"))
         if shortname == "" then
-            Append(out, TexCmd("subsection", GetProtectedStringField(entity, "name")))
+            Append(out, TexCmd("subsection", name))
         else
-            Append(out, TexCmd("subsection", GetProtectedStringField(entity, "name"), shortname))
+            Append(out, TexCmd("subsection", name, shortname))
         end
         Append(out, TexCmd("label", GetProtectedStringField(entity, "label")))
         Append(out, DescriptorsString(entity))

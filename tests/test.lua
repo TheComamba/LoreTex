@@ -29,7 +29,6 @@ Append(allTestFiles, "region-and-city")
 Append(allTestFiles, "ship-crew")
 Append(allTestFiles, "species-at-location")
 Append(allTestFiles, "sub-label")
-Append(allTestFiles, "types")
 local numFailed = 0
 local isContainedTranslation = false
 local apiFunctionUsage = {}

@@ -70,7 +70,7 @@ end
 
 local function generateEntityFromLabel(label)
     local out = {}
-    Append(out, [[\subsection{]] .. label .. [[}]])
+    Append(out, [[\subsection{]] .. CapFirst(label) .. [[}]])
     Append(out, [[\label{]] .. label .. [[}]])
     if #(generateChildren(label)) > 0 then
         for key, typename in pairs(types) do

@@ -37,7 +37,7 @@ local function generateExpected(typename, includesShortname, includesSubname)
     if includesShortname then
         Append(out, [[\subsection[Shorty]{]] .. typename .. [[ 1}]])
     else
-        Append(out, [[\subsection{]] .. typename .. [[ 1}]])
+        Append(out, [[\subsection{]] .. CapFirst(typename) .. [[ 1}]])
     end
     Append(out, [[\label{]] .. typename .. [[-1}]])
     Append(out, [[\subsubsection{]] .. CapFirst(Tr("affiliated")) .. [[ ]] .. CapFirst(typename) .. [[}]])
@@ -50,7 +50,7 @@ local function generateExpected(typename, includesShortname, includesSubname)
     else
         Append(out, [[\section{]] .. CapFirst(Tr("located_in")) .. [[ ]] .. typename .. [[ 1}]])
     end
-    Append(out, [[\subsection{]] .. typename .. [[ 2}]])
+    Append(out, [[\subsection{]] .. CapFirst(typename) .. [[ 2}]])
     Append(out, [[\label{]] .. typename .. [[-2}]])
     if includesSubname then
         Append(out, [[\subsubsection{Subname}]])
@@ -77,7 +77,7 @@ local function generateExpected(typename, includesShortname, includesSubname)
                 [[\section{]] .. CapFirst(Tr("located_in")) .. [[ ]] .. typename .. [[ 1 - ]] .. typename .. [[ 2}]])
         end
     end
-    Append(out, [[\subsection{]] .. typename .. [[ 3}]])
+    Append(out, [[\subsection{]] .. CapFirst(typename) .. [[ 3}]])
     Append(out, [[\label{]] .. typename .. [[-3}]])
     return out
 end

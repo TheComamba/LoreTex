@@ -50,7 +50,8 @@ local function generateExpected(level)
     Append(expected, [[\begin{itemize}]])
     Append(expected, [[\item -15 (]] .. Tr("x_years_ago", { 15 }) .. [[):\\Born.]])
     Append(expected,
-        [[\item -3 (]] .. Tr("x_years_ago", { 3 }) .. [[):\\ \nameref{char} ]] .. Tr("is") .. [[ ]] .. Tr("juvenile") ..
+        [[\item -3 (]] ..
+        Tr("x_years_ago", { 3 }) .. [[):\\ \nameref{char-1} ]] .. Tr("is") .. [[ ]] .. Tr("juvenile") ..
         [[.]])
     Append(expected, [[\end{itemize}]])
 
@@ -66,6 +67,13 @@ local function generateExpected(level)
     Append(expected, [[\subsection{Species-1}]])
     Append(expected, [[\label{species-1}]])
 
+    Append(expected, [[\subsubsection{Species-2}]])
+    Append(expected, [[\label{species-2}]])
+    Append(expected, [[\paragraph{Species-3}]])
+    Append(expected, [[\label{species-3}]])
+    Append(expected, [[\subparagraph{Species-4}]])
+    Append(expected, [[\label{species-4}]])
+
     Append(expected, [[\subsubsection{]] .. CapFirst(Tr("lifestages")) .. [[}]])
     Append(expected, [[\paragraph{\LoreTexSort{1}]] .. CapFirst(Tr("child")) .. [[}]])
     Append(expected, [[0-12 ]] .. Tr("years"))
@@ -79,13 +87,6 @@ local function generateExpected(level)
     Append(expected, [[60-90 ]] .. Tr("years"))
     Append(expected, [[\paragraph{\LoreTexSort{6}]] .. CapFirst(Tr("ancient")) .. [[}]])
     Append(expected, [[90+ ]] .. Tr("years"))
-
-    Append(expected, [[\subsubsection{Species-2}]])
-    Append(expected, [[\label{species-2}]])
-    Append(expected, [[\paragraph{Species-3}]])
-    Append(expected, [[\label{species-3}]])
-    Append(expected, [[\subparagraph{Species-4}]])
-    Append(expected, [[\label{species-4}]])
     return expected
 end
 

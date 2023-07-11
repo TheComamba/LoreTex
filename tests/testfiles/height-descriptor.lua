@@ -39,7 +39,7 @@ local function generateExpected(depth, height)
     end
     Append(out, [[\end{itemize}]])
     Append(out, [[\section{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
-    Append(out, [[\subsection{mountain-1}]])
+    Append(out, [[\subsection{Mountain-1}]])
     Append(out, [[\label{mountain-1}]])
     Append(out, [[\subsubsection{]] .. CapFirst(Tr("height")) .. [[}]])
     Append(out, generateHeightString(height))

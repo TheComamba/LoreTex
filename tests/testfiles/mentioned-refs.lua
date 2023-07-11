@@ -9,7 +9,6 @@ TexApi.newEntity { type = "other", label = "some-organisation", name = "Some Org
 local function refSetup()
     TexApi.makeEntityPrimary("primary-npc")
     TexApi.mention("mentioned-npc")
-    TexApi.addType { metatype = "characters", type = "NPCs" }
 end
 
 local expected = {}

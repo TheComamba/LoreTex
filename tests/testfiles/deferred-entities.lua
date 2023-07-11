@@ -9,7 +9,6 @@ local function setup1()
     TexApi.setCurrentYear(0)
     TexApi.makeEntityPrimary("deferred-entity-1")
     TexApi.makeEntityPrimary("deferred-entity-2")
-    TexApi.addType { metatype = "places", type = "places" }
 end
 local expected = {}
 Append(expected, [[\chapter{Places}]])
@@ -48,7 +47,6 @@ TexApi.setDescriptor { descriptor = "Orga Sublabel", description = [[\label{orga
 
 local function setup2()
     TexApi.makeEntityPrimary("some-npc")
-    TexApi.addType { metatype = "characters", type = "NPCs" }
 end
 
 expected = {}

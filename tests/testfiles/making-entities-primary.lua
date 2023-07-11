@@ -194,16 +194,10 @@ end
 
 local expected = {}
 
-local function typeSetup()
-    TexApi.addType { metatype = "other", type = "other" }
-    TexApi.addType { metatype = "places", type = "places" }
-end
-
 for key, typename in pairs(types) do
     entitySetup()
     local function refSetup()
         TexApi.makeAllEntitiesOfTypePrimary(typename)
-        typeSetup()
     end
 
     expected = generateExpected { primaryType = typename }
@@ -216,7 +210,6 @@ for depth = 1, 3 do
             entitySetup()
             local function refSetupLabel()
                 TexApi.makeEntityAndChildrenPrimary(label)
-                typeSetup()
             end
 
             expected = generateExpected { primaryParent = label }
@@ -228,7 +221,6 @@ for depth = 1, 3 do
                 local function refSetupLabelAndType()
                     TexApi.makeEntityAndChildrenPrimary(label)
                     TexApi.makeTypePrimaryWhenMentioned(primaryTypename)
-                    typeSetup()
                 end
 
                 expected = generateExpected { primaryParent = label, primaryTypeWhenMentioned = primaryTypename }

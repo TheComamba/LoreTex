@@ -17,8 +17,6 @@ end
 local function setup()
     TexApi.makeAllEntitiesPrimary()
     TexApi.setCurrentYear(0)
-    TexApi.addType { metatype = "characters", type = "NPCs" }
-    TexApi.addType { metatype = "peoples", type = "species" }
 end
 
 local function generateExpected(level)

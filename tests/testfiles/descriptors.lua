@@ -111,7 +111,6 @@ end
 
 local function setup()
     TexApi.makeAllEntitiesPrimary()
-    TexApi.addType { metatype = "places", type = "places" }
 end
 
 for _, isSubdescription in pairs({ false, true }) do

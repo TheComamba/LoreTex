@@ -1,6 +1,4 @@
 local function entitySetup()
-    TexApi.addType { metatype = "other", type = "organisations" }
-
     TexApi.newEntity { type = "NPCs", label = "normal", name = "Normal" }
     TexApi.addParent { parentLabel = "normal-orga" }
     TexApi.addParent { parentLabel = "secret-orga" }
@@ -66,7 +64,6 @@ local function refSetup()
     TexApi.reveal("revealed-orga")
 
     TexApi.setCurrentYear(0)
-    TexApi.addType { metatype = "characters", type = "NPCs" }
 end
 
 local function NPCsParagraph(isShowSecrets, isShowFuture)

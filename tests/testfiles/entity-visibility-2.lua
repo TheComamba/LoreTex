@@ -55,8 +55,6 @@ local expected = {}
 
 local function refSetup1()
     TexApi.makeEntityPrimary("teststory")
-    TexApi.addType { metatype = "chronologies", type = "stories" }
-    TexApi.addType { metatype = "other", type = "other" }
     TexApi.setCurrentYear(0)
 end
 

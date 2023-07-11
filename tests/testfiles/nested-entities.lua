@@ -84,8 +84,6 @@ end
 
 local function setup()
     TexApi.makeAllEntitiesPrimary()
-    TexApi.addType { metatype = "places", type = "places" }
-    TexApi.addType { metatype = "other", type = "other" }
 end
 
 for key, typename in pairs({ "places", "other" }) do

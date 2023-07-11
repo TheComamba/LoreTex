@@ -31,7 +31,6 @@ end
 
 local function refSetup()
     TexApi.makeEntityPrimary("test-1")
-    TexApi.addType { metatype = "places", type = "places" }
 end
 
 local function generateExpected(isCurrentDaySet, isShowFuture)

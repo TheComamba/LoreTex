@@ -8,7 +8,6 @@ TexApi.setLocation("test-region")
 
 local function setup()
     TexApi.makeAllEntitiesPrimary()
-    TexApi.addType { metatype = "places", type = "places" }
 end
 
 local expected = {

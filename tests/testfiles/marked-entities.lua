@@ -12,7 +12,6 @@ TexApi.reveal("ramona")
 local function refSetup()
     TexApi.makeEntityPrimary("flora")
     TexApi.makeEntityPrimary("ramona")
-    TexApi.addType { metatype = "characters", type = "NPCs" }
 end
 
 local expected = {}

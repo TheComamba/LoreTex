@@ -72,19 +72,8 @@ local function addFollowUpEntities(arg, newEntity)
     end
 end
 
-local function checkType(entity)
-    local type = GetProtectedStringField(entity, "type")
-    if not IsTypeKnown(type) then
-        local label = GetProtectedStringField(entity, "label")
-        LogError("Entity \"" .. label .. "\" has unknown type \"" .. type .. "\"")
-        SetProtectedField(entity, "type", type:upper())
-        TexApi.addType { metatype = "UNKNOWN", type = type:upper() }
-    end
-end
-
 local function processEntity(arg, entity)
     local newEntity = DeepCopy(entity)
-    checkType(newEntity)
     AddNameMarkers(newEntity)
     addAutomatedDescriptors(newEntity)
     for key, val in pairs(entity) do

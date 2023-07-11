@@ -58,8 +58,6 @@ for key, isAgingDefined in pairs({ false, true }) do
 
     local function setup()
         TexApi.makeAllEntitiesPrimary()
-        TexApi.addType { metatype = "characters", type = "NPCs" }
-        TexApi.addType { metatype = "peoples", type = "species" }
     end
 
     local name = { "Npc with species, aging " }

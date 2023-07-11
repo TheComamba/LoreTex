@@ -46,7 +46,6 @@ end
 local function refSetup1()
     TexApi.setCurrentYear(0)
     TexApi.makeEntityPrimary("test-1")
-    TexApi.addType { metatype = "places", type = "places" }
 end
 
 local function refSetup2()

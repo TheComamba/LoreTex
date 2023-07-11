@@ -15,7 +15,6 @@ local function setupBase()
     TexApi.setDaysPerYear(200)
     TexApi.setCurrentYear(100)
     TexApi.makeEntityPrimary("test")
-    TexApi.addType { metatype = "other", type = "other" }
 end
 
 local function setupNoOffset()

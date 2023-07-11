@@ -21,6 +21,3 @@ function GetSortedTypes()
     Sort(allTypes, "compareAlphanumerical")
     return allTypes
 end
-
---TODO delete this api function
-TexApi.addType = AddType

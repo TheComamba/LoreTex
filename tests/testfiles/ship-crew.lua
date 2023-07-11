@@ -71,9 +71,6 @@ Append(expected, [[\end{itemize}]])
 
 local function setup()
     TexApi.makeAllEntitiesPrimary()
-    TexApi.addType { metatype = "other", type = "ships" }
-    TexApi.addType { metatype = "characters", type = "NPCs" }
-    TexApi.addType { metatype = "places", type = "places" }
 end
 
 AssertAutomatedChapters("Example Ship Crew", expected, setup)

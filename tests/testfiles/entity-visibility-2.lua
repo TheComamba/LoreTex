@@ -19,6 +19,17 @@ end
 
 local function generateExpected(isItemReferenced, isShowSecrets)
     local out = {}
+    if isShowSecrets and isItemReferenced then
+        Append(out, [[\chapter{Other}]])
+        Append(out, [[\section*{]] .. CapFirst(Tr("all")) .. [[ Other}]])
+        Append(out, [[\begin{itemize}]])
+        Append(out, [[\item \nameref{secret-item}]])
+        Append(out, [[\end{itemize}]])
+        Append(out, [[\section{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
+        Append(out, [[\subsection[Secret Item]{Secret Item (]] .. CapFirst(Tr("secret")) .. [[)}]])
+        Append(out, [[\label{secret-item}]])
+        Append(out, generateHistoryParagraph())
+    end
     Append(out, [[\chapter{Stories}]])
     Append(out, [[\section*{]] .. CapFirst(Tr("all")) .. [[ Stories}]])
     Append(out, [[\begin{itemize}]])
@@ -29,22 +40,13 @@ local function generateExpected(isItemReferenced, isShowSecrets)
     Append(out, [[\label{teststory}]])
     if isShowSecrets then
         Append(out, generateHistoryParagraph())
-        if isItemReferenced then
-            Append(out, [[\chapter{Other}]])
-            Append(out, [[\section*{]] .. CapFirst(Tr("all")) .. [[ Other}]])
-            Append(out, [[\begin{itemize}]])
-            Append(out, [[\item \nameref{secret-item}]])
-            Append(out, [[\end{itemize}]])
-            Append(out, [[\section{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
-            Append(out, [[\subsection[Secret Item]{Secret Item (]] .. CapFirst(Tr("secret")) .. [[)}]])
-            Append(out, [[\label{secret-item}]])
-            Append(out, generateHistoryParagraph())
-        else
-            Append(out, [[\chapter{]] .. CapFirst(Tr("only_mentioned")) .. [[}]])
-            Append(out, [[\subparagraph{Secret Item}]])
-            Append(out, [[\label{secret-item}]])
-            Append(out, [[\hspace{1cm}]])
-        end
+    end
+
+    if isShowSecrets and not isItemReferenced then
+        Append(out, [[\chapter{]] .. CapFirst(Tr("only_mentioned")) .. [[}]])
+        Append(out, [[\subparagraph{Secret Item}]])
+        Append(out, [[\label{secret-item}]])
+        Append(out, [[\hspace{1cm}]])
     end
     return out
 end

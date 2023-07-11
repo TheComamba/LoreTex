@@ -15,14 +15,13 @@ local function generateOther(language)
     end
 
     local out = {}
-    Append(out, [[\chapter{Other}]])
-    Append(out, [[\section{]] .. CapFirst(haiproducts) .. [[}]])
-    Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(haiproducts) .. [[}]])
+    Append(out, [[\chapter{]] .. CapFirst(haiproducts) .. [[}]])
+    Append(out, [[\section*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(haiproducts) .. [[}]])
     Append(out, [[\begin{itemize}]])
     Append(out, [[\item \nameref{cream}]])
     Append(out, [[\end{itemize}]])
-    Append(out, [[\subsection{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
-    Append(out, [[\subsubsection{Cream}]])
+    Append(out, [[\section{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
+    Append(out, [[\subsection{Cream}]])
     Append(out, [[\label{cream}]])
     return out
 end
@@ -39,14 +38,13 @@ local function generateNonsense(language)
     end
 
     local out = {}
-    Append(out, [[\chapter{]] .. CapFirst(nonsense) .. [[}]])
-    Append(out, [[\section{]] .. CapFirst(laces) .. [[}]])
-    Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(laces) .. [[}]])
+    Append(out, [[\chapter{]] .. CapFirst(laces) .. [[}]])
+    Append(out, [[\section*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(laces) .. [[}]])
     Append(out, [[\begin{itemize}]])
     Append(out, [[\item \nameref{red-laces}]])
     Append(out, [[\end{itemize}]])
-    Append(out, [[\subsection{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
-    Append(out, [[\subsubsection{Red laces}]])
+    Append(out, [[\section{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
+    Append(out, [[\subsection{Red laces}]])
     Append(out, [[\label{red-laces}]])
     return out
 end

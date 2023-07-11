@@ -13,32 +13,31 @@ end
 
 local expected = {
     [[\chapter{Places}]],
-    [[\section{Places}]],
-    [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ Places}]],
+    [[\section*{]] .. CapFirst(Tr("all")) .. [[ Places}]],
     [[\begin{itemize}]],
     [[\item \nameref{test-city}]],
     [[\item \nameref{test-continent}]],
     [[\item \nameref{test-region}]],
     [[\end{itemize}]],
 
-    [[\subsection{]] .. CapFirst(Tr("in_whole_world")) .. [[}]],
-    [[\subsubsection{Test Continent}]],
+    [[\section{]] .. CapFirst(Tr("in_whole_world")) .. [[}]],
+    [[\subsection{Test Continent}]],
     [[\label{test-continent}]],
-    [[\paragraph{]] .. CapFirst(Tr("affiliated")) .. [[ Places}]],
+    [[\subsubsection{]] .. CapFirst(Tr("affiliated")) .. [[ Places}]],
     [[\begin{itemize}]],
     [[\item \nameref {test-region}]],
     [[\end{itemize}]],
 
-    [[\subsection{]] .. CapFirst(Tr("located_in")) .. [[ Test Continent}]],
-    [[\subsubsection{Test Region}]],
+    [[\section{]] .. CapFirst(Tr("located_in")) .. [[ Test Continent}]],
+    [[\subsection{Test Region}]],
     [[\label{test-region}]],
-    [[\paragraph{]] .. CapFirst(Tr("affiliated")) .. [[ Places}]],
+    [[\subsubsection{]] .. CapFirst(Tr("affiliated")) .. [[ Places}]],
     [[\begin{itemize}]],
     [[\item \nameref {test-city}]],
     [[\end{itemize}]],
 
-    [[\subsection{]] .. CapFirst(Tr("located_in")) .. [[ Test Continent - Test Region}]],
-    [[\subsubsection{Test City}]],
+    [[\section{]] .. CapFirst(Tr("located_in")) .. [[ Test Continent - Test Region}]],
+    [[\subsection{Test City}]],
     [[\label{test-city}]]
 }
 

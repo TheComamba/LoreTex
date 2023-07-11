@@ -70,11 +70,11 @@ end
 
 local function generateEntityFromLabel(label)
     local out = {}
-    Append(out, [[\subsubsection{]] .. label .. [[}]])
+    Append(out, [[\subsection{]] .. label .. [[}]])
     Append(out, [[\label{]] .. label .. [[}]])
     if #(generateChildren(label)) > 0 then
         for key, typename in pairs(types) do
-            Append(out, [[\paragraph{]] .. CapFirst(Tr("affiliated")) .. [[ ]] .. CapFirst(typename) .. [[}]])
+            Append(out, [[\subsubsection{]] .. CapFirst(Tr("affiliated")) .. [[ ]] .. CapFirst(typename) .. [[}]])
             Append(out, [[\begin{itemize}]])
             Append(out, [[\item \nameref{]] .. label .. [[-]] .. typename .. [[}]])
             Append(out, [[\end{itemize}]])
@@ -82,7 +82,7 @@ local function generateEntityFromLabel(label)
     end
     local parent = generateParent(label)
     if parent ~= nil then
-        Append(out, [[\paragraph{]] .. CapFirst(Tr("affiliations")) .. [[}]])
+        Append(out, [[\subsubsection{]] .. CapFirst(Tr("affiliations")) .. [[}]])
         Append(out, [[\begin{itemize}]])
         Append(out, [[\item ]] .. CapFirst(Tr("member")) .. [[ ]] .. Tr("of") .. [[ \nameref{]] .. parent .. [[}.]])
         Append(out, [[\end{itemize}]])
@@ -122,14 +122,13 @@ local function generateChapter(typename, primaryLabels)
     end
     local out = {}
     Append(out, [[\chapter{]] .. CapFirst(typename) .. [[}]])
-    Append(out, [[\section{]] .. CapFirst(typename) .. [[}]])
-    Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(typename) .. [[}]])
+    Append(out, [[\section*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(typename) .. [[}]])
     Append(out, [[\begin{itemize}]])
     for key, label in pairs(labelsOfType) do
         Append(out, [[\item \nameref{]] .. label .. [[}]])
     end
     Append(out, [[\end{itemize}]])
-    Append(out, [[\subsection{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
+    Append(out, [[\section{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
     for key, label in pairs(labelsOfType) do
         Append(out, generateEntityFromLabel(label))
     end

@@ -32,9 +32,9 @@ end
 
 local function generateOrga1(areLocationsSet)
     local out = {}
-    Append(out, [[\subsubsection{Orga}]])
+    Append(out, [[\subsection{Orga}]])
     Append(out, [[\label{orga}]])
-    Append(out, [[\paragraph{]] .. CapFirst(Tr("affiliated")) .. [[ Places}]])
+    Append(out, [[\subsubsection{]] .. CapFirst(Tr("affiliated")) .. [[ Places}]])
     Append(out, [[\begin{itemize}]])
     Append(out, [[\item \nameref{place-1}]])
     if areLocationsSet then
@@ -48,9 +48,9 @@ end
 
 local function generateOrga2()
     local out = {}
-    Append(out, [[\subsubsection{Orga 2}]])
+    Append(out, [[\subsection{Orga 2}]])
     Append(out, [[\label{orga-2}]])
-    Append(out, [[\paragraph{]] .. CapFirst(Tr("affiliations")) .. [[}]])
+    Append(out, [[\subsubsection{]] .. CapFirst(Tr("affiliations")) .. [[}]])
     Append(out, [[\begin{itemize}]])
     Append(out, [[\item Rulers ]] .. Tr("of") .. [[ \nameref{place-1}.]])
     Append(out, [[\end{itemize}]])
@@ -60,18 +60,17 @@ end
 local function generateExpected(areLocationsSet)
     local out = {}
     Append(out, [[\chapter{Other}]])
-    Append(out, [[\section{Other}]])
-    Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ Other}]])
+    Append(out, [[\section*{]] .. CapFirst(Tr("all")) .. [[ Other}]])
     Append(out, [[\begin{itemize}]])
     Append(out, [[\item \nameref{orga}]])
     Append(out, [[\item \nameref{orga-2}]])
     Append(out, [[\end{itemize}]])
     if areLocationsSet then
-        Append(out, [[\subsection{]] .. CapFirst(Tr("located_in")) .. [[ Place 1}]])
+        Append(out, [[\section{]] .. CapFirst(Tr("located_in")) .. [[ Place 1}]])
         Append(out, generateOrga2())
-        Append(out, [[\subsection{]] .. CapFirst(Tr("located_in")) .. [[ Place 3}]])
+        Append(out, [[\section{]] .. CapFirst(Tr("located_in")) .. [[ Place 3}]])
     else
-        Append(out, [[\subsection{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
+        Append(out, [[\section{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
     end
 
     Append(out, generateOrga1(areLocationsSet))
@@ -80,29 +79,28 @@ local function generateExpected(areLocationsSet)
     end
 
     Append(out, [[\chapter{Places}]])
-    Append(out, [[\section{Places}]])
-    Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ Places}]])
+    Append(out, [[\section*{]] .. CapFirst(Tr("all")) .. [[ Places}]])
     Append(out, [[\begin{itemize}]])
     Append(out, [[\item \nameref{place-1}]])
     Append(out, [[\item \nameref{place-2}]])
     Append(out, [[\end{itemize}]])
-    Append(out, [[\subsection{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
-    Append(out, [[\subsubsection{Place 1}]])
+    Append(out, [[\section{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
+    Append(out, [[\subsection{Place 1}]])
     Append(out, [[\label{place-1}]])
-    Append(out, [[\paragraph{]] .. CapFirst(Tr("affiliated")) .. [[ Other}]])
+    Append(out, [[\subsubsection{]] .. CapFirst(Tr("affiliated")) .. [[ Other}]])
     Append(out, [[\begin{itemize}]])
     Append(out, [[\item \nameref{orga-2} (Rulers)]])
     Append(out, [[\end{itemize}]])
-    Append(out, [[\paragraph{]] .. CapFirst(Tr("affiliations")) .. [[}]])
+    Append(out, [[\subsubsection{]] .. CapFirst(Tr("affiliations")) .. [[}]])
     Append(out, [[\begin{itemize}]])
     Append(out, [[\item ]] .. CapFirst(Tr("member")) .. [[ ]] .. Tr("of") .. [[ \nameref{orga}.]])
     Append(out, [[\end{itemize}]])
     if areLocationsSet then
-        Append(out, [[\subsection{]] .. CapFirst(Tr("located_in")) .. [[ Place 4}]])
+        Append(out, [[\section{]] .. CapFirst(Tr("located_in")) .. [[ Place 4}]])
     end
-    Append(out, [[\subsubsection{Place 2}]])
+    Append(out, [[\subsection{Place 2}]])
     Append(out, [[\label{place-2}]])
-    Append(out, [[\paragraph{]] .. CapFirst(Tr("affiliations")) .. [[}]])
+    Append(out, [[\subsubsection{]] .. CapFirst(Tr("affiliations")) .. [[}]])
     Append(out, [[\begin{itemize}]])
     Append(out, [[\item Hometown ]] .. Tr("of") .. [[ \nameref{orga}.]])
     Append(out, [[\end{itemize}]])

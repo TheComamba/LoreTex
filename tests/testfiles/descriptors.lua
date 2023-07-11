@@ -112,31 +112,30 @@ for key, isSubdescription in pairs({ false, true }) do
     for i = 1, 3 do
         TexApi.newEntity { type = "places", label = "1", name = "Test" }
         TexApi.setDescriptor { descriptor = "ZZZSubentity",
-            description = [[\label{2} \subparagraph{ZZZSubsubentity} \label{3}]] }
+            description = [[\label{2} \paragraph{ZZZSubsubentity} \label{3}]] }
         setDescriptors(GetMutableEntityFromAll(tostring(i)), isSubdescription)
 
         local expected = {}
         Append(expected, [[\chapter{Places}]])
-        Append(expected, [[\section{Places}]])
-        Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ Places}]])
+        Append(expected, [[\section*{]] .. CapFirst(Tr("all")) .. [[ Places}]])
         Append(expected, [[\begin{itemize}]])
         Append(expected, [[\item \nameref{1}]])
         Append(expected, [[\item \nameref{2}]])
         Append(expected, [[\item \nameref{3}]])
         Append(expected, [[\end{itemize}]])
-        Append(expected, [[\subsection{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
+        Append(expected, [[\section{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
 
-        Append(expected, [[\subsubsection{Test}]])
+        Append(expected, [[\subsection{Test}]])
         Append(expected, [[\label{1}]])
         if i == 1 then
             addDescriptorsToExpected(expected, isSubdescription, i)
         end
-        Append(expected, [[\paragraph{ZZZSubentity}]])
+        Append(expected, [[\subsubsection{ZZZSubentity}]])
         Append(expected, [[\label{2}]])
         if i == 2 then
             addDescriptorsToExpected(expected, isSubdescription, i)
         end
-        Append(expected, [[\subparagraph{ZZZSubsubentity}]])
+        Append(expected, [[\paragraph{ZZZSubsubentity}]])
         Append(expected, [[\label{3}]])
         if i == 3 then
             addDescriptorsToExpected(expected, isSubdescription, i)

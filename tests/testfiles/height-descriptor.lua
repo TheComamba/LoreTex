@@ -4,7 +4,7 @@ local function newMountain(depth)
         TexApi.setDescriptor { descriptor = "mountain-2", description = [[\label{mountain-2}]] }
     elseif depth == 3 then
         TexApi.setDescriptor { descriptor = "mountain-2",
-            description = [[\label{mountain-2}\subparagraph{mountain-3}\label{mountain-3}]] }
+            description = [[\label{mountain-2}\paragraph{mountain-3}\label{mountain-3}]] }
     end
 end
 
@@ -32,24 +32,23 @@ end
 local function generateExpected(depth, height)
     local out = {}
     Append(out, [[\chapter{Other}]])
-    Append(out, [[\section{Other}]])
-    Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ Other}]])
+    Append(out, [[\section*{]] .. CapFirst(Tr("all")) .. [[ Other}]])
     Append(out, [[\begin{itemize}]])
     for i = 1, depth do
         Append(out, [[\item \nameref{mountain-]] .. i .. [[}]])
     end
     Append(out, [[\end{itemize}]])
-    Append(out, [[\subsection{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
-    Append(out, [[\subsubsection{mountain-1}]])
+    Append(out, [[\section{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
+    Append(out, [[\subsection{mountain-1}]])
     Append(out, [[\label{mountain-1}]])
-    Append(out, [[\paragraph{]] .. CapFirst(Tr("height")) .. [[}]])
+    Append(out, [[\subsubsection{]] .. CapFirst(Tr("height")) .. [[}]])
     Append(out, generateHeightString(height))
     if depth >= 2 then
-        Append(out, [[\paragraph{Mountain-2}]])
+        Append(out, [[\subsubsection{Mountain-2}]])
         Append(out, [[\label{mountain-2}]])
     end
     if depth >= 3 then
-        Append(out, [[\subparagraph{Mountain-3}]])
+        Append(out, [[\paragraph{Mountain-3}]])
         Append(out, [[\label{mountain-3}]])
     end
     return out

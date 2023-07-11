@@ -11,41 +11,39 @@ end
 local function generateExpected(primaryType, isKarlReferenced)
     local out = {}
     if primaryType == "NPCs" or isKarlReferenced then
-        Append(out, [[\chapter{Characters}]])
-        Append(out, [[\section{NPCs}]])
-        Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ NPCs}]])
+        Append(out, [[\chapter{NPCs}]])
+        Append(out, [[\section*{]] .. CapFirst(Tr("all")) .. [[ NPCs}]])
         Append(out, [[\begin{itemize}]])
         Append(out, [[\item \nameref{karl}]])
         if primaryType == "NPCs" then
             Append(out, [[\item \nameref{peter}]])
         end
         Append(out, [[\end{itemize}]])
-        Append(out, [[\subsection{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
-        Append(out, [[\subsubsection{Karl}]])
+        Append(out, [[\section{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
+        Append(out, [[\subsection{Karl}]])
         Append(out, [[\label{karl}]])
-        Append(out, [[\paragraph{]] .. CapFirst(Tr("appearance")) .. [[}]])
-        Append(out, [[\subparagraph{]] .. CapFirst(Tr("species_and_age")) .. [[:}]])
+        Append(out, [[\subsubsection{]] .. CapFirst(Tr("appearance")) .. [[}]])
+        Append(out, [[\paragraph{]] .. CapFirst(Tr("species_and_age")) .. [[:}]])
         Append(out, [[\nameref {human}.]])
-        Append(out, [[\paragraph{Friend}]])
+        Append(out, [[\subsubsection{Friend}]])
         Append(out, [[\nameref{peter}]])
         if primaryType == "NPCs" then
-            Append(out, [[\subsubsection{Peter}]])
+            Append(out, [[\subsection{Peter}]])
             Append(out, [[\label{peter}]])
-            Append(out, [[\paragraph{]] .. CapFirst(Tr("appearance")) .. [[}]])
-            Append(out, [[\subparagraph{]] .. CapFirst(Tr("species_and_age")) .. [[:}]])
+            Append(out, [[\subsubsection{]] .. CapFirst(Tr("appearance")) .. [[}]])
+            Append(out, [[\paragraph{]] .. CapFirst(Tr("species_and_age")) .. [[:}]])
             Append(out, [[\nameref {human}.]])
         end
     end
 
     if primaryType == "species" and isKarlReferenced then
         Append(out, [[\chapter{Peoples}]])
-        Append(out, [[\section{Species}]])
-        Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ Species}]])
+        Append(out, [[\section*{]] .. CapFirst(Tr("all")) .. [[ Species}]])
         Append(out, [[\begin{itemize}]])
         Append(out, [[\item \nameref{human}]])
         Append(out, [[\end{itemize}]])
-        Append(out, [[\subsection{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
-        Append(out, [[\subsubsection{Human}]])
+        Append(out, [[\section{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
+        Append(out, [[\subsection{Human}]])
         Append(out, [[\label{human}]])
     end
 

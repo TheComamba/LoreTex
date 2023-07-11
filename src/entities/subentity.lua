@@ -147,6 +147,6 @@ function IsMapString(content)
     if type(content) ~= "string" then
         return false
     else
-        return string.find(content, [[\paragraph]]) == nil or string.find(content, [[\subparagraph]]) == nil
+        return string.find(content, [[\paragraph]]) ~= nil or string.find(content, [[\subparagraph]]) ~= nil
     end
 end

@@ -43,7 +43,7 @@ function DescriptorsString(entity, level)
         return {}
     end
     local descriptorsList = {}
-    for descriptor, description in pairs(entity) do
+    for descriptor, _ in pairs(entity) do
         if not IsProtectedDescriptor(descriptor) then
             descriptorsList[#descriptorsList + 1] = descriptor
         end
@@ -54,13 +54,13 @@ function DescriptorsString(entity, level)
     Sort(descriptorsList, "compareAlphanumerical")
 
     local out = {}
-    if level > 2 then
+    if level > 3 then
         Append(out, TexCmd("begin", "itemize"))
     end
     for key, descriptor in pairs(descriptorsList) do
         appendDescriptorString(out, entity, descriptor, level)
     end
-    if level > 2 then
+    if level > 3 then
         Append(out, TexCmd("end", "itemize"))
     end
     return out

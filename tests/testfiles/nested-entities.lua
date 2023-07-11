@@ -35,7 +35,7 @@ local function generateExpected(typename, includesShortname, includesSubname)
 
     Append(out, [[\section{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
     if includesShortname then
-        Append(out, [[\subsection[Shorty]{]] .. typename .. [[ 1}]])
+        Append(out, [[\subsection[Shorty]{]] .. CapFirst(typename) .. [[ 1}]])
     else
         Append(out, [[\subsection{]] .. CapFirst(typename) .. [[ 1}]])
     end

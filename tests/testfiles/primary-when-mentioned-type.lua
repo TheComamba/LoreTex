@@ -37,7 +37,7 @@ local function generateExpected(primaryType, isKarlReferenced)
     end
 
     if primaryType == "species" and isKarlReferenced then
-        Append(out, [[\chapter{Peoples}]])
+        Append(out, [[\chapter{Species}]])
         Append(out, [[\section*{]] .. CapFirst(Tr("all")) .. [[ Species}]])
         Append(out, [[\begin{itemize}]])
         Append(out, [[\item \nameref{human}]])

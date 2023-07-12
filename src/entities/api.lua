@@ -6,12 +6,12 @@ end
 TexApi.declarePC = declarePC
 
 local function newEntity(arg)
-    if not IsArgOk("newEntity", arg, { "type", "label", "name" }, { "shortname" }) then
+    if not IsArgOk("newEntity", arg, { "category", "label", "name" }, { "shortname" }) then
         return
     end
     CurrentEntity = GetMutableEntityFromAll(arg.label)
-    SetProtectedField(CurrentEntity, "type", arg.type)
-    AddType(arg.type)
+    SetProtectedField(CurrentEntity, "category", arg.category)
+    AddCategory(arg.category)
     SetProtectedField(CurrentEntity, "shortname", arg.shortname)
     SetProtectedField(CurrentEntity, "name", arg.name)
     local defaultLocation = GetScopedVariable("DefaultLocation")
@@ -24,10 +24,10 @@ TexApi.newEntity = newEntity
 
 local function newCharacter(arg)
     if IsIn(arg.label, PCs) then
-        arg.type = "PCs"
+        arg.category = "PCs"
         newEntity(arg)
     else
-        arg.type = "NPCs"
+        arg.category = "NPCs"
         newEntity(arg)
     end
 end
@@ -37,8 +37,8 @@ TexApi.newCharacter = newCharacter
 local function automatedChapters()
     local processOut = ProcessedEntities()
     local output = {}
-    for _, type in pairs(GetSortedTypes()) do
-        Append(output, PrintEntityChapter(processOut, type))
+    for _, category in pairs(GetSortedCategories()) do
+        Append(output, PrintEntityChapter(processOut, category))
     end
     Append(output, PrintOnlyMentionedChapter(processOut.mentioned))
     if HasError() then

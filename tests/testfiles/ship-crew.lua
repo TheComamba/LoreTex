@@ -1,18 +1,18 @@
-TexApi.newEntity { type = "places", label = "ocean", name = "Ocean" }
+TexApi.newEntity { category = "places", label = "ocean", name = "Ocean" }
 
-TexApi.newEntity { type = "ships", label = "aurora", name = "Aurora" }
+TexApi.newEntity { category = "ships", label = "aurora", name = "Aurora" }
 TexApi.setLocation("ocean")
 
 SetScopedVariable("DefaultLocation", GetMutableEntityFromAll("aurora"))
 
-TexApi.newEntity { type = "NPCs", label = "haldora", name = "Haldora" }
+TexApi.newEntity { category = "NPCs", label = "haldora", name = "Haldora" }
 TexApi.addParent { parentLabel = "aurora", relationship = "Captain" }
 
-TexApi.newEntity { type = "NPCs", label = "balagog", name = "Balagog" }
+TexApi.newEntity { category = "NPCs", label = "balagog", name = "Balagog" }
 TexApi.addParent { parentLabel = "aurora", relationship = "First Mate" }
 TexApi.addParent { parentLabel = "aurora", relationship = "Cook" }
 
-TexApi.newEntity { type = "NPCs", label = "cuen", name = "Cuen" }
+TexApi.newEntity { category = "NPCs", label = "cuen", name = "Cuen" }
 TexApi.addParent { parentLabel = "aurora" }
 
 local function generateCrewMember(label, roles)

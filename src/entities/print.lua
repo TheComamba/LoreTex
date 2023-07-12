@@ -98,15 +98,15 @@ local function printEntityChapterSortedByLocation(entities)
     return out
 end
 
-function PrintEntityChapter(processedOut, type)
-    local entitiesOfType = processedOut.entities[type]
-    if IsEmpty(entitiesOfType) then
+function PrintEntityChapter(processedOut, category)
+    local entitiesOfCategory = processedOut.entities[category]
+    if IsEmpty(entitiesOfCategory) then
         return {}
     end
 
     local out = {}
-    Append(out, TexCmd("chapter", CapFirst(type)))
-    Append(out, PrintAllEntities(type, entitiesOfType))
-    Append(out, printEntityChapterSortedByLocation(entitiesOfType))
+    Append(out, TexCmd("chapter", CapFirst(category)))
+    Append(out, PrintAllEntities(category, entitiesOfCategory))
+    Append(out, printEntityChapterSortedByLocation(entitiesOfCategory))
     return out
 end

@@ -1,16 +1,16 @@
-TexApi.newEntity { type = "NPCs", label = "some-npc", name = "Some NPC" }
+TexApi.newEntity { category = "NPCs", label = "some-npc", name = "Some NPC" }
 TexApi.setSpecies("subspecies")
 TexApi.setLocation("subplace-1")
 TexApi.setDescriptor { descriptor = "Info 1", description = [[Refers to \nameref{subplace-2}.]] }
 TexApi.setDescriptor { descriptor = "Info 2", description = [[Refers to \nameref{subplace-3}.]] }
 TexApi.setDescriptor { descriptor = "Info 3", description = [[Refers to \nameref{subplace-4}.]] }
-TexApi.newEntity { type = "places", label = "place-1", name = "Place 1" }
+TexApi.newEntity { category = "places", label = "place-1", name = "Place 1" }
 TexApi.setDescriptor { descriptor = "Subplace 1", description = [[\label{subplace-1}]] }
-TexApi.newEntity { type = "places", label = "place-2", name = "Place 2" }
+TexApi.newEntity { category = "places", label = "place-2", name = "Place 2" }
 TexApi.setDescriptor { descriptor = "Subplace 2", description = [[\label{subplace-2}]] }
 TexApi.setDescriptor { descriptor = "More Subplaces", description = [[\paragraph{Subplace 3} \label{subplace-3}
 \paragraph{Subplace 4} \label{subplace-4}]] }
-TexApi.newEntity { type = "species", label = "species", name = "Species" }
+TexApi.newEntity { category = "species", label = "species", name = "Species" }
 TexApi.setDescriptor { descriptor = "Subspecies", description = [[\label{subspecies}]] }
 
 local function refSetup1()
@@ -52,11 +52,11 @@ local expected = {
 
 AssertAutomatedChapters("Sublabel", expected, refSetup1)
 
-TexApi.newEntity { type = "NPCs", label = "also-primary", name = "Also Primary" }
+TexApi.newEntity { category = "NPCs", label = "also-primary", name = "Also Primary" }
 TexApi.setDescriptor { descriptor = "Sublabel 1", description = [[\label{sublabel-1}]] }
 TexApi.setDescriptor { descriptor = "Some Paragraph", description = [[\paragraph{Sublabel 2}\label{sublabel-2}]] }
 
-TexApi.newEntity { type = "NPCs", label = "not-primary", name = "Not Primary" }
+TexApi.newEntity { category = "NPCs", label = "not-primary", name = "Not Primary" }
 TexApi.setDescriptor { descriptor = "Sublabel 3", description = [[\label{sublabel-3}]] }
 TexApi.setDescriptor { descriptor = "Some ignored Paragraph",
     description =
@@ -97,7 +97,7 @@ local expected = {
 
 AssertAutomatedChapters("Only sublabel mentioned", expected, refSetup2)
 
-TexApi.newEntity { type = "NPCs", label = "some-npc", name = "Some NPC" }
+TexApi.newEntity { category = "NPCs", label = "some-npc", name = "Some NPC" }
 TexApi.setDescriptor { descriptor = "Paragraph with just label", description = [[\label{sublabel}]] }
 local paraWithoutLabel = {}
 Append(paraWithoutLabel, [[\paragraph{AA Subpara 1}]])
@@ -148,9 +148,9 @@ Append(expected, unusualPara)
 
 AssertAutomatedChapters("Subparagraphs with and without labels", expected, refSetup3)
 
-TexApi.newEntity { type = "places", label = "place-1", name = "Place 1" }
+TexApi.newEntity { category = "places", label = "place-1", name = "Place 1" }
 TexApi.setDescriptor { descriptor = "Appears Twice", description = [[\paragraph{One}\label{one}]] }
-TexApi.newEntity { type = "places", label = "place-2", name = "Place 2" }
+TexApi.newEntity { category = "places", label = "place-2", name = "Place 2" }
 TexApi.setDescriptor { descriptor = "Appears Twice", description = [[\paragraph{Two}\label{two}]] }
 
 local expected = {}

@@ -1,8 +1,8 @@
-TexApi.newEntity { label = "unimportant", type = "places", name = "Unimportant" }
+TexApi.newEntity { label = "unimportant", category = "places", name = "Unimportant" }
 TexApi.addHistory { year = 0, event = [[Mentions \nameref{deferred-entity-1}.]] }
 TexApi.addHistory { year = 0, event = [[Mentions \nameref{deferred-entity-2-alias}.]] }
-TexApi.newEntity { label = "deferred-entity-1", type = "places", name = "Deferred 1" }
-TexApi.newEntity { label = "deferred-entity-2", type = "places", name = "Deferred 2" }
+TexApi.newEntity { label = "deferred-entity-1", category = "places", name = "Deferred 1" }
+TexApi.newEntity { label = "deferred-entity-2", category = "places", name = "Deferred 2" }
 TexApi.setDescriptor { descriptor = "Alias", description = [[\label{deferred-entity-2-alias}]] }
 
 local function setup1()
@@ -38,11 +38,11 @@ Append(expected, [[\end{itemize}]])
 
 AssertAutomatedChapters("Deferred Entities", expected, setup1)
 
-TexApi.newEntity { type = "NPCs", label = "some-npc", name = "Some NPC" }
+TexApi.newEntity { category = "NPCs", label = "some-npc", name = "Some NPC" }
 TexApi.setLocation("some-place")
 TexApi.addParent { parentLabel = "orga-sublabel", relationship = "Code-Cleaner" }
-TexApi.newEntity { type = "places", label = "some-place", name = "Some Place" }
-TexApi.newEntity { type = "other", label = "some-orga", name = "Some Orga" }
+TexApi.newEntity { category = "places", label = "some-place", name = "Some Place" }
+TexApi.newEntity { category = "other", label = "some-orga", name = "Some Orga" }
 TexApi.setDescriptor { descriptor = "Orga Sublabel", description = [[\label{orga-sublabel}]] }
 
 local function setup2()
@@ -72,7 +72,7 @@ Append(expected, [[\hspace{1cm}]])
 AssertAutomatedChapters("Deferred Location and Association", expected, setup2)
 
 local function defineCalendar()
-    TexApi.newEntity { type = "calendars", label = "test-1", name = "Test 1" }
+    TexApi.newEntity { category = "calendars", label = "test-1", name = "Test 1" }
     TexApi.addMonth { month = "Primus", firstDay = 1 }
     TexApi.addMonth { month = "Secundus", firstDay = 100 }
     TexApi.setYearAbbreviation("QT")
@@ -96,7 +96,7 @@ out = { YearString(1801) }
 Assert("Deferred Calendar (Year)", expected, out)
 
 ResetState()
-TexApi.newEntity { type = "places", label = "some-place", name = "Some Place" }
+TexApi.newEntity { category = "places", label = "some-place", name = "Some Place" }
 TexApi.addHistory { yearFmt = "test-1", year = 0, event = "Some event." }
 defineCalendar()
 out = GetEntity("some-place")

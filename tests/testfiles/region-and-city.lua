@@ -1,9 +1,9 @@
-TexApi.newEntity { type = "places", label = "test-continent", name = "Test Continent" }
+TexApi.newEntity { category = "places", label = "test-continent", name = "Test Continent" }
 
-TexApi.newEntity { type = "places", label = "test-region", name = "Test Region" }
+TexApi.newEntity { category = "places", label = "test-region", name = "Test Region" }
 TexApi.setLocation("test-continent")
 
-TexApi.newEntity { type = "places", label = "test-city", name = "Test City" }
+TexApi.newEntity { category = "places", label = "test-city", name = "Test City" }
 TexApi.setLocation("test-region")
 
 local function setup()

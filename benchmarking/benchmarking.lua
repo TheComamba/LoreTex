@@ -106,16 +106,16 @@ function CreateBenchmarkingTest(sizeStr)
     end
     TexApi.setCurrentYear(1400)
     for i = size, 1, -1 do
-        TexApi.newEntity { type = "places", label = "place-" .. i, name = "Place " .. i }
+        TexApi.newEntity { category = "places", label = "place-" .. i, name = "Place " .. i }
         TexApi.addHistory { year = -i,
             event = [[Birth of \reference{char-]] .. i .. [[-1} \birthof{char-]] .. i .. [[-1}]] }
         TexApi.makeEntityPrimary("place-" .. i)
 
-        TexApi.newEntity { type = "species", label = "species-" .. i, name = "Species " .. i }
+        TexApi.newEntity { category = "species", label = "species-" .. i, name = "Species " .. i }
         TexApi.setAgeFactor(i)
         TexApi.makeEntityPrimary("species-" .. i)
 
-        TexApi.newEntity { type = "other", label = "organisation-" .. i, name = "Organisation " .. i }
+        TexApi.newEntity { category = "other", label = "organisation-" .. i, name = "Organisation " .. i }
         TexApi.makeEntityPrimary("organisation-" .. i)
         if i > 1 then
             TexApi.setLocation("place-" .. (i - 1))

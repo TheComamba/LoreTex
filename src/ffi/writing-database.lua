@@ -1,25 +1,25 @@
-local function toCColumns(luaColumns, cTypename)
+local function toCColumns(luaColumns, ccategory)
     if not type(luaColumns) == "table" then
         return nil
     end
-    if not type(cTypename) == "string" then
+    if not type(ccategory) == "string" then
         return nil
     end
     local ffi = GetFFIModule()
     if not ffi then return nil end
 
-    local cColumns = ffi.new(cTypename .. "[" .. #luaColumns .. "]")
+    local cColumns = ffi.new(ccategory .. "[" .. #luaColumns .. "]")
     for i = 0, (#luaColumns - 1) do
         cColumns[i] = luaColumns[i + 1]
     end
     return cColumns, #luaColumns
 end
 
-local function writeToDatabase(dbPath, columns, cTypename, writeFunction)
+local function writeToDatabase(dbPath, columns, ccategory, writeFunction)
     local ffi = GetFFIModule()
     if not ffi then return nil end
 
-    local cColumns, count = toCColumns(columns, cTypename)
+    local cColumns, count = toCColumns(columns, ccategory)
     local result = writeFunction(dbPath, cColumns, count)
 
     local errorMessage = ffi.string(result)

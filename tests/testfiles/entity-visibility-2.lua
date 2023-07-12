@@ -1,8 +1,8 @@
 local function entitySetup()
-    TexApi.newEntity { type = "stories", label = "teststory", name = "Teststory" }
+    TexApi.newEntity { category = "stories", label = "teststory", name = "Teststory" }
     TexApi.addHistory { year = -10, event = [[Concerns \nameref{secret-item}.]] }
 
-    TexApi.newEntity { type = "other", label = "secret-item", name = "Secret Item" }
+    TexApi.newEntity { category = "other", label = "secret-item", name = "Secret Item" }
     TexApi.setSecret()
 end
 

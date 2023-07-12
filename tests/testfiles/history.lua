@@ -2,7 +2,7 @@ local function entitySetup()
     TexApi.setCurrentYear(0)
     TexApi.setDaysPerYear(365)
 
-    TexApi.newEntity { type = "places", label = "test-1", name = "Test 1" }
+    TexApi.newEntity { category = "places", label = "test-1", name = "Test 1" }
     TexApi.addHistoryOnlyHere { year = -10, event =
     [[Event that concerns \reference{test-1}, but not \reference{test-2}.]] }
     TexApi.addHistory { year = -20, event = [[Some event.]] }
@@ -24,7 +24,7 @@ local function entitySetup()
     TexApi.addHistory { year = 1, event = [[Event next year.]] }
     TexApi.addHistory { year = 1, day = 15, event = [[Event next year, with day.]] }
 
-    TexApi.newEntity { type = "places", label = "test-2", name = "Test 2" }
+    TexApi.newEntity { category = "places", label = "test-2", name = "Test 2" }
     TexApi.addHistory { year = -5,
         event = [[Event that concerns \reference{test-1}, but not \reference{test-2}.\notconcerns{test-2}]] }
 end

@@ -1,11 +1,11 @@
 TexApi.setDaysPerYear(200)
 
-TexApi.newEntity { type = "calendars", label = "test-1", name = "Test 1" }
+TexApi.newEntity { category = "calendars", label = "test-1", name = "Test 1" }
 TexApi.addMonth { month = "Primus", firstDay = 1 }
 TexApi.addMonth { month = "Secundus", firstDay = 100 }
 TexApi.setYearAbbreviation("QT")
 
-TexApi.newEntity { type = "calendars", label = "test-2", name = "Test 2" }
+TexApi.newEntity { category = "calendars", label = "test-2", name = "Test 2" }
 TexApi.addMonth { month = "Knulch", firstDay = 20 }
 TexApi.addMonth { month = "Wimmel", firstDay = 150 }
 TexApi.setYearAbbreviation("WX")

@@ -1,4 +1,4 @@
-TexApi.newEntity { type = "places", label = "test-1", name = "Test 1" }
+TexApi.newEntity { category = "places", label = "test-1", name = "Test 1" }
 TexApi.setDescriptor { descriptor = "descriptor", description = "description" }
 TexApi.setDescriptor { descriptor = "subdescriptor", description =
 [[\paragraph{subdescription}\label{sublabel}]] }
@@ -6,7 +6,7 @@ local entity1 = CurrentEntity
 TexApi.addHistory { year = 0, event = [[Concerns \nameref{test-1}.]] }
 TexApi.addHistoryOnlyHere { year = 0, event = [[Concerns \reference{test-1}, but not \reference{test-2}.]] }
 
-TexApi.newEntity { type = "places", label = "test-2", name = "Test 2" }
+TexApi.newEntity { category = "places", label = "test-2", name = "Test 2" }
 local entity2 = CurrentEntity
 TexApi.addHistory { year = 0, event = [[Concerns \reference{test-1}, but not \reference{test-2}.\notconcerns{test-2}]] }
 

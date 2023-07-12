@@ -1,11 +1,11 @@
 local function entitySetup(level)
-    TexApi.newEntity { label = "species-1", type = "species", name = "species-1" }
+    TexApi.newEntity { label = "species-1", category = "species", name = "species-1" }
     TexApi.setDescriptor { descriptor = "species-2", description = [[\label{species-2}
 \paragraph{species-3}\label{species-3}
 \subparagraph{species-4}\label{species-4}]] }
     TexApi.setAgeFactor(1)
 
-    TexApi.newEntity { label = "char-1", type = "NPCs", name = "char-1" }
+    TexApi.newEntity { label = "char-1", category = "NPCs", name = "char-1" }
     TexApi.born { year = -15, event = "Born." }
     TexApi.setDescriptor { descriptor = "char-2", description = [[\label{char-2}
 \paragraph{char-3}\label{char-3}

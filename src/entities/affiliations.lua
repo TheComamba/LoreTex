@@ -69,8 +69,8 @@ local function entityQualifiersString(child, parent, relationships)
 end
 
 local function addSingleChildDescriptorToParent(child, parent, relationships)
-    local childType = GetProtectedStringField(child, "type")
-    local descriptor = Tr("affiliated") .. " " .. CapFirst(childType)
+    local childCategory = GetProtectedStringField(child, "category")
+    local descriptor = Tr("affiliated") .. " " .. CapFirst(childCategory)
     if parent[descriptor] == nil then
         parent[descriptor] = {}
     end

@@ -1,5 +1,5 @@
 local function newMountain(depth)
-    TexApi.newEntity { label = "mountain-1", name = "mountain-1", type = "other" }
+    TexApi.newEntity { label = "mountain-1", name = "mountain-1", category = "other" }
     if depth == 2 then
         TexApi.setDescriptor { descriptor = "mountain-2", description = [[\label{mountain-2}]] }
     elseif depth == 3 then

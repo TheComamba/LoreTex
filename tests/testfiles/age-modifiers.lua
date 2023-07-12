@@ -1,5 +1,5 @@
 local function newEntity(name, depth)
-    TexApi.newEntity { label = name .. 1, name = name .. 1, type = "other" }
+    TexApi.newEntity { label = name .. 1, name = name .. 1, category = "other" }
     if depth == 2 then
         TexApi.setDescriptor { descriptor = name .. 2, description = [[\label{]] .. name .. 2 .. [[}]] }
     elseif depth == 3 then
@@ -135,7 +135,7 @@ for depth = 1, 4 do
         newEntity("species-3-", depth)
         TexApi.setAgeModifierMixing("species-1-" .. depth, "species-2-" .. depth)
 
-        TexApi.newEntity { label = "char", name = "char", type = "other" }
+        TexApi.newEntity { label = "char", name = "char", category = "other" }
         if modification == "mixing" then
             TexApi.setSpecies("species-3-" .. depth)
         else

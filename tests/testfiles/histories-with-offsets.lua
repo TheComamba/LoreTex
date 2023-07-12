@@ -1,8 +1,8 @@
 local function entitySetup()
-    TexApi.newEntity { type = "calendars", label = "test-calendar-with-offset", name = "Test Calendar with Offset" }
+    TexApi.newEntity { category = "calendars", label = "test-calendar-with-offset", name = "Test Calendar with Offset" }
     TexApi.setYearOffset(10)
 
-    TexApi.newEntity { type = "other", label = "test", name = "Test Entity" }
+    TexApi.newEntity { category = "other", label = "test", name = "Test Entity" }
     TexApi.addHistory { yearFmt = "test-calendar-with-offset", year = 11, event = "Event with offset." }
     local itemEnteredInFormat = AllHistoryItems[#AllHistoryItems]
     TexApi.addHistory { year = 0, event = "Event without offset." }

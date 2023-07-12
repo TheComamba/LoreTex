@@ -1,7 +1,7 @@
-TexApi.newEntity { type = "NPCs", label = "test", name = "Test" }
+TexApi.newEntity { category = "NPCs", label = "test", name = "Test" }
 
 local function refSetup()
-    TexApi.makeAllEntitiesOfTypePrimary("NPCs")
+    TexApi.makeAllEntitiesOfCategoryPrimary("NPCs")
 end
 
 local expected = {}

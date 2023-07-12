@@ -115,7 +115,7 @@ end
 
 for _, isSubdescription in pairs({ false, true }) do
     for i = 1, 4 do
-        TexApi.newEntity { type = "places", label = "1", name = "Test" }
+        TexApi.newEntity { category = "places", label = "1", name = "Test" }
         TexApi.setDescriptor { descriptor = "ZZZSubentity",
             description = [[\label{2}
             \paragraph{ZZZSubsubentity} \label{3}

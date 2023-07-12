@@ -1,9 +1,9 @@
-TexApi.newEntity { type = "places", label = "tattooine", name = "Tattooine" }
+TexApi.newEntity { category = "places", label = "tattooine", name = "Tattooine" }
 
-TexApi.newEntity { type = "species", label = "tusken", name = "Tusken" }
+TexApi.newEntity { category = "species", label = "tusken", name = "Tusken" }
 TexApi.setLocation("tattooine")
 
-TexApi.newEntity { type = "species", label = "jawa", name = "Jawa" }
+TexApi.newEntity { category = "species", label = "jawa", name = "Jawa" }
 TexApi.setLocation("tattooine")
 
 local function refSetup()

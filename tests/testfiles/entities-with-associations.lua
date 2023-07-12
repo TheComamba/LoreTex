@@ -1,15 +1,15 @@
 local function entitySetup(setLocations)
-    TexApi.newEntity { type = "other", label = "orga", name = "Orga" }
+    TexApi.newEntity { category = "other", label = "orga", name = "Orga" }
     local orga = CurrentEntity
 
-    TexApi.newEntity { type = "places", label = "place-1", name = "Place 1" }
+    TexApi.newEntity { category = "places", label = "place-1", name = "Place 1" }
     TexApi.addParent { parentLabel = "orga" }
 
-    TexApi.newEntity { type = "places", label = "place-2", name = "Place 2" }
+    TexApi.newEntity { category = "places", label = "place-2", name = "Place 2" }
     TexApi.addParent { parentLabel = "orga", relationship = "Hometown" }
     local place2 = CurrentEntity
 
-    TexApi.newEntity { type = "other", label = "orga-2", name = "Orga 2" }
+    TexApi.newEntity { category = "other", label = "orga-2", name = "Orga 2" }
     TexApi.addParent { parentLabel = "place-1", relationship = "Rulers" }
     local orga2 = CurrentEntity
 
@@ -114,8 +114,8 @@ entitySetup(false)
 local expected = generateExpected(false)
 AssertAutomatedChapters("entities-with-associations", expected, refSetup)
 
-TexApi.newEntity { type = "places", label = "place-3", name = "Place 3" }
-TexApi.newEntity { type = "places", label = "place-4", name = "Place 4" }
+TexApi.newEntity { category = "places", label = "place-3", name = "Place 3" }
+TexApi.newEntity { category = "places", label = "place-4", name = "Place 4" }
 entitySetup(true)
 local expected = generateExpected(true)
 AssertAutomatedChapters("entities-with-associations-and-locations", expected, refSetup)

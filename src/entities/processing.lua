@@ -24,8 +24,8 @@ end
 
 local function addPrimariesWhenMentioned(arg, mentioned)
     for key, entity in pairs(mentioned) do
-        local typeName = GetProtectedStringField(entity, "type")
-        if IsIn(typeName, PrimaryRefWhenMentionedTypes) then
+        local categoryName = GetProtectedStringField(entity, "category")
+        if IsIn(categoryName, PrimaryRefWhenMentionedCategories) then
             AddProcessedEntity(arg, entity)
         end
     end
@@ -35,9 +35,9 @@ local function addEntityToDict(arg, newEntity)
     if arg.entites == nil then
         arg.entites = {}
     end
-    local typename = GetProtectedStringField(newEntity, "type")
-    if arg.entities[typename] == nil then
-        arg.entities[typename] = {}
+    local categoryname = GetProtectedStringField(newEntity, "category")
+    if arg.entities[categoryname] == nil then
+        arg.entities[categoryname] = {}
     end
     local locationName = ""
     if IsLocationUnrevealed(newEntity) then
@@ -48,10 +48,10 @@ local function addEntityToDict(arg, newEntity)
             locationName = PlaceToName(location)
         end
     end
-    if arg.entities[typename][locationName] == nil then
-        arg.entities[typename][locationName] = {}
+    if arg.entities[categoryname][locationName] == nil then
+        arg.entities[categoryname][locationName] = {}
     end
-    arg.entities[typename][locationName][#arg.entities[typename][locationName] + 1] = newEntity
+    arg.entities[categoryname][locationName][#arg.entities[categoryname][locationName] + 1] = newEntity
 end
 
 local function registerProcessedEntity(arg, newEntity)

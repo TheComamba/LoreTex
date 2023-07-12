@@ -22,13 +22,13 @@ function GetEntitiesIf(condition, list)
     return out
 end
 
-function GetEntitiesOfType(type, list)
+function GetEntitiesOfCategory(category, list)
     local out = {}
     if list == nil then
         list = AllEntities
     end
     for key, entity in pairs(list) do
-        if GetProtectedStringField(entity, "type") == type then
+        if GetProtectedStringField(entity, "category") == category then
             out[#out + 1] = entity
         end
     end

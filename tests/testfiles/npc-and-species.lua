@@ -1,12 +1,12 @@
 for key, isAgingDefined in pairs({ false, true }) do
     TexApi.setCurrentYear(0)
 
-    TexApi.newEntity { type = "species", label = "test-species", name = "Test Species" }
+    TexApi.newEntity { category = "species", label = "test-species", name = "Test Species" }
     if isAgingDefined then
         TexApi.setAgeFactor(1)
     end
 
-    TexApi.newEntity { type = "NPCs", label = "test-npc", name = "Test NPC" }
+    TexApi.newEntity { category = "NPCs", label = "test-npc", name = "Test NPC" }
     TexApi.setSpecies("test-species")
     TexApi.born { year = -20, event = "Birth." }
 

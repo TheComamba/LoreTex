@@ -1,10 +1,10 @@
-TexApi.newEntity { type = "NPCs", label = "primary-npc", name = "Primary NPC" }
+TexApi.newEntity { category = "NPCs", label = "primary-npc", name = "Primary NPC" }
 TexApi.setDescriptor { descriptor = "Description", description = [[Different than \nameref{other-npc}.]] }
 TexApi.addParent { parentLabel = "some-organisation" }
-TexApi.newEntity { type = "NPCs", label = "mentioned-npc", name = "Mentioned NPC" }
-TexApi.newEntity { type = "NPCs", label = "other-npc", name = "Other NPC" }
-TexApi.newEntity { type = "NPCs", label = "not-mentioned-npc", name = "Not mentioned NPC" }
-TexApi.newEntity { type = "other", label = "some-organisation", name = "Some Organisation" }
+TexApi.newEntity { category = "NPCs", label = "mentioned-npc", name = "Mentioned NPC" }
+TexApi.newEntity { category = "NPCs", label = "other-npc", name = "Other NPC" }
+TexApi.newEntity { category = "NPCs", label = "not-mentioned-npc", name = "Not mentioned NPC" }
+TexApi.newEntity { category = "other", label = "some-organisation", name = "Some Organisation" }
 
 local function refSetup()
     TexApi.makeEntityPrimary("primary-npc")

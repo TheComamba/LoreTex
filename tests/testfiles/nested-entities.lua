@@ -1,33 +1,33 @@
-local function setupTest(typename, includesShortname, includesSubname)
+local function setupTest(category, includesShortname, includesSubname)
     if includesShortname then
-        TexApi.newEntity { type = typename, label = typename .. "-1", name = typename .. " 1", shortname = "Shorty" }
+        TexApi.newEntity { category = category, label = category .. "-1", name = category .. " 1", shortname = "Shorty" }
     else
-        TexApi.newEntity { type = typename, label = typename .. "-1", name = typename .. " 1" }
+        TexApi.newEntity { category = category, label = category .. "-1", name = category .. " 1" }
     end
 
-    TexApi.newEntity { type = typename, label = typename .. "-2", name = typename .. " 2" }
-    TexApi.setLocation(typename .. "-1")
+    TexApi.newEntity { category = category, label = category .. "-2", name = category .. " 2" }
+    TexApi.setLocation(category .. "-1")
     if includesSubname then
         TexApi.setDescriptor { descriptor = "Subname", description = [[\label{sublabel}]] }
     end
 
-    TexApi.newEntity { type = typename, label = typename .. "-3", name = typename .. " 3" }
+    TexApi.newEntity { category = category, label = category .. "-3", name = category .. " 3" }
     if includesSubname then
         TexApi.setLocation("sublabel")
     else
-        TexApi.setLocation(typename .. "-2")
+        TexApi.setLocation(category .. "-2")
     end
 end
 
-local function generateExpected(typename, includesShortname, includesSubname)
+local function generateExpected(category, includesShortname, includesSubname)
     local out = {}
-    Append(out, [[\chapter{]] .. CapFirst(typename) .. [[}]])
+    Append(out, [[\chapter{]] .. CapFirst(category) .. [[}]])
 
-    Append(out, [[\section*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(typename) .. [[}]])
+    Append(out, [[\section*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(category) .. [[}]])
     Append(out, [[\begin{itemize}]])
-    Append(out, [[\item \nameref{]] .. typename .. [[-1}]])
-    Append(out, [[\item \nameref{]] .. typename .. [[-2}]])
-    Append(out, [[\item \nameref{]] .. typename .. [[-3}]])
+    Append(out, [[\item \nameref{]] .. category .. [[-1}]])
+    Append(out, [[\item \nameref{]] .. category .. [[-2}]])
+    Append(out, [[\item \nameref{]] .. category .. [[-3}]])
     if includesSubname then
         Append(out, [[\item \nameref{sublabel}]])
     end
@@ -35,50 +35,50 @@ local function generateExpected(typename, includesShortname, includesSubname)
 
     Append(out, [[\section{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
     if includesShortname then
-        Append(out, [[\subsection[Shorty]{]] .. CapFirst(typename) .. [[ 1}]])
+        Append(out, [[\subsection[Shorty]{]] .. CapFirst(category) .. [[ 1}]])
     else
-        Append(out, [[\subsection{]] .. CapFirst(typename) .. [[ 1}]])
+        Append(out, [[\subsection{]] .. CapFirst(category) .. [[ 1}]])
     end
-    Append(out, [[\label{]] .. typename .. [[-1}]])
-    Append(out, [[\subsubsection{]] .. CapFirst(Tr("affiliated")) .. [[ ]] .. CapFirst(typename) .. [[}]])
+    Append(out, [[\label{]] .. category .. [[-1}]])
+    Append(out, [[\subsubsection{]] .. CapFirst(Tr("affiliated")) .. [[ ]] .. CapFirst(category) .. [[}]])
     Append(out, [[\begin{itemize}]])
-    Append(out, [[\item \nameref{]] .. typename .. [[-2}]])
+    Append(out, [[\item \nameref{]] .. category .. [[-2}]])
     Append(out, [[\end{itemize}]])
 
     if includesShortname then
         Append(out, [[\section{]] .. CapFirst(Tr("located_in")) .. [[ Shorty}]])
     else
-        Append(out, [[\section{]] .. CapFirst(Tr("located_in")) .. [[ ]] .. typename .. [[ 1}]])
+        Append(out, [[\section{]] .. CapFirst(Tr("located_in")) .. [[ ]] .. category .. [[ 1}]])
     end
-    Append(out, [[\subsection{]] .. CapFirst(typename) .. [[ 2}]])
-    Append(out, [[\label{]] .. typename .. [[-2}]])
+    Append(out, [[\subsection{]] .. CapFirst(category) .. [[ 2}]])
+    Append(out, [[\label{]] .. category .. [[-2}]])
     if includesSubname then
         Append(out, [[\subsubsection{Subname}]])
         Append(out, [[\label{sublabel}]])
-        Append(out, [[\paragraph{]] .. CapFirst(Tr("affiliated")) .. [[ ]] .. CapFirst(typename) .. [[}]])
+        Append(out, [[\paragraph{]] .. CapFirst(Tr("affiliated")) .. [[ ]] .. CapFirst(category) .. [[}]])
     else
-        Append(out, [[\subsubsection{]] .. CapFirst(Tr("affiliated")) .. [[ ]] .. CapFirst(typename) .. [[}]])
+        Append(out, [[\subsubsection{]] .. CapFirst(Tr("affiliated")) .. [[ ]] .. CapFirst(category) .. [[}]])
     end
     Append(out, [[\begin{itemize}]])
-    Append(out, [[\item \nameref{]] .. typename .. [[-3}]])
+    Append(out, [[\item \nameref{]] .. category .. [[-3}]])
     Append(out, [[\end{itemize}]])
 
     if includesShortname then
         if includesSubname then
             Append(out, [[\section{]] .. CapFirst(Tr("located_in")) .. [[ Shorty - Subname}]])
         else
-            Append(out, [[\section{]] .. CapFirst(Tr("located_in")) .. [[ Shorty - ]] .. typename .. [[ 2}]])
+            Append(out, [[\section{]] .. CapFirst(Tr("located_in")) .. [[ Shorty - ]] .. category .. [[ 2}]])
         end
     else
         if includesSubname then
-            Append(out, [[\section{]] .. CapFirst(Tr("located_in")) .. [[ ]] .. typename .. [[ 1 - Subname}]])
+            Append(out, [[\section{]] .. CapFirst(Tr("located_in")) .. [[ ]] .. category .. [[ 1 - Subname}]])
         else
             Append(out,
-                [[\section{]] .. CapFirst(Tr("located_in")) .. [[ ]] .. typename .. [[ 1 - ]] .. typename .. [[ 2}]])
+                [[\section{]] .. CapFirst(Tr("located_in")) .. [[ ]] .. category .. [[ 1 - ]] .. category .. [[ 2}]])
         end
     end
-    Append(out, [[\subsection{]] .. CapFirst(typename) .. [[ 3}]])
-    Append(out, [[\label{]] .. typename .. [[-3}]])
+    Append(out, [[\subsection{]] .. CapFirst(category) .. [[ 3}]])
+    Append(out, [[\label{]] .. category .. [[-3}]])
     return out
 end
 
@@ -86,13 +86,13 @@ local function setup()
     TexApi.makeAllEntitiesPrimary()
 end
 
-for key, typename in pairs({ "places", "other" }) do
+for key, category in pairs({ "places", "other" }) do
     for key, includesShortname in pairs({ false, true }) do
         for key, includesSubname in pairs({ false, true }) do
-            setupTest(typename, includesShortname, includesSubname)
-            local expected = generateExpected(typename, includesShortname, includesSubname)
+            setupTest(category, includesShortname, includesSubname)
+            local expected = generateExpected(category, includesShortname, includesSubname)
 
-            local testName = "Nested " .. typename
+            local testName = "Nested " .. category
             if includesShortname then
                 testName = testName .. " with Shortname"
             end

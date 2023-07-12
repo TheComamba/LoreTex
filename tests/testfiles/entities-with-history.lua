@@ -1,7 +1,7 @@
 local function entitySetup()
-    TexApi.newEntity { type = "places", label = "test-1", name = "Test 1" }
+    TexApi.newEntity { category = "places", label = "test-1", name = "Test 1" }
 
-    TexApi.newEntity { type = "places", label = "test-2", name = "Test 2" }
+    TexApi.newEntity { category = "places", label = "test-2", name = "Test 2" }
     TexApi.addHistory { year = -10, event = [[Event that concerns \reference{test-1} and \itref{test-2}.]] }
     TexApi.addHistory { year = 10, event = [[Event in the future.]] }
 end

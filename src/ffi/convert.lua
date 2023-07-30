@@ -132,6 +132,9 @@ function EntitiesFromColumns(entityColumns)
         entityColumn.description = stringToDescription(entityColumn.description)
         if IsProtectedDescriptor(entityColumn.descriptor) then
             SetProtectedField(entity, entityColumn.descriptor, entityColumn.description)
+            if entityColumn.descriptor == GetProtectedDescriptor("category") then
+                AddCategory(entityColumn.description)
+            end
         elseif IsEntity(entityColumn.description) then
             entity[entityColumn.descriptor] = entityColumn.description
         else

@@ -32,8 +32,8 @@ local function addPrimariesWhenMentioned(arg, mentioned)
 end
 
 local function addEntityToDict(arg, newEntity)
-    if arg.entites == nil then
-        arg.entites = {}
+    if arg.entities == nil then
+        arg.entities = {}
     end
     local categoryname = GetProtectedStringField(newEntity, "category")
     if arg.entities[categoryname] == nil then

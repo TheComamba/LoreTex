@@ -1,17 +1,15 @@
-TexApi.setCurrentYear(0)
-
 TexApi.newEntity { category = "NPCs", label = "flora", shortname = "", name = "Flora" }
 TexApi.born { year = -10, event = [[\nameref{flora} is born.\birthof{flora}]] }
 TexApi.died { year = -5, event = [[\nameref{flora} dies.\deathof{flora}]] }
 
-
 TexApi.newEntity { category = "NPCs", label = "ramona", name = "Ramona" }
 TexApi.setSecret()
-TexApi.reveal("ramona")
 
-local function refSetup()
+local function setup()
+    TexApi.setCurrentYear(0)
     TexApi.makeEntityPrimary("flora")
     TexApi.makeEntityPrimary("ramona")
+    TexApi.reveal("ramona")
 end
 
 local expected = {}
@@ -35,4 +33,4 @@ Append(expected, [[\end{itemize}]])
 Append(expected, [[\subsection[Ramona]{Ramona (]] .. CapFirst(Tr("secret")) .. [[)}]])
 Append(expected, [[\label{ramona}]])
 
-AssertAutomatedChapters("Marked Entities", expected, refSetup)
+AssertAutomatedChapters("Marked Entities", expected, setup)

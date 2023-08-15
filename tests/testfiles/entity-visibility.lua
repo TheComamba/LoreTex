@@ -245,25 +245,37 @@ local out = {}
 local expected = {}
 
 entitySetup()
-TexApi.showSecrets(false)
-TexApi.showFuture(false)
+local function setup1()
+    refSetup()
+    TexApi.showSecrets(false)
+    TexApi.showFuture(false)
+end
 expected = generateExpected(false, false)
-AssertAutomatedChapters("entity-visibility-no-secrets-no-future", expected, refSetup)
+AssertAutomatedChapters("entity-visibility-no-secrets-no-future", expected, setup1)
 
 entitySetup()
-TexApi.showSecrets(true)
-TexApi.showFuture(false)
+local function setup2()
+    refSetup()
+    TexApi.showSecrets(true)
+    TexApi.showFuture(false)
+end
 expected = generateExpected(true, false)
-AssertAutomatedChapters("entity-visibility-with-secrets-no-future", expected, refSetup)
+AssertAutomatedChapters("entity-visibility-with-secrets-no-future", expected, setup2)
 
 entitySetup()
-TexApi.showSecrets(false)
-TexApi.showFuture(true)
+local function setup3()
+    refSetup()
+    TexApi.showSecrets(false)
+    TexApi.showFuture(true)
+end
 expected = generateExpected(false, true)
-AssertAutomatedChapters("entity-visibility-no-secrets-with-future", expected, refSetup)
+AssertAutomatedChapters("entity-visibility-no-secrets-with-future", expected, setup3)
 
 entitySetup()
-TexApi.showSecrets(true)
-TexApi.showFuture(true)
+local function setup4()
+    refSetup()
+    TexApi.showSecrets(true)
+    TexApi.showFuture(true)
+end
 expected = generateExpected(true, true)
-AssertAutomatedChapters("entity-visibility-with-secrets-with-future", expected, refSetup)
+AssertAutomatedChapters("entity-visibility-with-secrets-with-future", expected, setup4)

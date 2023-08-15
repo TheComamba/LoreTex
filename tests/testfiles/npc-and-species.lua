@@ -1,6 +1,4 @@
 for key, isAgingDefined in pairs({ false, true }) do
-    TexApi.setCurrentYear(0)
-
     TexApi.newEntity { category = "species", label = "test-species", name = "Test Species" }
     if isAgingDefined then
         TexApi.setAgeFactor(1)
@@ -57,6 +55,7 @@ for key, isAgingDefined in pairs({ false, true }) do
     end
 
     local function setup()
+        TexApi.setCurrentYear(0)
         TexApi.makeAllEntitiesPrimary()
     end
 

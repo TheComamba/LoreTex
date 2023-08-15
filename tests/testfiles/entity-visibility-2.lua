@@ -64,21 +64,33 @@ local function refSetup2()
 end
 
 entitySetup()
-TexApi.showSecrets(false)
+local function setup1()
+    refSetup1()
+    TexApi.showSecrets(false)
+end
 expected = generateExpected(false, false)
-AssertAutomatedChapters("entity-secrecy-two-do-not-show-secrets", expected, refSetup1)
+AssertAutomatedChapters("entity-secrecy-two-do-not-show-secrets", expected, setup1)
 
 entitySetup()
-TexApi.showSecrets(true)
+local function setup2()
+    refSetup1()
+    TexApi.showSecrets(true)
+end
 expected = generateExpected(false, true)
-AssertAutomatedChapters("entity-secrecy-two-show-secrets", expected, refSetup1)
+AssertAutomatedChapters("entity-secrecy-two-show-secrets", expected, setup2)
 
 entitySetup()
-TexApi.showSecrets(false)
+local function setup3()
+    refSetup2()
+    TexApi.showSecrets(false)
+end
 expected = generateExpected(true, false)
-AssertAutomatedChapters("entity-secrecy-two-do-not-show-secrets-but-item-referenced", expected, refSetup2)
+AssertAutomatedChapters("entity-secrecy-two-do-not-show-secrets-but-item-referenced", expected, setup3)
 
 entitySetup()
-TexApi.showSecrets(true)
+local function setup4()
+    refSetup2()
+    TexApi.showSecrets(true)
+end
 expected = generateExpected(true, true)
-AssertAutomatedChapters("entity-secrecy-two-show-secrets, item referenced", expected, refSetup2)
+AssertAutomatedChapters("entity-secrecy-two-show-secrets, item referenced", expected, setup4)

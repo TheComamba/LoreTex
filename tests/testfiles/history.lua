@@ -1,7 +1,4 @@
 local function entitySetup()
-    TexApi.setCurrentYear(0)
-    TexApi.setDaysPerYear(365)
-
     TexApi.newEntity { category = "places", label = "test-1", name = "Test 1" }
     TexApi.addHistoryOnlyHere { year = -10, event =
     [[Event that concerns \reference{test-1}, but not \reference{test-2}.]] }
@@ -29,8 +26,10 @@ local function entitySetup()
         event = [[Event that concerns \reference{test-1}, but not \reference{test-2}.\notconcerns{test-2}]] }
 end
 
-local function refSetup()
+local function setupBase()
     TexApi.makeEntityPrimary("test-1")
+    TexApi.setCurrentYear(0)
+    TexApi.setDaysPerYear(365)
 end
 
 local function generateExpected(isCurrentDaySet, isShowFuture)
@@ -121,23 +120,35 @@ local function generateExpected(isCurrentDaySet, isShowFuture)
 end
 
 entitySetup()
-TexApi.showFuture(false)
+local function setup1()
+    setupBase()
+    TexApi.showFuture(false)
+end
 local expected = generateExpected(false, false)
-AssertAutomatedChapters("history-events-no-future-day-not-set", expected, refSetup)
+AssertAutomatedChapters("history-events-no-future-day-not-set", expected, setup1)
 
 entitySetup()
-TexApi.showFuture(true)
+local function setup2()
+    setupBase()
+    TexApi.showFuture(true)
+end
 expected = generateExpected(false, true)
-AssertAutomatedChapters("history-events-with-future-day-not-set", expected, refSetup)
+AssertAutomatedChapters("history-events-with-future-day-not-set", expected, setup2)
 
 entitySetup()
-TexApi.setCurrentDay(10)
-TexApi.showFuture(false)
+local function setup3()
+    setupBase()
+    TexApi.setCurrentDay(10)
+    TexApi.showFuture(false)
+end
 local expected = generateExpected(true, false)
-AssertAutomatedChapters("history-events-no-future-day-set", expected, refSetup)
+AssertAutomatedChapters("history-events-no-future-day-set", expected, setup3)
 
 entitySetup()
-TexApi.setCurrentDay(10)
-TexApi.showFuture(true)
+local function setup4()
+    setupBase()
+    TexApi.setCurrentDay(10)
+    TexApi.showFuture(true)
+end
 expected = generateExpected(true, true)
-AssertAutomatedChapters("history-events-with-future-day-set", expected, refSetup)
+AssertAutomatedChapters("history-events-with-future-day-set", expected, setup4)

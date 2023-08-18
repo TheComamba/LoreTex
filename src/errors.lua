@@ -112,7 +112,6 @@ function DebugPrint(input)
     for _, line in pairs(content) do
         Append(out, SplitStringInLinebreaks(line, 100))
     end
-    Append(out, content)
     Append(out, TexCmd("end", "verbatim"))
     Append(out, TexCmd("vspace", "1cm"))
     return out

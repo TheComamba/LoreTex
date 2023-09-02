@@ -11,7 +11,7 @@ local function setDescriptorAsKeyValPair(arg)
 end
 
 function SetDescriptor(arg)
-    if not IsArgOk("SetDescriptor", arg, { "entity", "descriptor", "description" }, { "subdescriptor",
+    if not IsArgOk("SetDescriptor", arg, { "entity", "descriptor" }, { "description", "subdescriptor",
             "suppressDerivedDescriptors" }) then
         return
     end

@@ -1,10 +1,14 @@
 local function newEntity(name, depth)
-    TexApi.newEntity { label = name .. 1, name = name .. 1, type = "other" }
+    TexApi.newEntity { label = name .. 1, name = name .. 1, category = "other" }
     if depth == 2 then
         TexApi.setDescriptor { descriptor = name .. 2, description = [[\label{]] .. name .. 2 .. [[}]] }
     elseif depth == 3 then
         TexApi.setDescriptor { descriptor = name .. 2,
-            description = [[\subparagraph{]] .. name .. 3 .. [[}\label{]] .. name .. 3 .. [[}]] }
+            description = [[\paragraph{]] .. name .. 3 .. [[}\label{]] .. name .. 3 .. [[}]] }
+    elseif depth == 4 then
+        TexApi.setDescriptor { descriptor = name .. 3,
+            description = [[\paragraph{]] .. name .. 3 .. [[}\label{]] .. name .. 3 .. [[}
+            \subparagraph{]] .. name .. 4 .. [[}\label{]] .. name .. 4 .. [[}]] }
     end
 end
 
@@ -31,11 +35,11 @@ local function generateAppearance(depth, modification)
         Append(out, "species-1-" .. depth)
     end
     Append(out, [[}, 100 ]])
-    Append(out, Tr("years-old"))
+    Append(out, Tr("years_old"))
     if modification == "not-aging" then
-        Append(out, " (" .. Tr("does-not-age") .. ")")
+        Append(out, " (" .. Tr("does_not_age") .. ")")
     elseif modification == "factor" or modification == "exponent" or modification == "both" or modification == "mixing" then
-        Append(out, " (" .. Tr("corresponding-human-age") .. " ")
+        Append(out, " (" .. Tr("corresponding_human_age") .. " ")
         Append(out, generateHumanAgeCentury(modification))
         Append(out, " " .. Tr("years") .. ")")
     end
@@ -66,7 +70,7 @@ local function generateLifestageString(key, age)
     Append(out, [[\item ]])
     Append(out, age)
     Append(out, [[ (]])
-    Append(out, Tr("x-years-ago", { 100 - age }))
+    Append(out, Tr("x_years_ago", { 100 - age }))
     Append(out, [[): \\ \nameref{char} ]])
     Append(out, Tr("is") .. " ")
     Append(out, Tr(lifeStages[key]) .. ".")
@@ -75,26 +79,25 @@ end
 
 local function generateExpected(depth, modification)
     local out = {}
-    Append(out, [[\chapter{]] .. CapFirst(Tr("other")) .. [[}]])
-    Append(out, [[\section{]] .. CapFirst(Tr("other")) .. [[}]])
-    Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("other")) .. [[}]])
+    Append(out, [[\chapter{Other}]])
+    Append(out, [[\section*{]] .. CapFirst(Tr("all")) .. [[ Other}]])
     Append(out, [[\begin{itemize}]])
     Append(out, [[\item \nameref{char}]])
     Append(out, [[\end{itemize}]])
-    Append(out, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
-    Append(out, [[\subsubsection{char}]])
+    Append(out, [[\section{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
+    Append(out, [[\subsection{Char}]])
     Append(out, [[\label{char}]])
-    Append(out, [[\paragraph{]] .. CapFirst(Tr("appearance")) .. [[}]])
-    Append(out, [[\subparagraph{]] .. CapFirst(Tr("species-and-age")) .. [[:}]])
+    Append(out, [[\subsubsection{]] .. CapFirst(Tr("appearance")) .. [[}]])
+    Append(out, [[\paragraph{]] .. CapFirst(Tr("species_and_age")) .. [[:}]])
     Append(out, generateAppearance(depth, modification))
-    Append(out, [[\paragraph{]] .. CapFirst(Tr("history")) .. [[}]])
+    Append(out, [[\subsubsection{]] .. CapFirst(Tr("history")) .. [[}]])
     Append(out, [[\begin{itemize}]])
-    Append(out, [[\item 0 (]] .. Tr("x-years-ago", { 100 }) .. [[): \\Born.]])
+    Append(out, [[\item 0 (]] .. Tr("x_years_ago", { 100 }) .. [[): \\Born.]])
     for key, age in pairs(generateAgeAtLifestages(modification)) do
         Append(out, generateLifestageString(key, age))
     end
     Append(out, [[\end{itemize}]])
-    Append(out, [[\chapter{]] .. CapFirst(Tr("only-mentioned")) .. [[}]])
+    Append(out, [[\chapter{]] .. CapFirst(Tr("only_mentioned")) .. [[}]])
     if modification == "mixing" then
         Append(out, [[\subparagraph{species-3-]] .. depth .. [[}]])
         Append(out, [[\label{species-3-]] .. depth .. [[}]])
@@ -107,14 +110,13 @@ local function generateExpected(depth, modification)
     return out
 end
 
-local expected = {}
-local received = {}
+local function setup()
+    TexApi.setCurrentYear(100)
+    TexApi.makeEntityPrimary("char")
+end
 
-for depth = 1, 3 do
-    for key, modification in pairs({ "none", "not-aging", "normal", "factor", "exponent", "both", "mixing" }) do
-        ResetState()
-        TexApi.setCurrentYear(100)
-
+for depth = 1, 4 do
+    for _, modification in pairs({ "none", "not-aging", "normal", "factor", "exponent", "both", "mixing" }) do
         newEntity("species-1-", depth)
         if modification == "not-aging" then
             TexApi.setAgeFactor(0)
@@ -133,17 +135,16 @@ for depth = 1, 3 do
         newEntity("species-3-", depth)
         TexApi.setAgeModifierMixing("species-1-" .. depth, "species-2-" .. depth)
 
-        TexApi.newEntity { label = "char", name = "char", type = "other" }
+        TexApi.newEntity { label = "char", name = "char", category = "other" }
         if modification == "mixing" then
             TexApi.setSpecies("species-3-" .. depth)
         else
             TexApi.setSpecies("species-1-" .. depth)
         end
         TexApi.born { year = 0, event = "Born." }
-        TexApi.makeEntityPrimary("char")
 
-        expected = generateExpected(depth, modification)
-        received = TexApi.automatedChapters()
-        Assert("Age modifications " .. modification .. ", entity depth " .. depth, expected, received)
+        local name = "Age modifications " .. modification .. ", entity depth " .. depth
+        local expected = generateExpected(depth, modification)
+        AssertAutomatedChapters(name, expected, setup)
     end
 end

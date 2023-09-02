@@ -1,20 +1,26 @@
+NewpageAfterEntity = false
+
 local function printEntities(sectionname, entitiesList)
     if IsEmpty(entitiesList) then
         return {}
     end
 
     local out = {}
-    Append(out, TexCmd("subsection", CapFirst(sectionname)))
+    Append(out, TexCmd("section", CapFirst(sectionname)))
     Sort(entitiesList, "compareByName")
     for key, entity in pairs(entitiesList) do
-        local shortname = GetProtectedStringField(entity, "shortname")
+        local name = CapFirst(GetProtectedStringField(entity, "name"))
+        local shortname = CapFirst(GetProtectedStringField(entity, "shortname"))
         if shortname == "" then
-            Append(out, TexCmd("subsubsection", GetProtectedStringField(entity, "name")))
+            Append(out, TexCmd("subsection", name))
         else
-            Append(out, TexCmd("subsubsection", GetProtectedStringField(entity, "name"), shortname))
+            Append(out, TexCmd("subsection", name, shortname))
         end
         Append(out, TexCmd("label", GetProtectedStringField(entity, "label")))
         Append(out, DescriptorsString(entity))
+        if NewpageAfterEntity then
+            Append(out, TexCmd("newpage"))
+        end
     end
     return out
 end
@@ -40,7 +46,7 @@ function PrintOnlyMentionedChapter(mentionedEntities)
     Sort(mentionedEntities, "compareByName")
     for key, mentionedEntity in pairs(mentionedEntities) do
         if key == 1 then
-            Append(out, TexCmd("chapter", CapFirst(Tr("only-mentioned"))))
+            Append(out, TexCmd("chapter", CapFirst(Tr("only_mentioned"))))
         end
         local name = GetShortname(mentionedEntity)
         local label = GetProtectedStringField(mentionedEntity, "label")
@@ -63,7 +69,7 @@ local function PrintAllEntities(name, entities)
     end
     if #allLabels > 0 then
         Sort(allLabels, "compareByName")
-        Append(out, TexCmd("subsection*", CapFirst(Tr("all")) .. " " .. CapFirst(name)))
+        Append(out, TexCmd("section*", CapFirst(Tr("all")) .. " " .. CapFirst(name)))
         Append(out, ListAll(allLabels, NamerefString))
     end
     return out
@@ -76,38 +82,31 @@ local function printEntityChapterSortedByLocation(entities)
         if not IsProtectedDescriptor(locationName) then
             local sectionname = ""
             if IsEmpty(locationName) then
-                sectionname = Tr("in-whole-world")
+                sectionname = Tr("in_whole_world")
             else
-                sectionname = CapFirst(Tr("in")) .. " " .. locationName
+                sectionname = CapFirst(Tr("located_in")) .. " " .. locationName
             end
             local entitiesHere = entities[locationName]
             Append(out, printEntities(sectionname, entitiesHere))
         end
     end
 
-    local sectionname = Tr("at-secret-locations")
+    local sectionname = Tr("at_secret_locations")
     local entitiesAtSecretLocations = GetProtectedTableReferenceField(entities, "isSecret")
     Append(out, printEntities(sectionname, entitiesAtSecretLocations))
 
     return out
 end
 
-function PrintEntityChapter(processedOut, metatype)
-    if IsEmpty(processedOut.entities[metatype]) then
+function PrintEntityChapter(processedOut, category)
+    local entitiesOfCategory = processedOut.entities[category]
+    if IsEmpty(entitiesOfCategory) then
         return {}
     end
 
     local out = {}
-    Append(out, TexCmd("chapter", CapFirst(Tr(metatype))))
-    local types = AllTypes[metatype]
-    Sort(types, "compareTranslation")
-    for i, type in pairs(types) do
-        local entitiesOfType = processedOut.entities[metatype][type]
-        if not IsEmpty(entitiesOfType) then
-            Append(out, TexCmd("section", CapFirst(Tr(type))))
-            Append(out, PrintAllEntities(Tr(type), entitiesOfType))
-            Append(out, printEntityChapterSortedByLocation(entitiesOfType))
-        end
-    end
+    Append(out, TexCmd("chapter", CapFirst(category)))
+    Append(out, PrintAllEntities(category, entitiesOfCategory))
+    Append(out, printEntityChapterSortedByLocation(entitiesOfCategory))
     return out
 end

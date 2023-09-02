@@ -36,19 +36,19 @@ local function entityQualifiersString(child, parent, relationships)
     local birthyearstr = GetProtectedNullableField(child, "born")
     local birthyear = tonumber(birthyearstr)
     if birthyear ~= nil and birthyear <= GetCurrentYear() then
-        birthyear = AddYearOffset(birthyear, YearFmt)
+        birthyear = YearWithOffset(birthyear, YearFmt)
         Append(content, TexCmd("textborn") .. birthyear)
     end
     local deathyearstr = GetProtectedNullableField(child, "died")
     local deathyear = tonumber(deathyearstr)
     if deathyear ~= nil and deathyear <= GetCurrentYear() then
-        deathyear = AddYearOffset(deathyear, YearFmt)
+        deathyear = YearWithOffset(deathyear, YearFmt)
         Append(content, TexCmd("textdied") .. deathyear)
     end
     local childLocation = GetProtectedNullableField(child, "location")
     local parentLocation = GetProtectedNullableField(parent, "location")
     if IsLocationUnrevealed(child) then
-        Append(content, Tr("at-secret-location"))
+        Append(content, Tr("at_secret_location"))
     elseif childLocation ~= nil then
         local childLocationLabel = GetProtectedStringField(childLocation, "label")
         local parentLocationLabel = ""
@@ -57,7 +57,7 @@ local function entityQualifiersString(child, parent, relationships)
         end
         if childLocationLabel ~= parentLocationLabel and
             not IsIn(childLocationLabel, GetAllLabels(parent)) then
-            Append(content, Tr("in") .. " " .. TexCmd("nameref", childLocationLabel))
+            Append(content, Tr("located_in") .. " " .. TexCmd("nameref", childLocationLabel))
             AddToProtectedField(parent, "mentions", childLocation)
         end
     end
@@ -69,8 +69,8 @@ local function entityQualifiersString(child, parent, relationships)
 end
 
 local function addSingleChildDescriptorToParent(child, parent, relationships)
-    local childType = GetProtectedStringField(child, "type")
-    local descriptor = Tr("affiliated") .. " " .. Tr(childType)
+    local childCategory = GetProtectedStringField(child, "category")
+    local descriptor = Tr("affiliated") .. " " .. CapFirst(childCategory)
     if parent[descriptor] == nil then
         parent[descriptor] = {}
     end

@@ -1,14 +1,14 @@
 PrimaryRefs = {}
 MentionedRefs = {}
 UnfoundRefs = {}
-PrimaryRefWhenMentionedTypes = {}
+PrimaryRefWhenMentionedCategories = {}
 local refTypes = { "reference", "nameref", "itref", "ref" }
 
 function ResetRefs()
     PrimaryRefs = {}
     MentionedRefs = {}
     UnfoundRefs = {}
-    PrimaryRefWhenMentionedTypes = {}
+    PrimaryRefWhenMentionedCategories = {}
 end
 
 StateResetters[#StateResetters + 1] = ResetRefs
@@ -86,11 +86,11 @@ end
 
 TexApi.makeAllEntitiesPrimary = makeAllEntitiesPrimary
 
-local function makeTypePrimaryWhenMentioned(type)
-    UniqueAppend(PrimaryRefWhenMentionedTypes, type)
+local function makeCategoryPrimaryWhenMentioned(category)
+    UniqueAppend(PrimaryRefWhenMentionedCategories, category)
 end
 
-TexApi.makeTypePrimaryWhenMentioned = makeTypePrimaryWhenMentioned
+TexApi.makeCategoryPrimaryWhenMentioned = makeCategoryPrimaryWhenMentioned
 
 local function makeEntityAndChildrenPrimary(label)
     UniqueAppend(PrimaryRefs, label)
@@ -115,8 +115,8 @@ end
 
 TexApi.makeEntityAndChildrenPrimary = makeEntityAndChildrenPrimary
 
-TexApi.makeAllEntitiesOfTypePrimary = function(type)
-    makePrimaryIf(Bind(IsType, type))
+TexApi.makeAllEntitiesOfCategoryPrimary = function(category)
+    makePrimaryIf(Bind(HasCategory, category))
 end
 
 TexApi.makeEntityPrimary = function(label)

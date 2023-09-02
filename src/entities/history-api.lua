@@ -1,29 +1,30 @@
-local historyItemCounter = 1
+AllHistoryItems = {}
 
 StateResetters[#StateResetters + 1] = function()
-	historyItemCounter = 1
+	AllHistoryItems = {}
 end
 
 local function IsHistoryItemOk(caller, item)
 	local required = {}
-	Append(required, GetProtectedDescriptor("counter"))
 	Append(required, GetProtectedDescriptor("content"))
 	Append(required, GetProtectedDescriptor("isConcernsOthers"))
 	Append(required, GetProtectedDescriptor("isSecret"))
+	Append(required, GetProtectedDescriptor("label"))
 	Append(required, GetProtectedDescriptor("year"))
 	local optional = {}
 	Append(optional, GetProtectedDescriptor("day"))
 	Append(optional, GetProtectedDescriptor("originator"))
-	Append(optional, GetProtectedDescriptor("yearFormat"))
 	return IsArgOk(caller, item, required, optional)
 end
 
-function NewHistoryItem()
+function NewHistoryItem(addToAll)
 	local item = {}
 	SetProtectedField(item, "isSecret", false)
 	SetProtectedField(item, "isConcernsOthers", true)
-	SetProtectedField(item, "counter", historyItemCounter)
-	historyItemCounter = historyItemCounter + 1
+
+	if addToAll then
+		AllHistoryItems[#AllHistoryItems + 1] = item
+	end
 	return item
 end
 
@@ -33,32 +34,23 @@ local function setDay(historyItem, day)
 	end
 	local dayNumber = tonumber(day)
 	if dayNumber == nil then
-		LogError("Could not convert to number:" .. DebugPrint(day))
+		LogError { "Could not convert to number:", DebugPrint(day) }
 	else
 		SetProtectedField(historyItem, "day", dayNumber)
 	end
 end
 
-function SetYear(historyItem, year)
+function SetYear(historyItem, year, yearFmt)
 	local yearNumber = tonumber(year)
 	if yearNumber == nil then
-		LogError("Could not convert to number:" .. DebugPrint(year))
-	else
-		local yearFmt = GetProtectedNullableField(historyItem, "yearFormat")
-		if yearFmt ~= nil then
-			yearNumber = RemoveYearOffset(yearNumber, yearFmt)
-		end
-		SetProtectedField(historyItem, "year", yearNumber)
-	end
-end
-
-local function setYearFmt(historyItem, label)
-	if IsEmpty(label) then
-		LogError("Called with empty year format for history item:" .. DebugPrint(historyItem))
+		LogError { "Could not convert to number:", DebugPrint(year) }
 		return
 	end
-	local fmt = GetMutableEntityFromAll(label)
-	SetProtectedField(historyItem, "yearFormat", fmt)
+
+	if yearFmt ~= nil then
+		yearNumber = YearWithoutOffset(yearNumber, yearFmt)
+	end
+	SetProtectedField(historyItem, "year", yearNumber)
 end
 
 function AddMentions(entity, content)
@@ -70,29 +62,31 @@ function AddMentions(entity, content)
 end
 
 local function addConcerns(entity, content)
+	local concernsLabels = {}
 	local originator = GetProtectedNullableField(entity, "originator")
 	if originator ~= nil then
-		AddToProtectedField(entity, "concerns", originator)
+		UniqueAppend(concernsLabels, GetProtectedStringField(originator, "label"))
 	end
+
 	if GetProtectedNullableField(entity, "isConcernsOthers") then
-		local concernesLabels = {}
 		for key, mentioned in pairs(GetProtectedTableReferenceField(entity, "mentions")) do
 			local label = GetProtectedStringField(mentioned, "label")
 			if label ~= "" then
-				UniqueAppend(concernesLabels, label)
+				UniqueAppend(concernsLabels, label)
 			end
 		end
 		if GetProtectedNullableField(entity, "year") ~= nil then
-			UniqueAppend(concernesLabels, ScanStringForCmd(content, "concerns"))
-			UniqueAppend(concernesLabels, GetProtectedTableReferenceField(entity, "birthof"))
-			UniqueAppend(concernesLabels, GetProtectedTableReferenceField(entity, "deathof"))
+			UniqueAppend(concernsLabels, ScanStringForCmd(content, "concerns"))
+			UniqueAppend(concernsLabels, GetProtectedTableReferenceField(entity, "birthof"))
+			UniqueAppend(concernsLabels, GetProtectedTableReferenceField(entity, "deathof"))
 		end
-		local notConcerns = ScanForCmd(content, "notconcerns")
-		for key, concernedLabel in pairs(concernesLabels) do
-			if concernedLabel ~= "" and not IsIn(concernedLabel, notConcerns) then
-				local concernedEntity = GetMutableEntityFromAll(concernedLabel)
-				AddToProtectedField(entity, "concerns", concernedEntity)
-			end
+	end
+
+	local notConcerns = ScanForCmd(content, "notconcerns")
+	for key, concernedLabel in pairs(concernsLabels) do
+		if concernedLabel ~= "" and not IsIn(concernedLabel, notConcerns) then
+			local concernedEntity = GetMutableEntityFromAll(concernedLabel)
+			AddToProtectedField(entity, "concerns", concernedEntity)
 		end
 	end
 end
@@ -117,7 +111,9 @@ local function processEvent(item)
 	AddMentions(item, content)
 	addConcerns(item, content)
 	for key, entity in pairs(GetProtectedTableReferenceField(item, "concerns")) do
-		AddToProtectedField(entity, "historyItems", item)
+		if not IsIn(item, GetProtectedTableReferenceField(entity, "historyItems")) then
+			AddToProtectedField(entity, "historyItems", item)
+		end
 	end
 
 	local year = GetProtectedNullableField(item, "year")
@@ -128,18 +124,21 @@ local function processEvent(item)
 		SetProtectedField(item, "day", nil)
 	end
 	if #(GetProtectedTableReferenceField(item, "concerns")) == 0 then
-		LogError("This history item concerns nobody:" .. DebugPrint(item))
+		LogError { "This history item concerns nobody:", DebugPrint(item) }
 	end
 end
 
-local function addHistory(arg)
-	if not IsArgOk("addHistory", arg, { "year", "event" }, { "day", "isConcernsOthers", "isSecret", "yearFmt" }) then
+function AddHistory(arg)
+	if not IsArgOk("addHistory", arg, { "year", "event" }, { "day", "isConcernsOthers", "isSecret", "label", "originator",
+			"yearFmt" }) then
 		return
 	end
-	local item = NewHistoryItem()
-	SetProtectedField(item, "originator", CurrentEntity)
+	local item = NewHistoryItem(true)
+	if arg.originator then
+		SetProtectedField(item, "originator", arg.originator)
+	end
 	setDay(item, arg.day)
-	SetYear(item, arg.year)
+	SetYear(item, arg.year, arg.yearFmt)
 	SetProtectedField(item, "content", arg.event)
 	if not IsEmpty(arg.isConcernsOthers) then
 		SetProtectedField(item, "isConcernsOthers", arg.isConcernsOthers)
@@ -147,38 +146,42 @@ local function addHistory(arg)
 	if not IsEmpty(arg.isSecret) then
 		SetProtectedField(item, "isSecret", arg.isSecret)
 	end
-	if not IsEmpty(arg.yearFmt) then
-		setYearFmt(item, arg.yearFmt)
-	end
+	AssureUniqueHistoryLabel(item)
 	processEvent(item)
 end
 
 TexApi.addHistory = function(arg)
-	addHistory(arg)
+	arg.originator = CurrentEntity
+	if arg.yearFmt and arg.yearFmt ~= "" then
+		arg.yearFmt = GetMutableEntityFromAll(arg.yearFmt)
+	else
+		arg.yearFmt = nil
+	end
+	AddHistory(arg)
 end
 
 TexApi.addSecretHistory = function(arg)
 	arg.isSecret = true
-	addHistory(arg)
+	TexApi.addHistory(arg)
 end
 
 TexApi.addHistoryOnlyHere = function(arg)
 	arg.isConcernsOthers = false
-	addHistory(arg)
+	TexApi.addHistory(arg)
 end
 
 TexApi.born = function(arg)
-	addHistory(arg)
+	TexApi.addHistory(arg)
 	if not IsEmpty(arg.yearFmt) then
-		arg.year = RemoveYearOffset(arg.year, arg.yearFmt)
+		arg.year = YearWithoutOffset(arg.year, arg.yearFmt)
 	end
 	SetProtectedField(CurrentEntity, "born", arg.year)
 end
 
 TexApi.died = function(arg)
-	addHistory(arg)
+	TexApi.addHistory(arg)
 	if not IsEmpty(arg.yearFmt) then
-		arg.year = RemoveYearOffset(arg.year, arg.yearFmt)
+		arg.year = YearWithoutOffset(arg.year, arg.yearFmt)
 	end
 	SetProtectedField(CurrentEntity, "died", arg.year)
 end

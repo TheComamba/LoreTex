@@ -21,7 +21,7 @@ end
 
 TexApi.setCurrentYear = function(year)
     if year == nil or type(year) ~= "number" then
-        LogError("Called with " .. DebugPrint(year))
+        LogError { "Called with ", DebugPrint(year) }
         return
     end
     currentYear = year
@@ -30,7 +30,7 @@ end
 
 TexApi.setCurrentDay = function(day)
     if day == nil or type(day) ~= "number" then
-        LogError("Called with " .. DebugPrint(day))
+        LogError { "Called with ", DebugPrint(day) }
         return
     end
     currentDay = day
@@ -39,7 +39,7 @@ end
 
 TexApi.setDaysPerYear = function(days)
     if days == nil or type(days) ~= "number" then
-        LogError("Called with " .. DebugPrint(days))
+        LogError { "Called with ", DebugPrint(days) }
         return
     end
     daysPerYear = days
@@ -89,7 +89,7 @@ TexApi.addYearFmt = addYearFmt
 
 local function setYearAbbreviation(entity, abbr)
     if entity == nil then
-        LogError("Called without entity for abbreviation:" .. DebugPrint(abbr))
+        LogError { "Called without entity for abbreviation:", DebugPrint(abbr) }
         return
     end
     SetProtectedField(entity, "yearAbbreviation", abbr)
@@ -105,7 +105,7 @@ local function setYearOffset(entity, offset)
         return
     end
     if offset == nil or type(offset) ~= "number" then
-        LogError("Called with invalid offset for entity:" .. DebugPrint(entity))
+        LogError { "Called with invalid offset for entity:", DebugPrint(entity) }
         return
     end
     SetProtectedField(entity, "yearOffset", offset)
@@ -127,7 +127,7 @@ TexApi.addMonth = function(arg)
     addMonth(arg)
 end
 
-function RemoveYearOffset(year, fmt)
+function YearWithoutOffset(year, fmt)
     local offset = GetProtectedNullableField(fmt, "yearOffset")
     if offset == nil then
         return year
@@ -136,7 +136,7 @@ function RemoveYearOffset(year, fmt)
     end
 end
 
-function AddYearOffset(year, fmt)
+function YearWithOffset(year, fmt)
     local offset = GetProtectedNullableField(fmt, "yearOffset")
     if offset == nil then
         return year
@@ -175,22 +175,22 @@ local function timeDiffString(historyItem)
         elseif timeDiffInDays == -1 then
             return Tr("tomorrow")
         elseif timeDiffInDays > 1 then
-            return Tr("x-days-ago", { timeDiffInDays })
+            return Tr("x_days_ago", { timeDiffInDays })
         else
-            return Tr("in-x-days", { math.abs(timeDiffInDays) })
+            return Tr("in_x_days", { math.abs(timeDiffInDays) })
         end
     else
         timeDiffInYears = Round(timeDiffInYears)
         if timeDiffInYears == 0 then
-            return Tr("this-year")
+            return Tr("this_year")
         elseif timeDiffInYears == 1 then
-            return Tr("last-year")
+            return Tr("last_year")
         elseif timeDiffInYears == -1 then
-            return Tr("next-year")
+            return Tr("next_year")
         elseif timeDiffInYears > 1 then
-            return Tr("x-years-ago", { timeDiffInYears })
+            return Tr("x_years_ago", { timeDiffInYears })
         else
-            return Tr("in-x-years", { math.abs(timeDiffInYears) })
+            return Tr("in_x_years", { math.abs(timeDiffInYears) })
         end
     end
 end
@@ -216,7 +216,7 @@ function IsHasHappened(entity, keyword, onNil)
     else
         year = tonumber(year)
         if year == nil then
-            LogError("Entry with key \"" .. keyword .. "\" of is not a number:" .. DebugPrint(entity))
+            LogError { "Entry with key \"", keyword, "\" of is not a number:", DebugPrint(entity) }
             return onNil
         end
         return year <= GetCurrentYear()
@@ -241,6 +241,14 @@ end
 local function monthAndDay(day, namesAndFirstDays)
     local firstDay = 1
     local month = "NoMonthFound"
+    if not namesAndFirstDays then
+        LogError("No months defined!")
+        return month, day
+    elseif not namesAndFirstDays[1] then
+        LogError("No months defined!")
+        return month, day
+    end
+
     if day < namesAndFirstDays[1][2] then
         month = namesAndFirstDays[#namesAndFirstDays][1]
         firstDay = namesAndFirstDays[#namesAndFirstDays][2]

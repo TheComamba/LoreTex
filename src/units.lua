@@ -11,7 +11,7 @@ local fahrenheitOffset = -32
 
 function PrintFtToM(valInFt)
     if valInFt == nil or type(valInFt) ~= "number" then
-        LogError("Called with " .. DebugPrint(valInFt))
+        LogError { "Called with ", DebugPrint(valInFt) }
         return
     end
     local str = RoundedNumString(valInFt * ftInM, 1)
@@ -23,7 +23,7 @@ end
 
 function PrintFtToMSquared(valInFtSq)
     if valInFtSq == nil or type(valInFtSq) ~= "number" then
-        LogError("Called with " .. DebugPrint(valInFtSq))
+        LogError { "Called with ", DebugPrint(valInFtSq) }
         return
     end
     local str = RoundedNumString(valInFtSq * ftInM * ftInM, 1)
@@ -35,7 +35,7 @@ end
 
 function PrintFtCubedToLiter(valInFtCubed)
     if valInFtCubed == nil or type(valInFtCubed) ~= "number" then
-        LogError("Called with " .. DebugPrint(valInFtCubed))
+        LogError { "Called with ", DebugPrint(valInFtCubed) }
         return
     end
     local str = RoundedNumString(valInFtCubed * ftInM * ftInM * ftInM * MCubedInLiter, -1)
@@ -47,7 +47,7 @@ end
 
 function PrintMToFt(valInM)
     if valInM == nil or type(valInM) ~= "number" then
-        LogError("Called with " .. DebugPrint(valInM))
+        LogError { "Called with ", DebugPrint(valInM) }
         return
     end
     local str = RoundedNumString(valInM, 1)
@@ -59,7 +59,7 @@ end
 
 function PrintInToCM(valInIn)
     if valInIn == nil or type(valInIn) ~= "number" then
-        LogError("Called with " .. DebugPrint(valInIn))
+        LogError { "Called with ", DebugPrint(valInIn) }
         return
     end
     local str = RoundedNumString(valInIn * inInCm, 0)
@@ -71,7 +71,7 @@ end
 
 function PrintMiToKm(valInMi)
     if valInMi == nil or type(valInMi) ~= "number" then
-        LogError("Called with " .. DebugPrint(valInMi))
+        LogError { "Called with ", DebugPrint(valInMi) }
         return
     end
     local str = RoundedNumString(valInMi * MiInKM, 1)
@@ -83,7 +83,7 @@ end
 
 function PrintLbToKg(valInLb)
     if valInLb == nil or type(valInLb) ~= "number" then
-        LogError("Called with " .. DebugPrint(valInLb))
+        LogError { "Called with ", DebugPrint(valInLb) }
         return
     end
     local str = RoundedNumString(valInLb * lbInKg, 1)
@@ -95,7 +95,7 @@ end
 
 function PrintGallonToLiter(valInGallons)
     if valInGallons == nil or type(valInGallons) ~= "number" then
-        LogError("Called with " .. DebugPrint(valInGallons))
+        LogError { "Called with ", DebugPrint(valInGallons) }
         return
     end
     local str = RoundedNumString(valInGallons * gallonInLiter, 1)
@@ -107,7 +107,7 @@ end
 
 function PrintOunceToLiter(valInOunces)
     if valInOunces == nil or type(valInOunces) ~= "number" then
-        LogError("Called with " .. DebugPrint(valInOunces))
+        LogError { "Called with ", DebugPrint(valInOunces) }
         return
     end
     local str = RoundedNumString(valInOunces * ouncesInLiter, 1)
@@ -119,7 +119,7 @@ end
 
 function PrintQuartToLiter(valInQuart)
     if valInQuart == nil or type(valInQuart) ~= "number" then
-        LogError("Called with " .. DebugPrint(valInQuart))
+        LogError { "Called with ", DebugPrint(valInQuart) }
         return
     end
     local str = RoundedNumString(valInQuart * quartInLiter, 1)
@@ -131,7 +131,7 @@ end
 
 function PrintFahrenheitToCelsius(valInFahrenheit)
     if valInFahrenheit == nil or type(valInFahrenheit) ~= "number" then
-        LogError("Called with " .. DebugPrint(valInFahrenheit))
+        LogError { "Called with ", DebugPrint(valInFahrenheit) }
         return
     end
     local str = RoundedNumString((valInFahrenheit + fahrenheitOffset) * fahrenheitFactor, 0)

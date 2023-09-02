@@ -1,18 +1,17 @@
-TexApi.newEntity { type = "npcs", label = "test", name = "Test" }
+TexApi.newEntity { category = "NPCs", label = "test", name = "Test" }
 
-TexApi.makeAllEntitiesOfTypePrimary("characters")
+local function refSetup()
+    TexApi.makeAllEntitiesOfCategoryPrimary("NPCs")
+end
 
 local expected = {}
-Append(expected, [[\chapter{]] .. CapFirst(Tr("characters")) .. [[}]])
-Append(expected, [[\section{]] .. CapFirst(Tr("npcs")) .. [[}]])
-Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("npcs")) .. [[}]])
+Append(expected, [[\chapter{NPCs}]])
+Append(expected, [[\section*{]] .. CapFirst(Tr("all")) .. [[ NPCs}]])
 Append(expected, [[\begin{itemize}]])
 Append(expected, [[\item \nameref{test}]])
 Append(expected, [[\end{itemize}]])
-Append(expected, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
-Append(expected, [[\subsubsection{Test}]])
+Append(expected, [[\section{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
+Append(expected, [[\subsection{Test}]])
 Append(expected, [[\label{test}]])
 
-local out = TexApi.automatedChapters()
-
-Assert("make-primary-if", expected, out)
+AssertAutomatedChapters("make-primary-if", expected, refSetup)

@@ -2,6 +2,7 @@
 
 \input{../../src/main.tex}
 \loadLuacode{../../src/}
+\throwOnError
 
 \begin{document}
 	
@@ -37,15 +38,15 @@ If you want to tell \LoreTex{} what species a character has, you can do so using
 
 \setCurrentYear{3019}
 
-\newEntity{npcs}{aragorn}{}{Aragorn}
+\newEntity{NPCs}{aragorn}{}{Aragorn}
 \setSpecies{dunedain}
 \born{2931}{Birth of \nameref{aragorn}.}
 
-\newEntity{npcs}{arwen}{}{Arwen}
+\newEntity{NPCs}{arwen}{}{Arwen}
 \setSpecies{elf}
 \born{241}{Birth of \nameref{arwen}.}
 
-\newEntity{npcs}{boromir}{}{Boromir}
+\newEntity{NPCs}{boromir}{}{Boromir}
 \setSpecies{human}
 \born{2978}{Birth of \nameref{boromir}.}
 \died{3019}{Death of \nameref{boromir} at the hands of orcs.}

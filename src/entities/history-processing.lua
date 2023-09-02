@@ -34,12 +34,12 @@ end
 
 local function deleteDuplicateHistoryItems(items)
     local out = {}
-    local counters = {}
+    local labels = {}
     for key, item in pairs(items) do
-        local counter = GetProtectedNullableField(item, "counter")
-        if not IsIn(counter, counters) then
+        local label = GetProtectedNullableField(item, "label")
+        if not IsIn(label, labels) then
             out[#out + 1] = item
-            Append(counters, counter)
+            Append(labels, label)
         end
     end
     return out

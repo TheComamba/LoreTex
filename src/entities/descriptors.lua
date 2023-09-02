@@ -11,7 +11,8 @@ local function setDescriptorAsKeyValPair(arg)
 end
 
 function SetDescriptor(arg)
-    if not IsArgOk("SetDescriptor", arg, { "entity", "descriptor", "description" }, { "subdescriptor" }) then
+    if not IsArgOk("SetDescriptor", arg, { "entity", "descriptor" }, { "description", "subdescriptor",
+            "suppressDerivedDescriptors" }) then
         return
     end
 
@@ -20,14 +21,14 @@ function SetDescriptor(arg)
     if not IsEmpty(ScanForCmd(arg.description, "label")) then
         arg.description = ContentToEntity { name = arg.descriptor, content = arg.description }
         MakePartOf { subEntity = arg.description, mainEntity = arg.entity }
-    elseif not IsEmpty(ScanForCmd(arg.description, "subparagraph")) then
+    elseif IsMapString(arg.description) then
         arg.description = ContentToMap(arg.description)
     elseif not IsEmpty(arg.subdescriptor) then
         local content = arg.description
         local currentDescription = arg.entity[arg.descriptor]
         if IsEmpty(currentDescription) or not IsEntity(currentDescription) then
             local entityLabel = GetProtectedStringField(arg.entity, "label")
-            local subLabel = NewUniqueLabel(entityLabel .. "-" .. arg.descriptor)
+            local subLabel = NewUniqueEntityLabel(entityLabel .. "-" .. arg.descriptor)
             local subEntity = GetMutableEntityFromAll(subLabel)
             SetProtectedField(subEntity, "name", arg.descriptor)
             arg.description = subEntity

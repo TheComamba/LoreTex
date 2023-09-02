@@ -37,8 +37,13 @@
         dofile([[#1]] .. "/entities/refs.lua")
         dofile([[#1]] .. "/entities/species.lua")
         dofile([[#1]] .. "/entities/subentity.lua")
-        dofile([[#1]] .. "/entities/types.lua")
+        dofile([[#1]] .. "/entities/categories.lua")
         dofile([[#1]] .. "/entities/visibility.lua")
+
+        dofile([[#1]] .. "/ffi/convert.lua")
+        dofile([[#1]] .. "/ffi/lorecore.lua")
+        dofile([[#1]] .. "/ffi/reading-database.lua")
+        dofile([[#1]] .. "/ffi/writing-database.lua")
 
         ResetState()
         RelativePath = [[#1]]
@@ -57,6 +62,8 @@
     \input{#1/entities/protected-descriptors.tex}
     \input{#1/entities/common.tex}
     \input{#1/entities/refs.tex}
-    \input{#1/entities/types.tex}
     \input{#1/entities/visibility.tex}
+
+    \input{#1/ffi/reading-database.tex}
+    \input{#1/ffi/writing-database.tex}
 }

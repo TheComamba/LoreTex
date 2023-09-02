@@ -2,6 +2,7 @@
 
 \input{../../src/main.tex}
 \loadLuacode{../../src/}
+\throwOnError
 
 \begin{document}
 
@@ -13,7 +14,7 @@ The command to add history to an entity is:
 \end{verbatim}
 Note that giving a day is optional.
 
-\newEntity{npcs}{flora}{}{Flora}
+\newEntity{NPCs}{flora}{}{Flora}
 
 \addHistory{1823}{
 	\nameref{flora} begins to speak.
@@ -46,24 +47,26 @@ Two more important commands to signal the birth and death (or, more generally, t
 	\deathof{flora}
 }
 
-To put histories into context, you can specify the current year and day of the current year (both default to 0 otherwise):
+To put histories into context, you can specify the current year and day of the current year (both default to 0 otherwise), as well as the number of days your year has:
 \begin{verbatim}
 \setCurrentYear{year}
 \setCurrentDay{day}
+\setDaysPerYear{daysPerYear}
 \end{verbatim}
 \setCurrentYear{1888}
 \setCurrentDay{166}
+\setDaysPerYear{365}
 Note, for example, that \LoreTex{} calculates the current age of characters whose birthyear was given.
 
 
-\newEntity{npcs}{paul}{}{Paul}
+\newEntity{NPCs}{paul}{}{Paul}
 
 \addHistory[32]{1888}{
 	\nameref{paul} finds out about \nameref{flora}'s demise.
 	\notconcerns{flora}
 }
 
-\newEntity{npcs}{ramona}{}{Ramona}
+\newEntity{NPCs}{ramona}{}{Ramona}
 \newEntity{places}{rome}{}{Rome}
 
 

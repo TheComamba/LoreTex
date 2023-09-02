@@ -44,12 +44,12 @@ Comparer.compareAlphanumerical = function(a, b)
     elseif type(a) == "number" and type(b) == "number" then
         return a < b
     elseif type(a) == "number" and type(b) == "string" then
-        return true --numbers before strings
+        return true  --numbers before strings
     elseif type(a) == "string" and type(b) == "number" then
         return false --numbers before strings
     end
 
-    LogError("Tried comparing " .. DebugPrint(a) .. " with " .. DebugPrint(b))
+    LogError { "Tried comparing ", DebugPrint(a), " with ", DebugPrint(b) }
     return false
 end
 
@@ -78,12 +78,12 @@ Comparer.compareHistoryItems = function(a, b)
     local yearB = GetProtectedNullableField(b, "year")
     local dayA = GetProtectedNullableField(a, "day")
     local dayB = GetProtectedNullableField(b, "day")
-    local counterA = GetProtectedNullableField(a, "counter")
-    local counterB = GetProtectedNullableField(b, "counter")
+    local labelA = GetProtectedNullableField(a, "label")
+    local labelB = GetProtectedNullableField(b, "label")
     if yearA ~= yearB then
         return yearA < yearB
     elseif dayA == nil and dayB == nil then
-        return counterA < counterB
+        return Comparer.compareString(labelA, labelB)
     elseif dayB == nil then
         return false
     elseif dayA == nil then
@@ -91,12 +91,8 @@ Comparer.compareHistoryItems = function(a, b)
     elseif dayA ~= dayB then
         return dayA < dayB
     else
-        return counterA < counterB
+        return Comparer.compareString(labelA, labelB)
     end
-end
-
-Comparer.compareTranslation = function(a, b)
-    return Comparer.compareString(Tr(a), Tr(b))
 end
 
 function Sort(t, comp)

@@ -28,13 +28,13 @@ end
 
 local function getMixedAgeFactorAndExponent(speciesMixing)
 	if type(speciesMixing) ~= "table" or #speciesMixing ~= 2 then
-		LogError("getMixedAgeFactorAndExponent called with " .. DebugPrint(speciesMixing))
+		LogError { "getMixedAgeFactorAndExponent called with ", DebugPrint(speciesMixing) }
 		return 1, 1
 	end
 	local species1 = GetEntity(speciesMixing[1])
 	local species2 = GetEntity(speciesMixing[2])
 	if IsEmpty(species1) or IsEmpty(species2) then
-		LogError("One of " .. DebugPrint(speciesMixing) .. " not found!")
+		LogError { "At least one not found: ", DebugPrint(speciesMixing) }
 		return 1, 1
 	end
 	local f1, e1 = GetAgeFactorAndExponent(species1)
@@ -65,7 +65,7 @@ local function correspondingHumanAgeString(species, age)
 		local specificAge = yearsToAge(age, factor, exponent)
 		local specificAgeString = RoundedNumString(specificAge, 0)
 		Append(out, " (")
-		Append(out, Tr("corresponding-human-age"))
+		Append(out, Tr("corresponding_human_age"))
 		Append(out, " ")
 		Append(out, specificAgeString)
 		Append(out, " ")
@@ -83,7 +83,7 @@ local function specificAgeString(entity, age)
 	if isAgingSpecies(species) then
 		return correspondingHumanAgeString(species, age)
 	else
-		return " (" .. Tr("does-not-age") .. ")"
+		return " (" .. Tr("does_not_age") .. ")"
 	end
 end
 
@@ -103,7 +103,7 @@ local function ageString(entity, year)
 	end
 	Append(out, tostring(age))
 	Append(out, " ")
-	Append(out, Tr("years-old"))
+	Append(out, Tr("years_old"))
 	Append(out, specificAgeString(entity, age))
 	return table.concat(out)
 end
@@ -161,11 +161,12 @@ function AddLifestageHistoryItems(entity)
 			Append(event, " ")
 			Append(event, Tr(lifestage))
 			Append(event, ".")
-			local item = NewHistoryItem()
+			local item = NewHistoryItem(false)
 			SetYear(item, year)
 			SetProtectedField(item, "content", table.concat(event))
 			AddToProtectedField(item, "mentions", entity)
 			AddToProtectedField(entity, "historyItems", item)
+			AssureUniqueHistoryLabel(item)
 		end
 	end
 end

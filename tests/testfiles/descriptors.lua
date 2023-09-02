@@ -27,8 +27,10 @@ end
 
 local function levelToCaptionstyle(level)
     if level == 1 then
-        return "paragraph"
+        return "subsubsection"
     elseif level == 2 then
+        return "paragraph"
+    elseif level == 3 then
         return "subparagraph"
     else
         return [[item \textbf]]
@@ -37,14 +39,14 @@ end
 
 local function addDescriptorsToExpected(expected, isSubdescription, level)
     if isSubdescription then
-        if level > 2 then
+        if level > 3 then
             Append(expected, [[\begin{itemize}]])
         end
 
         Append(expected, [[\]] .. levelToCaptionstyle(level) .. [[{Test Descriptor}]])
         Append(expected, [[Test content]])
 
-        if level > 1 then
+        if level > 2 then
             Append(expected, [[\begin{itemize}]])
         end
 
@@ -58,13 +60,13 @@ local function addDescriptorsToExpected(expected, isSubdescription, level)
         Append(expected, [[\end{itemize}]])
 
         Append(expected, [[\]] .. levelToCaptionstyle(level + 1) .. [[{Some Submap}]])
-        Append(expected, [[\begin{itemize}]])
+        if level > 1 then
+            Append(expected, [[\begin{itemize}]])
+        end
         Append(expected, [[\]] .. levelToCaptionstyle(level + 2) .. [[{Alpha}]])
         Append(expected, [[$\alpha$]])
         Append(expected, [[\]] .. levelToCaptionstyle(level + 2) .. [[{Beta}]])
         Append(expected, [[$\beta$]])
-        Append(expected, [[\end{itemize}]])
-
         if level > 1 then
             Append(expected, [[\end{itemize}]])
         end
@@ -72,8 +74,12 @@ local function addDescriptorsToExpected(expected, isSubdescription, level)
         if level > 2 then
             Append(expected, [[\end{itemize}]])
         end
+
+        if level > 3 then
+            Append(expected, [[\end{itemize}]])
+        end
     else
-        if level > 2 then
+        if level > 3 then
             Append(expected, [[\begin{itemize}]])
         end
         Append(expected, [[\]] .. levelToCaptionstyle(level) .. [[{Some Content}]])
@@ -86,68 +92,72 @@ local function addDescriptorsToExpected(expected, isSubdescription, level)
         Append(expected, [[\end{itemize}]])
 
         Append(expected, [[\]] .. levelToCaptionstyle(level) .. [[{Some Map}]])
-        if level > 1 then
+        if level > 2 then
             Append(expected, [[\begin{itemize}]])
         end
         Append(expected, [[\]] .. levelToCaptionstyle(level + 1) .. [[{Alpha}]])
         Append(expected, [[$\alpha$]])
         Append(expected, [[\]] .. levelToCaptionstyle(level + 1) .. [[{Beta}]])
         Append(expected, [[$\beta$]])
-        if level > 1 then
-            Append(expected, [[\end{itemize}]])
-        end
-
         if level > 2 then
             Append(expected, [[\end{itemize}]])
         end
-    end
 
+        if level > 3 then
+            Append(expected, [[\end{itemize}]])
+        end
+    end
 end
 
-for key, isSubdescription in pairs({ false, true }) do
-    for i = 1, 3 do
-        ResetState()
+local function setup()
+    TexApi.makeAllEntitiesPrimary()
+end
 
-        TexApi.newEntity { type = "places", label = "1", name = "Test" }
+for _, isSubdescription in pairs({ false, true }) do
+    for i = 1, 4 do
+        TexApi.newEntity { category = "places", label = "1", name = "Test" }
         TexApi.setDescriptor { descriptor = "ZZZSubentity",
-            description = [[\label{2} \subparagraph{ZZZSubsubentity} \label{3}]] }
+            description = [[\label{2}
+            \paragraph{ZZZSubsubentity} \label{3}
+            \subparagraph{ZZZSubsubsubentity} \label{4}]] }
         setDescriptors(GetMutableEntityFromAll(tostring(i)), isSubdescription)
 
-        TexApi.makeAllEntitiesPrimary()
-
         local expected = {}
-        Append(expected, [[\chapter{]] .. CapFirst(Tr("places")) .. [[}]])
-        Append(expected, [[\section{]] .. CapFirst(Tr("places")) .. [[}]])
-        Append(expected, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("places")) .. [[}]])
+        Append(expected, [[\chapter{Places}]])
+        Append(expected, [[\section*{]] .. CapFirst(Tr("all")) .. [[ Places}]])
         Append(expected, [[\begin{itemize}]])
         Append(expected, [[\item \nameref{1}]])
         Append(expected, [[\item \nameref{2}]])
         Append(expected, [[\item \nameref{3}]])
+        Append(expected, [[\item \nameref{4}]])
         Append(expected, [[\end{itemize}]])
-        Append(expected, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
+        Append(expected, [[\section{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
 
-        Append(expected, [[\subsubsection{Test}]])
+        Append(expected, [[\subsection{Test}]])
         Append(expected, [[\label{1}]])
         if i == 1 then
             addDescriptorsToExpected(expected, isSubdescription, i)
         end
-        Append(expected, [[\paragraph{ZZZSubentity}]])
+        Append(expected, [[\subsubsection{ZZZSubentity}]])
         Append(expected, [[\label{2}]])
         if i == 2 then
             addDescriptorsToExpected(expected, isSubdescription, i)
         end
-        Append(expected, [[\subparagraph{ZZZSubsubentity}]])
+        Append(expected, [[\paragraph{ZZZSubsubentity}]])
         Append(expected, [[\label{3}]])
         if i == 3 then
             addDescriptorsToExpected(expected, isSubdescription, i)
         end
+        Append(expected, [[\subparagraph{ZZZSubsubsubentity}]])
+        Append(expected, [[\label{4}]])
+        if i == 4 then
+            addDescriptorsToExpected(expected, isSubdescription, i)
+        end
 
-        local out = TexApi.automatedChapters()
-
-        local testname = "Descriptors " .. i
+        local testname = "Descriptors with depth " .. i
         if isSubdescription then
             testname = "Sub-" .. testname
         end
-        Assert(testname, expected, out)
+        AssertAutomatedChapters(testname, expected, setup)
     end
 end

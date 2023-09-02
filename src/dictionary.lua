@@ -2,7 +2,7 @@ local interColumnSpacing = 0.022
 
 local function columnWidth(colNum)
     if type(colNum) ~= "number" or colNum < 1 then
-        LogError("Called with " .. DebugPrint(colNum))
+        LogError { "Called with ", DebugPrint(colNum) }
         return 0.01
     end
     local width = 0.47
@@ -29,7 +29,7 @@ local function firstTableLine(headers)
             Append(out, [[\\]])
         end
     end
-    Append(out, [[\hline]]) --it is important to not add the {}
+    Append(out, [[\hline]])  --it is important to not add the {}
     return table.concat(out) --it is important to concat here
 end
 

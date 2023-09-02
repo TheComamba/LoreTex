@@ -1,10 +1,10 @@
 local function newMountain(depth)
-    TexApi.newEntity { label = "mountain-1", name = "mountain-1", type = "other" }
+    TexApi.newEntity { label = "mountain-1", name = "mountain-1", category = "other" }
     if depth == 2 then
         TexApi.setDescriptor { descriptor = "mountain-2", description = [[\label{mountain-2}]] }
     elseif depth == 3 then
         TexApi.setDescriptor { descriptor = "mountain-2",
-            description = [[\label{mountain-2}\subparagraph{mountain-3}\label{mountain-3}]] }
+            description = [[\label{mountain-2}\paragraph{mountain-3}\label{mountain-3}]] }
     end
 end
 
@@ -24,48 +24,45 @@ local function generateHeightString(height)
         Append(out, "250")
     end
     Append(out, "km ")
-    Append(out, Tr("visual-range-to-horizon"))
+    Append(out, Tr("visual_range_to_horizon"))
     Append(out, ").")
     return table.concat(out)
 end
 
 local function generateExpected(depth, height)
     local out = {}
-    Append(out, [[\chapter{]] .. CapFirst(Tr("other")) .. [[}]])
-    Append(out, [[\section{]] .. CapFirst(Tr("other")) .. [[}]])
-    Append(out, [[\subsection*{]] .. CapFirst(Tr("all")) .. [[ ]] .. CapFirst(Tr("other")) .. [[}]])
+    Append(out, [[\chapter{Other}]])
+    Append(out, [[\section*{]] .. CapFirst(Tr("all")) .. [[ Other}]])
     Append(out, [[\begin{itemize}]])
     for i = 1, depth do
         Append(out, [[\item \nameref{mountain-]] .. i .. [[}]])
     end
     Append(out, [[\end{itemize}]])
-    Append(out, [[\subsection{]] .. CapFirst(Tr("in-whole-world")) .. [[}]])
-    Append(out, [[\subsubsection{mountain-1}]])
+    Append(out, [[\section{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
+    Append(out, [[\subsection{Mountain-1}]])
     Append(out, [[\label{mountain-1}]])
-    Append(out, [[\paragraph{]] .. CapFirst(Tr("height")) .. [[}]])
+    Append(out, [[\subsubsection{]] .. CapFirst(Tr("height")) .. [[}]])
     Append(out, generateHeightString(height))
     if depth >= 2 then
-        Append(out, [[\paragraph{Mountain-2}]])
+        Append(out, [[\subsubsection{Mountain-2}]])
         Append(out, [[\label{mountain-2}]])
     end
     if depth >= 3 then
-        Append(out, [[\subparagraph{Mountain-3}]])
+        Append(out, [[\paragraph{Mountain-3}]])
         Append(out, [[\label{mountain-3}]])
     end
     return out
 end
 
-local expexted = {}
-local received = {}
+local function setup()
+    TexApi.makeAllEntitiesPrimary()
+end
 
 for depth = 1, 3 do
     for key, height in pairs({ 0.5, 5, 50, 500, 5000 }) do
-        ResetState()
         newMountain(depth)
         TexApi.setHeight(height)
-        TexApi.makeAllEntitiesPrimary()
-        expexted = generateExpected(depth, height)
-        received = TexApi.automatedChapters()
-        Assert("setHeight depth " .. depth, expexted, received)
+        local expexted = generateExpected(depth, height)
+        AssertAutomatedChapters("setHeight depth " .. depth, expexted, setup)
     end
 end

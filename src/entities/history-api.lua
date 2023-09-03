@@ -4,23 +4,20 @@ StateResetters[#StateResetters + 1] = function()
 	AllHistoryItems = {}
 end
 
-local function IsHistoryItemOk(caller, item)
+local function IsHistoryInputOk(caller, item)
 	local required = {}
-	Append(required, GetProtectedDescriptor("content"))
-	Append(required, GetProtectedDescriptor("isConcernsOthers"))
-	Append(required, GetProtectedDescriptor("isSecret"))
+	local optional = {}
 	Append(required, GetProtectedDescriptor("label"))
 	Append(required, GetProtectedDescriptor("year"))
-	local optional = {}
 	Append(optional, GetProtectedDescriptor("day"))
-	Append(optional, GetProtectedDescriptor("originator"))
+	Append(required, GetProtectedDescriptor("content"))
+	Append(optional, GetProtectedDescriptor("properties"))
 	return IsArgOk(caller, item, required, optional)
 end
 
 function NewHistoryItem(addToAll)
 	local item = {}
 	SetProtectedField(item, "isSecret", false)
-	SetProtectedField(item, "isConcernsOthers", true)
 
 	if addToAll then
 		AllHistoryItems[#AllHistoryItems + 1] = item
@@ -77,8 +74,8 @@ local function addConcerns(entity, content)
 		end
 		if GetProtectedNullableField(entity, "year") ~= nil then
 			UniqueAppend(concernsLabels, ScanStringForCmd(content, "concerns"))
-			UniqueAppend(concernsLabels, GetProtectedTableReferenceField(entity, "birthof"))
-			UniqueAppend(concernsLabels, GetProtectedTableReferenceField(entity, "deathof"))
+			UniqueAppend(concernsLabels, GetProtectedTableReferenceField(entity, "birthOf"))
+			UniqueAppend(concernsLabels, GetProtectedTableReferenceField(entity, "deathOf"))
 		end
 	end
 
@@ -98,14 +95,14 @@ local function addSpecialyearsToEntities(field, year, labels)
 	end
 end
 
-local function processEvent(item)
-	if not IsHistoryItemOk("ProcessEvent", item) then
+local function processHistoryItem(item)
+	if not IsHistoryInputOk("ProcessEvent", item) then
 		return
 	end
 
 	local event = GetProtectedStringField(item, "content")
-	SetProtectedField(item, "birthof", ScanStringForCmd(event, "birthof"))
-	SetProtectedField(item, "deathof", ScanStringForCmd(event, "deathof"))
+	SetProtectedField(item, "birthOf", ScanStringForCmd(event, "birthOf"))
+	SetProtectedField(item, "deathOf", ScanStringForCmd(event, "deathOf"))
 
 	local content = GetProtectedStringField(item, "content")
 	AddMentions(item, content)
@@ -117,8 +114,8 @@ local function processEvent(item)
 	end
 
 	local year = GetProtectedNullableField(item, "year")
-	addSpecialyearsToEntities("born", year, GetProtectedTableReferenceField(item, "birthof"))
-	addSpecialyearsToEntities("died", year, GetProtectedTableReferenceField(item, "deathof"))
+	addSpecialyearsToEntities("born", year, GetProtectedTableReferenceField(item, "birthOf"))
+	addSpecialyearsToEntities("died", year, GetProtectedTableReferenceField(item, "deathOf"))
 
 	if IsEmpty(GetProtectedNullableField(item, "day")) then
 		SetProtectedField(item, "day", nil)
@@ -147,7 +144,7 @@ function AddHistory(arg)
 		SetProtectedField(item, "isSecret", arg.isSecret)
 	end
 	AssureUniqueHistoryLabel(item)
-	processEvent(item)
+	processHistoryItem(item)
 end
 
 TexApi.addHistory = function(arg)

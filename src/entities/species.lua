@@ -161,11 +161,13 @@ function AddLifestageHistoryItems(entity)
 			Append(event, " ")
 			Append(event, Tr(lifestage))
 			Append(event, ".")
-			local item = NewHistoryItem(false)
+			local item = {}
 			SetYear(item, year)
 			SetProtectedField(item, "content", table.concat(event))
-			AddToProtectedField(entity, "historyItems", item)
-			AssureUniqueHistoryLabel(item)
+			local historyProperties = {}
+			AddToProtectedField(historyProperties, "onlyConcerns", entity)
+			SetProtectedField(item, "properties", historyProperties)
+			ProcessHistoryItem(item)
 		end
 	end
 end

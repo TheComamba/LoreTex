@@ -4,7 +4,7 @@ StateResetters[#StateResetters + 1] = function()
 	AllHistoryItems = {}
 end
 
-local function IsHistoryInputOk(caller, item)
+local function isHistoryInputOk(caller, item)
 	local required = {}
 	local optional = {}
 	Append(required, GetProtectedDescriptor("label"))
@@ -12,17 +12,21 @@ local function IsHistoryInputOk(caller, item)
 	Append(optional, GetProtectedDescriptor("day"))
 	Append(required, GetProtectedDescriptor("content"))
 	Append(optional, GetProtectedDescriptor("properties"))
-	return IsArgOk(caller, item, required, optional)
-end
-
-function NewHistoryItem(addToAll)
-	local item = {}
-	SetProtectedField(item, "properties", {})
-
-	if addToAll then
-		AllHistoryItems[#AllHistoryItems + 1] = item
+	if not IsArgOk(caller, item, required, optional) then
+		return false
 	end
-	return item
+	local propertyNames = {}
+	Append(propertyNames, "isSecret")
+	Append(propertyNames, "additionalConcerns")
+	Append(propertyNames, "notConcerns")
+	Append(propertyNames, "onlyConcerns")
+	Append(propertyNames, "birthOf")
+	Append(propertyNames, "deathOf")
+	local properties = GetProtectedTableReferenceField(item, "properties")
+	if properties and not IsArgOk(caller, properties, {}, propertyNames) then
+		return false
+	end
+	return true
 end
 
 local function setDay(historyItem, day)
@@ -107,16 +111,15 @@ local function addSpecialyearsToEntities(field, year, entities)
 	end
 end
 
-local function processHistoryItem(item)
-	if not IsHistoryInputOk("ProcessEvent", item) then
+function ProcessHistoryItem(item)
+	if not isHistoryInputOk("ProcessEvent", item) then
 		return
 	end
 
-	local properties = GetProtectedTableReferenceField(item, "properties")
-	local content = GetProtectedStringField(item, "content")
-	scanContentForProperties(properties, content)
+	Append(AllHistoryItems, item)
 
 	local year = GetProtectedNullableField(item, "year")
+	local properties = GetProtectedTableReferenceField(item, "properties")
 	addSpecialyearsToEntities("born", year, GetProtectedTableReferenceField(properties, "birthOf"))
 	addSpecialyearsToEntities("died", year, GetProtectedTableReferenceField(properties, "deathOf"))
 
@@ -131,41 +134,39 @@ local function processHistoryItem(item)
 	end
 end
 
-function AddHistory(arg)
-	if not IsArgOk("addHistory", arg, { "year", "event" }, { "day", "isConcernsOthers", "isSecret", "label", "originator",
-			"yearFmt" }) then
+TexApi.addHistory = function(arg)
+	if not IsArgOk("addHistory", arg, { "year", "event" }, { "day", "isOnlyHere", "isSecret", "yearFmt" }) then
 		return
 	end
 
-	local item = NewHistoryItem(true)
+	local item = {}
 
-	SetYear(item, arg.year, arg.yearFmt)
-	setDay(item, arg.day)
-	SetProtectedField(item, "content", arg.event)
-
-	local properties = GetProtectedTableReferenceField(item, "properties")
-	if arg.isSecret then
-		SetProtectedField(properties, "isSecret", arg.isSecret)
-	end
-
-	if arg.isOnlyHere then
-		AddToProtectedField(properties, "onlyConcerns", arg.originator)
-	elseif arg.originator then
-		AddToProtectedField(properties, "additionalConcerns", arg.originator)
-	end
-
-	AssureUniqueHistoryLabel(item)
-	processHistoryItem(item)
-end
-
-TexApi.addHistory = function(arg)
-	arg.originator = CurrentEntity
 	if arg.yearFmt and arg.yearFmt ~= "" then
 		arg.yearFmt = GetMutableEntityFromAll(arg.yearFmt)
 	else
 		arg.yearFmt = nil
 	end
-	AddHistory(arg)
+
+	SetYear(item, arg.year, arg.yearFmt)
+	setDay(item, arg.day)
+	SetProtectedField(item, "content", arg.event)
+
+	local properties = {}
+	if arg.isSecret then
+		SetProtectedField(properties, "isSecret", arg.isSecret)
+	end
+
+	if arg.isOnlyHere then
+		AddToProtectedField(properties, "onlyConcerns", CurrentEntity)
+	elseif CurrentEntity then
+		AddToProtectedField(properties, "additionalConcerns", CurrentEntity)
+	end
+	scanContentForProperties(properties, arg.event)
+
+	SetProtectedField(item, "properties", properties)
+
+	AssureUniqueHistoryLabel(item)
+	ProcessHistoryItem(item)
 end
 
 TexApi.addSecretHistory = function(arg)

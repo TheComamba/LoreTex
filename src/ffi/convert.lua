@@ -225,7 +225,7 @@ end
 function HistoryItemsFromColumns(historyItemColumns)
     for _, item in pairs(historyItemColumns) do
         item = formatCHistoryItemForLua(item)
-        AddHistory(item)
+        ProcessHistoryItem(item)
     end
 end
 

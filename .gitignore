@@ -4,6 +4,8 @@
 *.log
 *.pdf
 *.synctex.gz
+*.fls
+*.fdb_latexmk
 
 dependencies
 dependencies.zip

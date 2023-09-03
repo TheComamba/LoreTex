@@ -55,7 +55,7 @@ local function addEntityToDict(arg, newEntity)
 end
 
 local function registerProcessedEntity(arg, newEntity)
-    if GetProtectedNullableField(newEntity, "partOf") == nil then
+    if not IsSubEntity(newEntity) then
         addEntityToDict(arg, newEntity)
     end
     local label = GetProtectedStringField(newEntity, "label")

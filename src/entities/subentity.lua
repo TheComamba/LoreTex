@@ -149,3 +149,7 @@ function IsMapString(content)
         return string.find(content, [[\paragraph]]) ~= nil or string.find(content, [[\subparagraph]]) ~= nil
     end
 end
+
+function IsSubEntity(entity)
+    return GetProtectedNullableField(entity, "partOf") ~= nil
+end

@@ -65,14 +65,24 @@ function ScanStringForCmd(str, cmd)
     return args
 end
 
+local function continueRcursion(key, subcontent)
+    if IsProtectedDescriptor(key) then
+        return false
+    elseif IsEntity(subcontent) and not IsSubEntity(subcontent) then
+        return false
+    else
+        return true
+    end
+end
+
 function ScanForCmd(content, cmd)
     local out = {}
     if type(content) == "string" then
         out = ScanStringForCmd(content, cmd)
     elseif type(content) == "table" then
-        for key, elem in pairs(content) do
-            if not IsProtectedDescriptor(key) then
-                local commands = ScanForCmd(elem, cmd)
+        for key, subcontent in pairs(content) do
+            if continueRcursion(key, subcontent) then
+                local commands = ScanForCmd(subcontent, cmd)
                 Append(out, commands)
             end
         end

@@ -161,7 +161,7 @@ function FirstNonWhitespaceChar(str)
 end
 
 function Append(dest, src)
-	if type(src) == "table" then
+	if type(src) == "table" and not IsEntity(src) then
 		for key, elem in pairs(src) do
 			Append(dest, elem)
 		end
@@ -171,7 +171,7 @@ function Append(dest, src)
 end
 
 function UniqueAppend(dest, src)
-	if type(src) == "table" then
+	if type(src) == "table" and not IsEntity(src) then
 		for key, elem in pairs(src) do
 			UniqueAppend(dest, elem)
 		end
@@ -185,7 +185,7 @@ end
 function Replace(strOld, strNew, content)
 	if type(content) == "string" then
 		return string.gsub(content, strOld, strNew)
-	elseif type(content) == "table" then
+	elseif type(content) == "table" and not IsEntity(content) then
 		for key, elem in pairs(content) do
 			content[key] = Replace(strOld, strNew, elem)
 		end

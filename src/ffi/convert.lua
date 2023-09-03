@@ -201,11 +201,18 @@ local function formatHistoryItemForC(luaItem)
     return cItem
 end
 
+local function isGenerated(item)
+    local properties = GetProtectedTableReferenceField(item, "properties")
+    return GetProtectedNullableField(properties, "isGenerated")
+end
+
 function GetHistoryItemColumns()
     local historyItems = {}
     for _, item in pairs(AllHistoryItems) do
-        local newItem = formatHistoryItemForC(item)
-        table.insert(historyItems, newItem)
+        if not isGenerated(item) then
+            local newItem = formatHistoryItemForC(item)
+            table.insert(historyItems, newItem)
+        end
     end
     return historyItems
 end

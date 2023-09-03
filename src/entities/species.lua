@@ -167,6 +167,7 @@ function AddLifestageHistoryItems(entity)
 			SetProtectedField(item, "content", table.concat(content))
 			local historyProperties = {}
 			AddToProtectedField(historyProperties, "onlyConcerns", entity)
+			SetProtectedField(historyProperties, "isGenerated", true)
 			SetProtectedField(item, "properties", historyProperties)
 			ProcessHistoryItem(item)
 		end

@@ -17,6 +17,7 @@ local function isHistoryInputOk(caller, item)
 	end
 	local propertyNames = {}
 	Append(propertyNames, GetProtectedDescriptor("isSecret"))
+	Append(propertyNames, GetProtectedDescriptor("isGenerated"))
 	Append(propertyNames, GetProtectedDescriptor("additionalConcerns"))
 	Append(propertyNames, GetProtectedDescriptor("notConcerns"))
 	Append(propertyNames, GetProtectedDescriptor("onlyConcerns"))

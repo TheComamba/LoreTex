@@ -135,7 +135,7 @@ function ProcessHistoryItem(item)
 end
 
 TexApi.addHistory = function(arg)
-	if not IsArgOk("addHistory", arg, { "year", "event" }, { "day", "isOnlyHere", "isSecret", "yearFmt" }) then
+	if not IsArgOk("addHistory", arg, { "year", "content" }, { "day", "isOnlyHere", "isSecret", "yearFmt" }) then
 		return
 	end
 
@@ -149,7 +149,7 @@ TexApi.addHistory = function(arg)
 
 	SetYear(item, arg.year, arg.yearFmt)
 	setDay(item, arg.day)
-	SetProtectedField(item, "content", arg.event)
+	SetProtectedField(item, "content", arg.content)
 
 	local properties = {}
 	if arg.isSecret then
@@ -161,7 +161,7 @@ TexApi.addHistory = function(arg)
 	elseif CurrentEntity then
 		AddToProtectedField(properties, "additionalConcerns", CurrentEntity)
 	end
-	scanContentForProperties(properties, arg.event)
+	scanContentForProperties(properties, arg.content)
 
 	SetProtectedField(item, "properties", properties)
 

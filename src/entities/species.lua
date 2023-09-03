@@ -154,17 +154,17 @@ function AddLifestageHistoryItems(entity)
 		realAge = Round(realAge)
 		local year = birthyear + realAge
 		if deathyear == nil or year <= deathyear then
-			local event = {}
-			Append(event, TexCmd("nameref", label))
-			Append(event, " ")
-			Append(event, Tr("is"))
-			Append(event, " ")
-			Append(event, Tr(lifestage))
-			Append(event, ".")
+			local content = {}
+			Append(content, TexCmd("nameref", label))
+			Append(content, " ")
+			Append(content, Tr("is"))
+			Append(content, " ")
+			Append(content, Tr(lifestage))
+			Append(content, ".")
 			local item = {}
 			SetYear(item, year)
 			AssureUniqueHistoryLabel(item)
-			SetProtectedField(item, "content", table.concat(event))
+			SetProtectedField(item, "content", table.concat(content))
 			local historyProperties = {}
 			AddToProtectedField(historyProperties, "onlyConcerns", entity)
 			SetProtectedField(item, "properties", historyProperties)

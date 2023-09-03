@@ -3,9 +3,9 @@ local function entitySetup()
     TexApi.setYearOffset(10)
 
     TexApi.newEntity { category = "other", label = "test", name = "Test Entity" }
-    TexApi.addHistory { yearFmt = "test-calendar-with-offset", year = 11, event = "Event with offset." }
+    TexApi.addHistory { yearFmt = "test-calendar-with-offset", year = 11, content = "Event with offset." }
     local itemEnteredInFormat = AllHistoryItems[#AllHistoryItems]
-    TexApi.addHistory { year = 0, event = "Event without offset." }
+    TexApi.addHistory { year = 0, content = "Event without offset." }
 
     Assert("Year of item entered in offsetted format", 1, GetProtectedNullableField(itemEnteredInFormat, "year"))
 end

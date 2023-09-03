@@ -1,5 +1,5 @@
 local function historyItemToString(historyItem, isPrintDate)
-    local event = GetProtectedStringField(historyItem, "content")
+    local content = GetProtectedStringField(historyItem, "content")
     local properties = GetProtectedTableReferenceField(historyItem, "properties")
     local isSecret = GetProtectedNullableField(properties, "isSecret") or IsConcernsOrMentionsSecret(historyItem)
     local out = {}
@@ -12,7 +12,7 @@ local function historyItemToString(historyItem, isPrintDate)
         Append(out, CapFirst(Tr("secret")))
         Append(out, ") ")
     end
-    Append(out, event)
+    Append(out, content)
     return table.concat(out)
 end
 

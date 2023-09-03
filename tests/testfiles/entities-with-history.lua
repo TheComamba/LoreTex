@@ -2,8 +2,8 @@ local function entitySetup()
     TexApi.newEntity { category = "places", label = "test-1", name = "Test 1" }
 
     TexApi.newEntity { category = "places", label = "test-2", name = "Test 2" }
-    TexApi.addHistory { year = -10, event = [[Event that concerns \reference{test-1} and \itref{test-2}.]] }
-    TexApi.addHistory { year = 10, event = [[Event in the future.]] }
+    TexApi.addHistory { year = -10, content = [[Event that concerns \reference{test-1} and \itref{test-2}.]] }
+    TexApi.addHistory { year = 10, content = [[Event in the future.]] }
 end
 
 local function generateExpected(isSecondAdded)

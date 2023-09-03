@@ -69,7 +69,7 @@ local function scanContentForProperties(properties, content)
 	end
 end
 
-local function getHistoryMentions(item)
+function GetHistoryMentions(item)
 	local content = GetProtectedStringField(item, "content")
 	return GetMentionedEntities(content)
 end
@@ -82,7 +82,7 @@ function GetHistoryConcerns(item)
 	end
 
 	local concernsTmp = {}
-	UniqueAppend(concernsTmp, getHistoryMentions(item))
+	UniqueAppend(concernsTmp, GetHistoryMentions(item))
 	UniqueAppend(concernsTmp, GetProtectedTableReferenceField(properties, "additionalConcerns"))
 	UniqueAppend(concernsTmp, GetProtectedTableReferenceField(properties, "birthOf"))
 	UniqueAppend(concernsTmp, GetProtectedTableReferenceField(properties, "deathOf"))

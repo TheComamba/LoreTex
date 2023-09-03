@@ -76,10 +76,8 @@ function IsLocationUnrevealed(entity)
 end
 
 local function concernsAndMentions(historyItem)
-    local out = GetProtectedTableReferenceField(historyItem, "concerns")
-    for key, mentions in pairs(GetProtectedTableReferenceField(historyItem, "mentions")) do
-        out[#out + 1] = mentions
-    end
+    local out = GetHistoryConcerns(historyItem)
+    Append(out, GetHistoryMentions(historyItem))
     return out
 end
 

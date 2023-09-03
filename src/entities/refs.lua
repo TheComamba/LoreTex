@@ -34,8 +34,19 @@ function ScanStringForCmd(str, cmd)
     local posCmd = string.find(str, cmdStr)
     local posClose = 0
     while posCmd ~= nil do
-        local posOpen = string.find(str, openStr, posCmd)
-        posClose = string.find(str, closeStr, math.max(posOpen, posClose + 1))
+        local posOpenTmp = string.find(str, openStr, posCmd)
+        if not posOpenTmp then
+            LogError("No opening bracket found for command \"" .. cmd .. "\".")
+            break
+        end
+        local posOpen = posOpenTmp
+
+        local posCloseTmp = string.find(str, closeStr, math.max(posOpen, posClose + 1))
+        if not posCloseTmp then
+            LogError("No closing bracket found for command \"" .. cmd .. "\".")
+            break
+        end
+        posClose = posCloseTmp
 
         local between = string.sub(str, posCmd + string.len(cmdStr), posOpen - 1)
         local arg = string.sub(str, posOpen + string.len(openStr), posClose - 1)
@@ -79,15 +90,15 @@ local function scanContentForMentionedRefs(content)
 end
 
 function GetMentionedEntities(content)
-	local refs = scanContentForMentionedRefs(content)
-	local mentions = {}
-	for _, ref in pairs(refs) do
-		local entity = GetMutableEntityFromAll(ref)
-		if entity ~= nil then
-			UniqueAppend(mentions, entity)
-		end
-	end
-	return mentions
+    local refs = scanContentForMentionedRefs(content)
+    local mentions = {}
+    for _, ref in pairs(refs) do
+        local entity = GetMutableEntityFromAll(ref)
+        if entity ~= nil then
+            UniqueAppend(mentions, entity)
+        end
+    end
+    return mentions
 end
 
 local function makeAllEntitiesPrimary()

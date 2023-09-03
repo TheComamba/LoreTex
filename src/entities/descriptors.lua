@@ -41,6 +41,7 @@ function SetDescriptor(arg)
     setDescriptorAsKeyValPair(arg)
 end
 
+---@diagnostic disable-next-line: duplicate-set-field
 TexApi.setDescriptor = function(arg)
     arg.entity = CurrentEntity
     SetDescriptor(arg)

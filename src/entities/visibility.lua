@@ -116,7 +116,8 @@ function IsHistoryShown(historyItem)
     elseif not isShowFuture and IsFutureEvent(historyItem) then
         return false
     elseif not isShowSecrets then
-        local isSecret = GetProtectedNullableField(historyItem, "isSecret")
+        local properties = GetProtectedTableReferenceField(historyItem, "properties")
+        local isSecret = GetProtectedNullableField(properties, "isSecret")
         if isSecret ~= nil and isSecret then
             return false
         elseif isConcernsOrMentionsUnrevealed(historyItem) then

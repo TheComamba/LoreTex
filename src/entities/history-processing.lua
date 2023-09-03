@@ -1,6 +1,7 @@
 local function historyItemToString(historyItem, isPrintDate)
     local event = GetProtectedStringField(historyItem, "content")
-    local isSecret = GetProtectedNullableField(historyItem, "isSecret") or IsConcernsOrMentionsSecret(historyItem)
+    local properties = GetProtectedTableReferenceField(historyItem, "properties")
+    local isSecret = GetProtectedNullableField(properties, "isSecret") or IsConcernsOrMentionsSecret(historyItem)
     local out = {}
     if isPrintDate then
         Append(out, YearAndDayString(historyItem))

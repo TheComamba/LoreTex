@@ -212,13 +212,13 @@ end
 
 local function formatCHistoryItemForLua(cItem)
     local luaItem = {}
-    luaItem.label = cItem.label
-    luaItem.year = cItem.year
+    SetProtectedField(luaItem, "label", cItem.label)
+    SetProtectedField(luaItem, "year", cItem.year)
     if cItem.day ~= 0 then
-        luaItem.day = cItem.day
+        SetProtectedField(luaItem, "day", cItem.day)
     end
-    luaItem.event = cItem.content
-    luaItem.properties = toProperLuaObject(cItem.properties)
+    SetProtectedField(luaItem, "content", cItem.content)
+    SetProtectedField(luaItem, "properties", toProperLuaObject(cItem.properties))
     return luaItem
 end
 

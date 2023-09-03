@@ -69,17 +69,9 @@ local function scanContentForProperties(properties, content)
 	end
 end
 
-function GetHistoryMentions(item)
+local function getHistoryMentions(item)
 	local content = GetProtectedStringField(item, "content")
-	local refs = ScanContentForMentionedRefs(content)
-	local mentions = {}
-	for _, ref in pairs(refs) do
-		local entity = GetMutableEntityFromAll(ref)
-		if entity ~= nil then
-			UniqueAppend(mentions, entity)
-		end
-	end
-	return mentions
+	return GetMentionedEntities(content)
 end
 
 function GetHistoryConcerns(item)
@@ -90,7 +82,7 @@ function GetHistoryConcerns(item)
 	end
 
 	local concernsTmp = {}
-	UniqueAppend(concernsTmp, GetHistoryMentions(item))
+	UniqueAppend(concernsTmp, getHistoryMentions(item))
 	UniqueAppend(concernsTmp, GetProtectedTableReferenceField(properties, "additionalConcerns"))
 	UniqueAppend(concernsTmp, GetProtectedTableReferenceField(properties, "birthOf"))
 	UniqueAppend(concernsTmp, GetProtectedTableReferenceField(properties, "deathOf"))
@@ -100,6 +92,10 @@ function GetHistoryConcerns(item)
 	for _, entity in pairs(concernsTmp) do
 		if not IsIn(entity, notConcerns) then
 			Append(actualConcerns, entity)
+			if not IsEntity(entity) then
+				LogError { "This entity is not an entity:", DebugPrint(entity) }
+				return {}
+			end
 		end
 	end
 	return actualConcerns

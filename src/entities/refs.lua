@@ -69,13 +69,25 @@ function ScanForCmd(content, cmd)
     return out
 end
 
-function ScanContentForMentionedRefs(content)
+local function scanContentForMentionedRefs(content)
     local mentionedRefsHere = {}
     for key1, refType in pairs(refTypes) do
         local refs = ScanForCmd(content, refType)
         UniqueAppend(mentionedRefsHere, refs)
     end
     return mentionedRefsHere
+end
+
+function GetMentionedEntities(content)
+	local refs = scanContentForMentionedRefs(content)
+	local mentions = {}
+	for _, ref in pairs(refs) do
+		local entity = GetMutableEntityFromAll(ref)
+		if entity ~= nil then
+			UniqueAppend(mentions, entity)
+		end
+	end
+	return mentions
 end
 
 local function makeAllEntitiesPrimary()

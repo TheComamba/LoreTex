@@ -39,7 +39,7 @@ function IsEntitySecret(entity)
     end
     if type(isSecret) ~= "boolean" then
         LogError("isSecret property of entity \"" ..
-        GetProtectedStringField(entity, "label") .. "\" should be boolean, but is " .. type(isSecret) .. ".")
+            GetProtectedStringField(entity, "label") .. "\" should be boolean, but is " .. type(isSecret) .. ".")
         return false
     end
     return isSecret
@@ -75,7 +75,7 @@ function IsLocationUnrevealed(entity)
     return IsEntityUnrevealed(location)
 end
 
-local function concernesAndMentions(historyItem)
+local function concernsAndMentions(historyItem)
     local out = GetProtectedTableReferenceField(historyItem, "concerns")
     for key, mentions in pairs(GetProtectedTableReferenceField(historyItem, "mentions")) do
         out[#out + 1] = mentions
@@ -84,7 +84,7 @@ local function concernesAndMentions(historyItem)
 end
 
 local function isConcernsOrMentionsUnrevealed(historyItem)
-    for key, entity in pairs(concernesAndMentions(historyItem)) do
+    for key, entity in pairs(concernsAndMentions(historyItem)) do
         if IsEntitySecret(entity) and not IsRevealed(entity) then
             return true
         end
@@ -93,7 +93,7 @@ local function isConcernsOrMentionsUnrevealed(historyItem)
 end
 
 function IsConcernsOrMentionsSecret(historyItem)
-    for key, entity in pairs(concernesAndMentions(historyItem)) do
+    for key, entity in pairs(concernsAndMentions(historyItem)) do
         if IsEntitySecret(entity) then
             return true
         end
@@ -102,7 +102,7 @@ function IsConcernsOrMentionsSecret(historyItem)
 end
 
 local function isAllConcnernsAndMentionsShown(historyItem)
-    for key, entity in pairs(concernesAndMentions(historyItem)) do
+    for key, entity in pairs(concernsAndMentions(historyItem)) do
         if not IsEntityShown(entity) then
             return false
         end

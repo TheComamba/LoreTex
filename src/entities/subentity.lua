@@ -79,7 +79,6 @@ function ContentToEntity(arg)
             MakePartOf { subEntity = val, mainEntity = newEntity }
         end
     end
-    AddMentions(newEntity, arg.content)
     return newEntity
 end
 

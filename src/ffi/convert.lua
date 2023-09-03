@@ -31,8 +31,6 @@ local function shouldDescriptorBeWrittenToDatabase(descriptor)
         return false
     elseif descriptor == GetProtectedDescriptor("label") then
         return false
-    elseif descriptor == GetProtectedDescriptor("mentions") then
-        return false
     else
         return true
     end

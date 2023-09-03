@@ -141,7 +141,7 @@ for depth = 1, 4 do
         else
             TexApi.setSpecies("species-1-" .. depth)
         end
-        TexApi.born { year = 0, event = "Born." }
+        TexApi.born { year = 0, content = "Born." }
 
         local name = "Age modifications " .. modification .. ", entity depth " .. depth
         local expected = generateExpected(depth, modification)

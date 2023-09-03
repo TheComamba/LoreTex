@@ -17,7 +17,6 @@ function SetDescriptor(arg)
     end
 
     Replace([[\reference]], [[\nameref]], arg.description)
-    AddMentions(arg.entity, arg.description)
     if not IsEmpty(ScanForCmd(arg.description, "label")) then
         arg.description = ContentToEntity { name = arg.descriptor, content = arg.description }
         MakePartOf { subEntity = arg.description, mainEntity = arg.entity }
@@ -42,6 +41,7 @@ function SetDescriptor(arg)
     setDescriptorAsKeyValPair(arg)
 end
 
+---@diagnostic disable-next-line: duplicate-set-field
 TexApi.setDescriptor = function(arg)
     arg.entity = CurrentEntity
     SetDescriptor(arg)

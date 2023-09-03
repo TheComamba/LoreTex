@@ -1,6 +1,6 @@
 TexApi.newEntity { label = "unimportant", category = "places", name = "Unimportant" }
-TexApi.addHistory { year = 0, event = [[Mentions \nameref{deferred-entity-1}.]] }
-TexApi.addHistory { year = 0, event = [[Mentions \nameref{deferred-entity-2-alias}.]] }
+TexApi.addHistory { year = 0, content = [[Mentions \nameref{deferred-entity-1}.]] }
+TexApi.addHistory { year = 0, content = [[Mentions \nameref{deferred-entity-2-alias}.]] }
 TexApi.newEntity { label = "deferred-entity-1", category = "places", name = "Deferred 1" }
 TexApi.newEntity { label = "deferred-entity-2", category = "places", name = "Deferred 2" }
 TexApi.setDescriptor { descriptor = "Alias", description = [[\label{deferred-entity-2-alias}]] }
@@ -97,7 +97,7 @@ Assert("Deferred Calendar (Year)", expected, out)
 
 ResetState()
 TexApi.newEntity { category = "places", label = "some-place", name = "Some Place" }
-TexApi.addHistory { yearFmt = "test-1", year = 0, event = "Some event." }
+TexApi.addHistory { yearFmt = "test-1", year = 0, content = "Some event." }
 defineCalendar()
 out = GetEntity("some-place")
 out = GetProtectedTableReferenceField(out, "historyItems")[1]

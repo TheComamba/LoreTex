@@ -7,7 +7,7 @@ TexApi.setDescriptor { descriptor = "subdescriptor", description =
 [[\paragraph{subdescription}\label{subdescription}]] }
 TexApi.setLocation("locationLabel")
 TexApi.addParent { parentLabel = "parentLabel" }
-TexApi.born { year = 223, event = [[\nameref{testLabel} is born, child of \nameref{parentLabel}.]] }
+TexApi.born { year = 223, content = [[\nameref{testLabel} is born, child of \nameref{parentLabel}.]] }
 TexApi.setSpecies("species-1")
 
 TexApi.newEntity { category = "NPCs", label = "some-npc", name = "Some NPC" }

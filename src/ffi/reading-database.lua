@@ -81,12 +81,10 @@ local function readHistoryItemColumns(dbPath)
         local cHistoryItem = cHistoryItems[i]
         local historyItem = {}
         historyItem.label = ffi.string(cHistoryItem.label)
-        historyItem.content = ffi.string(cHistoryItem.content)
-        historyItem.is_concerns_others = ffi.number(cHistoryItem.is_concerns_others)
-        historyItem.is_secret = ffi.number(cHistoryItem.is_secret)
         historyItem.year = ffi.number(cHistoryItem.year)
         historyItem.day = ffi.number(cHistoryItem.day)
-        historyItem.originator = ffi.string(cHistoryItem.originator)
+        historyItem.content = ffi.string(cHistoryItem.content)
+        historyItem.properties = ffi.string(cHistoryItem.properties)
         table.insert(histoyItemColumns, historyItem)
     end
     return histoyItemColumns

@@ -58,7 +58,6 @@ local function entityQualifiersString(child, parent, relationships)
         if childLocationLabel ~= parentLocationLabel and
             not IsIn(childLocationLabel, GetAllLabels(parent)) then
             Append(content, Tr("located_in") .. " " .. TexCmd("nameref", childLocationLabel))
-            AddToProtectedField(parent, "mentions", childLocation)
         end
     end
     if #content > 0 then
@@ -80,7 +79,6 @@ local function addSingleChildDescriptorToParent(child, parent, relationships)
     Append(content, " ")
     Append(content, entityQualifiersString(child, parent, relationships))
     UniqueAppend(parent[descriptor], table.concat(content))
-    AddToProtectedField(parent, "mentions", child)
 end
 
 local function getRelationships(child, parent)

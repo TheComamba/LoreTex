@@ -79,7 +79,6 @@ function ContentToEntity(arg)
             MakePartOf { subEntity = val, mainEntity = newEntity }
         end
     end
-    AddMentions(newEntity, arg.content)
     return newEntity
 end
 
@@ -149,4 +148,8 @@ function IsMapString(content)
     else
         return string.find(content, [[\paragraph]]) ~= nil or string.find(content, [[\subparagraph]]) ~= nil
     end
+end
+
+function IsSubEntity(entity)
+    return GetProtectedNullableField(entity, "partOf") ~= nil
 end

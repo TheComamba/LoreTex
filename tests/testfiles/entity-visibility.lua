@@ -4,10 +4,10 @@ local function entitySetup()
     TexApi.addParent { parentLabel = "secret-orga" }
     TexApi.addParent { parentLabel = "revealed-orga" }
     TexApi.addParent { parentLabel = "unborn-orga" }
-    TexApi.addHistory { year = -10, event = [[Normal event]] }
-    TexApi.addHistory { year = -9, event = [[Concerns \reference{secret}]] }
-    TexApi.addHistory { year = -8, event = [[Concerns \reference{revealed}]] }
-    TexApi.addSecretHistory { year = -5, event = [[Secret event]] }
+    TexApi.addHistory { year = -10, content = [[Normal event]] }
+    TexApi.addHistory { year = -9, content = [[Concerns \reference{secret}]] }
+    TexApi.addHistory { year = -8, content = [[Concerns \reference{revealed}]] }
+    TexApi.addSecretHistory { year = -5, content = [[Secret event]] }
 
     TexApi.newEntity { category = "NPCs", label = "secret", name = "Secret" }
     TexApi.setSecret()
@@ -15,7 +15,7 @@ local function entitySetup()
     TexApi.addParent { parentLabel = "secret-orga" }
     TexApi.addParent { parentLabel = "revealed-orga" }
     TexApi.addParent { parentLabel = "unborn-orga" }
-    TexApi.addHistory { year = -7, event = [[Concerns \reference{normal}]] }
+    TexApi.addHistory { year = -7, content = [[Concerns \reference{normal}]] }
 
     TexApi.newEntity { category = "NPCs", label = "revealed", name = "Revealed" }
     TexApi.setSecret()
@@ -23,14 +23,14 @@ local function entitySetup()
     TexApi.addParent { parentLabel = "secret-orga" }
     TexApi.addParent { parentLabel = "revealed-orga" }
     TexApi.addParent { parentLabel = "unborn-orga" }
-    TexApi.addHistory { year = -6, event = [[Concerns \reference{normal}]] }
+    TexApi.addHistory { year = -6, content = [[Concerns \reference{normal}]] }
 
     TexApi.newEntity { category = "NPCs", label = "unborn", name = "Unborn" }
     TexApi.addParent { parentLabel = "normal-orga" }
     TexApi.addParent { parentLabel = "secret-orga" }
     TexApi.addParent { parentLabel = "revealed-orga" }
     TexApi.addParent { parentLabel = "unborn-orga" }
-    TexApi.addHistory { year = 10, event = [[Created.\birthof{unborn}]] }
+    TexApi.addHistory { year = 10, content = [[Created.\birthof{unborn}]] }
 
     TexApi.newEntity { category = "NPCs", label = "at_secret_location", name = "At secret Location" }
     TexApi.setLocation("eldorado")
@@ -51,7 +51,7 @@ local function entitySetup()
     TexApi.setSecret()
 
     TexApi.newEntity { category = "organisations", label = "unborn-orga", name = "Unborn Organisation" }
-    TexApi.born { year = 10, event = [[Founded.\birthof{unborn-orga}]] }
+    TexApi.born { year = 10, content = [[Founded.\birthof{unborn-orga}]] }
 end
 
 local function refSetup()

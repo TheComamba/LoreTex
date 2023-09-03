@@ -6,7 +6,7 @@ for key, isAgingDefined in pairs({ false, true }) do
 
     TexApi.newEntity { category = "NPCs", label = "test-npc", name = "Test NPC" }
     TexApi.setSpecies("test-species")
-    TexApi.born { year = -20, event = "Birth." }
+    TexApi.born { year = -20, content = "Birth." }
 
     local expected = {}
     Append(expected, [[\chapter{NPCs}]])

@@ -108,7 +108,7 @@ function CreateBenchmarkingTest(sizeStr)
     for i = size, 1, -1 do
         TexApi.newEntity { category = "places", label = "place-" .. i, name = "Place " .. i }
         TexApi.addHistory { year = -i,
-            event = [[Birth of \reference{char-]] .. i .. [[-1} \birthof{char-]] .. i .. [[-1}]] }
+            content = [[Birth of \reference{char-]] .. i .. [[-1} \birthof{char-]] .. i .. [[-1}]] }
         TexApi.makeEntityPrimary("place-" .. i)
 
         TexApi.newEntity { category = "species", label = "species-" .. i, name = "Species " .. i }

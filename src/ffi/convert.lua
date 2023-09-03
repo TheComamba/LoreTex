@@ -1,6 +1,6 @@
 local entityRefCommand = "entityref"
 
-local descriptionToString
+local toProperLuaObject
 
 local function optionalEntityToString(inp)
     if IsEntity(inp) then
@@ -11,14 +11,27 @@ local function optionalEntityToString(inp)
     end
 end
 
-descriptionToString = function(description)
-    if IsEntity(description) then
-        return optionalEntityToString(description)
-    elseif type(description) == "table" then
-        require("lualibs.lua")
-        return utilities.json.tostring(description)
+local function entitiesToRefs(input)
+    if IsEntity(input) then
+        return optionalEntityToString(input)
+    elseif type(input) == "table" then
+        local out = {}
+        for key, val in pairs(input) do
+            out[key] = entitiesToRefs(val)
+        end
+        return out
     else
-        return tostring(description)
+        return input
+    end
+end
+
+local function toDatabaseString(input)
+    input = entitiesToRefs(input)
+    if type(input) == "table" then
+        require("lualibs.lua")
+        return utilities.json.tostring(input)
+    else
+        return tostring(input)
     end
 end
 
@@ -30,8 +43,6 @@ local function shouldDescriptorBeWrittenToDatabase(descriptor)
     elseif descriptor == GetProtectedDescriptor("parents") then
         return false
     elseif descriptor == GetProtectedDescriptor("label") then
-        return false
-    elseif descriptor == GetProtectedDescriptor("mentions") then
         return false
     else
         return true
@@ -49,7 +60,7 @@ local function createEntityColumn(label, descriptor, description)
     local column = {};
     column.label = label
     column.descriptor = descriptor
-    column.description = descriptionToString(description)
+    column.description = toDatabaseString(description)
 
     return column
 end
@@ -96,19 +107,38 @@ local function stringToBoolean(descriptionString)
     end
 end
 
-local function stringToDescription(descriptionString)
+local function stringToProperLuaObject(descriptionString)
     if isEntityRef(descriptionString) then
         local entityrefs = ScanStringForCmd(descriptionString, entityRefCommand)
         return GetMutableEntityFromAll(entityrefs[1])
     elseif isTableString(descriptionString) then
         require("lualibs.lua")
-        return utilities.json.tolua(descriptionString)
+        local tmp = utilities.json.tolua(descriptionString)
+        local out = {}
+        for key, val in pairs(tmp) do
+            out[key] = toProperLuaObject(val)
+        end
+        return out
     elseif isNumberString(descriptionString) then
         return tonumber(descriptionString)
     elseif stringToBoolean(descriptionString) ~= nil then
         return stringToBoolean(descriptionString)
     else
         return descriptionString
+    end
+end
+
+toProperLuaObject = function(input)
+    if type(input) == "string" then
+        return stringToProperLuaObject(input)
+    elseif type(input) == "table" and not IsEntity(input) then
+        local out = {}
+        for key, val in pairs(input) do
+            out[key] = toProperLuaObject(val)
+        end
+        return out
+    else
+        return input
     end
 end
 
@@ -129,7 +159,7 @@ end
 function EntitiesFromColumns(entityColumns)
     for _, entityColumn in pairs(entityColumns) do
         local entity = GetMutableEntityFromAll(entityColumn.label)
-        entityColumn.description = stringToDescription(entityColumn.description)
+        entityColumn.description = toProperLuaObject(entityColumn.description)
         if IsProtectedDescriptor(entityColumn.descriptor) then
             SetProtectedField(entity, entityColumn.descriptor, entityColumn.description)
             if entityColumn.descriptor == GetProtectedDescriptor("category") then
@@ -147,26 +177,10 @@ function EntitiesFromColumns(entityColumns)
     end
 end
 
-local function boolToNumber(bool)
-    if bool then
-        return 1
-    else
-        return 0
-    end
-end
-
 local function formatHistoryItemForC(luaItem)
     local cItem = {}
 
     cItem.label = GetProtectedStringField(luaItem, "label")
-
-    cItem.content = GetProtectedStringField(luaItem, "content")
-
-    local isConcernsOthers = GetProtectedNullableField(luaItem, "isConcernsOthers")
-    cItem.is_concerns_others = boolToNumber(isConcernsOthers)
-
-    local isSecret = GetProtectedNullableField(luaItem, "isSecret")
-    cItem.is_secret = boolToNumber(isSecret)
 
     local year = GetProtectedNullableField(luaItem, "year")
     if not year then
@@ -179,40 +193,46 @@ local function formatHistoryItemForC(luaItem)
     if not day then day = 0 end
     cItem.day = day
 
-    local originator = GetProtectedNullableField(luaItem, "originator")
-    cItem.originator = optionalEntityToString(originator)
+    cItem.content = GetProtectedStringField(luaItem, "content")
+
+    local properties = GetProtectedTableReferenceField(luaItem, "properties")
+    cItem.properties = toDatabaseString(properties)
+
     return cItem
+end
+
+local function isGenerated(item)
+    local properties = GetProtectedTableReferenceField(item, "properties")
+    return GetProtectedNullableField(properties, "isGenerated")
 end
 
 function GetHistoryItemColumns()
     local historyItems = {}
     for _, item in pairs(AllHistoryItems) do
-        local newItem = formatHistoryItemForC(item)
-        table.insert(historyItems, newItem)
+        if not isGenerated(item) then
+            local newItem = formatHistoryItemForC(item)
+            table.insert(historyItems, newItem)
+        end
     end
     return historyItems
 end
 
 local function formatCHistoryItemForLua(cItem)
     local luaItem = {}
-    luaItem.label = cItem.label
-    luaItem.event = cItem.content
-    local isConcernsOthers = cItem.is_concerns_others ~= 0
-    luaItem.isConcernsOthers = isConcernsOthers
-    local isSecret = cItem.is_secret ~= 0
-    luaItem.isSecret = isSecret
-    luaItem.year = cItem.year
+    SetProtectedField(luaItem, "label", cItem.label)
+    SetProtectedField(luaItem, "year", cItem.year)
     if cItem.day ~= 0 then
-        luaItem.day = cItem.day
+        SetProtectedField(luaItem, "day", cItem.day)
     end
-    luaItem.originator = stringToDescription(cItem.originator)
+    SetProtectedField(luaItem, "content", cItem.content)
+    SetProtectedField(luaItem, "properties", toProperLuaObject(cItem.properties))
     return luaItem
 end
 
 function HistoryItemsFromColumns(historyItemColumns)
     for _, item in pairs(historyItemColumns) do
         item = formatCHistoryItemForLua(item)
-        AddHistory(item)
+        ProcessHistoryItem(item)
     end
 end
 

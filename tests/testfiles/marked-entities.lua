@@ -1,6 +1,6 @@
 TexApi.newEntity { category = "NPCs", label = "flora", shortname = "", name = "Flora" }
-TexApi.born { year = -10, event = [[\nameref{flora} is born.\birthof{flora}]] }
-TexApi.died { year = -5, event = [[\nameref{flora} dies.\deathof{flora}]] }
+TexApi.born { year = -10, content = [[\nameref{flora} is born.\birthof{flora}]] }
+TexApi.died { year = -5, content = [[\nameref{flora} dies.\deathof{flora}]] }
 
 TexApi.newEntity { category = "NPCs", label = "ramona", name = "Ramona" }
 TexApi.setSecret()

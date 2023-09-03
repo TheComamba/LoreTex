@@ -6,7 +6,7 @@ local function entitySetup(level)
     TexApi.setAgeFactor(1)
 
     TexApi.newEntity { label = "char-1", category = "NPCs", name = "char-1" }
-    TexApi.born { year = -15, event = "Born." }
+    TexApi.born { year = -15, content = "Born." }
     TexApi.setDescriptor { descriptor = "char-2", description = [[\label{char-2}
 \paragraph{char-3}\label{char-3}
 \subparagraph{char-4}\label{char-4}]] }

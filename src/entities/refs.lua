@@ -34,8 +34,19 @@ function ScanStringForCmd(str, cmd)
     local posCmd = string.find(str, cmdStr)
     local posClose = 0
     while posCmd ~= nil do
-        local posOpen = string.find(str, openStr, posCmd)
-        posClose = string.find(str, closeStr, math.max(posOpen, posClose + 1))
+        local posOpenTmp = string.find(str, openStr, posCmd)
+        if not posOpenTmp then
+            LogError("No opening bracket found for command \"" .. cmd .. "\".")
+            break
+        end
+        local posOpen = posOpenTmp
+
+        local posCloseTmp = string.find(str, closeStr, math.max(posOpen, posClose + 1))
+        if not posCloseTmp then
+            LogError("No closing bracket found for command \"" .. cmd .. "\".")
+            break
+        end
+        posClose = posCloseTmp
 
         local between = string.sub(str, posCmd + string.len(cmdStr), posOpen - 1)
         local arg = string.sub(str, posOpen + string.len(openStr), posClose - 1)
@@ -54,14 +65,24 @@ function ScanStringForCmd(str, cmd)
     return args
 end
 
+local function continueRcursion(key, subcontent)
+    if IsProtectedDescriptor(key) then
+        return false
+    elseif IsEntity(subcontent) and not IsSubEntity(subcontent) then
+        return false
+    else
+        return true
+    end
+end
+
 function ScanForCmd(content, cmd)
     local out = {}
     if type(content) == "string" then
         out = ScanStringForCmd(content, cmd)
     elseif type(content) == "table" then
-        for key, elem in pairs(content) do
-            if not IsProtectedDescriptor(key) then
-                local commands = ScanForCmd(elem, cmd)
+        for key, subcontent in pairs(content) do
+            if continueRcursion(key, subcontent) then
+                local commands = ScanForCmd(subcontent, cmd)
                 Append(out, commands)
             end
         end
@@ -69,13 +90,25 @@ function ScanForCmd(content, cmd)
     return out
 end
 
-function ScanContentForMentionedRefs(content)
+local function scanContentForMentionedRefs(content)
     local mentionedRefsHere = {}
     for key1, refType in pairs(refTypes) do
         local refs = ScanForCmd(content, refType)
         UniqueAppend(mentionedRefsHere, refs)
     end
     return mentionedRefsHere
+end
+
+function GetMentionedEntities(content)
+    local refs = scanContentForMentionedRefs(content)
+    local mentions = {}
+    for _, ref in pairs(refs) do
+        local entity = GetMutableEntityFromAll(ref)
+        if entity ~= nil then
+            UniqueAppend(mentions, entity)
+        end
+    end
+    return mentions
 end
 
 local function makeAllEntitiesPrimary()

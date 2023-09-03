@@ -16,12 +16,12 @@ local function isHistoryInputOk(caller, item)
 		return false
 	end
 	local propertyNames = {}
-	Append(propertyNames, "isSecret")
-	Append(propertyNames, "additionalConcerns")
-	Append(propertyNames, "notConcerns")
-	Append(propertyNames, "onlyConcerns")
-	Append(propertyNames, "birthOf")
-	Append(propertyNames, "deathOf")
+	Append(propertyNames, GetProtectedDescriptor("isSecret"))
+	Append(propertyNames, GetProtectedDescriptor("additionalConcerns"))
+	Append(propertyNames, GetProtectedDescriptor("notConcerns"))
+	Append(propertyNames, GetProtectedDescriptor("onlyConcerns"))
+	Append(propertyNames, GetProtectedDescriptor("birthOf"))
+	Append(propertyNames, GetProtectedDescriptor("deathOf"))
 	local properties = GetProtectedTableReferenceField(item, "properties")
 	if properties and not IsArgOk(caller, properties, {}, propertyNames) then
 		return false
@@ -112,7 +112,7 @@ local function addSpecialyearsToEntities(field, year, entities)
 end
 
 function ProcessHistoryItem(item)
-	if not isHistoryInputOk("ProcessEvent", item) then
+	if not isHistoryInputOk("ProcessHistoryItem", item) then
 		return
 	end
 

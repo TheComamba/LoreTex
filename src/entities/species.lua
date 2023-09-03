@@ -163,6 +163,7 @@ function AddLifestageHistoryItems(entity)
 			Append(event, ".")
 			local item = {}
 			SetYear(item, year)
+			AssureUniqueHistoryLabel(item)
 			SetProtectedField(item, "content", table.concat(event))
 			local historyProperties = {}
 			AddToProtectedField(historyProperties, "onlyConcerns", entity)

@@ -4,16 +4,6 @@ StateResetters[#StateResetters + 1] = function()
     labelToProcessedEntity = {}
 end
 
-local function collectMentionedEntities(entity)
-    local out = GetProtectedTableCopyField(entity, "mentions")
-    for key, item in pairs(GetProtectedTableReferenceField(entity, "historyItems")) do
-        for key2, concern in pairs(GetProtectedTableReferenceField(item, "mentions")) do
-            out[#out + 1] = concern
-        end
-    end
-    return out
-end
-
 local function addAutomatedDescriptors(entity)
     AddAffiliationDescriptors(entity)
     AddSpeciesAndAgeString(entity)
@@ -23,7 +13,7 @@ local function addAutomatedDescriptors(entity)
 end
 
 local function addPrimariesWhenMentioned(arg, mentioned)
-    for key, entity in pairs(mentioned) do
+    for _, entity in pairs(mentioned) do
         local categoryName = GetProtectedStringField(entity, "category")
         if IsIn(categoryName, PrimaryRefWhenMentionedCategories) then
             AddProcessedEntity(arg, entity)
@@ -63,7 +53,7 @@ local function registerProcessedEntity(arg, newEntity)
 end
 
 local function addFollowUpEntities(arg, newEntity)
-    local mentionedEntities = collectMentionedEntities(newEntity)
+    local mentionedEntities = GetMentionedEntities(newEntity)
     addPrimariesWhenMentioned(arg, mentionedEntities)
     for key, mentionedEntity in pairs(mentionedEntities) do
         if not IsEntityUnrevealed(mentionedEntity) then

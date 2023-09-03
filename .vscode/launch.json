@@ -1,0 +1,17 @@
+// compare https://tex.stackexchange.com/questions/295539/is-there-a-way-to-step-through-lualatex-macros-using-a-remote-debugger
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug Tests",
+            "type": "lua-local",
+            "request": "launch",
+            "stopOnEntry": false,
+            "program": {
+                "command": "lualatex"
+            },
+            "cwd": "${workspaceFolder}/tests",
+            "args": ["--shell-escape", "run_tests.tex"]
+        }
+    ]
+}

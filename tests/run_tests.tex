@@ -1,17 +1,27 @@
 % !TeX document-id = {a56c153b-8832-403c-b169-454971bb6954}
 % !TeX TXS-program:compile = txs:///lualatex/{%.tex} -shell-escape "%.tex"
 \documentclass[oneside]{memoir}
+
 \setlrmarginsandblock{10mm}{10mm}{*}
 \setulmarginsandblock{25mm}{25mm}{*}
 \checkandfixthelayout
+
 \input{../src/main.tex}
+
+\usepackage{luapackageloader} %Re-enables the standard lua package loader
+\begin{luacode}
+    require("lldebugger").start()
+    --Currently, only some early breakpoints are hit.
+\end{luacode}
+
 \loadLuacode{../src/}
 \directlua{ dofile( "test.lua" ) }
 \input{test.tex}
+
 \begin{document}
 \pagestyle{empty}
 %\throwOnError
 %\sortErrorsChronologically
-%\LoreTexTest{ffi-convert}
-\LoreTexTests%{age-modifiers}
+\LoreTexTests
+
 \end{document}

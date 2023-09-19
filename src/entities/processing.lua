@@ -5,7 +5,9 @@ StateResetters[#StateResetters + 1] = function()
 end
 
 local function addAutomatedDescriptors(entity)
-    AddAffiliationDescriptors(entity)
+    if AreSecretsShown() then
+        AddAffiliationDescriptors(entity)
+    end
     AddSpeciesAndAgeString(entity)
     AddLifeStages(entity)
     AddHeightDescriptor(entity)
@@ -64,7 +66,9 @@ end
 
 local function processEntity(arg, entity)
     local newEntity = DeepCopy(entity)
-    AddNameMarkers(newEntity)
+    if AreSecretsShown() or IsRevealed(entity) then
+        AddNameMarkers(newEntity)
+    end
     addAutomatedDescriptors(newEntity)
     for key, val in pairs(entity) do
         if not IsProtectedDescriptor(key) and IsEntity(val) then

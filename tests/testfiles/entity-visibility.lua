@@ -70,20 +70,14 @@ local function refSetup()
     TexApi.setCurrentYear(0)
 end
 
-local function NPCsParagraph(isShowSecrets, isShowFuture)
+local function NPCsParagraph(isShowFuture)
     local out = {}
     Append(out, [[\subsubsection{]] .. CapFirst(Tr("affiliated")) .. [[ NPCs}]])
     Append(out, [[\begin{itemize}]])
-    if isShowSecrets then
-        Append(out, [[\item \nameref{at_secret_location} (]] .. Tr("located_in") .. [[ \nameref{eldorado})]])
-    else
-        Append(out, [[\item \nameref{at_secret_location} (]] .. Tr("at_secret_location") .. [[)]])
-    end
+    Append(out, [[\item \nameref{at_secret_location} (]] .. Tr("located_in") .. [[ \nameref{eldorado})]])
     Append(out, [[\item \nameref{normal}]])
     Append(out, [[\item \nameref{revealed} (]] .. Tr("secret") .. [[)]])
-    if isShowSecrets then
-        Append(out, [[\item \nameref{secret} (]] .. Tr("secret") .. [[)]])
-    end
+    Append(out, [[\item \nameref{secret} (]] .. Tr("secret") .. [[)]])
     if isShowFuture then
         Append(out, [[\item \nameref{unborn}]])
     end
@@ -91,7 +85,7 @@ local function NPCsParagraph(isShowSecrets, isShowFuture)
     return out
 end
 
-local function affiliationParagraph(isShowSecrets, isShowFuture)
+local function affiliationParagraph(isShowFuture)
     local out = {}
     Append(out, [[\subsubsection{]] .. CapFirst(Tr("affiliations")) .. [[}]])
     Append(out, [[\begin{itemize}]])
@@ -99,12 +93,9 @@ local function affiliationParagraph(isShowSecrets, isShowFuture)
     Append(out,
         [[\item (]] ..
         CapFirst(Tr("secret")) .. [[) ]] .. CapFirst(Tr("member")) .. [[ ]] .. Tr("of") .. [[ \nameref{revealed-orga}.]])
-    if isShowSecrets then
-        Append(out,
-            [[\item (]] ..
-            CapFirst(Tr("secret")) ..
-            [[) ]] .. CapFirst(Tr("member")) .. [[ ]] .. Tr("of") .. [[ \nameref{secret-orga}.]])
-    end
+    Append(out,
+        [[\item (]] ..
+        CapFirst(Tr("secret")) .. [[) ]] .. CapFirst(Tr("member")) .. [[ ]] .. Tr("of") .. [[ \nameref{secret-orga}.]])
     if isShowFuture then
         Append(out, [[\item ]] .. CapFirst(Tr("member")) .. [[ ]] .. Tr("of") .. [[ \nameref{unborn-orga}.]])
     end
@@ -132,7 +123,9 @@ local function charactersChapter(isShowSecrets, isShowFuture)
 
     Append(out, [[\subsection{Normal}]])
     Append(out, [[\label{normal}]])
-    Append(out, affiliationParagraph(isShowSecrets, isShowFuture))
+    if isShowSecrets then
+        Append(out, affiliationParagraph(isShowFuture))
+    end
     Append(out, [[\subsubsection{]] .. CapFirst(Tr("history")) .. [[}]])
     Append(out, [[\begin{itemize}]])
     Append(out, [[\item -10 (]] .. Tr("x_years_ago", { 10 }) .. [[):\\ Normal event]])
@@ -160,7 +153,9 @@ local function charactersChapter(isShowSecrets, isShowFuture)
 
     Append(out, [[\subsection[Revealed]{Revealed (]] .. CapFirst(Tr("secret")) .. [[)}]])
     Append(out, [[\label{revealed}]])
-    Append(out, affiliationParagraph(isShowSecrets, isShowFuture))
+    if isShowSecrets then
+        Append(out, affiliationParagraph(isShowFuture))
+    end
     Append(out, [[\subsubsection{]] .. CapFirst(Tr("history")) .. [[}]])
     Append(out, [[\begin{itemize}]])
     Append(out,
@@ -179,7 +174,9 @@ local function charactersChapter(isShowSecrets, isShowFuture)
     if isShowFuture then
         Append(out, [[\subsection{Unborn}]])
         Append(out, [[\label{unborn}]])
-        Append(out, affiliationParagraph(isShowSecrets, isShowFuture))
+        if isShowSecrets then
+            Append(out, affiliationParagraph(isShowFuture))
+        end
         Append(out, [[\subsubsection{]] .. CapFirst(Tr("history")) .. [[}]])
         Append(out, [[\begin{itemize}]])
         Append(out, [[\item 10 (]] .. Tr("in_x_years", { 10 }) .. [[):\\ Created.\birthof{unborn}]])
@@ -193,7 +190,9 @@ local function charactersChapter(isShowSecrets, isShowFuture)
     end
     Append(out, [[\subsection{At secret Location}]])
     Append(out, [[\label{at_secret_location}]])
-    Append(out, affiliationParagraph(isShowSecrets, isShowFuture))
+    if isShowSecrets then
+        Append(out, affiliationParagraph(isShowFuture))
+    end
     return out
 end
 
@@ -212,14 +211,20 @@ local function otherChapter(isShowSecrets, isShowFuture)
     Append(out, [[\section{]] .. CapFirst(Tr("in_whole_world")) .. [[}]])
     Append(out, [[\subsection{Normal Organisation}]])
     Append(out, [[\label{normal-orga}]])
-    Append(out, NPCsParagraph(isShowSecrets, isShowFuture))
+    if isShowSecrets then
+        Append(out, NPCsParagraph(isShowFuture))
+    end
     Append(out, [[\subsection[Revealed Organisation]{Revealed Organisation (]] .. CapFirst(Tr("secret")) .. [[)}]])
     Append(out, [[\label{revealed-orga}]])
-    Append(out, NPCsParagraph(isShowSecrets, isShowFuture))
+    if isShowSecrets then
+        Append(out, NPCsParagraph(isShowFuture))
+    end
     if isShowFuture then
         Append(out, [[\subsection{Unborn Organisation}]])
         Append(out, [[\label{unborn-orga}]])
-        Append(out, NPCsParagraph(isShowSecrets, isShowFuture))
+        if isShowSecrets then
+            Append(out, NPCsParagraph(isShowFuture))
+        end
         Append(out, [[\subsubsection{]] .. CapFirst(Tr("history")) .. [[}]])
         Append(out, [[\begin{itemize}]])
         Append(out, [[\item 10 (]] .. Tr("in_x_years", { 10 }) .. [[):\\ Founded.\birthof{unborn-orga}]])

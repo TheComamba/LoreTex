@@ -21,6 +21,7 @@ local function entitySetup(setLocations)
 end
 
 local function refSetup()
+    TexApi.showSecrets()
     TexApi.makeEntityPrimary("orga")
     TexApi.makeEntityPrimary("place-1")
     TexApi.makeEntityPrimary("place-2")

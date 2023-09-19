@@ -46,6 +46,7 @@ TexApi.newEntity { category = "other", label = "some-orga", name = "Some Orga" }
 TexApi.setDescriptor { descriptor = "Orga Sublabel", description = [[\label{orga-sublabel}]] }
 
 local function setup2()
+    TexApi.showSecrets()
     TexApi.makeEntityPrimary("some-npc")
 end
 

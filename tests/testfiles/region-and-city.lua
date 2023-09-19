@@ -7,6 +7,7 @@ TexApi.newEntity { category = "places", label = "test-city", name = "Test City" 
 TexApi.setLocation("test-region")
 
 local function setup()
+    TexApi.showSecrets()
     TexApi.makeAllEntitiesPrimary()
 end
 

@@ -83,6 +83,7 @@ local function generateExpected(category, includesShortname, includesSubname)
 end
 
 local function setup()
+    TexApi.showSecrets()
     TexApi.makeAllEntitiesPrimary()
 end
 

@@ -29,6 +29,10 @@ end
 
 TexApi.reveal = reveal
 
+function AreSecretsShown()
+    return isShowSecrets
+end
+
 function IsEntitySecret(entity)
     if entity == nil then
         return false
@@ -50,7 +54,7 @@ function IsRevealed(entity)
 end
 
 function IsEntityUnrevealed(entity)
-    if isShowSecrets then
+    if AreSecretsShown() then
         return false
     end
     return IsEntitySecret(entity) and (not IsRevealed(entity))
@@ -60,7 +64,7 @@ function IsEntityShown(entity)
     if not IsBorn(entity) and not isShowFuture then
         return false
     elseif IsEntitySecret(entity) then
-        if IsRevealed(entity) or isShowSecrets then
+        if IsRevealed(entity) or AreSecretsShown() then
             return true
         else
             return false
@@ -115,7 +119,7 @@ function IsHistoryShown(historyItem)
         return false
     elseif not isShowFuture and IsFutureEvent(historyItem) then
         return false
-    elseif not isShowSecrets then
+    elseif not AreSecretsShown() then
         local properties = GetProtectedTableReferenceField(historyItem, "properties")
         local isSecret = GetProtectedNullableField(properties, "isSecret")
         if isSecret ~= nil and isSecret then

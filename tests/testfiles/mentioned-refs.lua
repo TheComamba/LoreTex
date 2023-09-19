@@ -6,7 +6,8 @@ TexApi.newEntity { category = "NPCs", label = "other-npc", name = "Other NPC" }
 TexApi.newEntity { category = "NPCs", label = "not-mentioned-npc", name = "Not mentioned NPC" }
 TexApi.newEntity { category = "other", label = "some-organisation", name = "Some Organisation" }
 
-local function refSetup()
+local function setup()
+    TexApi.showSecrets()
     TexApi.makeEntityPrimary("primary-npc")
     TexApi.mention("mentioned-npc")
 end
@@ -38,4 +39,4 @@ Append(expected, [[\subparagraph{Some Organisation}]])
 Append(expected, [[\label{some-organisation}]])
 Append(expected, [[\hspace{1cm}]])
 
-AssertAutomatedChapters("mentioned-refs", expected, refSetup)
+AssertAutomatedChapters("mentioned-refs", expected, setup)

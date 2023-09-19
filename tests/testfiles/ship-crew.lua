@@ -70,6 +70,7 @@ Append(expected, [[\item \nameref{haldora} (Captain)]])
 Append(expected, [[\end{itemize}]])
 
 local function setup()
+    TexApi.showSecrets()
     TexApi.makeAllEntitiesPrimary()
 end
 

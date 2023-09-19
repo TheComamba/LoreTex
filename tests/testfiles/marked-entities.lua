@@ -6,6 +6,7 @@ TexApi.newEntity { category = "NPCs", label = "ramona", name = "Ramona" }
 TexApi.setSecret()
 
 local function setup()
+    TexApi.showSecrets()
     TexApi.setCurrentYear(0)
     TexApi.makeEntityPrimary("flora")
     TexApi.makeEntityPrimary("ramona")

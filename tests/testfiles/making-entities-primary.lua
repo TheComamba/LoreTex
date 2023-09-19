@@ -196,36 +196,39 @@ local expected = {}
 
 for _, category in pairs(categories) do
     entitySetup()
-    local function refSetup()
+    local function setup()
+        TexApi.showSecrets()
         TexApi.makeAllEntitiesOfCategoryPrimary(category)
     end
 
     expected = generateExpected { primaryCategory = category }
-    AssertAutomatedChapters("Category " .. category .. " is primary", expected, refSetup)
+    AssertAutomatedChapters("Category " .. category .. " is primary", expected, setup)
 end
 
 for depth = 1, 3 do
     for _, category in pairs(categories) do
         for _, label in pairs(generateLabels(category, depth)) do
             entitySetup()
-            local function refSetupLabel()
+            local function setup1()
+                TexApi.showSecrets()
                 TexApi.makeEntityAndChildrenPrimary(label)
             end
 
             expected = generateExpected { primaryParent = label }
             local testname = "Entity '" .. label .. "' is primary"
-            AssertAutomatedChapters(testname, expected, refSetupLabel)
+            AssertAutomatedChapters(testname, expected, setup1)
 
             for _, primaryCategory in pairs(categories) do
                 entitySetup()
-                local function refSetupLabel()
+                local function setup2()
+                    TexApi.showSecrets()
                     TexApi.makeEntityAndChildrenPrimary(label)
                     TexApi.makeCategoryPrimaryWhenMentioned(primaryCategory)
                 end
 
                 expected = generateExpected { primaryParent = label, primaryCategoryWhenMentioned = primaryCategory }
                 local testname2 = testname .. ", category " .. primaryCategory .. " is primary when mentioned"
-                AssertAutomatedChapters(testname2, expected, refSetupLabel)
+                AssertAutomatedChapters(testname2, expected, setup2)
             end
         end
     end

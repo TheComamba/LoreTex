@@ -39,6 +39,9 @@ local function entitySetup()
     TexApi.addParent { parentLabel = "revealed-orga" }
     TexApi.addParent { parentLabel = "unborn-orga" }
 
+    TexApi.newEntity { category = "NPCs", label = "secret_and_primary", name = "Secret and Primary" }
+    TexApi.setSecret()
+
     TexApi.newEntity { category = "places", label = "eldorado", name = "Eldorado" }
     TexApi.setSecret()
 
@@ -60,6 +63,7 @@ local function refSetup()
     TexApi.makeEntityPrimary("at_secret_location")
     TexApi.makeEntityPrimary("normal-orga")
     TexApi.makeEntityPrimary("unborn-orga")
+    TexApi.makeEntityPrimary("secret_and_primary")
     TexApi.reveal("revealed")
     TexApi.reveal("revealed-orga")
 
@@ -116,6 +120,9 @@ local function charactersChapter(isShowSecrets, isShowFuture)
     Append(out, [[\item \nameref{at_secret_location}]])
     Append(out, [[\item \nameref{normal}]])
     Append(out, [[\item \nameref{revealed}]])
+    if isShowSecrets then
+        Append(out, [[\item \nameref{secret_and_primary}]])
+    end
     if isShowFuture then
         Append(out, [[\item \nameref{unborn}]])
     end
@@ -163,6 +170,11 @@ local function charactersChapter(isShowSecrets, isShowFuture)
         [[\item -6 (]] ..
         Tr("x_years_ago", { 6 }) .. [[):\\ (]] .. CapFirst(Tr("secret")) .. [[) Concerns \nameref{normal}]])
     Append(out, [[\end{itemize}]])
+
+    if isShowSecrets then
+        Append(out, [[\subsection[Secret and Primary]{Secret and Primary (]] .. CapFirst(Tr("secret")) .. [[)}]])
+        Append(out, [[\label{secret_and_primary}]])
+    end
 
     if isShowFuture then
         Append(out, [[\subsection{Unborn}]])

@@ -2,7 +2,7 @@ PrimaryRefs = {}
 MentionedRefs = {}
 UnfoundRefs = {}
 PrimaryRefWhenMentionedCategories = {}
-local refTypes = { "reference", "nameref", "itref", "ref" }
+local refTypes = { "reference", "nameref", "itref", "ref", "silentref" }
 
 function ResetRefs()
     PrimaryRefs = {}

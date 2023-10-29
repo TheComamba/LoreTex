@@ -71,6 +71,7 @@ local function scanContentForProperties(properties, content)
 	if concernsAllMentionedEntities then
 		addEntities(properties, "additionalConcerns", ScanStringForCmd(content, "concerns"))
 		addEntities(properties, "notConcerns", ScanStringForCmd(content, "notconcerns"))
+		addEntities(properties, "notConcerns", ScanStringForCmd(content, "silentref"))
 	end
 end
 

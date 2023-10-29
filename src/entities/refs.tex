@@ -4,5 +4,6 @@
 \newcommand{\mention}[1]{\nameref{#1}\directlua{TexApi.mention("#1")}}
 \newcommand{\reference}[1]{\nameref{#1}\makeEntityPrimary{#1}}
 \newcommand{\itref}[1]{\textit{\nameref{#1}}}
+\newcommand{\silentref}[1]{\nameref{#1}}
 \newcommand{\makeCategoryPrimaryWhenMentioned}[1]{\directlua{TexApi.makeCategoryPrimaryWhenMentioned("#1")}}
 \newcommand{\makeAllEntitiesPrimary}{\directlua{TexApi.makeAllEntitiesPrimary()}}

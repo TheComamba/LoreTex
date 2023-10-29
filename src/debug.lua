@@ -45,3 +45,47 @@ Debug.debugAutomatedChapters = function()
     end
     tex.print(TexCmd("end", "verbatim"))
 end
+
+Debug.storeHistoryOriginator = function()
+    Debug.addProtectedDescriptor("originator")
+    local addHistoryOriginal = TexApi.addHistory
+    ---@diagnostic disable-next-line: duplicate-set-field
+    TexApi.addHistory = function(arg)
+        addHistoryOriginal(arg)
+        local item = AllHistoryItems[#AllHistoryItems]
+        SetProtectedField(item, "originator", CurrentEntity)
+    end
+end
+
+Debug.warnIfHistoryConcernsOtherCategory = function(originatorCategory, targetCategory)
+    local messages = {}
+    for _, item in pairs(AllHistoryItems) do
+        local originator = GetProtectedNullableField(item, "originator")
+        if originator == nil then
+            tex.print([[History item has no originator! The \verb"\storeHistoryOriginator" command needs to be called before \verb"\addHistory".]])
+            return
+        end
+
+        if GetProtectedStringField(originator, "category") == originatorCategory then
+            local concerns = GetHistoryConcerns(item)
+            for _, entity in pairs(concerns) do
+                local concernCategory = GetProtectedStringField(entity, "category")
+                if concernCategory == targetCategory then
+                    local originatorLabel = GetProtectedStringField(originator, "label")
+                    local label = GetProtectedStringField(entity, "label")
+                    local content = GetProtectedStringField(item, "content")
+                    content = Replace([[\nameref]], [[]], content)
+                    content = Replace([[\reference]], [[]], content)
+                    content = Replace([[\silentref]], [[]], content)
+                    local errorMessage = originatorLabel ..
+                        " has history concerning " .. label .. [[:\\]] .. content
+                    Append(messages, errorMessage)
+                end
+            end
+        end
+    end
+    if #messages > 0 then
+        tex.print(TexCmd("paragraph", "History items concerning other category"))
+        tex.print(ListAll(messages))
+    end
+end

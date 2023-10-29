@@ -5,6 +5,8 @@ local function addProtectedDescriptor(descriptor)
     protectedDescriptors[descriptor] = "_" .. descriptor
 end
 
+Debug.addProtectedDescriptor = addProtectedDescriptor
+
 local function addInheritableDescriptor(descriptor)
     isInheritableDescriptor[descriptor] = true
     addProtectedDescriptor(descriptor)

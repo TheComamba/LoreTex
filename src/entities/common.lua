@@ -2,7 +2,7 @@ function IsEntity(inp)
     if type(inp) ~= "table" then
         return false
     else
-        return GetProtectedStringField(inp, "label") ~= ""
+        return GetProtectedStringField(inp, "label") ~= "" or GetProtectedNullableField(inp, "timestamp") ~= nil
     end
 end
 

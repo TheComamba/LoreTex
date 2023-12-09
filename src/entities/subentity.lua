@@ -10,44 +10,6 @@ function NewUniqueEntityLabel(name)
     return generatedLabelFlag .. LabelFromName(name) .. "-" .. labelCounter
 end
 
-local function isHistoryLabelInUse(label)
-    for _, entity in pairs(AllHistoryItems) do
-        local historyLabel = GetProtectedStringField(entity, "label")
-        if historyLabel == label then
-            return true
-        end
-    end
-    return false
-end
-
-function AssureUniqueHistoryLabel(item)
-    local currentLabel = GetProtectedStringField(item, "label")
-    if currentLabel ~= "" then
-        if isHistoryLabelInUse(currentLabel) then
-            LogError("History label \"" .. currentLabel .. "\" is already in use.")
-        end
-        return
-    end
-
-    local year = GetProtectedNullableField(item, "year")
-    local day = GetProtectedNullableField(item, "day")
-    if year == nil then
-        LogError("History item without year.")
-        year = "ERROR"
-    end
-    if day == nil then
-        day = 0
-    end
-    local labelBase = generatedLabelFlag .. year .. "-" .. day
-    local label = labelBase
-    local historyLabelCounter = 0
-    while isHistoryLabelInUse(label) do
-        historyLabelCounter = historyLabelCounter + 1
-        label = labelBase .. "-" .. historyLabelCounter
-    end
-    SetProtectedField(item, "label", label)
-end
-
 function IsLabelGenerated(label)
     return label:find(generatedLabelFlag, 1, true) == 1
 end

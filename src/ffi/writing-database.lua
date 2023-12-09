@@ -51,3 +51,13 @@ TexApi.writeLoreToDatabase = function(dbPath)
     writeToDatabase(dbPath, GetHistoryItemColumns(), "CHistoryItem", loreCore.write_history_items)
     writeToDatabase(dbPath, GetRelationshipColumns(), "CEntityRelationship", loreCore.write_relationships)
 end
+
+function CurrentTimestamp()
+    local ffi = GetFFIModule()
+    if not ffi then return nil end
+
+    local loreCore = GetLib()
+    if not loreCore then return nil end
+
+    return loreCore.get_current_timestamp()
+end

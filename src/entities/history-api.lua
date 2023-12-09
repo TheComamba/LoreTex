@@ -7,7 +7,7 @@ end
 local function isHistoryInputOk(caller, item)
 	local required = {}
 	local optional = {}
-	Append(required, GetProtectedDescriptor("label"))
+	Append(required, GetProtectedDescriptor("timestamp"))
 	Append(required, GetProtectedDescriptor("year"))
 	Append(optional, GetProtectedDescriptor("day"))
 	Append(required, GetProtectedDescriptor("content"))

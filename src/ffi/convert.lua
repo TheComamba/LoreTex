@@ -180,11 +180,16 @@ end
 local function formatHistoryItemForC(luaItem)
     local cItem = {}
 
-    cItem.label = GetProtectedStringField(luaItem, "label")
+    local timestamp = GetProtectedNullableField(luaItem, "timestamp")
+    if not timestamp then
+        LogError("History item has no timestamp:" .. DebugPrint(luaItem))
+        return {}
+    end
+    cItem.timestamp = timestamp
 
     local year = GetProtectedNullableField(luaItem, "year")
     if not year then
-        LogError("History item " .. cItem.label .. " has no year.")
+        LogError("History item has no year:" .. DebugPrint(luaItem))
         return {}
     end
     cItem.year = year
@@ -219,7 +224,7 @@ end
 
 local function formatCHistoryItemForLua(cItem)
     local luaItem = {}
-    SetProtectedField(luaItem, "label", cItem.label)
+    SetProtectedField(luaItem, "timestamp", cItem.timestamp)
     SetProtectedField(luaItem, "year", cItem.year)
     if cItem.day ~= 0 then
         SetProtectedField(luaItem, "day", cItem.day)

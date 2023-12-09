@@ -7,7 +7,7 @@ end
 local function isHistoryInputOk(caller, item)
 	local required = {}
 	local optional = {}
-	Append(required, GetProtectedDescriptor("label"))
+	Append(required, GetProtectedDescriptor("timestamp"))
 	Append(required, GetProtectedDescriptor("year"))
 	Append(optional, GetProtectedDescriptor("day"))
 	Append(required, GetProtectedDescriptor("content"))
@@ -149,6 +149,7 @@ TexApi.addHistory = function(arg)
 		arg.yearFmt = nil
 	end
 
+	SetProtectedField(item, "timestamp", CurrentTimestamp())
 	SetYear(item, arg.year, arg.yearFmt)
 	setDay(item, arg.day)
 	SetProtectedField(item, "content", arg.content)
@@ -167,7 +168,6 @@ TexApi.addHistory = function(arg)
 
 	SetProtectedField(item, "properties", properties)
 
-	AssureUniqueHistoryLabel(item)
 	ProcessHistoryItem(item)
 end
 

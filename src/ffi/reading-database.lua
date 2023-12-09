@@ -80,7 +80,7 @@ local function readHistoryItemColumns(dbPath)
     for i = 0, (numHistoryItems - 1) do
         local cHistoryItem = cHistoryItems[i]
         local historyItem = {}
-        historyItem.label = ffi.string(cHistoryItem.label)
+        historyItem.timestamp = ffi.number(cHistoryItem.timestamp)
         historyItem.year = ffi.number(cHistoryItem.year)
         historyItem.day = ffi.number(cHistoryItem.day)
         historyItem.content = ffi.string(cHistoryItem.content)

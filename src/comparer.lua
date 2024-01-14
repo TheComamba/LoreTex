@@ -78,12 +78,12 @@ Comparer.compareHistoryItems = function(a, b)
     local yearB = GetProtectedNullableField(b, "year")
     local dayA = GetProtectedNullableField(a, "day")
     local dayB = GetProtectedNullableField(b, "day")
-    local labelA = GetProtectedStringField(a, "label")
-    local labelB = GetProtectedStringField(b, "label")
+    local timestampA = GetProtectedNullableField(a, "timestamp")
+    local timestampB = GetProtectedNullableField(b, "timestamp")
     if yearA ~= yearB then
         return yearA < yearB
     elseif dayA == nil and dayB == nil then
-        return Comparer.compareString(labelA, labelB)
+        return timestampA < timestampB
     elseif dayB == nil then
         return false
     elseif dayA == nil then
@@ -91,7 +91,7 @@ Comparer.compareHistoryItems = function(a, b)
     elseif dayA ~= dayB then
         return dayA < dayB
     else
-        return Comparer.compareString(labelA, labelB)
+        return timestampA < timestampB
     end
 end
 

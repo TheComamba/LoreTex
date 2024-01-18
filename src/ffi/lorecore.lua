@@ -35,6 +35,23 @@ local function getCHeader()
     return content
 end
 
+local function getLibName()
+    local ffi = GetFFIModule()
+    if not ffi then return nil end
+
+    local os = ffi.os
+    if os == "Windows" then
+        return "lorecore.dll"
+    elseif os == "OSX" then
+        return "liblorecore.dylib"
+    elseif os == "Linux" then
+        return "liblorecore.so"
+    else
+        LogError("Unsupported operating system: " .. os)
+        return nil
+    end
+end
+
 function GetLib()
     if loreCore then return loreCore end
 
@@ -45,7 +62,9 @@ function GetLib()
     if not header then return nil end
     ffi.cdef(header)
 
-    local libPath = RelativePath .. [[../dependencies/liblorecore.so]]
+    local libName = getLibName()
+    if not libName then return nil end
+    local libPath = RelativePath .. [[../dependencies/]] .. libName
     loreCore = ffi.load(libPath)
     if not loreCore then
         LogError("Cannot load rust library.")

@@ -10,6 +10,10 @@ local function newEntity(arg)
         return
     end
     CurrentEntity = GetMutableEntityFromAll(arg.label)
+    if not IsEmpty(GetProtectedStringField(CurrentEntity, "name")) then
+        LogError("An Entity with label " .. arg.label .. " already exists. It was not created a second time.")
+        return
+    end
     SetProtectedField(CurrentEntity, "category", arg.category)
     AddCategory(arg.category)
     SetProtectedField(CurrentEntity, "shortname", arg.shortname)

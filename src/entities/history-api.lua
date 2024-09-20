@@ -82,7 +82,7 @@ end
 
 function GetHistoryConcerns(item)
 	local properties = GetProtectedTableReferenceField(item, "properties")
-	local onlyConcerns = GetProtectedTableReferenceField(properties, "onlyConcerns")
+	local onlyConcerns = GetProtectedTableCopyField(properties, "onlyConcerns")
 	if not IsEmpty(onlyConcerns) then
 		return onlyConcerns
 	end

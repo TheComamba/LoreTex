@@ -108,10 +108,7 @@ local function stringToBoolean(descriptionString)
 end
 
 local function stringToProperLuaObject(descriptionString)
-    if isEntityRef(descriptionString) then
-        local entityrefs = ScanStringForCmd(descriptionString, entityRefCommand)
-        return GetMutableEntityFromAll(entityrefs[1])
-    elseif isTableString(descriptionString) then
+    if isTableString(descriptionString) then
         require("lualibs.lua")
         local tmp = utilities.json.tolua(descriptionString)
         local out = {}
@@ -123,6 +120,9 @@ local function stringToProperLuaObject(descriptionString)
         return tonumber(descriptionString)
     elseif stringToBoolean(descriptionString) ~= nil then
         return stringToBoolean(descriptionString)
+    elseif isEntityRef(descriptionString) then
+        local entityrefs = ScanStringForCmd(descriptionString, entityRefCommand)
+        return GetMutableEntityFromAll(entityrefs[1])
     else
         return descriptionString
     end

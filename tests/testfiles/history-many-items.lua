@@ -1,13 +1,15 @@
 size = 10
+
+TexApi.newEntity { category = "places", label = "test-1", name = "Test 1" }
+TexApi.newEntity { category = "places", label = "test-2", name = "Test 2" }
+for i = 1, size do
+    TexApi.addHistory { year = 0, content = [[Simple Event ]] .. (size - i) }
+    TexApi.addHistory { year = 0, content = [[Concerns \ref{test-1} and \ref{test-2}\ref{test-2}\ref{test-2} ]] .. (size - i) }
+    TexApi.addHistoryOnlyHere { year = 0, content = [[Only concerns \ref{test-2}, not \ref{test-1} ]] .. (size - i) }
+    TexApi.addHistory { year = 0, day = 1, content = [[Has day ]] .. (size - i) }
+end
+
 local function setup()
-    TexApi.newEntity { category = "places", label = "test-1", name = "Test 1" }
-    TexApi.newEntity { category = "places", label = "test-2", name = "Test 2" }
-    for i = 1, size do
-        TexApi.addHistory { year = 0, content = [[Simple Event ]] .. (size - i) }
-        TexApi.addHistory { year = 0, content = [[Concerns \ref{test-1} and \ref{test-2}\ref{test-2}\ref{test-2} ]] .. (size - i) }
-        TexApi.addHistoryOnlyHere { year = 0, content = [[Only concerns \ref{test-2}, not \ref{test-1} ]] .. (size - i) }
-        TexApi.addHistory { year = 0, day = 1, content = [[Has day ]] .. (size - i) }
-    end
     TexApi.makeAllEntitiesPrimary()
     TexApi.setCurrentYear(0)
     TexApi.setCurrentDay(0)
@@ -15,7 +17,7 @@ local function setup()
     TexApi.showFuture(true)
 end
 
-local function generateExpected(isCurrentDaySet, isShowFuture)
+local function generateExpected()
     local out = {}
     Append(out, [[\chapter{Places}]])
     Append(out, [[\section*{]] .. CapFirst(Tr("all")) .. [[ Places}]])
@@ -62,4 +64,4 @@ local function generateExpected(isCurrentDaySet, isShowFuture)
 end
 
 local expected = generateExpected()
-AssertAutomatedChapters("history-events-no-future-day-not-set", expected, setup)
+AssertAutomatedChapters("history-many-items", expected, setup)

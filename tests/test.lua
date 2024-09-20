@@ -144,6 +144,14 @@ function Assert(caller, expected, received)
     checkOutputValues(caller, expected, received)
 end
 
+function DatabaseRoundtrip(caller)
+    local dbName = os.tmpname() .. Replace(" ", "_", caller) .. ".db"
+    TexApi.writeLoreToDatabase(dbName)
+    ResetState()
+    TexApi.readLoreFromDatabase(dbName)
+    os.remove(dbName)
+end
+
 function AssertAutomatedChapters(caller, expected, setup)
     if setup then
         setup()
@@ -151,11 +159,7 @@ function AssertAutomatedChapters(caller, expected, setup)
     local out = TexApi.automatedChapters()
     Assert(caller, expected, out)
 
-    local dbName = os.tmpname() .. Replace(" ", "_", caller) .. ".db"
-    TexApi.writeLoreToDatabase(dbName)
-    ResetState()
-    TexApi.readLoreFromDatabase(dbName)
-    os.remove(dbName)
+    DatabaseRoundtrip(caller)
 
     if setup then
         setup()

@@ -37,6 +37,8 @@ TexApi.setCurrentYear(0)
 local automatedChaptersBeforeRoundtrip = TexApi.automatedChapters()
 
 local function check(testname)
+    Assert(testname .. ", no errors thrown", true, true)
+
     for _, entityBefore in ipairs(allEntitesBeforeRoundtrip) do
         local label = GetProtectedStringField(entityBefore, "label")
         local entityAfter = GetEntity(label)

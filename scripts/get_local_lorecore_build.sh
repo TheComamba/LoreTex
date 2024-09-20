@@ -2,6 +2,8 @@
 set -e
 cd $(git rev-parse --show-toplevel)
 
+mkdir -p dependencies
+
 if [ "$(uname)" == "Darwin" ]; then
     cp ../LoreCore/target/debug/liblorecore.dylib dependencies/
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then

@@ -29,34 +29,41 @@ TexApi.newEntity { category = "species", label = "species-4", name = "species-4"
 TexApi.setAgeFactor(0)
 TexApi.setAgeExponent(0)
 
-
+-- Before Roundtrip
 local allEntitesBeforeRoundtrip = DeepCopy(AllEntities)
 local allHistoryItemsBeforeRoundtrip = DeepCopy(AllHistoryItems)
 TexApi.makeAllEntitiesPrimary()
 TexApi.setCurrentYear(0)
 local automatedChaptersBeforeRoundtrip = TexApi.automatedChapters()
 
+local function check(testname)
+    for _, entityBefore in ipairs(allEntitesBeforeRoundtrip) do
+        local label = GetProtectedStringField(entityBefore, "label")
+        local entityAfter = GetEntity(label)
+        Assert(testname .. ", comparing entity " .. label, entityBefore, entityAfter)
+    end
+
+    for i, historyItemBefore in ipairs(allHistoryItemsBeforeRoundtrip) do
+        local historyItemAfter = AllHistoryItems[i]
+        Assert(testname .. ", comparing history item " .. i, historyItemBefore, historyItemAfter)
+    end
+
+    TexApi.makeAllEntitiesPrimary()
+    TexApi.setCurrentYear(0)
+    local automatedChaptersAfterRoundtrip = TexApi.automatedChapters()
+    Assert(testname .. ", comparing automated chapters", automatedChaptersBeforeRoundtrip,
+    automatedChaptersAfterRoundtrip)
+end
+
+-- Roundtrip without writing to database
 local entityColumns = GetEntityColumns()
 local historyItemColumns = GetHistoryItemColumns()
 local relationshipColumns = GetRelationshipColumns()
 ResetState()
-
 EntitiesFromColumns(entityColumns)
 HistoryItemsFromColumns(historyItemColumns)
 RelationshipsFromColumns(relationshipColumns)
-TexApi.makeAllEntitiesPrimary()
-TexApi.setCurrentYear(0)
-local automatedChaptersAfterRoundtrip = TexApi.automatedChapters()
+check("FFI Conversion")
 
-for _, entityBefore in ipairs(allEntitesBeforeRoundtrip) do
-    local label = GetProtectedStringField(entityBefore, "label")
-    local entityAfter = GetEntity(label)
-    Assert("FFI Conversion, comparing entity " .. label, entityBefore, entityAfter)
-end
-
-for i, historyItemBefore in ipairs(allHistoryItemsBeforeRoundtrip) do
-    local historyItemAfter = AllHistoryItems[i]
-    Assert("FFI Conversion, comparing history item " .. i, historyItemBefore, historyItemAfter)
-end
-
-Assert("FFI Conversion, comparing automated chapters", automatedChaptersBeforeRoundtrip, automatedChaptersAfterRoundtrip)
+DatabaseRoundtrip("ffi-convert")
+check("Database roundtrip")

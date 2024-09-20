@@ -9,6 +9,7 @@ TexApi.setDescriptor { descriptor = "subdescriptor", description =
 TexApi.setLocation("locationLabel")
 TexApi.addParent { parentLabel = "parentLabel" }
 TexApi.born { year = 223, content = [[\nameref{testLabel} is born in \silentref{locationLabel}, child of \nameref{parentLabel}.\concerns{parentLabel2}]] }
+TexApi.addHistoryOnlyHere { year = 224, content = [[\nameref{testLabel} is still in \nameref{locationLabel}.]] }
 TexApi.setSpecies("species-1")
 
 TexApi.newEntity { category = "NPCs", label = "some-npc", name = "Some NPC" }
@@ -57,6 +58,8 @@ local function check(testname)
     automatedChaptersAfterRoundtrip)
 end
 
+check("Repeated call")
+
 -- Roundtrip without writing to database
 local entityColumns = GetEntityColumns()
 local historyItemColumns = GetHistoryItemColumns()
@@ -65,7 +68,7 @@ ResetState()
 EntitiesFromColumns(entityColumns)
 HistoryItemsFromColumns(historyItemColumns)
 RelationshipsFromColumns(relationshipColumns)
-check("FFI Conversion")
+check("Roundtrip without writing to database")
 
 DatabaseRoundtrip("ffi-convert")
 check("Database roundtrip")

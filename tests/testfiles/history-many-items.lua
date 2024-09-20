@@ -15,7 +15,7 @@ local function setup()
     TexApi.showFuture(true)
 end
 
-local function generateExpected(isCurrentDaySet, isShowFuture)
+local function generateExpected()
     local out = {}
     Append(out, [[\chapter{Places}]])
     Append(out, [[\section*{]] .. CapFirst(Tr("all")) .. [[ Places}]])
@@ -62,4 +62,4 @@ local function generateExpected(isCurrentDaySet, isShowFuture)
 end
 
 local expected = generateExpected()
-AssertAutomatedChapters("history-events-no-future-day-not-set", expected, setup)
+AssertAutomatedChapters("history-many-items", expected, setup)

@@ -1,5 +1,6 @@
 TexApi.newEntity { category = "places", label = "locationLabel", name = "locationName" }
 TexApi.newEntity { category = "other", label = "parentLabel", name = "parentName" }
+TexApi.newEntity { category = "other", label = "parentLabel2", name = "parentName2" }
 
 TexApi.newEntity { category = "other", label = "testLabel", name = "testName" }
 TexApi.setDescriptor { descriptor = "descriptor", description = "description" }
@@ -7,7 +8,7 @@ TexApi.setDescriptor { descriptor = "subdescriptor", description =
 [[\paragraph{subdescription}\label{subdescription}]] }
 TexApi.setLocation("locationLabel")
 TexApi.addParent { parentLabel = "parentLabel" }
-TexApi.born { year = 223, content = [[\nameref{testLabel} is born, child of \nameref{parentLabel}.]] }
+TexApi.born { year = 223, content = [[\nameref{testLabel} is born in \silentref{locationLabel}, child of \nameref{parentLabel}.\concerns{parentLabel2}]] }
 TexApi.setSpecies("species-1")
 
 TexApi.newEntity { category = "NPCs", label = "some-npc", name = "Some NPC" }
@@ -28,8 +29,12 @@ TexApi.newEntity { category = "species", label = "species-4", name = "species-4"
 TexApi.setAgeFactor(0)
 TexApi.setAgeExponent(0)
 
+
 local allEntitesBeforeRoundtrip = DeepCopy(AllEntities)
 local allHistoryItemsBeforeRoundtrip = DeepCopy(AllHistoryItems)
+TexApi.makeAllEntitiesPrimary()
+TexApi.setCurrentYear(0)
+local automatedChaptersBeforeRoundtrip = TexApi.automatedChapters()
 
 local entityColumns = GetEntityColumns()
 local historyItemColumns = GetHistoryItemColumns()
@@ -39,6 +44,9 @@ ResetState()
 EntitiesFromColumns(entityColumns)
 HistoryItemsFromColumns(historyItemColumns)
 RelationshipsFromColumns(relationshipColumns)
+TexApi.makeAllEntitiesPrimary()
+TexApi.setCurrentYear(0)
+local automatedChaptersAfterRoundtrip = TexApi.automatedChapters()
 
 for _, entityBefore in ipairs(allEntitesBeforeRoundtrip) do
     local label = GetProtectedStringField(entityBefore, "label")
@@ -50,3 +58,5 @@ for i, historyItemBefore in ipairs(allHistoryItemsBeforeRoundtrip) do
     local historyItemAfter = AllHistoryItems[i]
     Assert("FFI Conversion, comparing history item " .. i, historyItemBefore, historyItemAfter)
 end
+
+Assert("FFI Conversion, comparing automated chapters", automatedChaptersBeforeRoundtrip, automatedChaptersAfterRoundtrip)

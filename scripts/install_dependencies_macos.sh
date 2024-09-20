@@ -5,7 +5,7 @@ cd $(git rev-parse --show-toplevel)
 if ! command -v lualatex &> /dev/null
 then
     echo "Installing lualatex"
-    brew install texlive-full
+    brew install texlive
 fi
 
 url=$(<scripts/required_lorecore_release.txt)

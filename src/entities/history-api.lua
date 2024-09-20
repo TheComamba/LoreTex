@@ -24,7 +24,7 @@ local function isHistoryInputOk(caller, item)
 	Append(propertyNames, GetProtectedDescriptor("birthOf"))
 	Append(propertyNames, GetProtectedDescriptor("deathOf"))
 	local properties = GetProtectedTableReferenceField(item, "properties")
-	if properties and not IsArgOk(caller, properties, {}, propertyNames) then
+	if properties and not IsArgOk(caller .. " (properties)", properties, {}, propertyNames) then
 		return false
 	end
 	return true

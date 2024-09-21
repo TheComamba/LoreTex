@@ -38,10 +38,36 @@ TexApi.setHeight = function(height)
     SetProtectedField(CurrentEntity, "height", height)
 end
 
+local function isRelationshipDuplicate(entity, parentLabel, relationship)
+    local parents = GetProtectedTableReferenceField(entity, "parents")
+    for _, parentAndRelationship in ipairs(parents) do
+        local thisParentLabel = GetProtectedStringField(parentAndRelationship[1], "label")
+        if thisParentLabel == parentLabel and parentAndRelationship[2] == relationship then
+            return true
+        end
+    end
+    return false
+end
+
 function AddParent(arg)
     if not IsArgOk("addParent", arg, { "entity", "parentLabel" }, { "relationship" }) then
         return
     end
+    if isRelationshipDuplicate(arg.entity, arg.parentLabel, arg.relationship) then
+        local childLabel = GetProtectedStringField(arg.entity, "label")
+        local message = {}
+        table.insert(message, "Trying to add parent ")
+        table.insert(message, arg.parentLabel)
+        table.insert(message, " with role ")
+        table.insert(message, arg.relationship)
+        table.insert(message, " to ")
+        table.insert(message, childLabel)
+        table.insert(message, ".")
+        table.insert(message, " This configuration already exists.")
+        LogError(message)
+        return
+    end
+
     local parent = GetMutableEntityFromAll(arg.parentLabel)
     AddToProtectedField(arg.entity, "parents", { parent, arg.relationship })
     AddToProtectedField(parent, "children", arg.entity)

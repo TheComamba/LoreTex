@@ -6,7 +6,7 @@ jobs:
   linux:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Install dependencies
         run: ./scripts/install_dependencies_linux.sh
@@ -17,7 +17,7 @@ jobs:
   windows:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Install dependencies
         run: .\scripts\install_dependencies_windows.bat
@@ -28,7 +28,7 @@ jobs:
   macOS:
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Install dependencies
         run: ./scripts/install_dependencies_macos.sh
